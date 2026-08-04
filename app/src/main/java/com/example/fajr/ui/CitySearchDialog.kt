@@ -44,7 +44,7 @@ fun CitySearchDialog(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(20.dp)
+                    .padding(16.dp)
             ) {
                 // Header
                 Row(
@@ -54,7 +54,7 @@ fun CitySearchDialog(
                 ) {
                     Text(
                         text = "اختر الدولة والمدينة",
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -132,7 +132,7 @@ fun CityRowItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp),
+                .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -145,13 +145,13 @@ fun CityRowItem(
             Column {
                 Text(
                     text = "${city.cityNameAr} - ${city.countryNameAr}",
-                    fontSize = 15.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = "${city.cityNameEn}, ${city.countryNameEn}",
-                    fontSize = 12.sp,
+                    fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }

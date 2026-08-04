@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import com.example.ui.components.WathakkerCard
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -75,28 +76,28 @@ fun StatisticsScreen(viewModel: MainViewModel) {
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 StatPeriodCard(
                     modifier = Modifier.weight(1f),
                     title = "اليوم",
                     count = stats.todayCount,
                     icon = Icons.Default.Today,
-                    accentColor = Color(0xFF3B82F6)
+                    accentColor = MaterialTheme.colorScheme.onSurface
                 )
                 StatPeriodCard(
                     modifier = Modifier.weight(1f),
                     title = "هذا الأسبوع",
                     count = stats.weekCount,
                     icon = Icons.Default.DateRange,
-                    accentColor = Color(0xFF10B981)
+                    accentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 StatPeriodCard(
                     modifier = Modifier.weight(1f),
                     title = "هذا الشهر",
                     count = stats.monthCount,
                     icon = Icons.Default.CalendarMonth,
-                    accentColor = Color(0xFFF59E0B)
+                    accentColor = MaterialTheme.colorScheme.outline
                 )
             }
         }
@@ -144,16 +145,7 @@ fun StatisticsScreen(viewModel: MainViewModel) {
 
 @Composable
 fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        ) {
+    WathakkerCard {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -162,7 +154,7 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "الأذكار المقروءة اليوم",
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -177,10 +169,10 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
 
                 // Custom Donut Chart Arc
                 val chartColors = listOf(
-                    Color(0xFF3B82F6),
-                    Color(0xFF10B981),
-                    Color(0xFF8B5CF6),
-                    Color(0xFFF59E0B)
+                    MaterialTheme.colorScheme.onSurface,
+                    MaterialTheme.colorScheme.onSurfaceVariant,
+                    MaterialTheme.colorScheme.outline,
+                    MaterialTheme.colorScheme.secondary
                 )
 
                 Box(
@@ -200,15 +192,15 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
             if (stats.topReadDhikr.isNotEmpty()) {
                 val topFour = stats.topReadDhikr.take(3)
                 val chartColors = listOf(
-                    Color(0xFF3B82F6),
-                    Color(0xFF10B981),
-                    Color(0xFF8B5CF6)
+                    MaterialTheme.colorScheme.onSurface,
+                    MaterialTheme.colorScheme.onSurfaceVariant,
+                    MaterialTheme.colorScheme.outline
                 )
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     topFour.forEachIndexed { index, (dhikrId, count) ->
                         val dhikrTitle = dhikrMap[dhikrId]?.title ?: "ذكر #$dhikrId"
-                        val color = chartColors.getOrElse(index) { Color(0xFF3B82F6) }
+                        val color = chartColors.getOrElse(index) { MaterialTheme.colorScheme.onSurface }
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -228,7 +220,7 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
                                 Spacer(Modifier.width(8.dp))
                                 Text(
                                     text = dhikrTitle,
-                                    fontSize = 14.sp,
+                                    fontSize = 13.sp,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -251,7 +243,6 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
                 )
             }
         }
-    }
 }
 
 @Composable
@@ -263,6 +254,7 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
         animationSpec = tween(durationMillis = 1000),
         label = "donutAnim"
     )
+    val trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
 
     LaunchedEffect(topItems) {
         animProgress = 1f
@@ -280,7 +272,7 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
 
         // Track background
         drawArc(
-            color = Color.White.copy(alpha = 0.1f),
+            color = trackColor,
             startAngle = 0f,
             sweepAngle = 360f,
             useCenter = false,
@@ -291,7 +283,7 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
 
         if (topItems.isEmpty()) {
             drawArc(
-                color = Color(0xFF3B82F6).copy(alpha = 0.4f),
+                color = trackColor.copy(alpha = 0.5f),
                 startAngle = -90f,
                 sweepAngle = 360f * animatedProgress,
                 useCenter = false,
@@ -303,7 +295,7 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
             var startAngle = -90f
             topItems.forEachIndexed { index, (_, count) ->
                 val sweepAngle = (count / total) * 360f * animatedProgress
-                val color = colors.getOrElse(index) { Color(0xFF3B82F6) }
+                val color = colors.getOrElse(index) { trackColor }
                 drawArc(
                     color = color,
                     startAngle = startAngle,
@@ -327,13 +319,10 @@ fun StatPeriodCard(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     accentColor: Color
 ) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+    WathakkerCard(
         modifier = modifier
     ) {
         Column(
-            modifier = Modifier.padding(14.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Box(
@@ -353,7 +342,7 @@ fun StatPeriodCard(
             Spacer(Modifier.height(12.dp))
             Text(
                 text = title,
-                fontSize = 12.sp,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -370,16 +359,7 @@ fun StatPeriodCard(
 
 @Composable
 fun StreakCard(streakDays: Int) {
-    Surface(
-        shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        ) {
+    WathakkerCard {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -390,13 +370,13 @@ fun StreakCard(streakDays: Int) {
                         modifier = Modifier
                             .size(42.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFFFF6B00).copy(alpha = 0.18f)),
+                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.LocalFireDepartment,
                             contentDescription = "Streak",
-                            tint = Color(0xFFFF6B00),
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(26.dp)
                         )
                     }
@@ -404,13 +384,13 @@ fun StreakCard(streakDays: Int) {
                     Column {
                         Text(
                             text = "الأيام المتتالية (Streak)",
-                            fontSize = 14.sp,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "الاستمرارية والالتزام بالأذكار",
-                            fontSize = 12.sp,
+                            fontSize = 13.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -418,14 +398,14 @@ fun StreakCard(streakDays: Int) {
 
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = Color(0xFFFF6B00).copy(alpha = 0.15f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
                 ) {
                     Text(
                         text = "$streakDays يوم",
-                        fontSize = 15.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFF6B00),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
                     )
                 }
             }
@@ -438,31 +418,24 @@ fun StreakCard(streakDays: Int) {
                     .fillMaxWidth()
                     .height(8.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                color = Color(0xFFFF6B00),
-                trackColor = Color(0xFFFF6B00).copy(alpha = 0.15f)
+                color = MaterialTheme.colorScheme.onSurface,
+                trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
             )
 
             Spacer(Modifier.height(8.dp))
             Text(
                 text = if (streakDays > 0) "ممتاز! استمر في المحافظة على أذكارك اليومية 🔥" else "ابدأ قراءة أذكارك اليوم لبناء سلسلتك المتتالية!",
-                fontSize = 12.sp,
+                fontSize = 13.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
-}
 
 @Composable
 fun TotalStatsCard(totalCount: Int) {
-    Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier.fillMaxWidth()
-    ) {
+    WathakkerCard {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -485,13 +458,13 @@ fun TotalStatsCard(totalCount: Int) {
                 Column {
                     Text(
                         text = "إجمالي جميع الأذكار المقروءة",
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "مجموع كل مرة قمت فيها بالضغط على تم القراءة",
-                        fontSize = 12.sp,
+                        fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -499,7 +472,7 @@ fun TotalStatsCard(totalCount: Int) {
 
             Text(
                 text = "$totalCount",
-                fontSize = 26.sp,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -514,15 +487,11 @@ fun HistoryItemRow(history: DhikrHistory, dhikr: Dhikr?) {
         sdf.format(Date(history.timestamp))
     }
 
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-        modifier = Modifier.fillMaxWidth()
+    WathakkerCard(
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -536,20 +505,20 @@ fun HistoryItemRow(history: DhikrHistory, dhikr: Dhikr?) {
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)
                 )
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(8.dp))
                 Column {
                     Text(
                         text = dhikr?.title ?: "ذكر #${history.dhikrId}",
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(Modifier.height(2.dp))
+                    Spacer(Modifier.height(4.dp))
                     Text(
                         text = formattedTime,
-                        fontSize = 12.sp,
+                        fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -561,7 +530,7 @@ fun HistoryItemRow(history: DhikrHistory, dhikr: Dhikr?) {
             ) {
                 Text(
                     text = "تم القراءة",
-                    fontSize = 11.sp,
+                    fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)

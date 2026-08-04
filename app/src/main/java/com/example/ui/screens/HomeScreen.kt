@@ -1,6 +1,11 @@
 package com.example.ui.screens
 
+import com.example.ui.components.WathakkerSwitch
+
+import com.example.ui.components.WathakkerTextField
+
 import androidx.compose.foundation.background
+import com.example.ui.components.WathakkerCard
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +24,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.*
+import com.example.ui.components.WathakkerChip
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.ui.theme.customColors
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
@@ -97,12 +104,12 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
             .padding(horizontal = 16.dp)
     ) {
         // Search Bar
-        OutlinedTextField(
+        WathakkerTextField(
             value = effectiveQuery,
             onValueChange = { newQuery ->
                 viewModel.setSearchQuery(newQuery)
             },
-            placeholder = { Text("ابحث في العنوان أو نص الذكر أو التصنيف...", fontSize = 15.sp) },
+            placeholder = { Text("ابحث في العنوان أو نص الذكر أو التصنيف...", fontSize = 16.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -142,43 +149,40 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 item {
-                    FilterChip(
+                    WathakkerChip(
                         selected = selectedTag == null,
                         onClick = { viewModel.setSelectedTag(null) },
-                        label = { Text("الكل", fontSize = 13.sp, fontWeight = FontWeight.Medium) },
-                        shape = RoundedCornerShape(20.dp)
+                        text = "الكل"
                     )
                 }
 
                 items(allTags, key = { it.tagId }) { tag ->
                     val isSelected = selectedTag?.tagId == tag.tagId
-                    val tagColor = remember(tag.colorHex) {
+                    val defaultTagColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    val tagColor = remember(tag.colorHex, defaultTagColor) {
                         try {
-                            Color(android.graphics.Color.parseColor(tag.colorHex))
+                            androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(tag.colorHex))
                         } catch (e: Exception) {
-                            Color(0xFF008080)
+                            defaultTagColor
                         }
                     }
 
-                    FilterChip(
+                    WathakkerChip(
                         selected = isSelected,
                         onClick = {
                             if (isSelected) viewModel.setSelectedTag(null)
                             else viewModel.setSelectedTag(tag)
                         },
-                        label = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(10.dp)
-                                        .clip(CircleShape)
-                                        .background(tagColor)
-                                )
-                                Spacer(Modifier.width(6.dp))
-                                Text(tag.name, fontSize = 13.sp)
-                            }
-                        },
-                        shape = RoundedCornerShape(20.dp)
+                        text = tag.name,
+                        color = tagColor,
+                        leadingIcon = {
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .clip(CircleShape)
+                                    .background(tagColor)
+                            )
+                        }
                     )
                 }
             }
@@ -206,7 +210,7 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                         text = if (effectiveQuery.isBlank() && selectedTag == null) "لا توجد أذكار" 
                                else if (selectedTag != null && effectiveQuery.isBlank()) "لا توجد أذكار تحت تصنيف \"${selectedTag?.name}\""
                                else "لا توجد نتائج تطابق \"$effectiveQuery\"",
-                        fontSize = 17.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -234,8 +238,7 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                         onTagClick = { tag ->
                             if (selectedTag?.tagId == tag.tagId) viewModel.setSelectedTag(null)
                             else viewModel.setSelectedTag(tag)
-                        },
-                        onMarkAsRead = { viewModel.markAsRead(dhikr) }
+                        }
                     )
                 }
             }
@@ -281,17 +284,13 @@ fun DhikrItemCard(
     onClickTimes: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onTagClick: ((Tag) -> Unit)? = null,
-    onMarkAsRead: (() -> Unit)? = null
+    onTagClick: ((Tag) -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp)
+    WathakkerCard(
+        color = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.padding(0.dp) // The list might have its own padding
     ) {
         Column {
             Row(
@@ -311,23 +310,16 @@ fun DhikrItemCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Switch(
+                    WathakkerSwitch(
                         checked = dhikr.isEnabled,
                         onCheckedChange = { onToggleEnabled() },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = MaterialTheme.colorScheme.primary,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                            uncheckedBorderColor = Color.Transparent,
-                        ),
                         modifier = Modifier.padding(end = 8.dp)
                     )
                     IconButton(onClick = onToggleFavorite) {
                         Icon(
                             imageVector = if (dhikr.isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
                             contentDescription = "Favorite",
-                            tint = if (dhikr.isFavorite) Color(0xFFFFC107) else MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = if (dhikr.isFavorite) MaterialTheme.customColors.warning else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Box {
@@ -382,23 +374,24 @@ fun DhikrItemCard(
                     tint = if (dhikr.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier.size(18.dp)
                 )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(timesString, color = if (dhikr.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), fontWeight = FontWeight.Medium, fontSize = 15.sp)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(timesString, color = if (dhikr.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), fontWeight = FontWeight.Medium, fontSize = 16.sp)
             }
 
             // Render Tags associated with this Dhikr
             if (tags.isNotEmpty()) {
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.padding(bottom = 10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(bottom = 8.dp)
                 ) {
                     tags.forEach { tag ->
-                        val tagColor = remember(tag.colorHex) {
+                        val defaultTagColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        val tagColor = remember(tag.colorHex, defaultTagColor) {
                             try {
-                                Color(android.graphics.Color.parseColor(tag.colorHex))
+                                androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(tag.colorHex))
                             } catch (e: Exception) {
-                                Color(0xFF008080)
+                                defaultTagColor
                             }
                         }
 
@@ -420,7 +413,7 @@ fun DhikrItemCard(
                                 Spacer(Modifier.width(4.dp))
                                 Text(
                                     text = tag.name,
-                                    fontSize = 12.sp,
+                                    fontSize = 13.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = tagColor
                                 )
@@ -443,23 +436,6 @@ fun DhikrItemCard(
                     fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth()
                 )
-            }
-
-            if (onMarkAsRead != null) {
-                Spacer(Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = onMarkAsRead) {
-                        Text(
-                            text = "تم القراءة ✓",
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontSize = 13.sp
-                        )
-                    }
-                }
             }
         }
     }

@@ -1,4 +1,7 @@
 package com.example.ui.screens
+import com.example.R
+
+import com.example.ui.components.WathakkerTextField
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -28,7 +31,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.R
 import com.example.ui.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -62,7 +64,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 Spacer(Modifier.height(24.dp))
                 Text(
                     text = "وَذكِّر",
-                    fontSize = 24.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(16.dp)
@@ -193,7 +195,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (isSearchActive) {
-                        OutlinedTextField(
+                        WathakkerTextField(
                             value = searchQuery,
                             onValueChange = { 
                                 searchQuery = it

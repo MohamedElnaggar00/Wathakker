@@ -1,10 +1,14 @@
 package com.example.ui.screens
 
+import com.example.ui.components.WathakkerTextField
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -18,11 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.Dhikr
-import com.example.utils.formatTimeStr12h
-
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import com.example.data.Tag
+import com.example.utils.formatTimeStr12h
+import com.example.ui.components.WathakkerChip
+import com.example.ui.components.WathakkerButton
+
+
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -35,7 +41,7 @@ fun DhikrAddDialog(
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var times by remember { mutableStateOf(listOf("09:00")) }
-    val selectedTagIds = remember { mutableStateListOf<Long>() }
+    var selectedTagIds by remember { mutableStateOf(emptySet<Long>()) }
     var showNewTagInput by remember { mutableStateOf(false) }
     var newTagName by remember { mutableStateOf("") }
 
@@ -47,7 +53,7 @@ fun DhikrAddDialog(
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)) {
-                TextField(
+                WathakkerTextField(
                     value = title,
                     onValueChange = { title = it },
                     placeholder = { Text("العنوان", color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -59,7 +65,7 @@ fun DhikrAddDialog(
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
 
-                TextField(
+                WathakkerTextField(
                     value = content,
                     onValueChange = { content = it },
                     placeholder = { Text("الدعاء", color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -81,13 +87,13 @@ fun DhikrAddDialog(
                     ) {
                         Text(
                             text = "التصنيفات (Tags):",
-                            fontSize = 14.sp,
+                            fontSize = 13.sp,
                             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        TextButton(onClick = { showNewTagInput = !showNewTagInput }) {
-                            Text("+ تصنيف جديد", fontSize = 13.sp)
-                        }
+                        WathakkerButton(
+    isSecondary = true,
+    isSmall = true,onClick = { showNewTagInput = !showNewTagInput }, text = "+ تصنيف جديد")
                     }
 
                     if (showNewTagInput) {
@@ -95,15 +101,16 @@ fun DhikrAddDialog(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                         ) {
-                            OutlinedTextField(
+                            WathakkerTextField(
                                 value = newTagName,
                                 onValueChange = { newTagName = it },
-                                placeholder = { Text("اسم التصنيف الجديد", fontSize = 12.sp) },
+                                placeholder = { Text("اسم التصنيف الجديد", fontSize = 13.sp) },
                                 singleLine = true,
                                 modifier = Modifier.weight(1f).height(50.dp)
                             )
                             Spacer(Modifier.width(8.dp))
-                            Button(
+                            WathakkerButton(
+    isSmall = true,
                                 onClick = {
                                     if (newTagName.isNotBlank()) {
                                         onCreateTag?.invoke(newTagName.trim())
@@ -111,10 +118,8 @@ fun DhikrAddDialog(
                                         showNewTagInput = false
                                     }
                                 },
-                                modifier = Modifier.height(50.dp)
-                            ) {
-                                Text("إضافة", fontSize = 13.sp)
-                            }
+                                text = "إضافة"
+                            )
                         }
                     }
 
@@ -125,46 +130,49 @@ fun DhikrAddDialog(
                     ) {
                         allTags.forEach { tag ->
                             val isSelected = selectedTagIds.contains(tag.tagId)
-                            FilterChip(
+                            WathakkerChip(
+                                text = tag.name,
                                 selected = isSelected,
                                 onClick = {
-                                    if (isSelected) selectedTagIds.remove(tag.tagId)
-                                    else selectedTagIds.add(tag.tagId)
+                                    val newSet = selectedTagIds.toMutableSet()
+                                    if (isSelected) newSet.remove(tag.tagId) else newSet.add(tag.tagId)
+                                    selectedTagIds = newSet
                                 },
-                                label = { Text(tag.name, fontSize = 13.sp) }
+                                color = androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(tag.colorHex))
                             )
                         }
                     }
                 }
 
+                Spacer(Modifier.height(8.dp))
                 HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
+                Spacer(Modifier.height(8.dp))
 
-                LazyColumn(modifier = Modifier.heightIn(max = 120.dp)) {
-                    itemsIndexed(times) { index, timeStr ->
-                        TimeRow(
-                            timeStr = timeStr,
-                            onTimeChange = { newTime ->
-                                val newTimes = times.toMutableList()
-                                newTimes[index] = newTime
-                                times = newTimes
-                            },
-                            onDelete = {
-                                val newTimes = times.toMutableList()
-                                newTimes.removeAt(index)
-                                times = newTimes
-                            }
-                        )
-                    }
-                }
+                Text("أوقات التنبيه:", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, modifier = Modifier.padding(start = 16.dp, bottom = 8.dp))
                 
-                TextButton(
-                    onClick = { times = times + "12:00" },
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Time", tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Spacer(Modifier.width(8.dp))
-                    Text("إضافة وقت تنبيه", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                times.forEachIndexed { index, time ->
+                    TimeRow(
+                        timeStr = time,
+                        onTimeChange = { newTime ->
+                            val newList = times.toMutableList()
+                            newList[index] = newTime
+                            times = newList
+                        },
+                        onDelete = {
+                            val newList = times.toMutableList()
+                            newList.removeAt(index)
+                            times = newList
+                        }
+                    )
                 }
+
+                WathakkerButton(
+    isSecondary = true,
+    isSmall = true,
+                    onClick = { times = times + listOf("12:00") },
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp),
+                    text = "إضافة وقت تنبيه"
+                )
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
@@ -193,7 +201,7 @@ fun DhikrEditDialog(
 ) {
     var title by remember { mutableStateOf(dhikr.title) }
     var content by remember { mutableStateOf(dhikr.content) }
-    val selectedTagIds = remember { mutableStateListOf<Long>().apply { addAll(initialTagIds) } }
+    var selectedTagIds by remember { mutableStateOf(initialTagIds.toSet()) }
     var showNewTagInput by remember { mutableStateOf(false) }
     var newTagName by remember { mutableStateOf("") }
 
@@ -205,7 +213,7 @@ fun DhikrEditDialog(
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)) {
-                TextField(
+                WathakkerTextField(
                     value = title,
                     onValueChange = { title = it },
                     placeholder = { Text("العنوان", color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -217,7 +225,7 @@ fun DhikrEditDialog(
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
 
-                TextField(
+                WathakkerTextField(
                     value = content,
                     onValueChange = { content = it },
                     placeholder = { Text("الدعاء", color = MaterialTheme.colorScheme.onSurfaceVariant) },
@@ -226,12 +234,10 @@ fun DhikrEditDialog(
                         focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent
                     ),
                     modifier = Modifier.fillMaxWidth().heightIn(min = 100.dp),
-                    maxLines = 8
+                    maxLines = 5
                 )
-
                 HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
 
-                // Tag Selection Section
                 Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -240,13 +246,13 @@ fun DhikrEditDialog(
                     ) {
                         Text(
                             text = "التصنيفات (Tags):",
-                            fontSize = 14.sp,
+                            fontSize = 13.sp,
                             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        TextButton(onClick = { showNewTagInput = !showNewTagInput }) {
-                            Text("+ تصنيف جديد", fontSize = 13.sp)
-                        }
+                        WathakkerButton(
+    isSecondary = true,
+    isSmall = true,onClick = { showNewTagInput = !showNewTagInput }, text = "+ تصنيف جديد")
                     }
 
                     if (showNewTagInput) {
@@ -254,15 +260,16 @@ fun DhikrEditDialog(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                         ) {
-                            OutlinedTextField(
+                            WathakkerTextField(
                                 value = newTagName,
                                 onValueChange = { newTagName = it },
-                                placeholder = { Text("اسم التصنيف الجديد", fontSize = 12.sp) },
+                                placeholder = { Text("اسم التصنيف الجديد", fontSize = 13.sp) },
                                 singleLine = true,
                                 modifier = Modifier.weight(1f).height(50.dp)
                             )
                             Spacer(Modifier.width(8.dp))
-                            Button(
+                            WathakkerButton(
+    isSmall = true,
                                 onClick = {
                                     if (newTagName.isNotBlank()) {
                                         onCreateTag?.invoke(newTagName.trim())
@@ -270,10 +277,8 @@ fun DhikrEditDialog(
                                         showNewTagInput = false
                                     }
                                 },
-                                modifier = Modifier.height(50.dp)
-                            ) {
-                                Text("إضافة", fontSize = 13.sp)
-                            }
+                                text = "إضافة"
+                            )
                         }
                     }
 
@@ -284,13 +289,15 @@ fun DhikrEditDialog(
                     ) {
                         allTags.forEach { tag ->
                             val isSelected = selectedTagIds.contains(tag.tagId)
-                            FilterChip(
+                            WathakkerChip(
+                                text = tag.name,
                                 selected = isSelected,
                                 onClick = {
-                                    if (isSelected) selectedTagIds.remove(tag.tagId)
-                                    else selectedTagIds.add(tag.tagId)
+                                    val newSet = selectedTagIds.toMutableSet()
+                                    if (isSelected) newSet.remove(tag.tagId) else newSet.add(tag.tagId)
+                                    selectedTagIds = newSet
                                 },
-                                label = { Text(tag.name, fontSize = 13.sp) }
+                                color = androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(tag.colorHex))
                             )
                         }
                     }
@@ -315,7 +322,7 @@ fun DhikrEditDialog(
 fun DhikrMultipleTimesDialog(
     dhikr: Dhikr,
     onDismiss: () -> Unit,
-    onConfirm: (List<String>) -> Unit
+    onConfirm: (times: List<String>) -> Unit
 ) {
     var times by remember { mutableStateOf(dhikr.reminderTimes) }
 
@@ -328,39 +335,36 @@ fun DhikrMultipleTimesDialog(
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)) {
                 Text(
-                    "تكرار التنبيه",
-                    fontSize = 20.sp,
+                    text = "أوقات التنبيه لـ: ${dhikr.title}",
+                    fontSize = 18.sp,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)
                 )
-                
-                LazyColumn(modifier = Modifier.heightIn(max = 300.dp)) {
-                    itemsIndexed(times) { index, timeStr ->
-                        TimeRow(
-                            timeStr = timeStr,
-                            onTimeChange = { newTime ->
-                                val newTimes = times.toMutableList()
-                                newTimes[index] = newTime
-                                times = newTimes
-                            },
-                            onDelete = {
-                                val newTimes = times.toMutableList()
-                                newTimes.removeAt(index)
-                                times = newTimes
-                            }
-                        )
-                    }
+
+                times.forEachIndexed { index, time ->
+                    TimeRow(
+                        timeStr = time,
+                        onTimeChange = { newTime ->
+                            val newList = times.toMutableList()
+                            newList[index] = newTime
+                            times = newList
+                        },
+                        onDelete = {
+                            val newList = times.toMutableList()
+                            newList.removeAt(index)
+                            times = newList
+                        }
+                    )
                 }
-                
-                TextButton(
-                    onClick = { times = times + "12:00" },
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp)
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Time", tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Spacer(Modifier.width(8.dp))
-                    Text("إضافة وقت تنبيه", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
+
+                WathakkerButton(
+    isSecondary = true,
+    isSmall = true,
+                    onClick = { times = times + listOf("12:00") },
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp),
+                    text = "إضافة وقت تنبيه"
+                )
                 
                 Spacer(modifier = Modifier.height(24.dp))
                 
@@ -379,24 +383,14 @@ fun DhikrMultipleTimesDialog(
 
 @Composable
 private fun DialogButtons(onDismiss: () -> Unit, onConfirm: () -> Unit) {
-    Surface(
-        shape = RoundedCornerShape(50),
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.padding(vertical = 4.dp)
-        ) {
-            TextButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
-                Text("إلغاء", color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
-            }
-            Box(modifier = Modifier.width(1.dp).height(24.dp).background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)))
-            TextButton(onClick = onConfirm, modifier = Modifier.weight(1f)) {
-                Text("حفظ", color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
-            }
-        }
+        WathakkerButton(
+    isSecondary = true,
+    isSmall = true,onClick = onDismiss, modifier = Modifier.weight(1f), text = "إلغاء")
+        WathakkerButton(onClick = onConfirm, modifier = Modifier.weight(1f), text = "حفظ")
     }
 }
 
@@ -407,21 +401,22 @@ fun TimeRow(
     onTimeChange: (String) -> Unit,
     onDelete: () -> Unit
 ) {
-    var showTimePicker by remember { mutableStateOf(false) }
     val parts = timeStr.split(":")
     val hour = parts.getOrNull(0)?.toIntOrNull() ?: 12
     val minute = parts.getOrNull(1)?.toIntOrNull() ?: 0
 
+    var showTimePicker by remember { mutableStateOf(false) }
+
     Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
             .clickable { showTimePicker = true }
-            .padding(vertical = 12.dp, horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Icon(Icons.Default.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
             Spacer(Modifier.width(16.dp))
             Text(formatTimeStr12h(timeStr), fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
         }
@@ -437,43 +432,46 @@ fun TimeRow(
             initialMinute = minute,
             is24Hour = false
         )
+        
         androidx.compose.ui.window.Dialog(onDismissRequest = { showTimePicker = false }) {
             Surface(
-                shape = RoundedCornerShape(28.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                tonalElevation = 0.dp,
-                modifier = Modifier.wrapContentSize()
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surface
             ) {
-                Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("اختر الوقت", fontSize = 18.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, modifier = Modifier.padding(bottom = 24.dp))
+                    
                     TimePicker(
                         state = state,
                         colors = TimePickerDefaults.colors(
                             clockDialColor = MaterialTheme.colorScheme.surfaceVariant,
-                            clockDialSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                            clockDialUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
                             selectorColor = MaterialTheme.colorScheme.primary,
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = MaterialTheme.colorScheme.surface,
                             periodSelectorBorderColor = MaterialTheme.colorScheme.primary,
                             periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                            timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            timeSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface
+                            periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     )
                     
                     Spacer(modifier = Modifier.height(24.dp))
                     
-                    DialogButtons(
-                        onDismiss = { showTimePicker = false },
-                        onConfirm = {
-                            onTimeChange(String.format("%02d:%02d", state.hour, state.minute))
-                            showTimePicker = false
-                        }
-                    )
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                        WathakkerButton(
+    isSecondary = true,
+    isSmall = true,onClick = { showTimePicker = false }, text = "إلغاء")
+                        Spacer(Modifier.width(8.dp))
+                        WathakkerButton(
+    isSmall = true,
+                            onClick = {
+                                onTimeChange(String.format("%02d:%02d", state.hour, state.minute))
+                                showTimePicker = false
+                            },
+                            text = "حفظ"
+                        )
+                    }
                 }
             }
         }
@@ -488,59 +486,50 @@ fun DhikrDetailDialog(
 ) {
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Surface(
-            shape = RoundedCornerShape(28.dp),
+            shape = RoundedCornerShape(24.dp),
             color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 6.dp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp)
+                modifier = Modifier.padding(24.dp)
             ) {
                 Text(
                     text = dhikr.title,
-                    fontSize = 22.sp,
+                    fontSize = 18.sp,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
+                
+                HorizontalDivider(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f), thickness = 2.dp)
+                
                 Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .padding(16.dp)
-                ) {
-                    Text(
-                        text = dhikr.content,
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        lineHeight = 28.sp
-                    )
-                }
-                Spacer(modifier = Modifier.height(20.dp))
+                
+                Text(
+                    text = dhikr.content,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    lineHeight = 24.sp
+                )
+                
+                Spacer(modifier = Modifier.height(24.dp))
+                
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (onMarkAsRead != null) {
-                        TextButton(onClick = {
+                        WathakkerButton(
+    isSecondary = true,
+    isSmall = true,onClick = {
                             onMarkAsRead()
                             onDismiss()
-                        }) {
-                            Text("تم القراءة", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-                        }
+                        }, text = "تم القراءة")
                         Spacer(modifier = Modifier.width(8.dp))
                     }
-                    Button(onClick = onDismiss) {
-                        Text("إغلاق", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-                    }
+                    WathakkerButton(
+    isSmall = true,onClick = onDismiss, text = "إغلاق")
                 }
             }
         }

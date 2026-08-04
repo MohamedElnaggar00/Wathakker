@@ -15,6 +15,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.material.icons.filled.Timer
+import kotlinx.coroutines.delay
 import com.example.fajr.alarm.FajrAlarmScheduler
 import com.example.fajr.data.FajrPreferences
 import com.example.fajr.sound.RingtoneHelper
@@ -188,7 +193,7 @@ fun FajrAlarmScreen(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFF0F172A) // Rich One UI 8.5 Dark Canvas
+        color = MaterialTheme.colorScheme.background
     ) {
         Box(
             modifier = Modifier
@@ -209,24 +214,24 @@ fun FajrAlarmScreen(
                         modifier = Modifier
                             .size(90.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFF3B82F6).copy(alpha = 0.2f)),
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Alarm,
                             contentDescription = "Fajr Alarm",
-                            tint = Color(0xFF60A5FA),
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(50.dp)
                         )
                     }
 
-                    Spacer(Modifier.height(20.dp))
+                    Spacer(Modifier.height(16.dp))
 
                     Text(
                         text = "صلاة الفجر",
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(Modifier.height(8.dp))
@@ -234,7 +239,7 @@ fun FajrAlarmScreen(
                     Text(
                         text = "حان الآن موعد صلاة الفجر",
                         fontSize = 18.sp,
-                        color = Color(0xFF94A3B8)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -242,15 +247,15 @@ fun FajrAlarmScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = currentTimeStr,
-                        fontSize = 48.sp,
+                        fontSize = 32.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = currentDateStr,
                         fontSize = 16.sp,
-                        color = Color(0xFFCBD5E1)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -262,7 +267,7 @@ fun FajrAlarmScreen(
                     if (showSnoozeOptions) {
                         Surface(
                             shape = RoundedCornerShape(24.dp),
-                            color = Color(0xFF1E293B),
+                            color = MaterialTheme.colorScheme.surfaceVariant,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Column(
@@ -271,33 +276,33 @@ fun FajrAlarmScreen(
                             ) {
                                 Text(
                                     text = "اختر مدة الغفوة (Snooze):",
-                                    fontSize = 15.sp,
+                                    fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color.White
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceEvenly
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    Button(
-                                        onClick = { onSnooze(5) },
-                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF334155))
-                                    ) {
-                                        Text("5 دقائق", color = Color.White)
-                                    }
-                                    Button(
-                                        onClick = { onSnooze(10) },
-                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF334155))
-                                    ) {
-                                        Text("10 دقائق", color = Color.White)
-                                    }
-                                    Button(
-                                        onClick = { onSnooze(15) },
-                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF334155))
-                                    ) {
-                                        Text("15 دقيقة", color = Color.White)
-                                    }
+                                    SnoozeOptionCard(
+                                        minutes = 5,
+                                        text = "5 دقائق",
+                                        onSnooze = onSnooze,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    SnoozeOptionCard(
+                                        minutes = 10,
+                                        text = "10 دقائق",
+                                        onSnooze = onSnooze,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    SnoozeOptionCard(
+                                        minutes = 15,
+                                        text = "15 دقيقة",
+                                        onSnooze = onSnooze,
+                                        modifier = Modifier.weight(1f)
+                                    )
                                 }
                             }
                         }
@@ -316,29 +321,90 @@ fun FajrAlarmScreen(
                                 .weight(1f)
                                 .height(56.dp)
                         ) {
-                            Icon(Icons.Default.Snooze, contentDescription = null, tint = Color.White)
+                            Icon(Icons.Default.Snooze, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                             Spacer(Modifier.width(8.dp))
-                            Text("غفوة", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                            Text("غفوة", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                         }
 
                         // Dismiss Button
                         Button(
                             onClick = onDismiss,
                             shape = RoundedCornerShape(20.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEF4444)),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
                             modifier = Modifier
                                 .weight(1f)
                                 .height(56.dp)
                         ) {
-                            Icon(Icons.Default.NotificationsOff, contentDescription = null, tint = Color.White)
+                            Icon(Icons.Default.NotificationsOff, contentDescription = null)
                             Spacer(Modifier.width(8.dp))
-                            Text("إيقاف المنبه", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                            Text("إيقاف المنبه", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
                     Spacer(Modifier.height(24.dp))
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun SnoozeOptionCard(
+    minutes: Int,
+    text: String,
+    onSnooze: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isSelected by remember { mutableStateOf(false) }
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+        animationSpec = tween(durationMillis = 300),
+        label = "backgroundColor"
+    )
+    val contentColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+        animationSpec = tween(durationMillis = 300),
+        label = "contentColor"
+    )
+    
+    LaunchedEffect(isSelected) {
+        if (isSelected) {
+            delay(300)
+            onSnooze(minutes)
+        }
+    }
+
+    Surface(
+        modifier = modifier
+            .height(100.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .clickable { isSelected = true },
+        shape = RoundedCornerShape(20.dp),
+        color = backgroundColor,
+        contentColor = contentColor,
+        shadowElevation = 2.dp
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Timer,
+                contentDescription = null,
+                modifier = Modifier.size(32.dp),
+                tint = contentColor
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = contentColor
+            )
         }
     }
 }

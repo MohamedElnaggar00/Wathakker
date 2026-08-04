@@ -11,7 +11,8 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -20,37 +21,71 @@ import androidx.core.view.WindowCompat
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.Color
+
+data class CustomColors(
+    val success: Color = Color.Unspecified,
+    val warning: Color = Color.Unspecified
+)
+
+val LocalCustomColors = staticCompositionLocalOf { CustomColors() }
+
+val MaterialTheme.customColors: CustomColors
+    @Composable
+    get() = LocalCustomColors.current
 
 private val DarkColorScheme = darkColorScheme(
-    primary = OneUIAccentDark,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    background = OneUIBackgroundDark,
-    surface = OneUISurfaceDark,
-    surfaceVariant = OneUISurfaceVariantDark,
-    onPrimary = Color.White,
-    onBackground = OneUITextPrimaryDark,
-    onSurface = OneUITextPrimaryDark,
-    onSurfaceVariant = OneUITextSecondaryDark
+    primary = PrimaryGray,
+    onPrimary = TextPrimaryDark,
+    primaryContainer = SecondaryDarkGrayDark,
+    onPrimaryContainer = TextPrimaryDark,
+    secondary = SecondaryDarkGrayDark,
+    onSecondary = TextPrimaryDark,
+    secondaryContainer = SurfaceDark,
+    onSecondaryContainer = TextPrimaryDark,
+    tertiary = PrimaryGray,
+    onTertiary = TextPrimaryDark,
+    tertiaryContainer = SurfaceDark,
+    onTertiaryContainer = TextPrimaryDark,
+    background = BackgroundDark,
+    onBackground = TextPrimaryDark,
+    surface = SurfaceDark,
+    onSurface = TextPrimaryDark,
+    surfaceVariant = BackgroundDark,
+    onSurfaceVariant = TextSecondaryDark,
+    outline = OutlineDark,
+    outlineVariant = OutlineDark,
+    error = ErrorRed,
+    onError = TextPrimaryDark
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = OneUIAccentLight,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = OneUIBackgroundLight,
-    surface = OneUISurfaceLight,
-    surfaceVariant = OneUISurfaceVariantLight,
-    onPrimary = Color.White,
-    onBackground = OneUITextPrimaryLight,
-    onSurface = OneUITextPrimaryLight,
-    onSurfaceVariant = OneUITextSecondaryLight
+    primary = PrimaryGray,
+    onPrimary = TextPrimaryLight,
+    primaryContainer = OutlineLight,
+    onPrimaryContainer = TextPrimaryLight,
+    secondary = SecondaryDarkGray,
+    onSecondary = SurfaceLight,
+    secondaryContainer = SurfaceLight,
+    onSecondaryContainer = TextPrimaryLight,
+    tertiary = PrimaryGray,
+    onTertiary = TextPrimaryLight,
+    tertiaryContainer = SurfaceLight,
+    onTertiaryContainer = TextPrimaryLight,
+    background = BackgroundLight,
+    onBackground = TextPrimaryLight,
+    surface = SurfaceLight,
+    onSurface = TextPrimaryLight,
+    surfaceVariant = BackgroundLight,
+    onSurfaceVariant = TextSecondaryLight,
+    outline = OutlineLight,
+    outlineVariant = OutlineLight,
+    error = ErrorRed,
+    onError = SurfaceLight
 )
 
 val OneUIShapes = Shapes(
-    extraSmall = RoundedCornerShape(24.dp),
-    small = RoundedCornerShape(16.dp),
+    extraSmall = RoundedCornerShape(16.dp),
+    small = RoundedCornerShape(20.dp),
     medium = RoundedCornerShape(24.dp),
     large = RoundedCornerShape(32.dp)
 )
@@ -71,6 +106,11 @@ fun MyApplicationTheme(
         else -> LightColorScheme
     }
     
+    val customColors = CustomColors(
+        success = SuccessGreen,
+        warning = WarningOrange
+    )
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -86,13 +126,15 @@ fun MyApplicationTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = getTypography(useDeviceFont),
-        shapes = OneUIShapes
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl,
+        LocalCustomColors provides customColors
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            content()
-        }
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = getTypography(useDeviceFont),
+            shapes = OneUIShapes,
+            content = content
+        )
     }
 }

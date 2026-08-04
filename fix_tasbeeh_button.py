@@ -1,4 +1,11 @@
-package com.example.ui.screens
+with open("app/src/main/java/com/example/ui/screens/TasbeehScreen.kt", "r") as f:
+    content = f.read()
+
+import re
+old_button_pattern = r'WathakkerButton\([^)]*?\)\s*\{[^}]*?\}'
+# Actually, since I don't want to mess up regex, let's just find and replace the block manually
+
+new_content = """package com.example.ui.screens
 import com.example.ui.components.WathakkerButton
 
 import androidx.compose.foundation.layout.*
@@ -16,7 +23,7 @@ import com.example.ui.viewmodel.MainViewModel
 
 @Composable
 fun TasbeehScreen(viewModel: MainViewModel) {
-    val counter by viewModel.tasbeehCount.collectAsStateWithLifecycle()
+    val counter by viewModel.tasbeehCounter.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -53,6 +60,11 @@ fun TasbeehScreen(viewModel: MainViewModel) {
         
         Spacer(modifier = Modifier.height(24.dp))
         
-        WathakkerButton(text = "تصفير العداد", onClick = { viewModel.resetTasbeeh() }, containerColor = androidx.compose.ui.graphics.Color.Transparent, contentColor = MaterialTheme.colorScheme.error)
+        TextButton(onClick = { viewModel.resetTasbeeh() }) {
+            Text("تصفير العداد", color = MaterialTheme.colorScheme.error)
+        }
     }
 }
+"""
+with open("app/src/main/java/com/example/ui/screens/TasbeehScreen.kt", "w") as f:
+    f.write(new_content)

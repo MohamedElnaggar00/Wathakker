@@ -2,28 +2,26 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Samsung One UI Inspired Palette
+val PrimaryGray = Color(0xFF8E8E93)
+val SecondaryDarkGray = Color(0xFF48484A)
+val SecondaryDarkGrayDark = Color(0xFFAAAAAA) // Lighter for dark mode
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val SurfaceLight = Color(0xFFFFFFFF)
+val SurfaceDark = Color(0xFF1C1C1E)
 
-// One UI Dark Theme Colors
-val OneUIBackgroundDark = Color(0xFF000000)
-val OneUISurfaceDark = Color(0xFF1C1C1E) // Changed to match design better
-val OneUISurfaceVariantDark = Color(0xFF2C2C2E)
-val OneUITextPrimaryDark = Color(0xFFFFFFFF)
-val OneUITextSecondaryDark = Color(0xFFAAAAAA)
-val OneUIAccentDark = Color(0xFF5B9DFF) // Blue accent typical for OneUI
+val BackgroundLight = Color(0xFFF5F5F7)
+val BackgroundDark = Color(0xFF121212)
 
-// One UI Light Theme Colors
-val OneUIBackgroundLight = Color(0xFFF2F2F6) // Light gray background like iOS/OneUI
-val OneUISurfaceLight = Color(0xFFFFFFFF)
-val OneUISurfaceVariantLight = Color(0xFFEFEFF0)
-val OneUITextPrimaryLight = Color(0xFF000000)
-val OneUITextSecondaryLight = Color(0xFF757575)
-val OneUIAccentLight = Color(0xFF007AFF)
+val SuccessGreen = Color(0xFF34C759)
+val ErrorRed = Color(0xFFFF3B30)
+val WarningOrange = Color(0xFFFF9500)
 
-val StarYellow = Color(0xFFFFC107)
+val TextPrimaryLight = Color(0xFF000000)
+val TextPrimaryDark = Color(0xFFFFFFFF)
+
+val TextSecondaryLight = Color(0xFF8E8E93)
+val TextSecondaryDark = Color(0xFF8E8E93)
+
+val OutlineLight = Color(0xFFE5E5EA)
+val OutlineDark = Color(0xFF38383A)
