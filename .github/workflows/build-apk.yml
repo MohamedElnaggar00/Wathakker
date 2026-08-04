@@ -39,13 +39,10 @@ jobs:
           name: app-debug.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Upload APK to Release
-        uses: svenstaro/upload-release-action@v2
+      - name: Create Release and Upload APK
+        uses: softprops/action-gh-release@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: app/build/outputs/apk/debug/app-debug.apk
-          asset_name: "Wathakker 1.1 preview.apk"
-          tag: latest
-          overwrite: true
+          tag_name: "v1.1-preview-${{ github.run_number }}"
+          name: "Wathakker 1.1 Preview (Build ${{ github.run_number }})"
+          files: app/build/outputs/apk/debug/app-debug.apk
           prerelease: true
-          release_name: "1.1 preview"
