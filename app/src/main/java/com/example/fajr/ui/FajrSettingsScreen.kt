@@ -529,7 +529,7 @@ fun FajrSettingsScreen(viewModel: FajrViewModel) {
                                 FilterChip(
                                     selected = state.maxDurationMinutes == mins,
                                     onClick = { viewModel.setMaxDuration(mins) },
-                                    label = { Text("$mins دقائق") },
+                                    label = { Text("$mins", modifier = Modifier.fillMaxWidth(), textAlign = androidx.compose.ui.text.style.TextAlign.Center, maxLines = 1) },
                                     modifier = Modifier.weight(1f)
                                 )
                             }
@@ -549,7 +549,7 @@ fun FajrHeaderCard(
 ) {
     Surface(
         shape = RoundedCornerShape(28.dp),
-        color = MaterialTheme.colorScheme.primaryContainer,
+        color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -561,20 +561,20 @@ fun FajrHeaderCard(
                 text = "منبه صلاة الفجر",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(Modifier.height(4.dp))
             Text(
                 text = "تنبيه دقيق لموعد الفجر حسب موقعك الجغرافي",
                 fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
             )
 
             Spacer(Modifier.height(18.dp))
 
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+                color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 Row(
                     modifier = Modifier
@@ -623,7 +623,7 @@ fun OneUICard(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxWidth(),
         content = { Column(content = content) }
     )

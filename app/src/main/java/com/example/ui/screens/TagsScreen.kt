@@ -57,8 +57,8 @@ fun TagsScreen(viewModel: MainViewModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "إدارة التصنيفات (Tags)",
-                    fontSize = 22.sp,
+                    text = "إدارة التصنيفات",
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -69,7 +69,7 @@ fun TagsScreen(viewModel: MainViewModel) {
                 ) {
                     Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text("إضافة تصنيف")
+                    Text("إضافة تصنيف", maxLines = 1)
                 }
             }
 
@@ -179,7 +179,7 @@ fun TagItemCard(
 
     Card(
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(

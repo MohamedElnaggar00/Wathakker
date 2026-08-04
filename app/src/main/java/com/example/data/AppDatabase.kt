@@ -10,9 +10,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Dhikr::class, Tag::class, DhikrTagCrossRef::class, DhikrHistory::class], version = 6, exportSchema = false)
+@Database(entities = [Dhikr::class, Tag::class, DhikrTagCrossRef::class, DhikrHistory::class], version = 7, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
+
     abstract fun dhikrDao(): DhikrDao
     abstract fun tagDao(): TagDao
     abstract fun historyDao(): HistoryDao
@@ -37,10 +38,34 @@ abstract class AppDatabase : RoomDatabase() {
                                 INSTANCE?.dhikrDao()?.let { dao ->
                                     val defaultAdhkar = listOf(
                                         Dhikr(
-                                            title = "دعاء السكينة", 
-                                            content = "اللهم امنحني السكينة لأتقبل الأشياء التي لا أستطيع تغييرها، والشجاعة لتغيير الأشياء التي أستطيع تغييرها، والحكمة لمعرفة الفرق بينهما", 
-                                            reminderTimes = listOf("09:00"),
-                                            isEnabled = false
+                                            title = "سؤال العفو والعافية",
+                                            content = "اللهم إنك عفو تحب العفو فاعف عني",
+                                            reminderTimes = listOf("10:00"),
+                                            isEnabled = true
+                                        ),
+                                        Dhikr(
+                                            title = "الثبات على الدين",
+                                            content = "يا مقلب القلوب ثبت قلبي على دينك",
+                                            reminderTimes = listOf("14:00"),
+                                            isEnabled = true
+                                        ),
+                                        Dhikr(
+                                            title = "خير الدنيا والآخرة",
+                                            content = "اللهم آتنا في الدنيا حسنة وفي الآخرة حسنة وقنا عذاب النار",
+                                            reminderTimes = listOf("18:00"),
+                                            isEnabled = true
+                                        ),
+                                        Dhikr(
+                                            title = "سؤال الهدى والتقى",
+                                            content = "اللهم إني أسألك الهدى والتقى والعفاف والغنى",
+                                            reminderTimes = listOf("08:00"),
+                                            isEnabled = true
+                                        ),
+                                        Dhikr(
+                                            title = "الإعانة على الذكر",
+                                            content = "اللهم أعني على ذكرك وشكرك وحسن عبادتك",
+                                            reminderTimes = listOf("20:00"),
+                                            isEnabled = true
                                         )
                                     )
                                     dao.insertAll(defaultAdhkar)

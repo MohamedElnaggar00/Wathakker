@@ -24,35 +24,47 @@ import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
     primary = OneUIAccentDark,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    background = OneUIBackgroundDark,
-    surface = OneUISurfaceDark,
-    surfaceVariant = OneUISurfaceVariantDark,
     onPrimary = Color.White,
+    primaryContainer = Color(0xFF1E3A8A), // Dark blue container
+    onPrimaryContainer = Color(0xFFD1E4FF),
+    secondary = Color(0xFF818181),
+    onSecondary = Color.White,
+    secondaryContainer = Color(0xFF333333),
+    onSecondaryContainer = Color(0xFFE0E0E0),
+    tertiary = Color(0xFF818181),
+    background = OneUIBackgroundDark,
     onBackground = OneUITextPrimaryDark,
+    surface = OneUISurfaceDark,
     onSurface = OneUITextPrimaryDark,
-    onSurfaceVariant = OneUITextSecondaryDark
+    surfaceVariant = OneUISurfaceVariantDark,
+    onSurfaceVariant = OneUITextSecondaryDark,
+    outline = Color(0xFF555555)
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = OneUIAccentLight,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    background = OneUIBackgroundLight,
-    surface = OneUISurfaceLight,
-    surfaceVariant = OneUISurfaceVariantLight,
     onPrimary = Color.White,
+    primaryContainer = Color(0xFFD1E4FF), // Light blue container
+    onPrimaryContainer = Color(0xFF001D36),
+    secondary = Color(0xFF818181),
+    onSecondary = Color.White,
+    secondaryContainer = Color(0xFFE0E0E0),
+    onSecondaryContainer = Color(0xFF333333),
+    tertiary = Color(0xFF818181),
+    background = OneUIBackgroundLight,
     onBackground = OneUITextPrimaryLight,
+    surface = OneUISurfaceLight,
     onSurface = OneUITextPrimaryLight,
-    onSurfaceVariant = OneUITextSecondaryLight
+    surfaceVariant = OneUISurfaceVariantLight,
+    onSurfaceVariant = OneUITextSecondaryLight,
+    outline = Color(0xFFCCCCCC)
 )
 
 val OneUIShapes = Shapes(
-    extraSmall = RoundedCornerShape(24.dp),
-    small = RoundedCornerShape(16.dp),
-    medium = RoundedCornerShape(24.dp),
-    large = RoundedCornerShape(32.dp)
+    extraSmall = RoundedCornerShape(4.dp), // Was 24.dp, causing pills
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp)
 )
 
 @Composable

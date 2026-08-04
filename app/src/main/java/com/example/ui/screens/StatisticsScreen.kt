@@ -146,7 +146,7 @@ fun StatisticsScreen(viewModel: MainViewModel) {
 fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -329,7 +329,7 @@ fun StatPeriodCard(
 ) {
     Surface(
         shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = MaterialTheme.colorScheme.surface,
         modifier = modifier
     ) {
         Column(
@@ -372,7 +372,7 @@ fun StatPeriodCard(
 fun StreakCard(streakDays: Int) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -456,7 +456,7 @@ fun StreakCard(streakDays: Int) {
 fun TotalStatsCard(totalCount: Int) {
     Surface(
         shape = RoundedCornerShape(20.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = MaterialTheme.colorScheme.surface,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -516,7 +516,7 @@ fun HistoryItemRow(history: DhikrHistory, dhikr: Dhikr?) {
 
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
