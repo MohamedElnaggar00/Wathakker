@@ -338,8 +338,9 @@ fun DhikrItemCard(
                             modifier = Modifier.width(220.dp)
                         ) {
                             DropdownMenuItem(
-                                text = { Text("تعديل نص وتصنيفات الدعاء", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
-                                leadingIcon = { Icon(Icons.Outlined.Edit, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface) },
+                                text = { Text("تعديل نص وتصنيفات الدعاء", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxWidth(), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
+                                leadingIcon = { Icon(Icons.Outlined.Edit, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(18.dp)) },
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                 onClick = { 
                                     expanded = false
                                     onEditClick() 
@@ -347,8 +348,9 @@ fun DhikrItemCard(
                             )
                             DashedDivider()
                             DropdownMenuItem(
-                                text = { Text("تكرار التنبيه مخصص", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
-                                leadingIcon = { Icon(Icons.Outlined.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface) },
+                                text = { Text("تكرار التنبيه مخصص", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxWidth(), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
+                                leadingIcon = { Icon(Icons.Outlined.Notifications, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(18.dp)) },
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                 onClick = { 
                                     expanded = false
                                     onClickTimes() 
@@ -356,8 +358,9 @@ fun DhikrItemCard(
                             )
                             DashedDivider()
                             DropdownMenuItem(
-                                text = { Text("حذف", fontSize = 16.sp, color = MaterialTheme.colorScheme.error, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
-                                leadingIcon = { Icon(Icons.Outlined.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
+                                text = { Text("حذف", fontSize = 13.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.error, modifier = Modifier.fillMaxWidth(), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
+                                leadingIcon = { Icon(Icons.Outlined.Delete, contentDescription = null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp)) },
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                 onClick = { 
                                     expanded = false
                                     onDeleteClick() 

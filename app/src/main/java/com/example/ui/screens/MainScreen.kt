@@ -245,10 +245,11 @@ fun MainScreen(viewModel: MainViewModel) {
                                     onDismissRequest = { showMenu = false },
                                     shape = RoundedCornerShape(16.dp),
                                     containerColor = MaterialTheme.colorScheme.surface,
-                                    modifier = Modifier.width(220.dp)
+                                    modifier = Modifier.width(200.dp)
                                 ) {
                                     DropdownMenuItem(
-                                        text = { Text("الإحصائيات والسجل", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        text = { Text("الإحصائيات والسجل", fontSize = 13.5.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 8.dp)) },
+                                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                         onClick = { 
                                             showMenu = false
                                             navController.navigate("statistics")
@@ -256,7 +257,8 @@ fun MainScreen(viewModel: MainViewModel) {
                                     )
                                     DashedDivider()
                                     DropdownMenuItem(
-                                        text = { Text("إدارة التصنيفات", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        text = { Text("إدارة التصنيفات", fontSize = 13.5.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 8.dp)) },
+                                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                         onClick = { 
                                             showMenu = false
                                             navController.navigate("tags")
@@ -264,7 +266,8 @@ fun MainScreen(viewModel: MainViewModel) {
                                     )
                                     DashedDivider()
                                     DropdownMenuItem(
-                                        text = { Text("منبه صلاة الفجر", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        text = { Text("منبه صلاة الفجر", fontSize = 13.5.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 8.dp)) },
+                                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                         onClick = { 
                                             showMenu = false
                                             navController.navigate("fajr_settings")
@@ -272,7 +275,8 @@ fun MainScreen(viewModel: MainViewModel) {
                                     )
                                     DashedDivider()
                                     DropdownMenuItem(
-                                        text = { Text("الإعدادات", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        text = { Text("الإعدادات", fontSize = 13.5.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 8.dp)) },
+                                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                         onClick = { 
                                             showMenu = false
                                             navController.navigate("settings")
@@ -280,7 +284,8 @@ fun MainScreen(viewModel: MainViewModel) {
                                     )
                                     DashedDivider()
                                     DropdownMenuItem(
-                                        text = { Text("عن التطبيق", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        text = { Text("عن التطبيق", fontSize = 13.5.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 8.dp)) },
+                                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
                                         onClick = { 
                                             showMenu = false
                                             navController.navigate("about")
