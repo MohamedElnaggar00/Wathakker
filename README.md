@@ -81,6 +81,6 @@
 
 <div align="center">
   <br>
-  <b>صُنع بحب بواسطة Google AI Studio 🤖 بمساعدة محمد النجار</b>
+  <b>صُنع بحب بواسطة Google AI Studio 🤖 | محمد النجار</b>
   <p><i>لا تنسونا من صالح دعائكم.</i></p>
 </div>
