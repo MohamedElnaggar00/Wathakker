@@ -31,8 +31,8 @@ fun DhikrAddDialog(
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(28.dp),
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 6.dp,
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            tonalElevation = 0.dp,
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)) {
@@ -115,8 +115,8 @@ fun DhikrEditDialog(
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(28.dp),
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 6.dp,
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            tonalElevation = 0.dp,
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)) {
@@ -170,8 +170,8 @@ fun DhikrMultipleTimesDialog(
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(28.dp),
-            color = MaterialTheme.colorScheme.surface,
-            tonalElevation = 6.dp,
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            tonalElevation = 0.dp,
             modifier = Modifier.fillMaxWidth().wrapContentHeight()
         ) {
             Column(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 24.dp, start = 8.dp, end = 8.dp)) {
@@ -229,8 +229,8 @@ fun DhikrMultipleTimesDialog(
 private fun DialogButtons(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(50),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-        modifier = Modifier.fillMaxWidth(0.8f).padding(horizontal = 16.dp)
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -238,11 +238,11 @@ private fun DialogButtons(onDismiss: () -> Unit, onConfirm: () -> Unit) {
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
             TextButton(onClick = onDismiss, modifier = Modifier.weight(1f)) {
-                Text("إلغاء", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 16.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
+                Text("إلغاء", color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
             }
-            Box(modifier = Modifier.width(1.dp).height(24.dp).background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)))
+            Box(modifier = Modifier.width(1.dp).height(24.dp).background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)))
             TextButton(onClick = onConfirm, modifier = Modifier.weight(1f)) {
-                Text("حفظ", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 16.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
+                Text("حفظ", color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp, fontWeight = androidx.compose.ui.text.font.FontWeight.Medium)
             }
         }
     }
@@ -288,8 +288,8 @@ fun TimeRow(
         androidx.compose.ui.window.Dialog(onDismissRequest = { showTimePicker = false }) {
             Surface(
                 shape = RoundedCornerShape(28.dp),
-                color = MaterialTheme.colorScheme.surface,
-                tonalElevation = 6.dp,
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                tonalElevation = 0.dp,
                 modifier = Modifier.wrapContentSize()
             ) {
                 Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -300,7 +300,7 @@ fun TimeRow(
                             clockDialSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
                             clockDialUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
                             selectorColor = MaterialTheme.colorScheme.primary,
-                            containerColor = MaterialTheme.colorScheme.surface,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
                             periodSelectorBorderColor = MaterialTheme.colorScheme.primary,
                             periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                             periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
