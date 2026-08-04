@@ -21,6 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.NotificationsOff
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 
 data class DhikrInstance(val dhikr: Dhikr, val hour: Int, val minute: Int)
 
@@ -136,11 +140,24 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton(onClick = onMarkAsRead) {
+                Button(
+                    onClick = onMarkAsRead,
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(20.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "تم القراءة ✓",
+                        text = "تم القراءة",
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary,
                         fontSize = 13.sp
                     )
                 }

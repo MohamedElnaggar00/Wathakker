@@ -80,31 +80,11 @@ fun MainScreen(viewModel: MainViewModel) {
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.BarChart, contentDescription = null) },
-                    label = { Text("الإحصائيات والسجل", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
-                    selected = false,
-                    onClick = {
-                        navController.navigate("statistics")
-                        scope.launch { drawerState.close() }
-                    },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                )
-                NavigationDrawerItem(
                     icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
                     label = { Text("قائمه الاذكار والتنبيه", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     selected = false,
                     onClick = {
                         navController.navigate("list")
-                        scope.launch { drawerState.close() }
-                    },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.Label, contentDescription = null) },
-                    label = { Text("إدارة التصنيفات (Tags)", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
-                    selected = false,
-                    onClick = {
-                        navController.navigate("tags")
                         scope.launch { drawerState.close() }
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -130,11 +110,21 @@ fun MainScreen(viewModel: MainViewModel) {
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
-                    icon = { Icon(painter = painterResource(id = R.drawable.ic_tasbeeh), contentDescription = null, modifier = Modifier.size(24.dp)) },
-                    label = { Text("عداد التسبيح", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    icon = { Icon(Icons.Default.Label, contentDescription = null) },
+                    label = { Text("إدارة التصنيفات", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     selected = false,
                     onClick = {
-                        navController.navigate("tasbeeh")
+                        navController.navigate("tags")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.BarChart, contentDescription = null) },
+                    label = { Text("الإحصائيات والسجل", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("statistics")
                         scope.launch { drawerState.close() }
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -145,6 +135,16 @@ fun MainScreen(viewModel: MainViewModel) {
                     selected = false,
                     onClick = {
                         navController.navigate("fajr_settings")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
+                    icon = { Icon(painter = painterResource(id = R.drawable.ic_tasbeeh), contentDescription = null, modifier = Modifier.size(24.dp)) },
+                    label = { Text("عداد التسبيح", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("tasbeeh")
                         scope.launch { drawerState.close() }
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

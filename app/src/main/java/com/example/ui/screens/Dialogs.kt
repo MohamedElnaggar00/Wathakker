@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -426,17 +428,15 @@ fun TimeRow(
             Text(formatTimeStr12h(timeStr), fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
         }
         IconButton(onClick = onDelete, modifier = Modifier.size(24.dp)) {
-            Icon(Icons.Default.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error.copy(alpha = 0.8f))
+            Icon(Icons.Outlined.Delete, contentDescription = "Delete", tint = MaterialTheme.colorScheme.error.copy(alpha = 0.8f))
         }
     }
     HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
 
     if (showTimePicker) {
-        val state = rememberTimePickerState(
-            initialHour = hour,
-            initialMinute = minute,
-            is24Hour = false
-        )
+        var selectedHour24 by remember { mutableStateOf(hour) }
+        var selectedMinute by remember { mutableStateOf(minute) }
+
         androidx.compose.ui.window.Dialog(onDismissRequest = { showTimePicker = false }) {
             Surface(
                 shape = RoundedCornerShape(28.dp),
@@ -445,24 +445,13 @@ fun TimeRow(
                 modifier = Modifier.wrapContentSize()
             ) {
                 Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    TimePicker(
-                        state = state,
-                        colors = TimePickerDefaults.colors(
-                            clockDialColor = MaterialTheme.colorScheme.surfaceVariant,
-                            clockDialSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                            clockDialUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                            selectorColor = MaterialTheme.colorScheme.primary,
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            periodSelectorBorderColor = MaterialTheme.colorScheme.primary,
-                            periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            periodSelectorUnselectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            periodSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                            timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            timeSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onSurface
-                        )
+                    com.example.ui.components.WheelTimePicker(
+                        initialHour24 = hour,
+                        initialMinute = minute,
+                        onTimeSelected = { h, m ->
+                            selectedHour24 = h
+                            selectedMinute = m
+                        }
                     )
                     
                     Spacer(modifier = Modifier.height(24.dp))
@@ -470,7 +459,7 @@ fun TimeRow(
                     DialogButtons(
                         onDismiss = { showTimePicker = false },
                         onConfirm = {
-                            onTimeChange(String.format("%02d:%02d", state.hour, state.minute))
+                            onTimeChange(String.format("%02d:%02d", selectedHour24, selectedMinute))
                             showTimePicker = false
                         }
                     )
@@ -530,10 +519,23 @@ fun DhikrDetailDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (onMarkAsRead != null) {
-                        TextButton(onClick = {
-                            onMarkAsRead()
-                            onDismiss()
-                        }) {
+                        Button(
+                            onClick = {
+                                onMarkAsRead()
+                                onDismiss()
+                            },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
                             Text("تم القراءة", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
                         }
                         Spacer(modifier = Modifier.width(8.dp))
