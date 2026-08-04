@@ -56,7 +56,8 @@ fun FavoritesScreen(viewModel: MainViewModel) {
                         onToggleFavorite = { viewModel.toggleFavorite(dhikr) },
                         onClickTimes = { showTimesDialog = dhikr },
                         onEditClick = { showEditDialog = dhikr },
-                        onDeleteClick = { viewModel.deleteDhikr(dhikr) }
+                        onDeleteClick = { viewModel.deleteDhikr(dhikr) },
+                        onMarkAsRead = { viewModel.markAsRead(dhikr) }
                     )
                 }
             }

@@ -82,21 +82,21 @@ fun StatisticsScreen(viewModel: MainViewModel) {
                     title = "اليوم",
                     count = stats.todayCount,
                     icon = Icons.Default.Today,
-                    accentColor = MaterialTheme.colorScheme.onSurface
+                    accentColor = Color(0xFF3B82F6)
                 )
                 StatPeriodCard(
                     modifier = Modifier.weight(1f),
                     title = "هذا الأسبوع",
                     count = stats.weekCount,
                     icon = Icons.Default.DateRange,
-                    accentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    accentColor = Color(0xFF10B981)
                 )
                 StatPeriodCard(
                     modifier = Modifier.weight(1f),
                     title = "هذا الشهر",
                     count = stats.monthCount,
                     icon = Icons.Default.CalendarMonth,
-                    accentColor = MaterialTheme.colorScheme.outline
+                    accentColor = Color(0xFFF59E0B)
                 )
             }
         }
@@ -177,10 +177,10 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
 
                 // Custom Donut Chart Arc
                 val chartColors = listOf(
-                    MaterialTheme.colorScheme.onSurface,
-                    MaterialTheme.colorScheme.onSurfaceVariant,
-                    MaterialTheme.colorScheme.outline,
-                    MaterialTheme.colorScheme.secondary
+                    Color(0xFF3B82F6),
+                    Color(0xFF10B981),
+                    Color(0xFF8B5CF6),
+                    Color(0xFFF59E0B)
                 )
 
                 Box(
@@ -200,15 +200,15 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
             if (stats.topReadDhikr.isNotEmpty()) {
                 val topFour = stats.topReadDhikr.take(3)
                 val chartColors = listOf(
-                    MaterialTheme.colorScheme.onSurface,
-                    MaterialTheme.colorScheme.onSurfaceVariant,
-                    MaterialTheme.colorScheme.outline
+                    Color(0xFF3B82F6),
+                    Color(0xFF10B981),
+                    Color(0xFF8B5CF6)
                 )
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     topFour.forEachIndexed { index, (dhikrId, count) ->
                         val dhikrTitle = dhikrMap[dhikrId]?.title ?: "ذكر #$dhikrId"
-                        val color = chartColors.getOrElse(index) { MaterialTheme.colorScheme.onSurface }
+                        val color = chartColors.getOrElse(index) { Color(0xFF3B82F6) }
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -263,7 +263,6 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
         animationSpec = tween(durationMillis = 1000),
         label = "donutAnim"
     )
-    val trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
 
     LaunchedEffect(topItems) {
         animProgress = 1f
@@ -281,7 +280,7 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
 
         // Track background
         drawArc(
-            color = trackColor,
+            color = Color.White.copy(alpha = 0.1f),
             startAngle = 0f,
             sweepAngle = 360f,
             useCenter = false,
@@ -292,7 +291,7 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
 
         if (topItems.isEmpty()) {
             drawArc(
-                color = trackColor.copy(alpha = 0.5f),
+                color = Color(0xFF3B82F6).copy(alpha = 0.4f),
                 startAngle = -90f,
                 sweepAngle = 360f * animatedProgress,
                 useCenter = false,
@@ -304,7 +303,7 @@ fun DonutChart(topItems: List<Pair<Int, Int>>, colors: List<Color>) {
             var startAngle = -90f
             topItems.forEachIndexed { index, (_, count) ->
                 val sweepAngle = (count / total) * 360f * animatedProgress
-                val color = colors.getOrElse(index) { trackColor }
+                val color = colors.getOrElse(index) { Color(0xFF3B82F6) }
                 drawArc(
                     color = color,
                     startAngle = startAngle,
@@ -391,13 +390,13 @@ fun StreakCard(streakDays: Int) {
                         modifier = Modifier
                             .size(42.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)),
+                            .background(Color(0xFFFF6B00).copy(alpha = 0.18f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.LocalFireDepartment,
                             contentDescription = "Streak",
-                            tint = MaterialTheme.colorScheme.onSurface,
+                            tint = Color(0xFFFF6B00),
                             modifier = Modifier.size(26.dp)
                         )
                     }
@@ -419,13 +418,13 @@ fun StreakCard(streakDays: Int) {
 
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                    color = Color(0xFFFF6B00).copy(alpha = 0.15f)
                 ) {
                     Text(
                         text = "$streakDays يوم",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = Color(0xFFFF6B00),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     )
                 }
@@ -439,8 +438,8 @@ fun StreakCard(streakDays: Int) {
                     .fillMaxWidth()
                     .height(8.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                color = MaterialTheme.colorScheme.onSurface,
-                trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
+                color = Color(0xFFFF6B00),
+                trackColor = Color(0xFFFF6B00).copy(alpha = 0.15f)
             )
 
             Spacer(Modifier.height(8.dp))

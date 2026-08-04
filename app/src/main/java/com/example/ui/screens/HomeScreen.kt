@@ -156,7 +156,7 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                         try {
                             Color(android.graphics.Color.parseColor(tag.colorHex))
                         } catch (e: Exception) {
-                            Color(0xFF6B6B73)
+                            Color(0xFF008080)
                         }
                     }
 
@@ -234,7 +234,8 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                         onTagClick = { tag ->
                             if (selectedTag?.tagId == tag.tagId) viewModel.setSelectedTag(null)
                             else viewModel.setSelectedTag(tag)
-                        }
+                        },
+                        onMarkAsRead = { viewModel.markAsRead(dhikr) }
                     )
                 }
             }
@@ -280,7 +281,8 @@ fun DhikrItemCard(
     onClickTimes: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
-    onTagClick: ((Tag) -> Unit)? = null
+    onTagClick: ((Tag) -> Unit)? = null,
+    onMarkAsRead: (() -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -396,7 +398,7 @@ fun DhikrItemCard(
                             try {
                                 Color(android.graphics.Color.parseColor(tag.colorHex))
                             } catch (e: Exception) {
-                                Color(0xFF6B6B73)
+                                Color(0xFF008080)
                             }
                         }
 
@@ -441,6 +443,23 @@ fun DhikrItemCard(
                     fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth()
                 )
+            }
+
+            if (onMarkAsRead != null) {
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onMarkAsRead) {
+                        Text(
+                            text = "تم القراءة ✓",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
             }
         }
     }

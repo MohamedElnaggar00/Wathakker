@@ -173,7 +173,7 @@ fun TagItemCard(
         try {
             Color(android.graphics.Color.parseColor(tag.colorHex))
         } catch (e: Exception) {
-            Color(0xFF6B6B73)
+            Color(0xFF008080)
         }
     }
 
@@ -242,12 +242,12 @@ fun TagAddEditDialog(
     onConfirm: (String, String) -> Unit
 ) {
     var name by remember { mutableStateOf(tag?.name ?: "") }
-    var selectedColorHex by remember { mutableStateOf(tag?.colorHex ?: "#6B6B73") }
+    var selectedColorHex by remember { mutableStateOf(tag?.colorHex ?: "#008080") }
 
     val availableColors = listOf(
-        "#111113", "#2C2C30", "#48484A", "#6B6B73",
-        "#8E8E93", "#3B3B42", "#55555E", "#72727C",
-        "#8D8D98", "#A8A8B4", "#50505A", "#686874"
+        "#008080", "#800080", "#1E3A8A", "#059669",
+        "#DC2626", "#D97706", "#4F46E5", "#2563EB",
+        "#0284C7", "#0D9488", "#16A34A", "#CA8A04"
     )
 
     AlertDialog(
@@ -323,7 +323,7 @@ private fun ColorCircle(
         try {
             Color(android.graphics.Color.parseColor(colorHex))
         } catch (e: Exception) {
-            Color(0xFF6B6B73)
+            Color(0xFF008080)
         }
     }
 

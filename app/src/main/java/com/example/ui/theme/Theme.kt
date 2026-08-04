@@ -24,57 +24,33 @@ import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
     primary = OneUIAccentDark,
-    onPrimary = OneUIBlack,
-    primaryContainer = OneUIContainerDark,
-    onPrimaryContainer = OneUIWhite,
-    secondary = OneUILightGray,
-    onSecondary = OneUIBlack,
-    secondaryContainer = OneUISurfaceVariantDark,
-    onSecondaryContainer = OneUIWhite,
-    tertiary = OneUIGray,
-    onTertiary = OneUIWhite,
-    tertiaryContainer = OneUISurfaceDark,
-    onTertiaryContainer = OneUIWhite,
-    background = OneUIDarkCanvas,
-    onBackground = OneUITextPrimaryDark,
+    secondary = PurpleGrey80,
+    tertiary = Pink80,
+    background = OneUIBackgroundDark,
     surface = OneUISurfaceDark,
-    onSurface = OneUITextPrimaryDark,
     surfaceVariant = OneUISurfaceVariantDark,
-    onSurfaceVariant = OneUITextSecondaryDark,
-    outline = OneUIBorderDark,
-    outlineVariant = OneUIContainerDark,
-    error = Color(0xFFE53935),
-    onError = OneUIWhite
+    onPrimary = Color.White,
+    onBackground = OneUITextPrimaryDark,
+    onSurface = OneUITextPrimaryDark,
+    onSurfaceVariant = OneUITextSecondaryDark
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = OneUIAccentLight,
-    onPrimary = OneUIWhite,
-    primaryContainer = OneUIContainerLight,
-    onPrimaryContainer = OneUITextPrimaryLight,
-    secondary = OneUIDarkGray,
-    onSecondary = OneUIWhite,
-    secondaryContainer = OneUISurfaceVariantLight,
-    onSecondaryContainer = OneUITextPrimaryLight,
-    tertiary = OneUIGray,
-    onTertiary = OneUIWhite,
-    tertiaryContainer = OneUIBackgroundLight,
-    onTertiaryContainer = OneUITextPrimaryLight,
+    secondary = PurpleGrey40,
+    tertiary = Pink40,
     background = OneUIBackgroundLight,
-    onBackground = OneUITextPrimaryLight,
     surface = OneUISurfaceLight,
-    onSurface = OneUITextPrimaryLight,
     surfaceVariant = OneUISurfaceVariantLight,
-    onSurfaceVariant = OneUITextSecondaryLight,
-    outline = OneUIBorderLight,
-    outlineVariant = OneUIContainerLight,
-    error = Color(0xFFD32F2F),
-    onError = OneUIWhite
+    onPrimary = Color.White,
+    onBackground = OneUITextPrimaryLight,
+    onSurface = OneUITextPrimaryLight,
+    onSurfaceVariant = OneUITextSecondaryLight
 )
 
 val OneUIShapes = Shapes(
-    extraSmall = RoundedCornerShape(16.dp),
-    small = RoundedCornerShape(20.dp),
+    extraSmall = RoundedCornerShape(24.dp),
+    small = RoundedCornerShape(16.dp),
     medium = RoundedCornerShape(24.dp),
     large = RoundedCornerShape(32.dp)
 )

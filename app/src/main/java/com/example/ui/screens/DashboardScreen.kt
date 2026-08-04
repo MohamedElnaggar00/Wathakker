@@ -76,19 +76,13 @@ fun DashboardScreen(viewModel: MainViewModel) {
     ) {
         if (currentOrPassedInstance != null) {
             Text("التذكير الحالي", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 8.dp))
-            DhikrHighlightCard(
-                instance = currentOrPassedInstance,
-                onMarkAsRead = { viewModel.markAsRead(currentOrPassedInstance.dhikr) }
-            )
+            DhikrHighlightCard(instance = currentOrPassedInstance)
             Spacer(modifier = Modifier.height(24.dp))
         }
 
         if (nextDhikrInstance != null) {
             Text("التذكير القادم", color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 8.dp))
-            DhikrHighlightCard(
-                instance = nextDhikrInstance,
-                onMarkAsRead = { viewModel.markAsRead(nextDhikrInstance.dhikr) }
-            )
+            DhikrHighlightCard(instance = nextDhikrInstance)
         }
 
         if (currentOrPassedInstance == null && nextDhikrInstance == null) {
@@ -98,7 +92,7 @@ fun DashboardScreen(viewModel: MainViewModel) {
 }
 
 @Composable
-fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
+fun DhikrHighlightCard(instance: DhikrInstance) {
     val dhikr = instance.dhikr
     Box(
         modifier = androidx.compose.ui.Modifier
@@ -143,21 +137,6 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
                     lineHeight = 24.sp,
                     modifier = androidx.compose.ui.Modifier.fillMaxWidth()
                 )
-            }
-
-            Spacer(androidx.compose.ui.Modifier.height(8.dp))
-            Row(
-                modifier = androidx.compose.ui.Modifier.fillMaxWidth(),
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.End
-            ) {
-                androidx.compose.material3.TextButton(onClick = onMarkAsRead) {
-                    Text(
-                        text = "تم القراءة ✓",
-                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
-                        fontSize = 13.sp
-                    )
-                }
             }
         }
     }

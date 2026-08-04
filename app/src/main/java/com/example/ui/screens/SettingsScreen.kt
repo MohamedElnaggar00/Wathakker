@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material3.*
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.*
@@ -29,11 +27,7 @@ import com.example.ui.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    viewModel: MainViewModel,
-    onBack: () -> Unit,
-    onNavigateToFajr: (() -> Unit)? = null
-) {
+fun SettingsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     val language by viewModel.language.collectAsState()
     val vibrationEnabled by viewModel.vibrationEnabled.collectAsState()
     val useDeviceFont by viewModel.useDeviceFont.collectAsState()
@@ -69,51 +63,6 @@ fun SettingsScreen(
         }
 
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-
-            // Fajr Prayer Alarm Setting Item
-            if (onNavigateToFajr != null) {
-                SettingsItemBox {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onNavigateToFajr() }
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Default.Alarm,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Spacer(Modifier.width(12.dp))
-                            Column {
-                                Text(
-                                    text = "منبه صلاة الفجر",
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                                Text(
-                                    text = "إعدادات المنبه، الموقع، والنغمات",
-                                    fontSize = 13.sp,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                        Icon(
-                            imageVector = Icons.Default.ChevronLeft,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-
             // Notification Sound Setting
             SettingsItemBox {
                 Row(
