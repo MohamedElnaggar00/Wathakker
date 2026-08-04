@@ -2,7 +2,7 @@
   <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="100" height="100" alt="App Icon">
   <h1>تطبيق وَذكِّر 🌙</h1>
   <p><b>الإصدار 2.0 متاح الآن! 🎉</b></p>
-  <p>تطبيق إسلامي شامل يهدف إلى مساعدتك في الحفاظ على أذكارك اليومية، صلواتك، ومتابعة التزامك بطريقة عصرية وسهلة.</p>
+  <p>تطبيق إسلامي شامل يهدف إلى مساعدتك في الحفاظ على أذكارك اليومية، صلواتك، ومتابعة التزامك بطريقة عصرية وسهلة الاستخدام.</p>
 </div>
 
 ---
@@ -49,24 +49,24 @@
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="Screenshot/1.jpg" width="200" alt="الشاشة 1"><br><b>الشاشة الرئيسية</b></td>
-      <td align="center"><img src="Screenshot/2.jpg" width="200" alt="الشاشة 2"><br><b>قائمة الأذكار</b></td>
-      <td align="center"><img src="Screenshot/3.jpg" width="200" alt="الشاشة 3"><br><b>التفاصيل</b></td>
+      <td align="center"><img src="Screenshot/1.jpg" width="400" alt="الشاشة 1"></td>
+      <td align="center"><img src="Screenshot/2.jpg" width="400" alt="الشاشة 2"></td>
+      <td align="center"><img src="Screenshot/3.jpg" width="400" alt="الشاشة 3"></td>
     </tr>
     <tr>
-      <td align="center"><img src="Screenshot/4.jpg" width="200" alt="الشاشة 4"><br><b>إضافة ذكر</b></td>
-      <td align="center"><img src="Screenshot/5.jpg" width="200" alt="الشاشة 5"><br><b>اختيار الوقت</b></td>
-      <td align="center"><img src="Screenshot/6.jpg" width="200" alt="الشاشة 6"><br><b>التصنيفات</b></td>
+      <td align="center"><img src="Screenshot/4.jpg" width="400" alt="الشاشة 4"></td>
+      <td align="center"><img src="Screenshot/5.jpg" width="400" alt="الشاشة 5"></td>
+      <td align="center"><img src="Screenshot/6.jpg" width="400" alt="الشاشة 6"></td>
     </tr>
     <tr>
-      <td align="center"><img src="Screenshot/7.jpg" width="200" alt="الشاشة 7"><br><b>الإحصائيات</b></td>
-      <td align="center"><img src="Screenshot/8.jpg" width="200" alt="الشاشة 8"><br><b>الرسوم البيانية</b></td>
-      <td align="center"><img src="Screenshot/9.jpg" width="200" alt="الشاشة 9"><br><b>التنبيهات</b></td>
+      <td align="center"><img src="Screenshot/7.jpg" width="400" alt="الشاشة 7"></td>
+      <td align="center"><img src="Screenshot/8.jpg" width="400" alt="الشاشة 8"></td>
+      <td align="center"><img src="Screenshot/9.jpg" width="400" alt="الشاشة 9"></td>
     </tr>
     <tr>
-      <td align="center"><img src="Screenshot/10.jpg" width="200" alt="الشاشة 10"><br><b>المسبحة</b></td>
-      <td align="center"><img src="Screenshot/11.jpg" width="200" alt="الشاشة 11"><br><b>الإعدادات</b></td>
-      <td align="center"><img src="Screenshot/12.jpg" width="200" alt="الشاشة 12"><br><b>الوضع الداكن</b></td>
+      <td align="center"><img src="Screenshot/10.jpg" width="400" alt="الشاشة 10"></td>
+      <td align="center"><img src="Screenshot/11.jpg" width="400" alt="الشاشة 11"></td>
+      <td align="center"><img src="Screenshot/12.jpg" width="400" alt="الشاشة 12"></td>
     </tr>
   </table>
 </div>
