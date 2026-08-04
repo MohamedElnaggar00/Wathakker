@@ -23,7 +23,7 @@ fun AboutScreen() {
         Text("وَذكِّر", fontSize = 48.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            "تطبيق يساعدك على الحفاظ على الأذكار في يومك وليلتك\n\nالإصدار V1.0 - Preview",
+            "تطبيق يساعدك على الحفاظ على الأذكار في يومك وليلتك\n\nالإصدار V1.1 - Preview",
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 18.sp
