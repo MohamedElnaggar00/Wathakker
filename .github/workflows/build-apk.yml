@@ -45,6 +45,6 @@ jobs:
       - name: Create Release and Upload APK
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "latest"
+          tag_name: "v1.1-build-${{ github.run_number }}"
           name: "Wathakker V1.1 Preview (Build ${{ github.run_number }})"
           files: "app/build/outputs/apk/debug/Wathakker V1.1 Preview (Build ${{ github.run_number }}).apk"
