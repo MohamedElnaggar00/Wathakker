@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Dhikr::class], version = 3, exportSchema = false)
+@Database(entities = [Dhikr::class], version = 4, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dhikrDao(): DhikrDao
@@ -35,8 +35,8 @@ abstract class AppDatabase : RoomDatabase() {
                                 INSTANCE?.dhikrDao()?.let { dao ->
                                     val defaultAdhkar = listOf(
                                         Dhikr(
-                                            title = "التسبيح", 
-                                            content = "سبحان الله وبحمده سبحان الله العظيم", 
+                                            title = "دعاء السكينة", 
+                                            content = "اللهم امنحني السكينة لأتقبل الأشياء التي لا أستطيع تغييرها، والشجاعة لتغيير الأشياء التي أستطيع تغييرها، والحكمة لمعرفة الفرق بينهما", 
                                             reminderTimes = listOf("09:00"),
                                             isEnabled = false
                                         )
