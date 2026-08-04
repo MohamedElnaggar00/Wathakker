@@ -32,6 +32,9 @@ import com.example.R
 import com.example.ui.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
+import androidx.compose.material.icons.filled.Label
+import androidx.compose.material.icons.filled.BarChart
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
@@ -39,6 +42,7 @@ fun MainScreen(viewModel: MainViewModel) {
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     val selectedDhikrNotif by viewModel.selectedDhikrFromNotification.collectAsStateWithLifecycle()
+    val allTags by viewModel.allTags.collectAsStateWithLifecycle()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -72,11 +76,31 @@ fun MainScreen(viewModel: MainViewModel) {
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.BarChart, contentDescription = null) },
+                    label = { Text("الإحصائيات والسجل", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("statistics")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
                     icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
                     label = { Text("قائمه الاذكار والتنبيه", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     selected = false,
                     onClick = {
                         navController.navigate("list")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.Label, contentDescription = null) },
+                    label = { Text("إدارة التصنيفات (Tags)", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("tags")
                         scope.launch { drawerState.close() }
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -210,6 +234,22 @@ fun MainScreen(viewModel: MainViewModel) {
                                     modifier = Modifier.width(220.dp)
                                 ) {
                                     DropdownMenuItem(
+                                        text = { Text("الإحصائيات والسجل", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        onClick = { 
+                                            showMenu = false
+                                            navController.navigate("statistics")
+                                        }
+                                    )
+                                    DashedDivider()
+                                    DropdownMenuItem(
+                                        text = { Text("إدارة التصنيفات", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        onClick = { 
+                                            showMenu = false
+                                            navController.navigate("tags")
+                                        }
+                                    )
+                                    DashedDivider()
+                                    DropdownMenuItem(
                                         text = { Text("الإعدادات", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
                                         onClick = { 
                                             showMenu = false
@@ -238,8 +278,14 @@ fun MainScreen(viewModel: MainViewModel) {
                     composable("dashboard") {
                         DashboardScreen(viewModel = viewModel)
                     }
+                    composable("statistics") {
+                        StatisticsScreen(viewModel = viewModel)
+                    }
                     composable("list") {
                         HomeScreen(viewModel = viewModel, searchQuery = searchQuery)
+                    }
+                    composable("tags") {
+                        TagsScreen(viewModel = viewModel)
                     }
                     composable("favorites") {
                         FavoritesScreen(viewModel = viewModel)
@@ -260,10 +306,14 @@ fun MainScreen(viewModel: MainViewModel) {
 
                 if (showAddDialog) {
                     DhikrAddDialog(
+                        allTags = allTags,
                         onDismiss = { showAddDialog = false },
-                        onConfirm = { title, content, times ->
-                            viewModel.addDhikrWithSchedule(title, content, times)
+                        onConfirm = { title, content, times, tagIds ->
+                            viewModel.addDhikrWithScheduleAndTags(title, content, times, tagIds)
                             showAddDialog = false
+                        },
+                        onCreateTag = { newTagName ->
+                            viewModel.addTag(newTagName)
                         }
                     )
                 }

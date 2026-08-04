@@ -20,14 +20,24 @@ import androidx.compose.ui.unit.sp
 import com.example.data.Dhikr
 import com.example.utils.formatTimeStr12h
 
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import com.example.data.Tag
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DhikrAddDialog(
+    allTags: List<Tag> = emptyList(),
     onDismiss: () -> Unit,
-    onConfirm: (String, String, List<String>) -> Unit
+    onConfirm: (title: String, content: String, times: List<String>, tagIds: List<Long>) -> Unit,
+    onCreateTag: ((String) -> Unit)? = null
 ) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var times by remember { mutableStateOf(listOf("09:00")) }
+    val selectedTagIds = remember { mutableStateListOf<Long>() }
+    var showNewTagInput by remember { mutableStateOf(false) }
+    var newTagName by remember { mutableStateOf("") }
 
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -62,7 +72,74 @@ fun DhikrAddDialog(
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
 
-                LazyColumn(modifier = Modifier.heightIn(max = 150.dp)) {
+                // Tag Selection Section
+                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "التصنيفات (Tags):",
+                            fontSize = 14.sp,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        TextButton(onClick = { showNewTagInput = !showNewTagInput }) {
+                            Text("+ تصنيف جديد", fontSize = 13.sp)
+                        }
+                    }
+
+                    if (showNewTagInput) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = newTagName,
+                                onValueChange = { newTagName = it },
+                                placeholder = { Text("اسم التصنيف الجديد", fontSize = 12.sp) },
+                                singleLine = true,
+                                modifier = Modifier.weight(1f).height(50.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Button(
+                                onClick = {
+                                    if (newTagName.isNotBlank()) {
+                                        onCreateTag?.invoke(newTagName.trim())
+                                        newTagName = ""
+                                        showNewTagInput = false
+                                    }
+                                },
+                                modifier = Modifier.height(50.dp)
+                            ) {
+                                Text("إضافة", fontSize = 13.sp)
+                            }
+                        }
+                    }
+
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        allTags.forEach { tag ->
+                            val isSelected = selectedTagIds.contains(tag.tagId)
+                            FilterChip(
+                                selected = isSelected,
+                                onClick = {
+                                    if (isSelected) selectedTagIds.remove(tag.tagId)
+                                    else selectedTagIds.add(tag.tagId)
+                                },
+                                label = { Text(tag.name, fontSize = 13.sp) }
+                            )
+                        }
+                    }
+                }
+
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
+
+                LazyColumn(modifier = Modifier.heightIn(max = 120.dp)) {
                     itemsIndexed(times) { index, timeStr ->
                         TimeRow(
                             timeStr = timeStr,
@@ -82,20 +159,20 @@ fun DhikrAddDialog(
                 
                 TextButton(
                     onClick = { times = times + "12:00" },
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp)
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add Time", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.width(8.dp))
                     Text("إضافة وقت تنبيه", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 
                 DialogButtons(
                     onDismiss = onDismiss,
                     onConfirm = {
                         if (title.isNotBlank() && content.isNotBlank() && times.isNotEmpty()) {
-                            onConfirm(title, content, times)
+                            onConfirm(title, content, times, selectedTagIds.toList())
                         }
                     }
                 )
@@ -104,14 +181,21 @@ fun DhikrAddDialog(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DhikrEditDialog(
     dhikr: Dhikr,
+    allTags: List<Tag> = emptyList(),
+    initialTagIds: List<Long> = emptyList(),
     onDismiss: () -> Unit,
-    onConfirm: (String, String) -> Unit
+    onConfirm: (title: String, content: String, tagIds: List<Long>) -> Unit,
+    onCreateTag: ((String) -> Unit)? = null
 ) {
     var title by remember { mutableStateOf(dhikr.title) }
     var content by remember { mutableStateOf(dhikr.content) }
+    val selectedTagIds = remember { mutableStateListOf<Long>().apply { addAll(initialTagIds) } }
+    var showNewTagInput by remember { mutableStateOf(false) }
+    var newTagName by remember { mutableStateOf("") }
 
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -142,16 +226,83 @@ fun DhikrEditDialog(
                         focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent
                     ),
                     modifier = Modifier.fillMaxWidth().heightIn(min = 100.dp),
-                    maxLines = 10
+                    maxLines = 8
                 )
+
+                HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f), thickness = 1.dp, modifier = Modifier.padding(horizontal = 16.dp))
+
+                // Tag Selection Section
+                Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "التصنيفات (Tags):",
+                            fontSize = 14.sp,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        TextButton(onClick = { showNewTagInput = !showNewTagInput }) {
+                            Text("+ تصنيف جديد", fontSize = 13.sp)
+                        }
+                    }
+
+                    if (showNewTagInput) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                        ) {
+                            OutlinedTextField(
+                                value = newTagName,
+                                onValueChange = { newTagName = it },
+                                placeholder = { Text("اسم التصنيف الجديد", fontSize = 12.sp) },
+                                singleLine = true,
+                                modifier = Modifier.weight(1f).height(50.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Button(
+                                onClick = {
+                                    if (newTagName.isNotBlank()) {
+                                        onCreateTag?.invoke(newTagName.trim())
+                                        newTagName = ""
+                                        showNewTagInput = false
+                                    }
+                                },
+                                modifier = Modifier.height(50.dp)
+                            ) {
+                                Text("إضافة", fontSize = 13.sp)
+                            }
+                        }
+                    }
+
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        allTags.forEach { tag ->
+                            val isSelected = selectedTagIds.contains(tag.tagId)
+                            FilterChip(
+                                selected = isSelected,
+                                onClick = {
+                                    if (isSelected) selectedTagIds.remove(tag.tagId)
+                                    else selectedTagIds.add(tag.tagId)
+                                },
+                                label = { Text(tag.name, fontSize = 13.sp) }
+                            )
+                        }
+                    }
+                }
                 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 
                 DialogButtons(
                     onDismiss = onDismiss,
                     onConfirm = {
                         if (title.isNotBlank() && content.isNotBlank()) {
-                            onConfirm(title, content)
+                            onConfirm(title, content, selectedTagIds.toList())
                         }
                     }
                 )

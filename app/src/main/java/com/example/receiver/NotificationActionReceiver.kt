@@ -33,7 +33,8 @@ class NotificationActionReceiver : BroadcastReceiver() {
                     CoroutineScope(Dispatchers.IO).launch {
                         try {
                             val db = AppDatabase.getDatabase(context)
-                            db.dhikrDao().markAsRead(dhikrId)
+                            val repo = com.example.data.DhikrRepository(db.dhikrDao(), db.tagDao(), db.historyDao())
+                            repo.markAsRead(dhikrId)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         } finally {

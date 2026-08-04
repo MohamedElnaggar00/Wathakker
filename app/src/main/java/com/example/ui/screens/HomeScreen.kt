@@ -4,14 +4,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.NotificationsOff
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.*
@@ -26,11 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
+import com.example.data.Tag
 import com.example.ui.viewmodel.MainViewModel
 import com.example.utils.formatTimeStr12h
-
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 
 @Composable
 fun DashedDivider(modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)) {
@@ -46,9 +48,13 @@ fun DashedDivider(modifier: Modifier = Modifier, color: Color = MaterialTheme.co
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
     val allDhikr by viewModel.allDhikr.collectAsStateWithLifecycle()
+    val allTags by viewModel.allTags.collectAsStateWithLifecycle()
+    val dhikrsWithTags by viewModel.dhikrsWithTags.collectAsStateWithLifecycle()
+    val selectedTag by viewModel.selectedTag.collectAsStateWithLifecycle()
     val vmSearchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 
     val effectiveQuery = if (searchQuery.isNotBlank()) searchQuery else vmSearchQuery
@@ -56,14 +62,32 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
     var showTimesDialog by remember { mutableStateOf<Dhikr?>(null) }
     var showEditDialog by remember { mutableStateOf<Dhikr?>(null) }
 
-    val filteredDhikr = remember(allDhikr, effectiveQuery) {
-        if (effectiveQuery.isBlank()) {
-            allDhikr
-        } else {
-            val q = effectiveQuery.trim()
-            allDhikr.filter { 
-                it.title.contains(q, ignoreCase = true) || it.content.contains(q, ignoreCase = true) 
+    val dhikrTagsMap = remember(dhikrsWithTags) {
+        dhikrsWithTags.associate { it.dhikr.id to it.tags }
+    }
+
+    val filteredDhikr = remember(allDhikr, effectiveQuery, selectedTag, dhikrTagsMap) {
+        allDhikr.filter { dhikr ->
+            val tagsForThisDhikr = dhikrTagsMap[dhikr.id] ?: emptyList()
+
+            // Tag filter
+            val matchesTag = if (selectedTag == null) {
+                true
+            } else {
+                tagsForThisDhikr.any { it.tagId == selectedTag?.tagId }
             }
+
+            // Search query filter (title, content, or tag name)
+            val matchesQuery = if (effectiveQuery.isBlank()) {
+                true
+            } else {
+                val q = effectiveQuery.trim()
+                dhikr.title.contains(q, ignoreCase = true) ||
+                        dhikr.content.contains(q, ignoreCase = true) ||
+                        tagsForThisDhikr.any { it.name.contains(q, ignoreCase = true) }
+            }
+
+            matchesTag && matchesQuery
         }
     }
 
@@ -78,7 +102,7 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
             onValueChange = { newQuery ->
                 viewModel.setSearchQuery(newQuery)
             },
-            placeholder = { Text("ابحث في العنوان أو نص الذكر...", fontSize = 15.sp) },
+            placeholder = { Text("ابحث في العنوان أو نص الذكر أو التصنيف...", fontSize = 15.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -110,6 +134,56 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                 .padding(vertical = 8.dp)
         )
 
+        // Tag Filter Chips Row
+        if (allTags.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(vertical = 8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                item {
+                    FilterChip(
+                        selected = selectedTag == null,
+                        onClick = { viewModel.setSelectedTag(null) },
+                        label = { Text("الكل", fontSize = 13.sp, fontWeight = FontWeight.Medium) },
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                }
+
+                items(allTags, key = { it.tagId }) { tag ->
+                    val isSelected = selectedTag?.tagId == tag.tagId
+                    val tagColor = remember(tag.colorHex) {
+                        try {
+                            Color(android.graphics.Color.parseColor(tag.colorHex))
+                        } catch (e: Exception) {
+                            Color(0xFF008080)
+                        }
+                    }
+
+                    FilterChip(
+                        selected = isSelected,
+                        onClick = {
+                            if (isSelected) viewModel.setSelectedTag(null)
+                            else viewModel.setSelectedTag(tag)
+                        },
+                        label = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(10.dp)
+                                        .clip(CircleShape)
+                                        .background(tagColor)
+                                )
+                                Spacer(Modifier.width(6.dp))
+                                Text(tag.name, fontSize = 13.sp)
+                            }
+                        },
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                }
+            }
+        }
+
         if (filteredDhikr.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -129,7 +203,9 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = if (effectiveQuery.isBlank()) "لا توجد أذكار" else "لا توجد نتائج تطابق \"$effectiveQuery\"",
+                        text = if (effectiveQuery.isBlank() && selectedTag == null) "لا توجد أذكار" 
+                               else if (selectedTag != null && effectiveQuery.isBlank()) "لا توجد أذكار تحت تصنيف \"${selectedTag?.name}\""
+                               else "لا توجد نتائج تطابق \"$effectiveQuery\"",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -146,13 +222,20 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                     items = filteredDhikr,
                     key = { it.id }
                 ) { dhikr ->
+                    val tags = dhikrTagsMap[dhikr.id] ?: emptyList()
                     DhikrItemCard(
                         dhikr = dhikr,
+                        tags = tags,
                         onToggleEnabled = { viewModel.toggleEnabled(dhikr) },
                         onToggleFavorite = { viewModel.toggleFavorite(dhikr) },
                         onClickTimes = { showTimesDialog = dhikr },
                         onEditClick = { showEditDialog = dhikr },
-                        onDeleteClick = { viewModel.deleteDhikr(dhikr) }
+                        onDeleteClick = { viewModel.deleteDhikr(dhikr) },
+                        onTagClick = { tag ->
+                            if (selectedTag?.tagId == tag.tagId) viewModel.setSelectedTag(null)
+                            else viewModel.setSelectedTag(tag)
+                        },
+                        onMarkAsRead = { viewModel.markAsRead(dhikr) }
                     )
                 }
             }
@@ -171,25 +254,35 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
     }
 
     showEditDialog?.let { dhikr ->
+        val currentTagIds = (dhikrTagsMap[dhikr.id] ?: emptyList()).map { it.tagId }
         DhikrEditDialog(
             dhikr = dhikr,
+            allTags = allTags,
+            initialTagIds = currentTagIds,
             onDismiss = { showEditDialog = null },
-            onConfirm = { newTitle, newContent ->
-                viewModel.updateDhikrText(dhikr, newTitle, newContent)
+            onConfirm = { newTitle, newContent, tagIds ->
+                viewModel.updateDhikrWithTags(dhikr, newTitle, newContent, tagIds)
                 showEditDialog = null
+            },
+            onCreateTag = { newTagName ->
+                viewModel.addTag(newTagName)
             }
         )
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DhikrItemCard(
     dhikr: Dhikr,
+    tags: List<Tag> = emptyList(),
     onToggleEnabled: () -> Unit,
     onToggleFavorite: () -> Unit,
     onClickTimes: () -> Unit,
     onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onTagClick: ((Tag) -> Unit)? = null,
+    onMarkAsRead: (() -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -250,7 +343,7 @@ fun DhikrItemCard(
                             modifier = Modifier.width(220.dp)
                         ) {
                             DropdownMenuItem(
-                                text = { Text("تعديل نص الدعاء", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                text = { Text("تعديل نص وتصنيفات الدعاء", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
                                 onClick = { 
                                     expanded = false
                                     onEditClick() 
@@ -279,7 +372,7 @@ fun DhikrItemCard(
             
             val timesString = dhikr.reminderTimes.joinToString("، ") { formatTimeStr12h(it) }
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 12.dp),
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 8.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -291,6 +384,50 @@ fun DhikrItemCard(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(timesString, color = if (dhikr.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), fontWeight = FontWeight.Medium, fontSize = 15.sp)
+            }
+
+            // Render Tags associated with this Dhikr
+            if (tags.isNotEmpty()) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.padding(bottom = 10.dp)
+                ) {
+                    tags.forEach { tag ->
+                        val tagColor = remember(tag.colorHex) {
+                            try {
+                                Color(android.graphics.Color.parseColor(tag.colorHex))
+                            } catch (e: Exception) {
+                                Color(0xFF008080)
+                            }
+                        }
+
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = tagColor.copy(alpha = 0.15f),
+                            modifier = Modifier.clickable { onTagClick?.invoke(tag) }
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(8.dp)
+                                        .clip(CircleShape)
+                                        .background(tagColor)
+                                )
+                                Spacer(Modifier.width(4.dp))
+                                Text(
+                                    text = tag.name,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = tagColor
+                                )
+                            }
+                        }
+                    }
+                }
             }
             
             Box(
@@ -306,6 +443,23 @@ fun DhikrItemCard(
                     fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth()
                 )
+            }
+
+            if (onMarkAsRead != null) {
+                Spacer(Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onMarkAsRead) {
+                        Text(
+                            text = "تم القراءة ✓",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
             }
         }
     }

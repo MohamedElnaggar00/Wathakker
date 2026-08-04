@@ -15,6 +15,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+import com.example.data.Tag
+import com.example.data.DhikrWithTags
+import com.example.data.DhikrHistory
+import kotlinx.coroutines.flow.map
+
+data class DhikrStats(
+    val todayCount: Int = 0,
+    val weekCount: Int = 0,
+    val monthCount: Int = 0,
+    val totalCount: Int = 0,
+    val streakDays: Int = 0,
+    val topReadDhikr: List<Pair<Int, Int>> = emptyList()
+)
+
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: DhikrRepository
     private val alarmScheduler: AlarmScheduler
@@ -61,13 +75,101 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         _searchQuery.value = query
     }
 
+    private val _selectedTag = MutableStateFlow<Tag?>(null)
+    val selectedTag: StateFlow<Tag?> = _selectedTag.asStateFlow()
+
+    fun setSelectedTag(tag: Tag?) {
+        _selectedTag.value = tag
+    }
+
     private val _tasbeehCount = MutableStateFlow(prefs.getInt("count", 0))
     val tasbeehCount: StateFlow<Int> = _tasbeehCount.asStateFlow()
 
     init {
-        val dao = AppDatabase.getDatabase(application).dhikrDao()
-        repository = DhikrRepository(dao)
+        val db = AppDatabase.getDatabase(application)
+        repository = DhikrRepository(db.dhikrDao(), db.tagDao(), db.historyDao())
         alarmScheduler = AlarmScheduler(application)
+    }
+
+    val allHistory: StateFlow<List<DhikrHistory>> = repository.allHistory.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    val stats: StateFlow<DhikrStats> = repository.allHistory.map { historyList ->
+        calculateStats(historyList)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = DhikrStats()
+    )
+
+    private fun calculateStats(historyList: List<DhikrHistory>): DhikrStats {
+        if (historyList.isEmpty()) return DhikrStats()
+
+        val cal = java.util.Calendar.getInstance()
+        cal.set(java.util.Calendar.HOUR_OF_DAY, 0)
+        cal.set(java.util.Calendar.MINUTE, 0)
+        cal.set(java.util.Calendar.SECOND, 0)
+        cal.set(java.util.Calendar.MILLISECOND, 0)
+        val startOfToday = cal.timeInMillis
+
+        val weekCal = (cal.clone() as java.util.Calendar).apply {
+            add(java.util.Calendar.DAY_OF_YEAR, -6)
+        }
+        val startOfWeek = weekCal.timeInMillis
+
+        val monthCal = (cal.clone() as java.util.Calendar).apply {
+            set(java.util.Calendar.DAY_OF_MONTH, 1)
+        }
+        val startOfMonth = monthCal.timeInMillis
+
+        var todayCount = 0
+        var weekCount = 0
+        var monthCount = 0
+        val totalCount = historyList.size
+
+        val dhikrCountsMap = mutableMapOf<Int, Int>()
+        val dateSet = mutableSetOf<String>()
+
+        for (item in historyList) {
+            if (item.timestamp >= startOfToday) todayCount++
+            if (item.timestamp >= startOfWeek) weekCount++
+            if (item.timestamp >= startOfMonth) monthCount++
+
+            dhikrCountsMap[item.dhikrId] = (dhikrCountsMap[item.dhikrId] ?: 0) + 1
+            dateSet.add(item.dateString)
+        }
+
+        // Streak calculation
+        val sdf = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
+        val checkCal = (cal.clone() as java.util.Calendar)
+        var streak = 0
+
+        var currentDateStr = sdf.format(checkCal.time)
+        if (!dateSet.contains(currentDateStr)) {
+            // If today has no reading yet, check if yesterday had a reading to keep streak active
+            checkCal.add(java.util.Calendar.DAY_OF_YEAR, -1)
+            currentDateStr = sdf.format(checkCal.time)
+        }
+
+        while (dateSet.contains(currentDateStr)) {
+            streak++
+            checkCal.add(java.util.Calendar.DAY_OF_YEAR, -1)
+            currentDateStr = sdf.format(checkCal.time)
+        }
+
+        val topRead = dhikrCountsMap.toList().sortedByDescending { it.second }
+
+        return DhikrStats(
+            todayCount = todayCount,
+            weekCount = weekCount,
+            monthCount = monthCount,
+            totalCount = totalCount,
+            streakDays = streak,
+            topReadDhikr = topRead
+        )
     }
 
     val allDhikr: StateFlow<List<Dhikr>> = repository.allDhikr.stateIn(
@@ -83,6 +185,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     )
     
     val enabledDhikr: StateFlow<List<Dhikr>> = repository.enabledDhikr.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    val allTags: StateFlow<List<Tag>> = repository.allTags.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    val dhikrsWithTags: StateFlow<List<DhikrWithTags>> = repository.dhikrsWithTags.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
@@ -123,6 +237,29 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
          }
     }
 
+    fun addDhikrWithScheduleAndTags(title: String, content: String, times: List<String>, tagIds: List<Long>) {
+        viewModelScope.launch {
+            val newDhikr = Dhikr(title = title, content = content, reminderTimes = times, isEnabled = true)
+            val id = repository.insert(newDhikr)
+            val scheduledDhikr = newDhikr.copy(id = id.toInt())
+            alarmScheduler.schedule(scheduledDhikr)
+            if (tagIds.isNotEmpty()) {
+                repository.updateDhikrTags(id.toInt(), tagIds)
+            }
+        }
+    }
+
+    fun updateDhikrWithTags(dhikr: Dhikr, newTitle: String, newContent: String, tagIds: List<Long>) {
+        viewModelScope.launch {
+            val updated = dhikr.copy(title = newTitle, content = newContent)
+            repository.update(updated)
+            repository.updateDhikrTags(dhikr.id, tagIds)
+            if (updated.isEnabled) {
+                alarmScheduler.schedule(updated)
+            }
+        }
+    }
+
     fun updateDhikrText(dhikr: Dhikr, newTitle: String, newContent: String) {
         viewModelScope.launch {
             val updated = dhikr.copy(title = newTitle, content = newContent)
@@ -130,6 +267,34 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             if (updated.isEnabled) {
                 alarmScheduler.schedule(updated)
             }
+        }
+    }
+
+    fun updateDhikrTags(dhikrId: Int, tagIds: List<Long>) {
+        viewModelScope.launch {
+            repository.updateDhikrTags(dhikrId, tagIds)
+        }
+    }
+
+    fun addTag(name: String, colorHex: String = "#008080", onCreated: ((Tag) -> Unit)? = null) {
+        viewModelScope.launch {
+            val tag = repository.getOrCreateTagByName(name, colorHex)
+            onCreated?.invoke(tag)
+        }
+    }
+
+    fun updateTag(tag: Tag) {
+        viewModelScope.launch {
+            repository.updateTag(tag)
+        }
+    }
+
+    fun deleteTag(tag: Tag) {
+        viewModelScope.launch {
+            if (_selectedTag.value?.tagId == tag.tagId) {
+                _selectedTag.value = null
+            }
+            repository.deleteTag(tag)
         }
     }
 
@@ -164,6 +329,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.markAsRead(dhikrId)
         }
+    }
+
+    fun markAsRead(dhikr: Dhikr) {
+        markAsRead(dhikr.id)
     }
 
     fun resetTasbeeh() {

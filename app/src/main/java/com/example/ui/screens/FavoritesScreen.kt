@@ -21,9 +21,15 @@ import com.example.ui.viewmodel.MainViewModel
 @Composable
 fun FavoritesScreen(viewModel: MainViewModel) {
     val favoriteDhikr by viewModel.favoriteDhikr.collectAsStateWithLifecycle()
+    val allTags by viewModel.allTags.collectAsStateWithLifecycle()
+    val dhikrsWithTags by viewModel.dhikrsWithTags.collectAsStateWithLifecycle()
 
     var showTimesDialog by remember { mutableStateOf<Dhikr?>(null) }
     var showEditDialog by remember { mutableStateOf<Dhikr?>(null) }
+
+    val dhikrTagsMap = remember(dhikrsWithTags) {
+        dhikrsWithTags.associate { it.dhikr.id to it.tags }
+    }
 
     Column(
         modifier = Modifier
@@ -42,13 +48,16 @@ fun FavoritesScreen(viewModel: MainViewModel) {
                     items = favoriteDhikr,
                     key = { it.id }
                 ) { dhikr ->
+                    val tags = dhikrTagsMap[dhikr.id] ?: emptyList()
                     DhikrItemCard(
                         dhikr = dhikr,
+                        tags = tags,
                         onToggleEnabled = { viewModel.toggleEnabled(dhikr) },
                         onToggleFavorite = { viewModel.toggleFavorite(dhikr) },
                         onClickTimes = { showTimesDialog = dhikr },
                         onEditClick = { showEditDialog = dhikr },
-                        onDeleteClick = { viewModel.deleteDhikr(dhikr) }
+                        onDeleteClick = { viewModel.deleteDhikr(dhikr) },
+                        onMarkAsRead = { viewModel.markAsRead(dhikr) }
                     )
                 }
             }
@@ -67,12 +76,18 @@ fun FavoritesScreen(viewModel: MainViewModel) {
     }
 
     showEditDialog?.let { dhikr ->
+        val currentTagIds = (dhikrTagsMap[dhikr.id] ?: emptyList()).map { it.tagId }
         DhikrEditDialog(
             dhikr = dhikr,
+            allTags = allTags,
+            initialTagIds = currentTagIds,
             onDismiss = { showEditDialog = null },
-            onConfirm = { newTitle, newContent ->
-                viewModel.updateDhikrText(dhikr, newTitle, newContent)
+            onConfirm = { newTitle, newContent, tagIds ->
+                viewModel.updateDhikrWithTags(dhikr, newTitle, newContent, tagIds)
                 showEditDialog = null
+            },
+            onCreateTag = { newTagName ->
+                viewModel.addTag(newTagName)
             }
         )
     }

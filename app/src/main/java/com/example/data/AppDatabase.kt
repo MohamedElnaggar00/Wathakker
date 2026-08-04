@@ -10,10 +10,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [Dhikr::class], version = 4, exportSchema = false)
+@Database(entities = [Dhikr::class, Tag::class, DhikrTagCrossRef::class, DhikrHistory::class], version = 6, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dhikrDao(): DhikrDao
+    abstract fun tagDao(): TagDao
+    abstract fun historyDao(): HistoryDao
 
     companion object {
         @Volatile
@@ -42,6 +44,15 @@ abstract class AppDatabase : RoomDatabase() {
                                         )
                                     )
                                     dao.insertAll(defaultAdhkar)
+                                }
+                                INSTANCE?.tagDao()?.let { tagDao ->
+                                    val defaultTags = listOf(
+                                        Tag(name = "أذكار الصباح", colorHex = "#008080"),
+                                        Tag(name = "أذكار المساء", colorHex = "#800080"),
+                                        Tag(name = "أذكار النوم", colorHex = "#1E3A8A"),
+                                        Tag(name = "أدعية عامة", colorHex = "#059669")
+                                    )
+                                    defaultTags.forEach { tagDao.insertTag(it) }
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()
