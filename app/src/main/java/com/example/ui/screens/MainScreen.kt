@@ -34,6 +34,10 @@ import kotlinx.coroutines.launch
 
 import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Alarm
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fajr.ui.FajrSettingsScreen
+import com.example.fajr.ui.FajrViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -131,6 +135,16 @@ fun MainScreen(viewModel: MainViewModel) {
                     selected = false,
                     onClick = {
                         navController.navigate("tasbeeh")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.Alarm, contentDescription = null) },
+                    label = { Text("منبه صلاة الفجر", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("fajr_settings")
                         scope.launch { drawerState.close() }
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -250,6 +264,14 @@ fun MainScreen(viewModel: MainViewModel) {
                                     )
                                     DashedDivider()
                                     DropdownMenuItem(
+                                        text = { Text("منبه صلاة الفجر", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                        onClick = { 
+                                            showMenu = false
+                                            navController.navigate("fajr_settings")
+                                        }
+                                    )
+                                    DashedDivider()
+                                    DropdownMenuItem(
                                         text = { Text("الإعدادات", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
                                         onClick = { 
                                             showMenu = false
@@ -297,7 +319,15 @@ fun MainScreen(viewModel: MainViewModel) {
                         RemindersScreen(viewModel = viewModel)
                     }
                     composable("settings") {
-                        SettingsScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
+                        SettingsScreen(
+                            viewModel = viewModel,
+                            onBack = { navController.popBackStack() },
+                            onNavigateToFajr = { navController.navigate("fajr_settings") }
+                        )
+                    }
+                    composable("fajr_settings") {
+                        val fajrViewModel: FajrViewModel = viewModel()
+                        FajrSettingsScreen(viewModel = fajrViewModel)
                     }
                     composable("about") {
                         AboutScreen()
