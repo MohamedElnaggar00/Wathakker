@@ -74,6 +74,8 @@ class FajrAlarmActivity : ComponentActivity() {
                     FajrAlarmScreen(
                         onDismiss = { stopAndFinish() },
                         onSnooze = { minutes ->
+                            val p = FajrPreferences(this)
+                            p.snoozeCount += 1
                             FajrAlarmScheduler(this).scheduleSnooze(minutes)
                             stopAndFinish()
                         }
@@ -131,11 +133,19 @@ class FajrAlarmActivity : ComponentActivity() {
         }
 
         // Max Duration Auto-stop
-        val maxDurationMs = prefs.maxDurationMinutes * 60 * 1000L
-        autoStopRunnable = Runnable { stopAndFinish() }
+        val maxDurationMs = 1 * 60 * 1000L
+        autoStopRunnable = Runnable { handleAutoStop() }
         handler.postDelayed(autoStopRunnable!!, maxDurationMs)
     }
 
+    private fun handleAutoStop() {
+        val prefs = FajrPreferences(this)
+        if (prefs.snoozeCount < 3) {
+            prefs.snoozeCount += 1
+            FajrAlarmScheduler(this).scheduleSnooze(prefs.maxDurationMinutes)
+        }
+        stopAndFinish()
+    }
     private fun stopAndFinish() {
         autoStopRunnable?.let { handler.removeCallbacks(it) }
         try {

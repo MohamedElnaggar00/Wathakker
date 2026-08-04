@@ -169,7 +169,7 @@ fun FajrSettingsScreen(viewModel: FajrViewModel) {
                         }
                     }
 
-                    Switch(
+                    com.example.ui.components.OneUISwitch(
                         checked = state.isAlarmEnabled,
                         onCheckedChange = { viewModel.toggleAlarm(it) }
                     )
@@ -487,7 +487,7 @@ fun FajrSettingsScreen(viewModel: FajrViewModel) {
                             Spacer(Modifier.width(10.dp))
                             Text("الاهتزاز أثناء التنبيه", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                         }
-                        Switch(
+                        com.example.ui.components.OneUISwitch(
                             checked = state.isVibrationEnabled,
                             onCheckedChange = { viewModel.toggleVibration(it) }
                         )
@@ -519,7 +519,7 @@ fun FajrSettingsScreen(viewModel: FajrViewModel) {
 
                     // Max Duration Selector
                     Column {
-                        Text("المدة القصوى لرنين المنبه", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text("مدة الغفوة", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                         Spacer(Modifier.height(8.dp))
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -529,7 +529,7 @@ fun FajrSettingsScreen(viewModel: FajrViewModel) {
                                 FilterChip(
                                     selected = state.maxDurationMinutes == mins,
                                     onClick = { viewModel.setMaxDuration(mins) },
-                                    label = { Text("$mins", modifier = Modifier.fillMaxWidth(), textAlign = androidx.compose.ui.text.style.TextAlign.Center, maxLines = 1) },
+                                    label = { Text("$mins (د)", modifier = Modifier.fillMaxWidth(), textAlign = androidx.compose.ui.text.style.TextAlign.Center, maxLines = 1) },
                                     modifier = Modifier.weight(1f)
                                 )
                             }

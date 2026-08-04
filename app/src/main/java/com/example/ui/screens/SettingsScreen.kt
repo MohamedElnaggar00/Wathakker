@@ -143,16 +143,9 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("الاهتزاز", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
-                    Switch(
+                    com.example.ui.components.OneUISwitch(
                         checked = vibrationEnabled,
                         onCheckedChange = { viewModel.updateVibrationEnabled(it) },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = MaterialTheme.colorScheme.primary,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                            uncheckedBorderColor = Color.Transparent,
-                        ),
 
                     )
                 }
@@ -175,16 +168,9 @@ fun SettingsScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    Switch(
+                    com.example.ui.components.OneUISwitch(
                         checked = useDeviceFont,
                         onCheckedChange = { viewModel.updateUseDeviceFont(it) },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = MaterialTheme.colorScheme.primary,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                            uncheckedBorderColor = Color.Transparent,
-                        ),
 
                     )
                 }

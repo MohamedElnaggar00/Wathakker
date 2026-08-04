@@ -1,0 +1,3 @@
+sed -i 's/fun DhikrHighlightCard(instance: DhikrInstance)/fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit)/g' app/src/main/java/com/example/ui/screens/DashboardScreen.kt
+sed -i 's/DhikrHighlightCard(instance = currentOrPassedInstance)/DhikrHighlightCard(instance = currentOrPassedInstance, onMarkAsRead = { viewModel.markAsRead(currentOrPassedInstance.dhikr) })/g' app/src/main/java/com/example/ui/screens/DashboardScreen.kt
+sed -i 's/DhikrHighlightCard(instance = nextDhikrInstance)/DhikrHighlightCard(instance = nextDhikrInstance, onMarkAsRead = { viewModel.markAsRead(nextDhikrInstance.dhikr) })/g' app/src/main/java/com/example/ui/screens/DashboardScreen.kt

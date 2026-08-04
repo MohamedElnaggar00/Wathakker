@@ -63,7 +63,7 @@ class FajrAlarmScheduler(private val context: Context) {
 
     private fun setExactAlarm(triggerAtMillis: Long, requestCode: Int) {
         val intent = Intent(context, FajrAlarmReceiver::class.java).apply {
-            action = ACTION_FAJR_ALARM
+            action = if (requestCode == SNOOZE_REQUEST_CODE) "ACTION_SNOOZE_TRIGGER" else ACTION_FAJR_ALARM
         }
 
         val pendingIntent = PendingIntent.getBroadcast(

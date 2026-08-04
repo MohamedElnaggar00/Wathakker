@@ -32,6 +32,7 @@ class FajrAlarmReceiver : BroadcastReceiver() {
 
         if (intent.action != "ACTION_SNOOZE_TRIGGER") {
             prefs.lastAlarmTriggeredDate = todayDate
+            prefs.snoozeCount = 0
         }
 
         // Show Full Screen Notification and Launch Alarm Activity

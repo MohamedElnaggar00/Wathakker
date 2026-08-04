@@ -102,7 +102,7 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
             onValueChange = { newQuery ->
                 viewModel.setSearchQuery(newQuery)
             },
-            placeholder = { Text("ابحث في العنوان أو نص الذكر أو التصنيف...", fontSize = 15.sp) },
+            placeholder = { Text("ابحث عن ذكر أو تصنيف...", fontSize = 15.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -235,7 +235,6 @@ fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
                             if (selectedTag?.tagId == tag.tagId) viewModel.setSelectedTag(null)
                             else viewModel.setSelectedTag(tag)
                         },
-                        onMarkAsRead = { viewModel.markAsRead(dhikr) }
                     )
                 }
             }
@@ -282,7 +281,6 @@ fun DhikrItemCard(
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onTagClick: ((Tag) -> Unit)? = null,
-    onMarkAsRead: (() -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -311,16 +309,9 @@ fun DhikrItemCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Switch(
+                    com.example.ui.components.OneUISwitch(
                         checked = dhikr.isEnabled,
                         onCheckedChange = { onToggleEnabled() },
-                        colors = SwitchDefaults.colors(
-                            checkedThumbColor = Color.White,
-                            checkedTrackColor = MaterialTheme.colorScheme.primary,
-                            uncheckedThumbColor = Color.White,
-                            uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                            uncheckedBorderColor = Color.Transparent,
-                        ),
                         modifier = Modifier.padding(end = 8.dp)
                     )
                     IconButton(onClick = onToggleFavorite) {
@@ -343,7 +334,7 @@ fun DhikrItemCard(
                             modifier = Modifier.width(220.dp)
                         ) {
                             DropdownMenuItem(
-                                text = { Text("تعديل نص وتصنيفات الدعاء", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                text = { Text("تعديل نص وتصنيفات الدعاء", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
                                 onClick = { 
                                     expanded = false
                                     onEditClick() 
@@ -351,7 +342,7 @@ fun DhikrItemCard(
                             )
                             DashedDivider()
                             DropdownMenuItem(
-                                text = { Text("تكرار التنبيه مخصص", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                text = { Text("تكرار التنبيه مخصص", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
                                 onClick = { 
                                     expanded = false
                                     onClickTimes() 
@@ -359,7 +350,7 @@ fun DhikrItemCard(
                             )
                             DashedDivider()
                             DropdownMenuItem(
-                                text = { Text("حذف", fontSize = 16.sp, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(horizontal = 12.dp)) },
+                                text = { Text("حذف", fontSize = 16.sp, color = MaterialTheme.colorScheme.error, modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Right) },
                                 onClick = { 
                                     expanded = false
                                     onDeleteClick() 
@@ -445,23 +436,7 @@ fun DhikrItemCard(
                 )
             }
 
-            if (onMarkAsRead != null) {
-                Spacer(Modifier.height(8.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(onClick = onMarkAsRead) {
-                        Text(
-                            text = "تم القراءة ✓",
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary,
-                            fontSize = 13.sp
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 
+}

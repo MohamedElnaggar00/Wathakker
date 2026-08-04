@@ -1,3 +1,4 @@
+cat << 'INNER' > app/src/main/java/com/example/fajr/data/FajrPreferences.kt
 package com.example.fajr.data
 
 import android.content.Context
@@ -57,12 +58,5 @@ class FajrPreferences(context: Context) {
     var snoozeCount: Int
         get() = prefs.getInt("snooze_count", 0)
         set(value) = prefs.edit().putInt("snooze_count", value).apply()
-
-    var useCurrentLocation: Boolean
-        get() = prefs.getBoolean("use_current_location", true)
-        set(value) = prefs.edit().putBoolean("use_current_location", value).apply()
-
-    var countryName: String
-        get() = prefs.getString("country_name", "مصر") ?: "مصر"
-        set(value) = prefs.edit().putString("country_name", value).apply()
 }
+INNER

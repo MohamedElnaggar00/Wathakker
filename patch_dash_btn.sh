@@ -1,3 +1,4 @@
+cat << 'INNER' > app/src/main/java/com/example/ui/screens/DashboardScreen.kt
 package com.example.ui.screens
 
 import androidx.compose.foundation.layout.*
@@ -148,3 +149,4 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
         }
     }
 }
+INNER

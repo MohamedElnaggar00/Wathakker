@@ -1,0 +1,1 @@
+sed -i 's/onSnooze = { minutes ->/onSnooze = { minutes ->\n                            val p = FajrPreferences(this)\n                            p.snoozeCount += 1/g' app/src/main/java/com/example/fajr/ui/FajrAlarmActivity.kt
