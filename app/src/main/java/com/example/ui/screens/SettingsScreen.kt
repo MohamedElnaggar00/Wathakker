@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.components.WathakkerSwitch
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -63,7 +61,7 @@ fun SettingsScreen(
             }
             Text(
                 text = "الإعدادات",
-                fontSize = 22.sp,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(start = 8.dp)
@@ -145,10 +143,18 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text("الاهتزاز", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
-                    WathakkerSwitch(
+                    Switch(
                         checked = vibrationEnabled,
                         onCheckedChange = { viewModel.updateVibrationEnabled(it) },
-                        )
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = MaterialTheme.colorScheme.primary,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                            uncheckedBorderColor = Color.Transparent,
+                        ),
+
+                    )
                 }
             }
 
@@ -165,14 +171,22 @@ fun SettingsScreen(
                         Text("خط الجهاز الافتراضي", fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
                         Text(
                             text = "استخدام خط النظام بدلاً من الخط المخصص",
-                            fontSize = 13.sp,
+                            fontSize = 14.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    WathakkerSwitch(
+                    Switch(
                         checked = useDeviceFont,
                         onCheckedChange = { viewModel.updateUseDeviceFont(it) },
-                        )
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = Color.White,
+                            checkedTrackColor = MaterialTheme.colorScheme.primary,
+                            uncheckedThumbColor = Color.White,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
+                            uncheckedBorderColor = Color.Transparent,
+                        ),
+
+                    )
                 }
             }
         }

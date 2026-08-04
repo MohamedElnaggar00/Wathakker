@@ -1,13 +1,17 @@
 package com.example.ui.screens
-import com.example.ui.components.WathakkerButton
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -16,43 +20,53 @@ import com.example.ui.viewmodel.MainViewModel
 
 @Composable
 fun TasbeehScreen(viewModel: MainViewModel) {
-    val counter by viewModel.tasbeehCount.collectAsStateWithLifecycle()
+    val count by viewModel.tasbeehCount.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "المسبحة",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.Bold
-        )
-        
-        Spacer(modifier = Modifier.height(48.dp))
-        
-        Text(
-            text = counter.toString(),
-            fontSize = 72.sp,
+            text = "عداد التسبيح",
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(bottom = 48.dp)
         )
-        
-        Spacer(modifier = Modifier.height(64.dp))
-        
-        WathakkerButton(
-            text = "سبّح",
-            onClick = { viewModel.incrementTasbeeh() },
-            modifier = Modifier.size(120.dp),
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        )
-        
-        Spacer(modifier = Modifier.height(24.dp))
-        
-        WathakkerButton(text = "تصفير العداد", onClick = { viewModel.resetTasbeeh() }, containerColor = androidx.compose.ui.graphics.Color.Transparent, contentColor = MaterialTheme.colorScheme.error)
+
+        Box(
+            modifier = Modifier
+                .size(200.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.primaryContainer)
+                .clickable { viewModel.incrementTasbeeh() },
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = count.toString(),
+                fontSize = 64.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
+        }
+
+        Spacer(modifier = Modifier.height(48.dp))
+
+        Button(
+            onClick = { viewModel.resetTasbeeh() },
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+            shape = CircleShape,
+            modifier = Modifier.size(80.dp)
+        ) {
+            Icon(
+                Icons.Default.Refresh,
+                contentDescription = "إعادة تعيين",
+                tint = MaterialTheme.colorScheme.onErrorContainer,
+                modifier = Modifier.size(36.dp)
+            )
+        }
     }
 }

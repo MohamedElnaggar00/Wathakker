@@ -15,7 +15,6 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,10 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.material.icons.filled.Timer
-import kotlinx.coroutines.delay
 import com.example.fajr.alarm.FajrAlarmScheduler
 import com.example.fajr.data.FajrPreferences
 import com.example.fajr.sound.RingtoneHelper
@@ -225,7 +220,7 @@ fun FajrAlarmScreen(
                         )
                     }
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(20.dp))
 
                     Text(
                         text = "صلاة الفجر",
@@ -247,7 +242,7 @@ fun FajrAlarmScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = currentTimeStr,
-                        fontSize = 32.sp,
+                        fontSize = 48.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -276,33 +271,42 @@ fun FajrAlarmScreen(
                             ) {
                                 Text(
                                     text = "اختر مدة الغفوة (Snooze):",
-                                    fontSize = 16.sp,
+                                    fontSize = 15.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(Modifier.height(12.dp))
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                    horizontalArrangement = Arrangement.SpaceEvenly
                                 ) {
-                                    SnoozeOptionCard(
-                                        minutes = 5,
-                                        text = "5 دقائق",
-                                        onSnooze = onSnooze,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                    SnoozeOptionCard(
-                                        minutes = 10,
-                                        text = "10 دقائق",
-                                        onSnooze = onSnooze,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                    SnoozeOptionCard(
-                                        minutes = 15,
-                                        text = "15 دقيقة",
-                                        onSnooze = onSnooze,
-                                        modifier = Modifier.weight(1f)
-                                    )
+                                    Button(
+                                        onClick = { onSnooze(5) },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                        )
+                                    ) {
+                                        Text("5 دقائق")
+                                    }
+                                    Button(
+                                        onClick = { onSnooze(10) },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                        )
+                                    ) {
+                                        Text("10 دقائق")
+                                    }
+                                    Button(
+                                        onClick = { onSnooze(15) },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                        )
+                                    ) {
+                                        Text("15 دقيقة")
+                                    }
                                 }
                             }
                         }
@@ -347,64 +351,6 @@ fun FajrAlarmScreen(
                     Spacer(Modifier.height(24.dp))
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun SnoozeOptionCard(
-    minutes: Int,
-    text: String,
-    onSnooze: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    var isSelected by remember { mutableStateOf(false) }
-    val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
-        animationSpec = tween(durationMillis = 300),
-        label = "backgroundColor"
-    )
-    val contentColor by animateColorAsState(
-        targetValue = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
-        animationSpec = tween(durationMillis = 300),
-        label = "contentColor"
-    )
-    
-    LaunchedEffect(isSelected) {
-        if (isSelected) {
-            delay(300)
-            onSnooze(minutes)
-        }
-    }
-
-    Surface(
-        modifier = modifier
-            .height(100.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .clickable { isSelected = true },
-        shape = RoundedCornerShape(20.dp),
-        color = backgroundColor,
-        contentColor = contentColor,
-        shadowElevation = 2.dp
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.Timer,
-                contentDescription = null,
-                modifier = Modifier.size(32.dp),
-                tint = contentColor
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = text,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = contentColor
-            )
         }
     }
 }

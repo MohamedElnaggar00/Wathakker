@@ -20,7 +20,7 @@ fun AboutScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("وَذكِّر", fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
+        Text("وَذكِّر", fontSize = 48.sp, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             "تطبيق يساعدك على الحفاظ على الأذكار في يومك وليلتك\n\nالإصدار V2.0 - Preview",
@@ -41,7 +41,7 @@ fun AboutScreen() {
             "بواسطة\nمحمد النجار",
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 18.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(32.dp))

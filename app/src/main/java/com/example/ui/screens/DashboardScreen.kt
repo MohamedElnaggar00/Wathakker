@@ -1,7 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.components.WathakkerButton
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -12,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
 import com.example.ui.viewmodel.MainViewModel
@@ -127,8 +124,8 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
                     tint = if (dhikr.isEnabled) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = androidx.compose.ui.Modifier.size(18.dp)
                 )
-                Spacer(modifier = androidx.compose.ui.Modifier.width(4.dp))
-                Text(timeString, color = if (dhikr.isEnabled) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), fontWeight = androidx.compose.ui.text.font.FontWeight.Medium, fontSize = 16.sp)
+                Spacer(modifier = androidx.compose.ui.Modifier.width(6.dp))
+                Text(timeString, color = if (dhikr.isEnabled) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f), fontWeight = androidx.compose.ui.text.font.FontWeight.Medium, fontSize = 15.sp)
             }
             
             Box(
@@ -153,12 +150,14 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
                 modifier = androidx.compose.ui.Modifier.fillMaxWidth(),
                 horizontalArrangement = androidx.compose.foundation.layout.Arrangement.End
             ) {
-                WathakkerButton(
-    isSecondary = true,
-    isSmall = true,
-                    onClick = onMarkAsRead,
-                    text = "تم القراءة ✓"
-                )
+                androidx.compose.material3.TextButton(onClick = onMarkAsRead) {
+                    Text(
+                        text = "تم القراءة ✓",
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                        color = androidx.compose.material3.MaterialTheme.colorScheme.onSurface,
+                        fontSize = 13.sp
+                    )
+                }
             }
         }
     }

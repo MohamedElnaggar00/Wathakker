@@ -11,8 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -21,66 +20,56 @@ import androidx.core.view.WindowCompat
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
-
-data class CustomColors(
-    val success: Color = Color.Unspecified,
-    val warning: Color = Color.Unspecified
-)
-
-val LocalCustomColors = staticCompositionLocalOf { CustomColors() }
-
-val MaterialTheme.customColors: CustomColors
-    @Composable
-    get() = LocalCustomColors.current
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimaryGray,
-    onPrimary = TextPrimaryDark,
-    primaryContainer = SecondaryDarkGrayDark,
-    onPrimaryContainer = TextPrimaryDark,
-    secondary = SecondaryDarkGrayDark,
-    onSecondary = TextPrimaryDark,
-    secondaryContainer = SurfaceDark,
-    onSecondaryContainer = TextPrimaryDark,
-    tertiary = PrimaryGray,
-    onTertiary = TextPrimaryDark,
-    tertiaryContainer = SurfaceDark,
-    onTertiaryContainer = TextPrimaryDark,
-    background = BackgroundDark,
-    onBackground = TextPrimaryDark,
-    surface = SurfaceDark,
-    onSurface = TextPrimaryDark,
-    surfaceVariant = BackgroundDark,
-    onSurfaceVariant = TextSecondaryDark,
-    outline = OutlineDark,
-    outlineVariant = OutlineDark,
-    error = ErrorRed,
-    onError = TextPrimaryDark
+    primary = OneUIAccentDark,
+    onPrimary = OneUIBlack,
+    primaryContainer = OneUIContainerDark,
+    onPrimaryContainer = OneUIWhite,
+    secondary = OneUILightGray,
+    onSecondary = OneUIBlack,
+    secondaryContainer = OneUISurfaceVariantDark,
+    onSecondaryContainer = OneUIWhite,
+    tertiary = OneUIGray,
+    onTertiary = OneUIWhite,
+    tertiaryContainer = OneUISurfaceDark,
+    onTertiaryContainer = OneUIWhite,
+    background = OneUIDarkCanvas,
+    onBackground = OneUITextPrimaryDark,
+    surface = OneUISurfaceDark,
+    onSurface = OneUITextPrimaryDark,
+    surfaceVariant = OneUISurfaceVariantDark,
+    onSurfaceVariant = OneUITextSecondaryDark,
+    outline = OneUIBorderDark,
+    outlineVariant = OneUIContainerDark,
+    error = Color(0xFFE53935),
+    onError = OneUIWhite
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimaryGray,
-    onPrimary = TextPrimaryLight,
-    primaryContainer = OutlineLight,
-    onPrimaryContainer = TextPrimaryLight,
-    secondary = SecondaryDarkGray,
-    onSecondary = SurfaceLight,
-    secondaryContainer = SurfaceLight,
-    onSecondaryContainer = TextPrimaryLight,
-    tertiary = PrimaryGray,
-    onTertiary = TextPrimaryLight,
-    tertiaryContainer = SurfaceLight,
-    onTertiaryContainer = TextPrimaryLight,
-    background = BackgroundLight,
-    onBackground = TextPrimaryLight,
-    surface = SurfaceLight,
-    onSurface = TextPrimaryLight,
-    surfaceVariant = BackgroundLight,
-    onSurfaceVariant = TextSecondaryLight,
-    outline = OutlineLight,
-    outlineVariant = OutlineLight,
-    error = ErrorRed,
-    onError = SurfaceLight
+    primary = OneUIAccentLight,
+    onPrimary = OneUIWhite,
+    primaryContainer = OneUIContainerLight,
+    onPrimaryContainer = OneUITextPrimaryLight,
+    secondary = OneUIDarkGray,
+    onSecondary = OneUIWhite,
+    secondaryContainer = OneUISurfaceVariantLight,
+    onSecondaryContainer = OneUITextPrimaryLight,
+    tertiary = OneUIGray,
+    onTertiary = OneUIWhite,
+    tertiaryContainer = OneUIBackgroundLight,
+    onTertiaryContainer = OneUITextPrimaryLight,
+    background = OneUIBackgroundLight,
+    onBackground = OneUITextPrimaryLight,
+    surface = OneUISurfaceLight,
+    onSurface = OneUITextPrimaryLight,
+    surfaceVariant = OneUISurfaceVariantLight,
+    onSurfaceVariant = OneUITextSecondaryLight,
+    outline = OneUIBorderLight,
+    outlineVariant = OneUIContainerLight,
+    error = Color(0xFFD32F2F),
+    onError = OneUIWhite
 )
 
 val OneUIShapes = Shapes(
@@ -106,11 +95,6 @@ fun MyApplicationTheme(
         else -> LightColorScheme
     }
     
-    val customColors = CustomColors(
-        success = SuccessGreen,
-        warning = WarningOrange
-    )
-
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -126,15 +110,13 @@ fun MyApplicationTheme(
         }
     }
 
-    CompositionLocalProvider(
-        LocalLayoutDirection provides LayoutDirection.Rtl,
-        LocalCustomColors provides customColors
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = getTypography(useDeviceFont),
+        shapes = OneUIShapes
     ) {
-        MaterialTheme(
-            colorScheme = colorScheme,
-            typography = getTypography(useDeviceFont),
-            shapes = OneUIShapes,
-            content = content
-        )
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            content()
+        }
     }
 }

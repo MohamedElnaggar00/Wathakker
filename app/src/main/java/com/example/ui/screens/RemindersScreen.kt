@@ -87,7 +87,7 @@ fun ReminderRow(dhikr: Dhikr, onToggle: () -> Unit) {
                     text = timesString,
                     color = if (dhikr.isEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                     fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp
+                    fontSize = 14.sp
                 )
             }
             

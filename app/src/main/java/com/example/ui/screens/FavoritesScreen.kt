@@ -36,7 +36,7 @@ fun FavoritesScreen(viewModel: MainViewModel) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("الاذكار المفضلة", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(bottom = 16.dp))
+        Text("الاذكار المفضلة", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground, modifier = Modifier.padding(bottom = 16.dp))
         
         if (favoriteDhikr.isEmpty()) {
             Text("لا توجد أذكار مفضلة", color = MaterialTheme.colorScheme.onSurfaceVariant)

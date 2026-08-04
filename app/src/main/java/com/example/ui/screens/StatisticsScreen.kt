@@ -5,7 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import com.example.ui.components.WathakkerCard
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -76,7 +75,7 @@ fun StatisticsScreen(viewModel: MainViewModel) {
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 StatPeriodCard(
                     modifier = Modifier.weight(1f),
@@ -145,7 +144,16 @@ fun StatisticsScreen(viewModel: MainViewModel) {
 
 @Composable
 fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
-    WathakkerCard {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -154,7 +162,7 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "الأذكار المقروءة اليوم",
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -220,7 +228,7 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
                                 Spacer(Modifier.width(8.dp))
                                 Text(
                                     text = dhikrTitle,
-                                    fontSize = 13.sp,
+                                    fontSize = 14.sp,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -243,6 +251,7 @@ fun TodayOverviewCard(stats: DhikrStats, dhikrMap: Map<Int, Dhikr>) {
                 )
             }
         }
+    }
 }
 
 @Composable
@@ -319,10 +328,13 @@ fun StatPeriodCard(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     accentColor: Color
 ) {
-    WathakkerCard(
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
         modifier = modifier
     ) {
         Column(
+            modifier = Modifier.padding(14.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Box(
@@ -342,7 +354,7 @@ fun StatPeriodCard(
             Spacer(Modifier.height(12.dp))
             Text(
                 text = title,
-                fontSize = 13.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -359,7 +371,16 @@ fun StatPeriodCard(
 
 @Composable
 fun StreakCard(streakDays: Int) {
-    WathakkerCard {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -384,13 +405,13 @@ fun StreakCard(streakDays: Int) {
                     Column {
                         Text(
                             text = "الأيام المتتالية (Streak)",
-                            fontSize = 13.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = "الاستمرارية والالتزام بالأذكار",
-                            fontSize = 13.sp,
+                            fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -402,10 +423,10 @@ fun StreakCard(streakDays: Int) {
                 ) {
                     Text(
                         text = "$streakDays يوم",
-                        fontSize = 16.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     )
                 }
             }
@@ -425,17 +446,24 @@ fun StreakCard(streakDays: Int) {
             Spacer(Modifier.height(8.dp))
             Text(
                 text = if (streakDays > 0) "ممتاز! استمر في المحافظة على أذكارك اليومية 🔥" else "ابدأ قراءة أذكارك اليوم لبناء سلسلتك المتتالية!",
-                fontSize = 13.sp,
+                fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
+}
 
 @Composable
 fun TotalStatsCard(totalCount: Int) {
-    WathakkerCard {
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -458,13 +486,13 @@ fun TotalStatsCard(totalCount: Int) {
                 Column {
                     Text(
                         text = "إجمالي جميع الأذكار المقروءة",
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "مجموع كل مرة قمت فيها بالضغط على تم القراءة",
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -472,7 +500,7 @@ fun TotalStatsCard(totalCount: Int) {
 
             Text(
                 text = "$totalCount",
-                fontSize = 22.sp,
+                fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
@@ -487,11 +515,15 @@ fun HistoryItemRow(history: DhikrHistory, dhikr: Dhikr?) {
         sdf.format(Date(history.timestamp))
     }
 
-    WathakkerCard(
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -505,20 +537,20 @@ fun HistoryItemRow(history: DhikrHistory, dhikr: Dhikr?) {
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(20.dp)
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(10.dp))
                 Column {
                     Text(
                         text = dhikr?.title ?: "ذكر #${history.dhikrId}",
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(2.dp))
                     Text(
                         text = formattedTime,
-                        fontSize = 13.sp,
+                        fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -530,7 +562,7 @@ fun HistoryItemRow(history: DhikrHistory, dhikr: Dhikr?) {
             ) {
                 Text(
                     text = "تم القراءة",
-                    fontSize = 13.sp,
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)

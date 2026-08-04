@@ -1,8 +1,5 @@
 package com.example.ui.screens
 
-import com.example.ui.components.WathakkerTextField
-import com.example.ui.components.WathakkerDialog
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,7 +14,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Label
 import androidx.compose.material3.*
-import com.example.ui.components.WathakkerCard
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,10 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Tag
-import com.example.ui.components.WathakkerButton
-
-
-
 import com.example.ui.viewmodel.MainViewModel
 
 @Composable
@@ -71,11 +63,14 @@ fun TagsScreen(viewModel: MainViewModel) {
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
-                WathakkerButton(
-    isSmall = true,
+                Button(
                     onClick = { showAddTagDialog = true },
-                    text = "إضافة تصنيف"
-                )
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("إضافة تصنيف")
+                }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -143,27 +138,24 @@ fun TagsScreen(viewModel: MainViewModel) {
         }
 
         tagToDelete?.let { tag ->
-            WathakkerDialog(
+            AlertDialog(
                 onDismissRequest = { tagToDelete = null },
                 title = { Text("حذف التصنيف") },
                 text = { Text("هل أنت تأكد من حذف تصنيف \"${tag.name}\"؟ لن يتم حذف الأذكار المرتبطة به.") },
                 confirmButton = {
-                    WathakkerButton(
-    isSmall = true,
+                    TextButton(
                         onClick = {
                             viewModel.deleteTag(tag)
                             tagToDelete = null
-                        },
-                        text = "حذف"
-                    )
+                        }
+                    ) {
+                        Text("حذف", color = MaterialTheme.colorScheme.error)
+                    }
                 },
                 dismissButton = {
-                    WathakkerButton(
-    isSecondary = true,
-    isSmall = true,
-                        onClick = { tagToDelete = null },
-                        text = "إلغاء"
-                    )
+                    TextButton(onClick = { tagToDelete = null }) {
+                        Text("إلغاء")
+                    }
                 }
             )
         }
@@ -177,21 +169,23 @@ fun TagItemCard(
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val defaultTagColor = MaterialTheme.colorScheme.onSurfaceVariant
-    val tagColor = remember(tag.colorHex, defaultTagColor) {
+    val tagColor = remember(tag.colorHex) {
         try {
-            androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(tag.colorHex))
+            Color(android.graphics.Color.parseColor(tag.colorHex))
         } catch (e: Exception) {
-            defaultTagColor
+            Color(0xFF6B6B73)
         }
     }
 
-    WathakkerCard(
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = Modifier.padding(0.dp) // Layout takes care of margin? No, wait. PrimaryCard already has 16.dp margin.
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -256,12 +250,12 @@ fun TagAddEditDialog(
         "#8D8D98", "#A8A8B4", "#50505A", "#686874"
     )
 
-    WathakkerDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(if (tag == null) "إضافة تصنيف جديد" else "تعديل التصنيف") },
         text = {
             Column {
-                WathakkerTextField(
+                OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("اسم التصنيف") },
@@ -270,7 +264,7 @@ fun TagAddEditDialog(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("اختر لون التصنيف:", fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                Text("اختر لون التصنيف:", fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
@@ -301,23 +295,20 @@ fun TagAddEditDialog(
             }
         },
         confirmButton = {
-            WathakkerButton(
-    isSmall = true,
+            Button(
                 onClick = {
                     if (name.isNotBlank()) {
                         onConfirm(name.trim(), selectedColorHex)
                     }
-                },
-                text = "حفظ"
-            )
+                }
+            ) {
+                Text("حفظ")
+            }
         },
         dismissButton = {
-            WathakkerButton(
-    isSecondary = true,
-    isSmall = true,
-                onClick = onDismiss,
-                text = "إلغاء"
-            )
+            TextButton(onClick = onDismiss) {
+                Text("إلغاء")
+            }
         }
     )
 }
@@ -328,12 +319,11 @@ private fun ColorCircle(
     isSelected: Boolean,
     onSelect: () -> Unit
 ) {
-    val defaultColor = MaterialTheme.colorScheme.onSurfaceVariant
-    val color = remember(colorHex, defaultColor) {
+    val color = remember(colorHex) {
         try {
-            androidx.compose.ui.graphics.Color(android.graphics.Color.parseColor(colorHex))
+            Color(android.graphics.Color.parseColor(colorHex))
         } catch (e: Exception) {
-            defaultColor
+            Color(0xFF6B6B73)
         }
     }
 
