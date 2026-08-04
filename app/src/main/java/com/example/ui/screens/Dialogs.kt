@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.Dhikr
+import com.example.utils.formatTimeStr12h
 
 @Composable
 fun DhikrAddDialog(
@@ -322,6 +323,73 @@ fun TimeRow(
                             showTimePicker = false
                         }
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DhikrDetailDialog(
+    dhikr: Dhikr,
+    onDismiss: () -> Unit,
+    onMarkAsRead: (() -> Unit)? = null
+) {
+    androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            shape = RoundedCornerShape(28.dp),
+            color = MaterialTheme.colorScheme.surface,
+            tonalElevation = 6.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
+            ) {
+                Text(
+                    text = dhikr.title,
+                    fontSize = 22.sp,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = dhikr.content,
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        lineHeight = 28.sp
+                    )
+                }
+                Spacer(modifier = Modifier.height(20.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (onMarkAsRead != null) {
+                        TextButton(onClick = {
+                            onMarkAsRead()
+                            onDismiss()
+                        }) {
+                            Text("تم القراءة", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    Button(onClick = onDismiss) {
+                        Text("إغلاق", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                    }
                 }
             }
         }

@@ -27,17 +27,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
 import com.example.ui.viewmodel.MainViewModel
+import com.example.utils.formatTimeStr12h
 
-fun formatTimeStr12h(timeStr: String): String {
-    val parts = timeStr.split(":")
-    if (parts.size != 2) return timeStr
-    val hour = parts[0].toIntOrNull() ?: return timeStr
-    val minute = parts[1].toIntOrNull() ?: return timeStr
-    val isAm = hour < 12
-    val displayHour = if (hour % 12 == 0) 12 else hour % 12
-    val amPm = if (isAm) "ص" else "م"
-    return String.format("%02d:%02d %s", displayHour, minute, amPm)
-}
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 
 @Composable
 fun DashedDivider(modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)) {
@@ -56,43 +49,112 @@ fun DashedDivider(modifier: Modifier = Modifier, color: Color = MaterialTheme.co
 @Composable
 fun HomeScreen(viewModel: MainViewModel, searchQuery: String = "") {
     val allDhikr by viewModel.allDhikr.collectAsStateWithLifecycle()
+    val vmSearchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+
+    val effectiveQuery = if (searchQuery.isNotBlank()) searchQuery else vmSearchQuery
 
     var showTimesDialog by remember { mutableStateOf<Dhikr?>(null) }
     var showEditDialog by remember { mutableStateOf<Dhikr?>(null) }
+
+    val filteredDhikr = remember(allDhikr, effectiveQuery) {
+        if (effectiveQuery.isBlank()) {
+            allDhikr
+        } else {
+            val q = effectiveQuery.trim()
+            allDhikr.filter { 
+                it.title.contains(q, ignoreCase = true) || it.content.contains(q, ignoreCase = true) 
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        val filteredDhikr = if (searchQuery.isBlank()) {
-            allDhikr
-        } else {
-            allDhikr.filter { it.title.contains(searchQuery, ignoreCase = true) || it.content.contains(searchQuery, ignoreCase = true) }
-        }
-        
-        if (filteredDhikr.isEmpty()) {
-            Text(
-                text = "لا توجد نتائج",
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-        }
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(bottom = 24.dp, top = 8.dp),
-            modifier = Modifier.weight(1f)
-        ) {
-            items(filteredDhikr) { dhikr ->
-                DhikrItemCard(
-                    dhikr = dhikr,
-                    onToggleEnabled = { viewModel.toggleEnabled(dhikr) },
-                    onToggleFavorite = { viewModel.toggleFavorite(dhikr) },
-                    onClickTimes = { showTimesDialog = dhikr },
-                    onEditClick = { showEditDialog = dhikr },
-                    onDeleteClick = { viewModel.deleteDhikr(dhikr) }
+        // Search Bar
+        OutlinedTextField(
+            value = effectiveQuery,
+            onValueChange = { newQuery ->
+                viewModel.setSearchQuery(newQuery)
+            },
+            placeholder = { Text("ابحث في العنوان أو نص الذكر...", fontSize = 15.sp) },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "بحث",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            },
+            trailingIcon = {
+                if (effectiveQuery.isNotEmpty()) {
+                    IconButton(onClick = { viewModel.setSearchQuery("") }) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "مسح البحث",
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
+
+        if (filteredDhikr.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = if (effectiveQuery.isBlank()) "لا توجد أذكار" else "لا توجد نتائج تطابق \"$effectiveQuery\"",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = PaddingValues(bottom = 24.dp, top = 8.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                items(
+                    items = filteredDhikr,
+                    key = { it.id }
+                ) { dhikr ->
+                    DhikrItemCard(
+                        dhikr = dhikr,
+                        onToggleEnabled = { viewModel.toggleEnabled(dhikr) },
+                        onToggleFavorite = { viewModel.toggleFavorite(dhikr) },
+                        onClickTimes = { showTimesDialog = dhikr },
+                        onEditClick = { showEditDialog = dhikr },
+                        onDeleteClick = { viewModel.deleteDhikr(dhikr) }
+                    )
+                }
             }
         }
     }

@@ -17,8 +17,8 @@ android {
     applicationId = "com.wathakker.app"
     minSdk = 23
     targetSdk = 36
-    versionCode = 2
-    versionName = "V1.1 - Preview"
+    versionCode = 3
+    versionName = "V2.0 - Preview"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     ndk {

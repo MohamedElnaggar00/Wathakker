@@ -17,9 +17,15 @@ interface DhikrDao {
 
     @Query("SELECT * FROM dhikr_table WHERE isEnabled = 1")
     fun getEnabledDhikr(): Flow<List<Dhikr>>
+
+    @Query("SELECT * FROM dhikr_table WHERE isEnabled = 1")
+    suspend fun getEnabledDhikrSync(): List<Dhikr>
     
     @Query("SELECT * FROM dhikr_table WHERE id = :id")
     suspend fun getDhikrById(id: Int): Dhikr?
+
+    @Query("UPDATE dhikr_table SET readCount = readCount + 1, lastReadTime = :lastReadTime WHERE id = :id")
+    suspend fun markAsRead(id: Int, lastReadTime: Long = System.currentTimeMillis())
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDhikr(dhikr: Dhikr): Long

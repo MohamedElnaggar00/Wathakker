@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.R
 import com.example.ui.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
@@ -37,6 +38,7 @@ fun MainScreen(viewModel: MainViewModel) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
+    val selectedDhikrNotif by viewModel.selectedDhikrFromNotification.collectAsStateWithLifecycle()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -155,7 +157,10 @@ fun MainScreen(viewModel: MainViewModel) {
                     if (isSearchActive) {
                         OutlinedTextField(
                             value = searchQuery,
-                            onValueChange = { searchQuery = it },
+                            onValueChange = { 
+                                searchQuery = it
+                                viewModel.setSearchQuery(it)
+                            },
                             placeholder = { Text("بحث...") },
                             modifier = Modifier.weight(1f).padding(end = 8.dp),
                             singleLine = true,
@@ -163,6 +168,7 @@ fun MainScreen(viewModel: MainViewModel) {
                                 IconButton(onClick = { 
                                     isSearchActive = false
                                     searchQuery = ""
+                                    viewModel.setSearchQuery("")
                                 }) {
                                     Icon(Icons.Default.Close, contentDescription = "Close Search")
                                 }
@@ -259,6 +265,14 @@ fun MainScreen(viewModel: MainViewModel) {
                             viewModel.addDhikrWithSchedule(title, content, times)
                             showAddDialog = false
                         }
+                    )
+                }
+
+                selectedDhikrNotif?.let { dhikr ->
+                    DhikrDetailDialog(
+                        dhikr = dhikr,
+                        onDismiss = { viewModel.clearSelectedDhikrFromNotification() },
+                        onMarkAsRead = { viewModel.markAsRead(dhikr.id) }
                     )
                 }
             }

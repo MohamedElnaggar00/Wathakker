@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
 import com.example.ui.viewmodel.MainViewModel
+import com.example.utils.formatTimeStr12h
 import java.util.Calendar
 import androidx.compose.foundation.background
 import androidx.compose.ui.draw.clip
@@ -25,44 +27,47 @@ data class DhikrInstance(val dhikr: Dhikr, val hour: Int, val minute: Int)
 fun DashboardScreen(viewModel: MainViewModel) {
     val enabledDhikr by viewModel.enabledDhikr.collectAsStateWithLifecycle()
 
-    // Find current and next dhikr
-    val now = Calendar.getInstance()
-    val currentHour = now.get(Calendar.HOUR_OF_DAY)
-    val currentMinute = now.get(Calendar.MINUTE)
+    val instancesState: Pair<DhikrInstance?, DhikrInstance?> = remember(enabledDhikr) {
+        val now = Calendar.getInstance()
+        val currentHour = now.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = now.get(Calendar.MINUTE)
+        var nextDhikrInstance: DhikrInstance? = null
+        var currentOrPassedInstance: DhikrInstance? = null
 
-    var nextDhikrInstance: DhikrInstance? = null
-    var currentOrPassedInstance: DhikrInstance? = null
-
-    if (enabledDhikr.isNotEmpty()) {
-        val instances = mutableListOf<DhikrInstance>()
-        for (dhikr in enabledDhikr) {
-            for (timeStr in dhikr.reminderTimes) {
-                val parts = timeStr.split(":")
-                if (parts.size == 2) {
-                    val h = parts[0].toIntOrNull() ?: continue
-                    val m = parts[1].toIntOrNull() ?: continue
-                    instances.add(DhikrInstance(dhikr, h, m))
+        if (enabledDhikr.isNotEmpty()) {
+            val instances = mutableListOf<DhikrInstance>()
+            for (dhikr in enabledDhikr) {
+                for (timeStr in dhikr.reminderTimes) {
+                    val parts = timeStr.split(":")
+                    if (parts.size == 2) {
+                        val h = parts[0].toIntOrNull() ?: continue
+                        val m = parts[1].toIntOrNull() ?: continue
+                        instances.add(DhikrInstance(dhikr, h, m))
+                    }
                 }
             }
-        }
-        
-        val sorted = instances.sortedWith(compareBy({ it.hour }, { it.minute }))
-        
-        for (instance in sorted) {
-            if (instance.hour > currentHour || (instance.hour == currentHour && instance.minute > currentMinute)) {
-                nextDhikrInstance = instance
-                break
+
+            val sorted = instances.sortedWith(compareBy({ it.hour }, { it.minute }))
+
+            for (instance in sorted) {
+                if (instance.hour > currentHour || (instance.hour == currentHour && instance.minute > currentMinute)) {
+                    nextDhikrInstance = instance
+                    break
+                }
+                currentOrPassedInstance = instance
             }
-            currentOrPassedInstance = instance
+            if (nextDhikrInstance == null && sorted.isNotEmpty()) nextDhikrInstance = sorted.first()
+            if (currentOrPassedInstance == null && sorted.isNotEmpty()) currentOrPassedInstance = sorted.last()
+
+            if (nextDhikrInstance == currentOrPassedInstance) {
+                nextDhikrInstance = null
+            }
         }
-        if (nextDhikrInstance == null && sorted.isNotEmpty()) nextDhikrInstance = sorted.first()
-        if (currentOrPassedInstance == null && sorted.isNotEmpty()) currentOrPassedInstance = sorted.last()
-        
-        // Prevent showing the exact same reminder twice
-        if (nextDhikrInstance == currentOrPassedInstance) {
-            nextDhikrInstance = null
-        }
+        Pair(currentOrPassedInstance, nextDhikrInstance)
     }
+
+    val currentOrPassedInstance = instancesState.first
+    val nextDhikrInstance = instancesState.second
 
     Column(
         modifier = Modifier

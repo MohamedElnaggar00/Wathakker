@@ -11,6 +11,10 @@ class DhikrRepository(private val dhikrDao: DhikrDao) {
         return dhikrDao.getDhikrById(id)
     }
 
+    suspend fun markAsRead(id: Int) {
+        dhikrDao.markAsRead(id)
+    }
+
     suspend fun insert(dhikr: Dhikr): Long {
         return dhikrDao.insertDhikr(dhikr)
     }

@@ -38,7 +38,10 @@ fun FavoritesScreen(viewModel: MainViewModel) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(favoriteDhikr) { dhikr ->
+                items(
+                    items = favoriteDhikr,
+                    key = { it.id }
+                ) { dhikr ->
                     DhikrItemCard(
                         dhikr = dhikr,
                         onToggleEnabled = { viewModel.toggleEnabled(dhikr) },

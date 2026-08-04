@@ -40,11 +40,11 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Rename APK
-        run: mv app/build/outputs/apk/debug/app-debug.apk "app/build/outputs/apk/debug/Wathakker V1.1 Preview (Build ${{ github.run_number }}).apk"
+        run: mv app/build/outputs/apk/debug/app-debug.apk "app/build/outputs/apk/debug/Wathakker V2.0 Preview (Build ${{ github.run_number }}).apk"
 
       - name: Create Release and Upload APK
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "v1.1-build-${{ github.run_number }}"
-          name: "Wathakker V1.1 Preview (Build ${{ github.run_number }})"
-          files: "app/build/outputs/apk/debug/Wathakker V1.1 Preview (Build ${{ github.run_number }}).apk"
+          tag_name: "v2.0-build-${{ github.run_number }}"
+          name: "Wathakker V2.0 Preview (Build ${{ github.run_number }})"
+          files: "app/build/outputs/apk/debug/Wathakker V2.0 Preview (Build ${{ github.run_number }}).apk"

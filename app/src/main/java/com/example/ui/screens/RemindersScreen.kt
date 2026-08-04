@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
 import com.example.ui.viewmodel.MainViewModel
+import com.example.utils.formatTimeStr12h
 
 @Composable
 fun RemindersScreen(viewModel: MainViewModel) {
@@ -44,7 +45,10 @@ fun RemindersScreen(viewModel: MainViewModel) {
             contentPadding = PaddingValues(bottom = 24.dp, top = 8.dp),
             modifier = Modifier.weight(1f)
         ) {
-            items(allDhikr) { dhikr ->
+            items(
+                items = allDhikr,
+                key = { it.id }
+            ) { dhikr ->
                 ReminderRow(
                     dhikr = dhikr,
                     onToggle = { viewModel.toggleEnabled(dhikr) }

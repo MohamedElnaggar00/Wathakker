@@ -16,14 +16,19 @@ import com.example.ui.screens.MainScreen
 import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.viewmodel.MainViewModel
 
+import android.content.Intent
+import androidx.activity.viewModels
+
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleIntent(intent)
         
         enableEdgeToEdge()
         setContent {
-            val viewModel: MainViewModel = viewModel()
-            val useDeviceFont by viewModel.useDeviceFont.collectAsState()
+            val useDeviceFont by mainViewModel.useDeviceFont.collectAsState()
             
             // Safely request notification permission using Compose
             val launcher = rememberLauncherForActivityResult(
@@ -41,8 +46,20 @@ class MainActivity : ComponentActivity() {
             }
 
             MyApplicationTheme(useDeviceFont = useDeviceFont) {
-                MainScreen(viewModel = viewModel)
+                MainScreen(viewModel = mainViewModel)
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        val dhikrId = intent?.getIntExtra("DHIKR_ID", -1) ?: -1
+        if (dhikrId != -1) {
+            mainViewModel.onDhikrSelectedFromNotification(dhikrId)
         }
     }
 }

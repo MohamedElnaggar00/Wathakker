@@ -54,6 +54,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    fun setSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
     private val _tasbeehCount = MutableStateFlow(prefs.getInt("count", 0))
     val tasbeehCount: StateFlow<Int> = _tasbeehCount.asStateFlow()
 
@@ -137,6 +144,26 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val newCount = _tasbeehCount.value + 1
         _tasbeehCount.value = newCount
         prefs.edit().putInt("count", newCount).apply()
+    }
+
+    private val _selectedDhikrFromNotification = MutableStateFlow<Dhikr?>(null)
+    val selectedDhikrFromNotification: StateFlow<Dhikr?> = _selectedDhikrFromNotification.asStateFlow()
+
+    fun onDhikrSelectedFromNotification(dhikrId: Int) {
+        viewModelScope.launch {
+            val dhikr = repository.getDhikrById(dhikrId)
+            _selectedDhikrFromNotification.value = dhikr
+        }
+    }
+
+    fun clearSelectedDhikrFromNotification() {
+        _selectedDhikrFromNotification.value = null
+    }
+
+    fun markAsRead(dhikrId: Int) {
+        viewModelScope.launch {
+            repository.markAsRead(dhikrId)
+        }
     }
 
     fun resetTasbeeh() {
