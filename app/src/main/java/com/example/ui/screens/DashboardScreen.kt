@@ -57,6 +57,11 @@ fun DashboardScreen(viewModel: MainViewModel) {
         }
         if (nextDhikrInstance == null && sorted.isNotEmpty()) nextDhikrInstance = sorted.first()
         if (currentOrPassedInstance == null && sorted.isNotEmpty()) currentOrPassedInstance = sorted.last()
+        
+        // Prevent showing the exact same reminder twice
+        if (nextDhikrInstance == currentOrPassedInstance) {
+            nextDhikrInstance = null
+        }
     }
 
     Column(

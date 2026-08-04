@@ -12,17 +12,22 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.R
 import com.example.ui.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -36,9 +41,13 @@ fun MainScreen(viewModel: MainViewModel) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
+            val topPadding = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.width(300.dp)
+                drawerShape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp),
+                modifier = Modifier
+                    .width(300.dp)
+                    .padding(top = topPadding, bottom = topPadding)
             ) {
                 Spacer(Modifier.height(24.dp))
                 Text(
@@ -49,7 +58,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     modifier = Modifier.padding(16.dp)
                 )
                 NavigationDrawerItem(
-                    icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
+                    icon = { Icon(Icons.Default.Home, contentDescription = null) },
                     label = { Text("الشاشة الرئيسية", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     selected = false,
                     onClick = {
@@ -71,6 +80,16 @@ fun MainScreen(viewModel: MainViewModel) {
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.Notifications, contentDescription = null) },
+                    label = { Text("جميع التنبيهات", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("reminders")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
                     icon = { Icon(Icons.Default.Star, contentDescription = null) },
                     label = { Text("الاذكار المفضلة", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     selected = false,
@@ -81,11 +100,21 @@ fun MainScreen(viewModel: MainViewModel) {
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
-                    icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
+                    icon = { Icon(painter = painterResource(id = R.drawable.ic_tasbeeh), contentDescription = null, modifier = Modifier.size(24.dp)) },
                     label = { Text("عداد التسبيح", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     selected = false,
                     onClick = {
                         navController.navigate("tasbeeh")
+                        scope.launch { drawerState.close() }
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                    label = { Text("الإعدادات", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    selected = false,
+                    onClick = {
+                        navController.navigate("settings")
                         scope.launch { drawerState.close() }
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -211,6 +240,9 @@ fun MainScreen(viewModel: MainViewModel) {
                     }
                     composable("tasbeeh") {
                         TasbeehScreen(viewModel = viewModel)
+                    }
+                    composable("reminders") {
+                        RemindersScreen(viewModel = viewModel)
                     }
                     composable("settings") {
                         SettingsScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
