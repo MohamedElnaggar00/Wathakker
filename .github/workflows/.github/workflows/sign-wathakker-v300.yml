@@ -1,0 +1,60 @@
+name: Sign Wathakker V3.0.0
+on:
+  workflow_dispatch:
+  push:
+    branches: [oneui-redesign]
+    paths:
+      - 1-ConvertBks.java
+      - 2-Wathakker-V3.0.0-unsigned.apk
+      - .github/workflows/sign-wathakker-v300.yml
+permissions:
+  contents: read
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install build tools
+        run: sdkmanager 'build-tools;36.0.0'
+      - name: Convert BKS and sign release APK
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          work=$(mktemp -d)
+          trap 'rm -rf "$work"' EXIT
+          for name in KEYSTORE_BASE64 KEY_PASSWORD KEY_ALIAS; do
+            if [ -z "${!name}" ]; then echo "Missing signing secret: $name"; exit 1; fi
+          done
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$work/source.bks"
+          curl --fail --silent --show-error --location https://repo.maven.apache.org/maven2/org/bouncycastle/bcprov-jdk18on/1.78.1/bcprov-jdk18on-1.78.1.jar -o "$work/bcprov.jar"
+          echo "add5915e6acfc6ab5836e1fd8a5e21c6488536a8c1f21f386eeb3bf280b702d7  $work/bcprov.jar" | sha256sum --check
+          javac -cp "$work/bcprov.jar" -d "$work" 1-ConvertBks.java
+          java -cp "$work:$work/bcprov.jar" ConvertBks "$work/source.bks" "$work/signing.p12"
+          BT="$ANDROID_HOME/build-tools/36.0.0"
+          echo "483367c1cf6dfd6b93a61877ca3443acbf53413528ce5cabad8aa8845df78771  2-Wathakker-V3.0.0-unsigned.apk" | sha256sum --check
+          "$BT/zipalign" -f -p 4 2-Wathakker-V3.0.0-unsigned.apk "$work/aligned.apk"
+          mkdir -p dist
+          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out dist/Wathakker-V3.0.0.apk "$work/aligned.apk"
+          "$BT/apksigner" verify --verbose --print-certs dist/Wathakker-V3.0.0.apk > dist/signature.txt
+          grep -q '0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f' dist/signature.txt
+          "$BT/aapt2" dump badging dist/Wathakker-V3.0.0.apk > dist/package.txt
+          grep -q "name='com.wathakker.app' versionCode='6' versionName='3.0.0'" dist/package.txt
+          "$BT/aapt2" dump xmltree dist/Wathakker-V3.0.0.apk --file AndroidManifest.xml > "$work/manifest.txt"
+          grep -q 'debuggable.*=false' "$work/manifest.txt"
+          sha256sum dist/Wathakker-V3.0.0.apk > dist/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Wathakker-V3.0.0-release
+          path: dist/
+          retention-days: 30
