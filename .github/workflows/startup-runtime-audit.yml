@@ -1,0 +1,56 @@
+name: Audit shipped APK cold startup
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [.github/workflows/startup-runtime-audit.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  runtime-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: Wathakker-V3.0.4-release
+          run-id: 38179573292
+          github-token: ${{ github.token }}
+          path: shipped
+      - name: Verify exact shipped APK bytes
+        run: |
+          echo '034a37d6d48541cb9f9443c944726a9517c380b3a96a3af4ecbaddb1bedf5944  shipped/Wathakker-V3.0.4.apk' | sha256sum -c
+          mkdir -p runtime-evidence
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Launch actual shipped APK and capture crash
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          disable-animations: true
+          script: |
+            adb install shipped/Wathakker-V3.0.4.apk
+            adb shell am force-stop com.wathakker.app
+            adb logcat -c
+            adb shell am start -W -n com.wathakker.app/com.example.MainActivity > runtime-evidence/fresh-launch.txt 2>&1
+            sleep 8
+            adb logcat -d -v threadtime > runtime-evidence/fresh-logcat.txt
+            adb shell screencap -p /sdcard/startup.png
+            adb pull /sdcard/startup.png runtime-evidence/fresh-screen.png
+            adb shell dumpsys activity activities > runtime-evidence/fresh-activities.txt
+            grep -A 100 'FATAL EXCEPTION' runtime-evidence/fresh-logcat.txt || true
+      - name: Preserve runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: startup-runtime-evidence
+          path: runtime-evidence/
+          retention-days: 7
