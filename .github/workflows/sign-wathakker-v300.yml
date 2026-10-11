@@ -1,11 +1,11 @@
-name: Sign Wathakker V3.0.3
+name: Sign Wathakker V3.0.4
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
       - 1-ConvertBks.java
-      - 2-Wathakker-V3.0.3-unsigned.apk
+      - 2-Wathakker-V3.0.4-unsigned.apk
       - .github/workflows/sign-wathakker-v300.yml
 permissions:
   contents: read
@@ -49,20 +49,20 @@ jobs:
           javac -cp "$work/bcprov.jar" -d "$work" "$work/ConvertBks.java"
           java -cp "$work:$work/bcprov.jar" ConvertBks "$work/source.bks" "$work/signing.p12"
           BT="$ANDROID_HOME/build-tools/36.0.0"
-          echo "e583635ed1d5549d2c0d1745ba9f07daa9b16418eaf8cbd6c423fc00da68f36b  2-Wathakker-V3.0.3-unsigned.apk" | sha256sum --check
-          "$BT/zipalign" -f -p 4 2-Wathakker-V3.0.3-unsigned.apk "$work/aligned.apk"
+          echo "fade486912489c6ac2db7053edf1be31900801cc69e284a7192f6b2617772b49  2-Wathakker-V3.0.4-unsigned.apk" | sha256sum --check
+          "$BT/zipalign" -f -p 4 2-Wathakker-V3.0.4-unsigned.apk "$work/aligned.apk"
           mkdir -p dist
-          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out dist/Wathakker-V3.0.3.apk "$work/aligned.apk"
-          "$BT/apksigner" verify --verbose --print-certs dist/Wathakker-V3.0.3.apk > dist/signature.txt
+          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out dist/Wathakker-V3.0.4.apk "$work/aligned.apk"
+          "$BT/apksigner" verify --verbose --print-certs dist/Wathakker-V3.0.4.apk > dist/signature.txt
           grep -q '0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f' dist/signature.txt
-          "$BT/aapt2" dump badging dist/Wathakker-V3.0.3.apk > dist/package.txt
-          grep -q "name='com.wathakker.app' versionCode='9' versionName='3.0.3'" dist/package.txt
-          "$BT/aapt2" dump xmltree dist/Wathakker-V3.0.3.apk --file AndroidManifest.xml > "$work/manifest.txt"
+          "$BT/aapt2" dump badging dist/Wathakker-V3.0.4.apk > dist/package.txt
+          grep -q "name='com.wathakker.app' versionCode='10' versionName='3.0.4'" dist/package.txt
+          "$BT/aapt2" dump xmltree dist/Wathakker-V3.0.4.apk --file AndroidManifest.xml > "$work/manifest.txt"
           grep -q 'debuggable.*=false' "$work/manifest.txt"
           grep -q "application-label:'وذكر'" dist/package.txt
-          sha256sum dist/Wathakker-V3.0.3.apk > dist/SHA256SUMS.txt
+          sha256sum dist/Wathakker-V3.0.4.apk > dist/SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: Wathakker-V3.0.3-release
+          name: Wathakker-V3.0.4-release
           path: dist/
           retention-days: 30
