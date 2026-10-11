@@ -19,7 +19,14 @@ jobs:
           distribution: temurin
           java-version: '17'
       - name: Install build tools
-        run: sdkmanager 'build-tools;36.0.0'
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          MANAGER=$(find "$SDK/cmdline-tools" -path '*/bin/sdkmanager' -type f | head -1)
+          test -n "$MANAGER"
+          "$MANAGER" 'build-tools;36.0.0'
+          echo "ANDROID_HOME=$SDK" >> "$GITHUB_ENV"
       - name: Convert BKS and sign release APK
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
