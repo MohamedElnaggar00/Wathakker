@@ -45,7 +45,8 @@ jobs:
           printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$work/source.bks"
           curl --fail --silent --show-error --location https://repo.maven.apache.org/maven2/org/bouncycastle/bcprov-jdk18on/1.78.1/bcprov-jdk18on-1.78.1.jar -o "$work/bcprov.jar"
           echo "add5915e6acfc6ab5836e1fd8a5e21c6488536a8c1f21f386eeb3bf280b702d7  $work/bcprov.jar" | sha256sum --check
-          javac -cp "$work/bcprov.jar" -d "$work" 1-ConvertBks.java
+          cp 1-ConvertBks.java "$work/ConvertBks.java"
+          javac -cp "$work/bcprov.jar" -d "$work" "$work/ConvertBks.java"
           java -cp "$work:$work/bcprov.jar" ConvertBks "$work/source.bks" "$work/signing.p12"
           BT="$ANDROID_HOME/build-tools/36.0.0"
           echo "483367c1cf6dfd6b93a61877ca3443acbf53413528ce5cabad8aa8845df78771  2-Wathakker-V3.0.0-unsigned.apk" | sha256sum --check
