@@ -61,7 +61,7 @@ jobs:
           mkdir -p host-classes host-dex
           javac -encoding UTF-8 -source 8 -target 8 -cp "$ANDROID" -d host-classes $(find patch/host/src -name '*.java')
           "$BT/d8" --lib "$ANDROID" --min-api 26 --output host-dex $(find host-classes -name '*.class')
-          "$BT/aapt2" link -I "$ANDROID" --manifest patch/host/AndroidManifest.xml -o host-unsigned.apk
+          "$BT/aapt2" link -I "$ANDROID" --min-sdk-version 26 --target-sdk-version 35 --manifest patch/host/AndroidManifest.xml -o host-unsigned.apk
           zip -j host-unsigned.apk host-dex/classes.dex
           keytool -genkeypair -keystore host.jks -storepass android -keypass android -alias debug -dname CN=WidgetRuntimeTest -keyalg RSA -validity 30
           "$BT/zipalign" -f 4 host-unsigned.apk host-aligned.apk
@@ -164,20 +164,28 @@ jobs:
             adb shell uiautomator dump /sdcard/settings.xml
             adb pull /sdcard/settings.xml runtime-evidence/settings-ui.xml
             adb shell input keyevent 4
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 2
             adb shell input tap 346 2220
             sleep 2
             adb shell screencap -p /sdcard/fajr.png
             adb pull /sdcard/fajr.png runtime-evidence/fajr-screen.png
             adb shell uiautomator dump /sdcard/fajr.xml
             adb pull /sdcard/fajr.xml runtime-evidence/fajr-ui.xml
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 2
             adb shell input tap 735 2220
             sleep 2
             adb shell screencap -p /sdcard/azkar.png
             adb pull /sdcard/azkar.png runtime-evidence/azkar-screen.png
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 2
             adb shell input tap 540 2220
             sleep 2
             adb shell screencap -p /sdcard/hisn.png
             adb pull /sdcard/hisn.png runtime-evidence/hisn-screen.png
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 2
             adb shell input tap 150 2220
             sleep 2
             adb shell screencap -p /sdcard/tasbih.png
@@ -193,6 +201,8 @@ jobs:
             adb shell appwidget grantbind --package com.wathakker.widgettest --user 0
             adb logcat -c
             adb shell am start -W -n com.wathakker.widgettest/.MainActivity
+            sleep 3
+            adb logcat -d -v threadtime > runtime-evidence/widget-start-logcat.txt
             for i in $(seq 1 60); do adb shell run-as com.wathakker.widgettest test -f files/TEST-DONE && break; sleep 2; done
             adb shell run-as com.wathakker.widgettest test -f files/TEST-DONE
             adb logcat -d -v threadtime > runtime-evidence/widget-logcat.txt
