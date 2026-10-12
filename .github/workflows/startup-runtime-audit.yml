@@ -86,35 +86,63 @@ jobs:
           profile: pixel_6
           disable-animations: true
           script: |
-            adb install candidate.apk
+            set -eu
+            adb root
+            adb wait-for-device
+            adb install -g candidate.apk
+            adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
+            adb shell am force-stop com.android.permissioncontroller
+            adb shell am force-stop com.google.android.permissioncontroller
             adb logcat -c
-            adb shell am start -W -n com.wathakker.app/com.example.MainActivity > runtime-evidence/fresh-launch.txt 2>&1
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity > runtime-evidence/fresh-launch.txt 2>&1
             sleep 8
             adb logcat -d -v threadtime > runtime-evidence/fresh-logcat.txt
+            adb shell pidof com.wathakker.app > runtime-evidence/fresh-pid.txt
+            adb shell dumpsys activity activities > runtime-evidence/fresh-activities.txt
+            grep -E '(topResumedActivity=|mResumedActivity:).*com.wathakker.app/com.example.MainActivity' runtime-evidence/fresh-activities.txt
             adb shell screencap -p /sdcard/startup.png
             adb pull /sdcard/startup.png runtime-evidence/fresh-screen.png
             adb shell uiautomator dump /sdcard/fresh.xml
             adb pull /sdcard/fresh.xml runtime-evidence/fresh-ui.xml
             adb shell am force-stop com.wathakker.app
             adb uninstall com.wathakker.app
-            adb install old/Wathakker-V3.0.1.apk
+            adb install -g old/Wathakker-V3.0.1.apk
+            adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
             adb logcat -c
-            adb shell am start -W -n com.wathakker.app/com.example.MainActivity > runtime-evidence/old-launch.txt 2>&1
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity > runtime-evidence/old-launch.txt 2>&1
             sleep 8
             adb logcat -d -v threadtime > runtime-evidence/old-logcat.txt
             adb shell am force-stop com.wathakker.app
-            adb install -r candidate.apk
+            adb shell 'find /data/user/0/com.wathakker.app/shared_prefs /data/user/0/com.wathakker.app/databases -type f -exec sha256sum {} \; 2>/dev/null' | sort > runtime-evidence/data-before-upgrade.txt
+            test -s runtime-evidence/data-before-upgrade.txt
+            adb install -r -g candidate.apk > runtime-evidence/upgrade-install.txt
+            adb shell 'find /data/user/0/com.wathakker.app/shared_prefs /data/user/0/com.wathakker.app/databases -type f -exec sha256sum {} \; 2>/dev/null' | sort > runtime-evidence/data-after-upgrade.txt
+            diff -u runtime-evidence/data-before-upgrade.txt runtime-evidence/data-after-upgrade.txt > runtime-evidence/data-preservation.diff
+            adb shell am force-stop com.android.permissioncontroller
+            adb shell am force-stop com.google.android.permissioncontroller
             adb logcat -c
-            adb shell am start -W -n com.wathakker.app/com.example.MainActivity > runtime-evidence/upgrade-launch.txt 2>&1
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity > runtime-evidence/upgrade-launch.txt 2>&1
             sleep 8
             adb logcat -d -v threadtime > runtime-evidence/upgrade-logcat.txt
+            adb shell pidof com.wathakker.app > runtime-evidence/upgrade-pid.txt
+            adb shell dumpsys activity activities > runtime-evidence/upgrade-activities.txt
+            grep -E '(topResumedActivity=|mResumedActivity:).*com.wathakker.app/com.example.MainActivity' runtime-evidence/upgrade-activities.txt
             adb shell screencap -p /sdcard/upgrade.png
             adb pull /sdcard/upgrade.png runtime-evidence/upgrade-screen.png
             adb shell uiautomator dump /sdcard/upgrade.xml
             adb pull /sdcard/upgrade.xml runtime-evidence/upgrade-ui.xml
-            adb shell dumpsys activity activities > runtime-evidence/upgrade-activities.txt
+            adb shell input tap 970 155
+            sleep 2
+            adb shell screencap -p /sdcard/drawer.png
+            adb pull /sdcard/drawer.png runtime-evidence/drawer-screen.png
+            adb shell uiautomator dump /sdcard/drawer.xml
+            adb pull /sdcard/drawer.xml runtime-evidence/drawer-ui.xml
+            adb shell input keyevent 4
+            adb logcat -d -v threadtime > runtime-evidence/navigation-logcat.txt
+            adb shell pidof com.wathakker.app > runtime-evidence/navigation-pid.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/fresh-logcat.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/upgrade-logcat.txt
+            ! grep -q 'FATAL EXCEPTION' runtime-evidence/navigation-logcat.txt
       - name: Preserve evidence only, not a delivery APK
         if: always()
         uses: actions/upload-artifact@v4
