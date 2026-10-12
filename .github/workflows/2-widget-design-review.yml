@@ -28,7 +28,7 @@ jobs:
           set -euo pipefail
           MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -path '*/bin/sdkmanager' -type f | head -1)
           "$MANAGER" 'build-tools;36.0.0' 'platforms;android-35'
-          unzip -q "$(find . -maxdepth 1 -name '*widget-date-review.zip' -print -quit)" -d audit
+          unzip -q "$(find . -maxdepth 1 -name '*widget-complete-review.zip' -print -quit)" -d audit
           BT="$ANDROID_HOME/build-tools/36.0.0"
           ANDROID="$ANDROID_HOME/platforms/android-35/android.jar"
           mkdir -p audit/classes audit/dex evidence
@@ -62,7 +62,8 @@ jobs:
             adb install audit.apk
             adb logcat -c
             adb shell am start -W -n com.wathakker.widgetaudit/.MainActivity
-            sleep 5
+            for i in $(seq 1 180); do adb shell run-as com.wathakker.widgetaudit test -f files/RENDER-DONE && break; sleep 2; done
+            adb shell run-as com.wathakker.widgetaudit test -f files/RENDER-DONE
             adb shell dumpsys appwidget > evidence/review-provider-registration.txt
             adb logcat -d -v threadtime > evidence/render-logcat.txt
             adb shell run-as com.wathakker.widgetaudit ls files > evidence/rendered-files.txt
