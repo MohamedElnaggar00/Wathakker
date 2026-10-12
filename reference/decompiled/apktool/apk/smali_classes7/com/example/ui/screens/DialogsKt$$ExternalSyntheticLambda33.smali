@@ -1,0 +1,90 @@
+.class public final synthetic Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;
+.super Ljava/lang/Object;
+.source "D8$$SyntheticClass"
+
+# interfaces
+.implements Lkotlin/jvm/functions/Function2;
+
+
+# instance fields
+.field public final synthetic f$0:Lcom/example/data/Dhikr;
+
+.field public final synthetic f$1:Ljava/util/List;
+
+.field public final synthetic f$2:Ljava/util/List;
+
+.field public final synthetic f$3:Lkotlin/jvm/functions/Function0;
+
+.field public final synthetic f$4:Lkotlin/jvm/functions/Function3;
+
+.field public final synthetic f$5:Lkotlin/jvm/functions/Function1;
+
+.field public final synthetic f$6:I
+
+.field public final synthetic f$7:I
+
+
+# direct methods
+.method public synthetic constructor <init>(Lcom/example/data/Dhikr;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function1;II)V
+    .locals 0
+
+    .line 0
+    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
+
+    iput-object p1, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$0:Lcom/example/data/Dhikr;
+
+    iput-object p2, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$1:Ljava/util/List;
+
+    iput-object p3, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$2:Ljava/util/List;
+
+    iput-object p4, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$3:Lkotlin/jvm/functions/Function0;
+
+    iput-object p5, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$4:Lkotlin/jvm/functions/Function3;
+
+    iput-object p6, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$5:Lkotlin/jvm/functions/Function1;
+
+    iput p7, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$6:I
+
+    iput p8, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$7:I
+
+    return-void
+.end method
+
+
+# virtual methods
+.method public final invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+    .locals 10
+
+    .line 0
+    iget-object v0, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$0:Lcom/example/data/Dhikr;
+
+    iget-object v1, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$1:Ljava/util/List;
+
+    iget-object v2, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$2:Ljava/util/List;
+
+    iget-object v3, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$3:Lkotlin/jvm/functions/Function0;
+
+    iget-object v4, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$4:Lkotlin/jvm/functions/Function3;
+
+    iget-object v5, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$5:Lkotlin/jvm/functions/Function1;
+
+    iget v6, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$6:I
+
+    iget v7, p0, Lcom/example/ui/screens/DialogsKt$$ExternalSyntheticLambda33;->f$7:I
+
+    move-object v8, p1
+
+    check-cast v8, Landroidx/compose/runtime/Composer;
+
+    check-cast p2, Ljava/lang/Integer;
+
+    invoke-virtual {p2}, Ljava/lang/Integer;->intValue()I
+
+    move-result v9
+
+    invoke-static/range {v0 .. v9}, Lcom/example/ui/screens/DialogsKt;->DhikrEditDialog$lambda$35(Lcom/example/data/Dhikr;Ljava/util/List;Ljava/util/List;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function3;Lkotlin/jvm/functions/Function1;IILandroidx/compose/runtime/Composer;I)Lkotlin/Unit;
+
+    move-result-object p1
+
+    return-object p1
+.end method
