@@ -47,31 +47,6 @@ public final /* data */ class DhikrStats {
         return dhikrStats.copy(i, i2, i3, i4, i7, list2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final int getTodayCount() {
-        return this.todayCount;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getWeekCount() {
-        return this.weekCount;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final int getMonthCount() {
-        return this.monthCount;
-    }
-
-    /* renamed from: component4, reason: from getter */
-    public final int getTotalCount() {
-        return this.totalCount;
-    }
-
-    /* renamed from: component5, reason: from getter */
-    public final int getStreakDays() {
-        return this.streakDays;
-    }
-
     public final List<Pair<Integer, Integer>> component6() {
         return this.topReadDhikr;
     }

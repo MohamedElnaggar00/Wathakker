@@ -45,16 +45,6 @@ public final /* data */ class FajrSettingsState {
         return this.isVibrationEnabled;
     }
 
-    /* renamed from: component11, reason: from getter */
-    public final int getMaxDurationMinutes() {
-        return this.maxDurationMinutes;
-    }
-
-    /* renamed from: component12, reason: from getter */
-    public final int getAlarmVolume() {
-        return this.alarmVolume;
-    }
-
     /* renamed from: component13, reason: from getter */
     public final boolean getIsRefreshing() {
         return this.isRefreshing;
@@ -63,51 +53,6 @@ public final /* data */ class FajrSettingsState {
     /* renamed from: component14, reason: from getter */
     public final boolean getIsGpsAvailable() {
         return this.isGpsAvailable;
-    }
-
-    /* renamed from: component15, reason: from getter */
-    public final boolean getHasLocationPermission() {
-        return this.hasLocationPermission;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final boolean getUseCurrentLocation() {
-        return this.useCurrentLocation;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final String getCityName() {
-        return this.cityName;
-    }
-
-    /* renamed from: component4, reason: from getter */
-    public final double getLatitude() {
-        return this.latitude;
-    }
-
-    /* renamed from: component5, reason: from getter */
-    public final double getLongitude() {
-        return this.longitude;
-    }
-
-    /* renamed from: component6, reason: from getter */
-    public final String getNextFajrTimeFormatted() {
-        return this.nextFajrTimeFormatted;
-    }
-
-    /* renamed from: component7, reason: from getter */
-    public final long getNextFajrMillis() {
-        return this.nextFajrMillis;
-    }
-
-    /* renamed from: component8, reason: from getter */
-    public final CalculationMethod getCalculationMethod() {
-        return this.calculationMethod;
-    }
-
-    /* renamed from: component9, reason: from getter */
-    public final String getRingtoneTitle() {
-        return this.ringtoneTitle;
     }
 
     public final FajrSettingsState copy(boolean isAlarmEnabled, boolean useCurrentLocation, String cityName, double latitude, double longitude, String nextFajrTimeFormatted, long nextFajrMillis, CalculationMethod calculationMethod, String ringtoneTitle, boolean isVibrationEnabled, int maxDurationMinutes, int alarmVolume, boolean isRefreshing, boolean isGpsAvailable, boolean hasLocationPermission) {

@@ -49,46 +49,6 @@ public final /* data */ class HisnItem {
         return hisnItem.copy(i, i2, i3, str, i6, str7, str5, str6);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final int getId() {
-        return this.id;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getChapterId() {
-        return this.chapterId;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final int getOrder() {
-        return this.order;
-    }
-
-    /* renamed from: component4, reason: from getter */
-    public final String getText() {
-        return this.text;
-    }
-
-    /* renamed from: component5, reason: from getter */
-    public final int getCount() {
-        return this.count;
-    }
-
-    /* renamed from: component6, reason: from getter */
-    public final String getFadl() {
-        return this.fadl;
-    }
-
-    /* renamed from: component7, reason: from getter */
-    public final String getSource() {
-        return this.source;
-    }
-
-    /* renamed from: component8, reason: from getter */
-    public final String getHokm() {
-        return this.hokm;
-    }
-
     public final HisnItem copy(int id, int chapterId, int order, String text, int count, String fadl, String source, String hokm) {
         Intrinsics.checkNotNullParameter(text, "text");
         Intrinsics.checkNotNullParameter(fadl, "fadl");

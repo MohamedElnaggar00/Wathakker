@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
-import kotlinx.coroutines.BuildersKt__Builders_commonKt;
+import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.Dispatchers;
 import kotlinx.coroutines.flow.FlowKt;
 import kotlinx.coroutines.flow.MutableStateFlow;
@@ -84,7 +84,7 @@ public final class FajrViewModel extends AndroidViewModel {
     }
 
     public final void updateLocationFromGps() {
-        BuildersKt__Builders_commonKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new FajrViewModel$updateLocationFromGps$1(this, null), 2, null);
+        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new FajrViewModel$updateLocationFromGps$1(this, null), 2, null);
     }
 
     public final void setCity(CityItem city) {
@@ -139,7 +139,7 @@ public final class FajrViewModel extends AndroidViewModel {
     }
 
     public final void refreshFajrTimeManually() {
-        BuildersKt__Builders_commonKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new FajrViewModel$refreshFajrTimeManually$1(this, null), 2, null);
+        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new FajrViewModel$refreshFajrTimeManually$1(this, null), 2, null);
     }
 
     /* JADX INFO: Access modifiers changed from: private */

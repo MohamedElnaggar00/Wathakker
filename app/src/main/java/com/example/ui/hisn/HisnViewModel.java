@@ -37,7 +37,7 @@ import kotlin.coroutines.jvm.internal.SuspendLambda;
 import kotlin.jvm.functions.Function2;
 import kotlin.jvm.internal.Intrinsics;
 import kotlin.ranges.RangesKt;
-import kotlinx.coroutines.BuildersKt__Builders_commonKt;
+import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.Dispatchers;
 import kotlinx.coroutines.flow.Flow;
@@ -86,7 +86,7 @@ public final class HisnViewModel extends AndroidViewModel {
                 final /* synthetic */ FlowCollector $this_unsafeFlow;
 
                 @Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
-                @DebugMetadata(c = "com.example.ui.hisn.HisnViewModel$special$$inlined$map$1$2", f = "HisnViewModel.kt", i = {0, 0, 0, 0, 0}, l = {AccessibilityNodeInfoCompat.MAX_NUMBER_OF_PREFETCHED_NODES}, m = "emit", n = {"value", "$completion", "value", "$this$map_u24lambda_u245", "$i$a$-unsafeTransform-FlowKt__TransformKt$map$1\\1\\49\\0"}, s = {"L$0", "L$1", "L$2", "L$3", "I$0"})
+                @DebugMetadata(c = "com.example.ui.hisn.HisnViewModel$special$$inlined$map$1$2", f = "HisnViewModel.kt", i = {0, 0, 0, 0, 0}, l = {AccessibilityNodeInfoCompat.MAX_NUMBER_OF_PREFETCHED_NODES}, m = "emit", n = {"value", "$completion", "value", "$this$map_u24lambda_u245", "$i$a$-unsafeTransform-FlowKt$map$1\\1\\49\\0"}, s = {"L$0", "L$1", "L$2", "L$3", "I$0"})
                 /* renamed from: com.example.ui.hisn.HisnViewModel$special$$inlined$map$1$2$1, reason: invalid class name */
                 /* loaded from: classes9.dex */
                 public static final class AnonymousClass1 extends ContinuationImpl {
@@ -189,7 +189,7 @@ public final class HisnViewModel extends AndroidViewModel {
                 final /* synthetic */ FlowCollector $this_unsafeFlow;
 
                 @Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
-                @DebugMetadata(c = "com.example.ui.hisn.HisnViewModel$special$$inlined$map$2$2", f = "HisnViewModel.kt", i = {0, 0, 0, 0, 0}, l = {AccessibilityNodeInfoCompat.MAX_NUMBER_OF_PREFETCHED_NODES}, m = "emit", n = {"value", "$completion", "value", "$this$map_u24lambda_u245", "$i$a$-unsafeTransform-FlowKt__TransformKt$map$1\\1\\49\\0"}, s = {"L$0", "L$1", "L$2", "L$3", "I$0"})
+                @DebugMetadata(c = "com.example.ui.hisn.HisnViewModel$special$$inlined$map$2$2", f = "HisnViewModel.kt", i = {0, 0, 0, 0, 0}, l = {AccessibilityNodeInfoCompat.MAX_NUMBER_OF_PREFETCHED_NODES}, m = "emit", n = {"value", "$completion", "value", "$this$map_u24lambda_u245", "$i$a$-unsafeTransform-FlowKt$map$1\\1\\49\\0"}, s = {"L$0", "L$1", "L$2", "L$3", "I$0"})
                 /* renamed from: com.example.ui.hisn.HisnViewModel$special$$inlined$map$2$2$1, reason: invalid class name */
                 /* loaded from: classes9.dex */
                 public static final class AnonymousClass1 extends ContinuationImpl {
@@ -275,7 +275,7 @@ public final class HisnViewModel extends AndroidViewModel {
                 return collect == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? collect : Unit.INSTANCE;
             }
         }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), SetsKt.emptySet());
-        BuildersKt__Builders_commonKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new AnonymousClass1(null), 2, null);
+        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new AnonymousClass1(null), 2, null);
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -378,10 +378,10 @@ public final class HisnViewModel extends AndroidViewModel {
     }
 
     private final void toggle(int chapterId, int itemId) {
-        BuildersKt__Builders_commonKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new HisnViewModel$toggle$1(this, chapterId, itemId, null), 2, null);
+        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new HisnViewModel$toggle$1(this, chapterId, itemId, null), 2, null);
     }
 
     public final void markChapterRead(int chapterId) {
-        BuildersKt__Builders_commonKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new HisnViewModel$markChapterRead$1(this, chapterId, null), 2, null);
+        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new HisnViewModel$markChapterRead$1(this, chapterId, null), 2, null);
     }
 }

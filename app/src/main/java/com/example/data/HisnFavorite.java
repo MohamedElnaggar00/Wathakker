@@ -25,21 +25,6 @@ public final /* data */ class HisnFavorite {
         return hisnFavorite.copy(j, i, i2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final long getId() {
-        return this.id;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getChapterId() {
-        return this.chapterId;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final int getItemId() {
-        return this.itemId;
-    }
-
     public final HisnFavorite copy(long id, int chapterId, int itemId) {
         return new HisnFavorite(id, chapterId, itemId);
     }

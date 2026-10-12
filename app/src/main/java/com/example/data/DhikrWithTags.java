@@ -25,11 +25,6 @@ public final /* data */ class DhikrWithTags {
         return dhikrWithTags.copy(dhikr, list);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final Dhikr getDhikr() {
-        return this.dhikr;
-    }
-
     public final List<Tag> component2() {
         return this.tags;
     }

@@ -37,7 +37,7 @@ import androidx.compose.runtime.CompositionLocalMap;
 import androidx.compose.runtime.MutableState;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambdaKt;
 import androidx.compose.ui.Alignment;
@@ -112,7 +112,7 @@ public final class CitySearchDialogKt {
             ComposerKt.sourceInformationMarkerStart($composer2, -558746380, "CC(remember):CitySearchDialog.kt#9igjgp");
             Object rememberedValue = $composer2.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default("", null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default("", null, 2, null);
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue = mutableStateOf$default;
             }

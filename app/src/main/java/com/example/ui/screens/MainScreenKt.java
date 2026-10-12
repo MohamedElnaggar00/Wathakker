@@ -35,7 +35,7 @@ import androidx.compose.runtime.MutableState;
 import androidx.compose.runtime.ProvidedValue;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.State;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambdaKt;
@@ -99,7 +99,7 @@ import kotlin.jvm.internal.Intrinsics;
 import kotlin.jvm.internal.Reflection;
 import kotlin.ranges.RangesKt;
 import kotlin.reflect.KClass;
-import kotlinx.coroutines.BuildersKt__Builders_commonKt;
+import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.CoroutineScope;
 
 /* compiled from: MainScreen.kt */
@@ -159,7 +159,7 @@ public final class MainScreenKt {
             Object rememberedValue = $composer3.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
                 navController = navController2;
-                mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue = mutableStateOf$default2;
             } else {
@@ -170,7 +170,7 @@ public final class MainScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer3, -90843589, "CC(remember):MainScreen.kt#9igjgp");
             Object rememberedValue2 = $composer3.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue2 = mutableStateOf$default;
             }
@@ -1454,7 +1454,7 @@ public final class MainScreenKt {
         Intrinsics.checkNotNullParameter(tab, "tab");
         int i = oneUITabs.indexOf(tab);
         if (i >= 0) {
-            BuildersKt__Builders_commonKt.launch$default($scope, null, null, new MainScreenKt$MainScreen$1$1$6$1$1($pagerState, i, null), 3, null);
+            BuildersKt.launch$default($scope, null, null, new MainScreenKt$MainScreen$1$1$6$1$1($pagerState, i, null), 3, null);
         }
         return Unit.INSTANCE;
     }

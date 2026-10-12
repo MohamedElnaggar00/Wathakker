@@ -53,21 +53,6 @@ public final /* data */ class Dhikr {
         return dhikr.copy(i, str, str3, z, list2, z3, i4, j2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final int getId() {
-        return this.id;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final String getTitle() {
-        return this.title;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final String getContent() {
-        return this.content;
-    }
-
     /* renamed from: component4, reason: from getter */
     public final boolean getIsFavorite() {
         return this.isFavorite;
@@ -80,16 +65,6 @@ public final /* data */ class Dhikr {
     /* renamed from: component6, reason: from getter */
     public final boolean getIsEnabled() {
         return this.isEnabled;
-    }
-
-    /* renamed from: component7, reason: from getter */
-    public final int getReadCount() {
-        return this.readCount;
-    }
-
-    /* renamed from: component8, reason: from getter */
-    public final long getLastReadTime() {
-        return this.lastReadTime;
     }
 
     public final Dhikr copy(int id, String title, String content, boolean isFavorite, List<String> reminderTimes, boolean isEnabled, int readCount, long lastReadTime) {

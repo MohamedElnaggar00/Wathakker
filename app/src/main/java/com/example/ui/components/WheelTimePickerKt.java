@@ -27,7 +27,7 @@ import androidx.compose.runtime.MutableState;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
 import androidx.compose.runtime.SnapshotStateKt;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.State;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambdaKt;
@@ -185,7 +185,7 @@ public final class WheelTimePickerKt {
             ComposerKt.sourceInformationMarkerStart($composer3, 1394616490, "CC(remember):WheelTimePicker.kt#9igjgp");
             Object rememberedValue4 = $composer3.rememberedValue();
             if (rememberedValue4 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default3 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(Integer.valueOf(initialHour12 - 1), null, 2, null);
+                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf$default(Integer.valueOf(initialHour12 - 1), null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default3);
                 rememberedValue4 = mutableStateOf$default3;
             }
@@ -194,7 +194,7 @@ public final class WheelTimePickerKt {
             ComposerKt.sourceInformationMarkerStart($composer3, 1394618982, "CC(remember):WheelTimePicker.kt#9igjgp");
             Object rememberedValue5 = $composer3.rememberedValue();
             if (rememberedValue5 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(Integer.valueOf(i2), null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(Integer.valueOf(i2), null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue5 = mutableStateOf$default2;
             }
@@ -203,7 +203,7 @@ public final class WheelTimePickerKt {
             ComposerKt.sourceInformationMarkerStart($composer3, 1394621298, "CC(remember):WheelTimePicker.kt#9igjgp");
             Object rememberedValue6 = $composer3.rememberedValue();
             if (rememberedValue6 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(Integer.valueOf(initialIsAm ? i8 : 1), null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(Integer.valueOf(initialIsAm ? i8 : 1), null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue6 = mutableStateOf$default;
             }

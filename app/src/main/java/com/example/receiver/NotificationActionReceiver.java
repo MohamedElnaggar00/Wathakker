@@ -7,7 +7,7 @@ import android.content.Intent;
 import com.example.alarm.AlarmScheduler;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
-import kotlinx.coroutines.BuildersKt__Builders_commonKt;
+import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.CoroutineScopeKt;
 import kotlinx.coroutines.Dispatchers;
 
@@ -50,7 +50,7 @@ public final class NotificationActionReceiver extends BroadcastReceiver {
                 case -929181687:
                     if (action.equals(ACTION_MARK_AS_READ) && dhikrId != -1) {
                         BroadcastReceiver.PendingResult pendingResult = goAsync();
-                        BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new NotificationActionReceiver$onReceive$1(context, dhikrId, pendingResult, null), 3, null);
+                        BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new NotificationActionReceiver$onReceive$1(context, dhikrId, pendingResult, null), 3, null);
                         return;
                     }
                     return;

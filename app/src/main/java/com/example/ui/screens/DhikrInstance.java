@@ -26,21 +26,6 @@ public final /* data */ class DhikrInstance {
         return dhikrInstance.copy(dhikr, i, i2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final Dhikr getDhikr() {
-        return this.dhikr;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getHour() {
-        return this.hour;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final int getMinute() {
-        return this.minute;
-    }
-
     public final DhikrInstance copy(Dhikr dhikr, int hour, int minute) {
         Intrinsics.checkNotNullParameter(dhikr, "dhikr");
         return new DhikrInstance(dhikr, hour, minute);

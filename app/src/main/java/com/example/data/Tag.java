@@ -27,21 +27,6 @@ public final /* data */ class Tag {
         return tag.copy(j, str, str2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final long getTagId() {
-        return this.tagId;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final String getName() {
-        return this.name;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final String getColorHex() {
-        return this.colorHex;
-    }
-
     public final Tag copy(long tagId, String name, String colorHex) {
         Intrinsics.checkNotNullParameter(name, "name");
         Intrinsics.checkNotNullParameter(colorHex, "colorHex");

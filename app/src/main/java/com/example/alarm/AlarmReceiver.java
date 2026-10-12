@@ -15,7 +15,7 @@ import com.example.receiver.NotificationActionReceiver;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
-import kotlinx.coroutines.BuildersKt__Builders_commonKt;
+import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.CoroutineScopeKt;
 import kotlinx.coroutines.Dispatchers;
 
@@ -73,7 +73,7 @@ public final class AlarmReceiver extends BroadcastReceiver {
             showNotification(context, id, title, content);
             if (!isSnooze) {
                 BroadcastReceiver.PendingResult pendingResult = goAsync();
-                BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new AlarmReceiver$onReceive$1(context, id, pendingResult, null), 3, null);
+                BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new AlarmReceiver$onReceive$1(context, id, pendingResult, null), 3, null);
             }
         }
     }

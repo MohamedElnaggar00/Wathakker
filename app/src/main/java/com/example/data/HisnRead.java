@@ -33,26 +33,6 @@ public final /* data */ class HisnRead {
         return hisnRead.copy(j3, i3, str2, j2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final long getId() {
-        return this.id;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getChapterId() {
-        return this.chapterId;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final String getDateString() {
-        return this.dateString;
-    }
-
-    /* renamed from: component4, reason: from getter */
-    public final long getTimestamp() {
-        return this.timestamp;
-    }
-
     public final HisnRead copy(long id, int chapterId, String dateString, long timestamp) {
         Intrinsics.checkNotNullParameter(dateString, "dateString");
         return new HisnRead(id, chapterId, dateString, timestamp);

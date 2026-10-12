@@ -59,16 +59,6 @@ public final /* data */ class HisnListState {
         return this.readTodayIds;
     }
 
-    /* renamed from: component5, reason: from getter */
-    public final String getQuery() {
-        return this.query;
-    }
-
-    /* renamed from: component6, reason: from getter */
-    public final boolean getOnlyFavorites() {
-        return this.onlyFavorites;
-    }
-
     public final HisnListState copy(List<HisnChapter> chapters, Map<Integer, Integer> itemCounts, Set<Integer> favoriteChapterIds, Set<Integer> readTodayIds, String query, boolean onlyFavorites) {
         Intrinsics.checkNotNullParameter(chapters, "chapters");
         Intrinsics.checkNotNullParameter(itemCounts, "itemCounts");

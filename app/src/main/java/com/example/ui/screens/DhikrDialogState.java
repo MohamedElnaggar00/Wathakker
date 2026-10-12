@@ -1,7 +1,7 @@
 package com.example.ui.screens;
 
 import androidx.compose.runtime.MutableState;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import com.example.data.Dhikr;
 import kotlin.Metadata;
 
@@ -20,9 +20,9 @@ public final class DhikrDialogState {
     public DhikrDialogState() {
         MutableState mutableStateOf$default;
         MutableState mutableStateOf$default2;
-        mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
+        mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
         this.times = mutableStateOf$default;
-        mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
+        mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
         this.edit = mutableStateOf$default2;
     }
 

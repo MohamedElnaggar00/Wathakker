@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import kotlin.Metadata;
 import kotlin.jvm.internal.DefaultConstructorMarker;
 import kotlin.jvm.internal.Intrinsics;
-import kotlinx.coroutines.BuildersKt__Builders_commonKt;
+import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.CoroutineScopeKt;
 import kotlinx.coroutines.Dispatchers;
 
@@ -72,7 +72,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     public void onCreate(SupportSQLiteDatabase db) {
                         Intrinsics.checkNotNullParameter(db, "db");
                         super.onCreate(db);
-                        BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1(null), 3, null);
+                        BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1(null), 3, null);
                     }
                 }).build();
                 Companion companion = AppDatabase.INSTANCE;

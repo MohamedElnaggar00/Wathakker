@@ -37,7 +37,7 @@ import androidx.compose.runtime.CompositionLocalMap;
 import androidx.compose.runtime.MutableState;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.State;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambda;
@@ -1477,7 +1477,7 @@ public final class HomeScreenKt {
             Object rememberedValue = $composer3.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
                 cs = cs2;
-                mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue = mutableStateOf$default;
             } else {

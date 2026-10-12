@@ -20,16 +20,6 @@ public final /* data */ class ChapterItemCount {
         return chapterItemCount.copy(i, i2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final int getChapterId() {
-        return this.chapterId;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getItemCount() {
-        return this.itemCount;
-    }
-
     public final ChapterItemCount copy(int chapterId, int itemCount) {
         return new ChapterItemCount(chapterId, itemCount);
     }

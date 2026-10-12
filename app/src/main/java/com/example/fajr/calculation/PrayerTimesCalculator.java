@@ -34,36 +34,6 @@ public final class PrayerTimesCalculator {
             return dayPrayerTimes.copy(j, (i & 2) != 0 ? dayPrayerTimes.sunrise : j2, (i & 4) != 0 ? dayPrayerTimes.dhuhr : j3, (i & 8) != 0 ? dayPrayerTimes.asr : j4, (i & 16) != 0 ? dayPrayerTimes.maghrib : j5, (i & 32) != 0 ? dayPrayerTimes.isha : j6);
         }
 
-        /* renamed from: component1, reason: from getter */
-        public final long getFajr() {
-            return this.fajr;
-        }
-
-        /* renamed from: component2, reason: from getter */
-        public final long getSunrise() {
-            return this.sunrise;
-        }
-
-        /* renamed from: component3, reason: from getter */
-        public final long getDhuhr() {
-            return this.dhuhr;
-        }
-
-        /* renamed from: component4, reason: from getter */
-        public final long getAsr() {
-            return this.asr;
-        }
-
-        /* renamed from: component5, reason: from getter */
-        public final long getMaghrib() {
-            return this.maghrib;
-        }
-
-        /* renamed from: component6, reason: from getter */
-        public final long getIsha() {
-            return this.isha;
-        }
-
         public final DayPrayerTimes copy(long fajr, long sunrise, long dhuhr, long asr, long maghrib, long isha) {
             return new DayPrayerTimes(fajr, sunrise, dhuhr, asr, maghrib, isha);
         }
@@ -137,16 +107,6 @@ public final class PrayerTimesCalculator {
                 d2 = solarParams.declination;
             }
             return solarParams.copy(d, d2);
-        }
-
-        /* renamed from: component1, reason: from getter */
-        public final double getTransit() {
-            return this.transit;
-        }
-
-        /* renamed from: component2, reason: from getter */
-        public final double getDeclination() {
-            return this.declination;
         }
 
         public final SolarParams copy(double transit, double declination) {

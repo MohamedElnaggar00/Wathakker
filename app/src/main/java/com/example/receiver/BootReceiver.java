@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
-import kotlinx.coroutines.BuildersKt__Builders_commonKt;
+import kotlinx.coroutines.BuildersKt;
 import kotlinx.coroutines.CoroutineScopeKt;
 import kotlinx.coroutines.Dispatchers;
 
@@ -28,35 +28,35 @@ public final class BootReceiver extends BroadcastReceiver {
                         return;
                     }
                     BroadcastReceiver.PendingResult pendingResult = goAsync();
-                    BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult, null), 3, null);
+                    BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult, null), 3, null);
                     return;
                 case 502473491:
                     if (!action.equals("android.intent.action.TIMEZONE_CHANGED")) {
                         return;
                     }
                     BroadcastReceiver.PendingResult pendingResult2 = goAsync();
-                    BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult2, null), 3, null);
+                    BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult2, null), 3, null);
                     return;
                 case 505380757:
                     if (!action.equals("android.intent.action.TIME_SET")) {
                         return;
                     }
                     BroadcastReceiver.PendingResult pendingResult22 = goAsync();
-                    BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult22, null), 3, null);
+                    BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult22, null), 3, null);
                     return;
                 case 798292259:
                     if (!action.equals("android.intent.action.BOOT_COMPLETED")) {
                         return;
                     }
                     BroadcastReceiver.PendingResult pendingResult222 = goAsync();
-                    BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult222, null), 3, null);
+                    BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult222, null), 3, null);
                     return;
                 case 1737074039:
                     if (!action.equals("android.intent.action.MY_PACKAGE_REPLACED")) {
                         return;
                     }
                     BroadcastReceiver.PendingResult pendingResult2222 = goAsync();
-                    BuildersKt__Builders_commonKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult2222, null), 3, null);
+                    BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new BootReceiver$onReceive$1(context, pendingResult2222, null), 3, null);
                     return;
                 default:
                     return;

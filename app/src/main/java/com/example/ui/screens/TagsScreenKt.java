@@ -33,7 +33,7 @@ import androidx.compose.runtime.CompositionLocalMap;
 import androidx.compose.runtime.MutableState;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.State;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambda;
@@ -138,7 +138,7 @@ public final class TagsScreenKt {
             Object rememberedValue = $composer2.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
                 i = 0;
-                mutableStateOf$default3 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
                 $composer2.updateRememberedValue(mutableStateOf$default3);
                 rememberedValue = mutableStateOf$default3;
             } else {
@@ -149,7 +149,7 @@ public final class TagsScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1259815284, "CC(remember):TagsScreen.kt#9igjgp");
             Object rememberedValue2 = $composer2.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
                 $composer2.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue2 = mutableStateOf$default2;
             }
@@ -158,7 +158,7 @@ public final class TagsScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1259817204, "CC(remember):TagsScreen.kt#9igjgp");
             Object rememberedValue3 = $composer2.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue3 = mutableStateOf$default;
             }
@@ -989,7 +989,7 @@ public final class TagsScreenKt {
                 if (tag == null || (str2 = tag.getName()) == null) {
                     str2 = "";
                 }
-                mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(str2, null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(str2, null, 2, null);
                 $composer2.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue = mutableStateOf$default2;
             }
@@ -1001,7 +1001,7 @@ public final class TagsScreenKt {
                 if (tag == null || (str = tag.getColorHex()) == null) {
                     str = "#008080";
                 }
-                mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(str, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(str, null, 2, null);
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue2 = mutableStateOf$default;
             }

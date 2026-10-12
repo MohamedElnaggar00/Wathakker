@@ -39,36 +39,6 @@ public final /* data */ class CityItem {
         return cityItem.copy(str, str2, str3, str4, d4, d3);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final String getCityNameAr() {
-        return this.cityNameAr;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final String getCityNameEn() {
-        return this.cityNameEn;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final String getCountryNameAr() {
-        return this.countryNameAr;
-    }
-
-    /* renamed from: component4, reason: from getter */
-    public final String getCountryNameEn() {
-        return this.countryNameEn;
-    }
-
-    /* renamed from: component5, reason: from getter */
-    public final double getLatitude() {
-        return this.latitude;
-    }
-
-    /* renamed from: component6, reason: from getter */
-    public final double getLongitude() {
-        return this.longitude;
-    }
-
     public final CityItem copy(String cityNameAr, String cityNameEn, String countryNameAr, String countryNameEn, double latitude, double longitude) {
         Intrinsics.checkNotNullParameter(cityNameAr, "cityNameAr");
         Intrinsics.checkNotNullParameter(cityNameEn, "cityNameEn");

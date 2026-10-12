@@ -20,16 +20,6 @@ public final /* data */ class DhikrTagCrossRef {
         return dhikrTagCrossRef.copy(i, j);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final int getDhikrId() {
-        return this.dhikrId;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final long getTagId() {
-        return this.tagId;
-    }
-
     public final DhikrTagCrossRef copy(int dhikrId, long tagId) {
         return new DhikrTagCrossRef(dhikrId, tagId);
     }

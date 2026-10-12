@@ -64,7 +64,7 @@ import androidx.compose.runtime.ProvidedValue;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
 import androidx.compose.runtime.SnapshotStateKt;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.State;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambda;
@@ -496,7 +496,7 @@ public final class OneUIKt {
             Object rememberedValue3 = $composer3.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
                 expandedPx = expandedPx2;
-                rememberedValue3 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(true, null, 2, null);
+                rememberedValue3 = SnapshotStateKt.mutableStateOf$default(true, null, 2, null);
                 $composer3.updateRememberedValue(rememberedValue3);
             } else {
                 expandedPx = expandedPx2;

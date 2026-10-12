@@ -33,26 +33,6 @@ public final /* data */ class DhikrHistory {
         return dhikrHistory.copy(j3, i3, j4, str);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final long getHistoryId() {
-        return this.historyId;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getDhikrId() {
-        return this.dhikrId;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final long getTimestamp() {
-        return this.timestamp;
-    }
-
-    /* renamed from: component4, reason: from getter */
-    public final String getDateString() {
-        return this.dateString;
-    }
-
     public final DhikrHistory copy(long historyId, int dhikrId, long timestamp, String dateString) {
         Intrinsics.checkNotNullParameter(dateString, "dateString");
         return new DhikrHistory(historyId, dhikrId, timestamp, dateString);

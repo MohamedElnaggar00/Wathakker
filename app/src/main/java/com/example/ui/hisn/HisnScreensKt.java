@@ -42,7 +42,7 @@ import androidx.compose.runtime.ProvidableCompositionLocal;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
 import androidx.compose.runtime.SnapshotIntStateKt;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.State;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambda;
@@ -1338,7 +1338,7 @@ public final class HisnScreensKt {
     /* JADX INFO: Access modifiers changed from: package-private */
     public static final MutableState HisnItemCard$lambda$44$lambda$43() {
         MutableState mutableStateOf$default;
-        mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+        mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
         return mutableStateOf$default;
     }
 

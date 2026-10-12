@@ -30,7 +30,7 @@ import androidx.compose.runtime.EffectsKt;
 import androidx.compose.runtime.MutableState;
 import androidx.compose.runtime.RecomposeScopeImplKt;
 import androidx.compose.runtime.ScopeUpdateScope;
-import androidx.compose.runtime.SnapshotStateKt__SnapshotStateKt;
+import androidx.compose.runtime.SnapshotStateKt;
 import androidx.compose.runtime.Updater;
 import androidx.compose.runtime.internal.ComposableLambdaKt;
 import androidx.compose.ui.Alignment;
@@ -97,7 +97,7 @@ public final class FajrAlarmActivityKt {
             ComposerKt.sourceInformationMarkerStart($composer3, -1817525283, "CC(remember):FajrAlarmActivity.kt#9igjgp");
             Object rememberedValue = $composer3.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default3 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default("", null, 2, null);
+                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf$default("", null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default3);
                 rememberedValue = mutableStateOf$default3;
             }
@@ -106,7 +106,7 @@ public final class FajrAlarmActivityKt {
             ComposerKt.sourceInformationMarkerStart($composer3, -1817523427, "CC(remember):FajrAlarmActivity.kt#9igjgp");
             Object rememberedValue2 = $composer3.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default("", null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default("", null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue2 = mutableStateOf$default2;
             }
@@ -115,7 +115,7 @@ public final class FajrAlarmActivityKt {
             ComposerKt.sourceInformationMarkerStart($composer3, -1817521472, "CC(remember):FajrAlarmActivity.kt#9igjgp");
             Object rememberedValue3 = $composer3.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue3 = mutableStateOf$default;
             }

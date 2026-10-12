@@ -26,21 +26,6 @@ public final /* data */ class W {
         return w.copy(str, j, j2);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final String getName() {
-        return this.name;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final long getAdhan() {
-        return this.adhan;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final long getIqama() {
-        return this.iqama;
-    }
-
     public final W copy(String name, long adhan, long iqama) {
         Intrinsics.checkNotNullParameter(name, "name");
         return new W(name, adhan, iqama);

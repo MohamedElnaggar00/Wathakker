@@ -26,21 +26,6 @@ public final /* data */ class HisnChapter {
         return hisnChapter.copy(i, i2, str);
     }
 
-    /* renamed from: component1, reason: from getter */
-    public final int getId() {
-        return this.id;
-    }
-
-    /* renamed from: component2, reason: from getter */
-    public final int getOrder() {
-        return this.order;
-    }
-
-    /* renamed from: component3, reason: from getter */
-    public final String getName() {
-        return this.name;
-    }
-
     public final HisnChapter copy(int id, int order, String name) {
         Intrinsics.checkNotNullParameter(name, "name");
         return new HisnChapter(id, order, name);

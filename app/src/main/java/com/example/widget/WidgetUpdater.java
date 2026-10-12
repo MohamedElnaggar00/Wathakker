@@ -126,36 +126,6 @@ public final class WidgetUpdater {
             return this.times;
         }
 
-        /* renamed from: component3, reason: from getter */
-        public final int getNextIndex() {
-            return this.nextIndex;
-        }
-
-        /* renamed from: component4, reason: from getter */
-        public final String getNextName() {
-            return this.nextName;
-        }
-
-        /* renamed from: component5, reason: from getter */
-        public final long getNextMillis() {
-            return this.nextMillis;
-        }
-
-        /* renamed from: component6, reason: from getter */
-        public final String getPrevName() {
-            return this.prevName;
-        }
-
-        /* renamed from: component7, reason: from getter */
-        public final long getPrevMillis() {
-            return this.prevMillis;
-        }
-
-        /* renamed from: component8, reason: from getter */
-        public final String getCity() {
-            return this.city;
-        }
-
         public final PrayerState copy(List<String> names, List<Long> times, int nextIndex, String nextName, long nextMillis, String prevName, long prevMillis, String city) {
             Intrinsics.checkNotNullParameter(names, "names");
             Intrinsics.checkNotNullParameter(times, "times");
@@ -379,31 +349,6 @@ public final class WidgetUpdater {
             int i3 = i;
             long j4 = j2;
             return iqamaState.copy(str, j, j4, i3, j3);
-        }
-
-        /* renamed from: component1, reason: from getter */
-        public final String getPrayerName() {
-            return this.prayerName;
-        }
-
-        /* renamed from: component2, reason: from getter */
-        public final long getAdhanMillis() {
-            return this.adhanMillis;
-        }
-
-        /* renamed from: component3, reason: from getter */
-        public final long getIqamaMillis() {
-            return this.iqamaMillis;
-        }
-
-        /* renamed from: component4, reason: from getter */
-        public final int getProgressPct() {
-            return this.progressPct;
-        }
-
-        /* renamed from: component5, reason: from getter */
-        public final long getNextIqamaMillis() {
-            return this.nextIqamaMillis;
         }
 
         public final IqamaState copy(String prayerName, long adhanMillis, long iqamaMillis, int progressPct, long nextIqamaMillis) {
