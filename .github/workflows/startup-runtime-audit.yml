@@ -37,12 +37,18 @@ jobs:
           echo "488a1c2b07e2f944ef4a08d8c049ff64000d620c9b0f6737a45b892f25daa354  $PATCH" | sha256sum -c
           unzip -q "$PATCH" -d patch
           python3 - <<'PYCODE'
-          import zipfile
+          import zipfile,struct
           src=zipfile.ZipFile('shipped/Wathakker-V3.0.4.apk')
+          manifest=bytearray(src.read('AndroidManifest.xml'))
+          old='3.0.4'.encode('utf-16le');new='3.0.5'.encode('utf-16le')
+          assert manifest.count(old)==1
+          manifest=manifest.replace(old,new)
+          assert struct.unpack_from('<I',manifest,9196)[0]==10
+          struct.pack_into('<I',manifest,9196,11)
           with zipfile.ZipFile('candidate-unsigned.apk','w') as dst:
             for i in src.infolist():
               if i.filename.startswith('META-INF/') and i.filename.endswith(('.RSA','.SF','.MF')):continue
-              dst.writestr(i,open('patch/classes6.dex','rb').read() if i.filename=='classes6.dex' else src.read(i.filename))
+              dst.writestr(i,manifest if i.filename=='AndroidManifest.xml' else open('patch/classes6.dex','rb').read() if i.filename=='classes6.dex' else src.read(i.filename))
           PYCODE
           mkdir -p runtime-evidence
       - name: Ensure signing tools are installed
@@ -71,6 +77,8 @@ jobs:
           "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out candidate.apk "$work/aligned.apk"
           "$BT/apksigner" verify --verbose --print-certs candidate.apk > runtime-evidence/signature.txt
           grep -q '0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f' runtime-evidence/signature.txt
+          "$BT/aapt2" dump badging candidate.apk > runtime-evidence/package.txt
+          grep -q "name='com.wathakker.app' versionCode='11' versionName='3.0.5'" runtime-evidence/package.txt
           sha256sum candidate.apk > runtime-evidence/candidate-sha256.txt
       - name: Enable KVM
         run: |
@@ -131,19 +139,50 @@ jobs:
             adb pull /sdcard/upgrade.png runtime-evidence/upgrade-screen.png
             adb shell uiautomator dump /sdcard/upgrade.xml
             adb pull /sdcard/upgrade.xml runtime-evidence/upgrade-ui.xml
-            adb shell input tap 970 155
+            adb shell input tap 970 224
             sleep 2
             adb shell screencap -p /sdcard/drawer.png
             adb pull /sdcard/drawer.png runtime-evidence/drawer-screen.png
             adb shell uiautomator dump /sdcard/drawer.xml
             adb pull /sdcard/drawer.xml runtime-evidence/drawer-ui.xml
             adb shell input keyevent 4
+            adb shell input tap 120 224
+            sleep 2
+            adb shell screencap -p /sdcard/settings.png
+            adb pull /sdcard/settings.png runtime-evidence/settings-screen.png
+            adb shell uiautomator dump /sdcard/settings.xml
+            adb pull /sdcard/settings.xml runtime-evidence/settings-ui.xml
+            adb shell input keyevent 4
+            adb shell input tap 346 2220
+            sleep 2
+            adb shell screencap -p /sdcard/fajr.png
+            adb pull /sdcard/fajr.png runtime-evidence/fajr-screen.png
+            adb shell uiautomator dump /sdcard/fajr.xml
+            adb pull /sdcard/fajr.xml runtime-evidence/fajr-ui.xml
+            adb shell input tap 735 2220
+            sleep 2
+            adb shell screencap -p /sdcard/azkar.png
+            adb pull /sdcard/azkar.png runtime-evidence/azkar-screen.png
+            adb shell input tap 540 2220
+            sleep 2
+            adb shell screencap -p /sdcard/hisn.png
+            adb pull /sdcard/hisn.png runtime-evidence/hisn-screen.png
+            adb shell input tap 150 2220
+            sleep 2
+            adb shell screencap -p /sdcard/tasbih.png
+            adb pull /sdcard/tasbih.png runtime-evidence/tasbih-screen.png
             adb logcat -d -v threadtime > runtime-evidence/navigation-logcat.txt
             adb shell pidof com.wathakker.app > runtime-evidence/navigation-pid.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/fresh-logcat.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/upgrade-logcat.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/navigation-logcat.txt
-      - name: Preserve evidence only, not a delivery APK
+      - name: Preserve final signed private candidate after runtime gates
+        uses: actions/upload-artifact@v4
+        with:
+          name: Wathakker-V3.0.5-private-validated
+          path: candidate.apk
+          retention-days: 7
+      - name: Preserve runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
