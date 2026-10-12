@@ -182,6 +182,9 @@ dependencies {
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.okhttp)
+  implementation("androidx.autofill:autofill:1.1.0")
+  implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+  implementation("dev.chrisbanes.haze:haze:1.0.2")
 }
 """
 open(os.path.join(ROOT, 'app/build.gradle.kts'), 'w').write(gradle)
@@ -213,3 +216,52 @@ patch('com/example/prayer/PrayerTimesScreenKt.java', [
     ('? true : r17)', '? true : (r17 != 0))'),
     ('? true : r17,', '? true : (r17 != 0),'),
 ])
+
+# 9. global jadx clean-ups over every generated java file
+def remove_renamed_getters(src):
+    # jadx emits the data-class componentN() twice: once renamed to the getter. Drop the renamed copy if the getter exists.
+    pat = re.compile(r'[ \t]*/\* renamed from: component\d+, reason: from getter \*/\n(?:[ \t]*@[^\n]*\n)*[ \t]*(?:public |private |protected )?(?:final )?[\w<>\[\], ?.$]+ (get\w+|is\w+)\(\) \{')
+    out = []
+    pos = 0
+    while True:
+        m = pat.search(src, pos)
+        if not m:
+            out.append(src[pos:])
+            break
+        name = m.group(1)
+        # find end of method by brace matching
+        i = m.end()
+        depth = 1
+        while depth:
+            c = src[i]
+            if c == '{':
+                depth += 1
+            elif c == '}':
+                depth -= 1
+            i += 1
+        # is the same method defined elsewhere in the file?
+        decl = re.compile(r'\b' + name + r'\(\) \{')
+        count = len(decl.findall(src))
+        out.append(src[pos:m.start()])
+        if count > 1:
+            pos = i
+            while pos < len(src) and src[pos] == '\n':
+                pos += 1
+        else:
+            out.append(src[m.start():i])
+            pos = i
+    return ''.join(out)
+
+fixed = 0
+for dp, _, fs in os.walk(os.path.join(MAIN, 'java')):
+    for f in fs:
+        if not f.endswith('.java'):
+            continue
+        fp = os.path.join(dp, f)
+        t = open(fp, encoding='utf-8').read()
+        n = remove_renamed_getters(t)
+        n = re.sub(r'\b([A-Z]\w*Kt)__\w+\b', r'\1', n)
+        if n != t:
+            open(fp, 'w', encoding='utf-8').write(n)
+            fixed += 1
+print('cleaned files', fixed)
