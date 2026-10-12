@@ -67,10 +67,16 @@ jobs:
             adb pull /sdcard/render.png evidence/harness-screen.png
             ! grep -q 'FATAL EXCEPTION' evidence/render-logcat.txt
             test -s evidence/proposed-Hero.png
-      - name: Preserve review pixels only, no production build
+      - name: Retain render evidence in job log without artifact storage
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: widget-design-review-pixels
-          path: evidence/
-          retention-days: 7
+        run: |
+          python3 - <<'PYCODE'
+          import zipfile,base64,pathlib
+          with zipfile.ZipFile('review-evidence.zip','w',zipfile.ZIP_DEFLATED) as z:
+            for p in pathlib.Path('evidence').glob('*'):
+              if p.is_file():z.write(p,p.name)
+          b=base64.b64encode(pathlib.Path('review-evidence.zip').read_bytes()).decode()
+          print('REVIEW_EVIDENCE_BASE64_BEGIN')
+          for i in range(0,len(b),3000):print('REVIEWDATA:'+b[i:i+3000])
+          print('REVIEW_EVIDENCE_BASE64_END')
+          PYCODE
