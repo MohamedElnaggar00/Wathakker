@@ -41,10 +41,10 @@ jobs:
       - name: Save build log summary
         run: |
           mkdir -p build-logs
-          { echo "outcome: ${{ steps.build.outcome }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; grep -n -E "error:|error\)|warning: \[|FAILED|What went wrong|AAPT|Execution failed|Caused by|BUILD" build.log | head -400; } > build-logs/last.txt
+          { echo "outcome: ${{ steps.build.outcome }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; grep -n -E "error:|error\)|warning: \[|FAILED|What went wrong|AAPT|Execution failed|Caused by|BUILD" build.log | head -400; } > build-logs/run-${{ github.run_number }}.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add build-logs/last.txt
+          git add build-logs/run-${{ github.run_number }}.txt
           git commit -m "build-logs: summary of run ${{ github.run_id }}" || echo "no log change"
           git pull --rebase origin main || true
           git push origin HEAD:main || true
