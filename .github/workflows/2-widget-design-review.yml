@@ -58,6 +58,10 @@ jobs:
           for n in a.namelist():
             if n.endswith('.dex') and n!='classes15.dex':assert a.read(n)==b.read(n),n
           PYCODE
+          python3 - <<'PYHOST'
+          from pathlib import Path
+          p=Path('patch/host/AndroidManifest.xml');s=p.read_text();s=s.replace('<uses-permission','<queries><package android:name="com.wathakker.app"/></queries><uses-permission',1);p.write_text(s)
+          PYHOST
           mkdir -p host-classes host-dex
           javac -encoding UTF-8 -source 8 -target 8 -cp "$ANDROID" -d host-classes $(find patch/host/src -name '*.java')
           "$BT/d8" --lib "$ANDROID" --min-api 26 --output host-dex $(find host-classes -name '*.class')
