@@ -28,7 +28,7 @@ jobs:
           set -euo pipefail
           MANAGER=$(find "$ANDROID_HOME/cmdline-tools" -path '*/bin/sdkmanager' -type f | head -1)
           "$MANAGER" 'build-tools;36.0.0' 'platforms;android-35'
-          unzip -q "$(find . -maxdepth 1 -name '*widget-native-render-audit.zip' -print -quit)" -d audit
+          unzip -q "$(find . -maxdepth 1 -name '*widget-size-font-review.zip' -print -quit)" -d audit
           BT="$ANDROID_HOME/build-tools/36.0.0"
           ANDROID="$ANDROID_HOME/platforms/android-35/android.jar"
           mkdir -p audit/classes audit/dex evidence
@@ -55,6 +55,8 @@ jobs:
           script: |
             set -eu
             adb install -g current/candidate.apk
+            adb shell am start -W -n com.wathakker.app/com.example.MainActivity
+            sleep 3
             adb shell dumpsys appwidget > evidence/current-provider-registration.txt
             adb install audit.apk
             adb logcat -c
@@ -66,7 +68,7 @@ jobs:
             adb shell screencap -p /sdcard/render.png
             adb pull /sdcard/render.png evidence/harness-screen.png
             ! grep -q 'FATAL EXCEPTION' evidence/render-logcat.txt
-            test -s evidence/proposed-Hero.png
+            test -s evidence/proposed-Hero-330x90.png
       - name: Retain render evidence in job log without artifact storage
         if: always()
         run: |
