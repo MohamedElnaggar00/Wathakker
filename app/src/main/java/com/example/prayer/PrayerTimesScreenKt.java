@@ -124,7 +124,7 @@ public final class PrayerTimesScreenKt {
     public static final void PrayerTimesScreen(Function0<Unit> function0, Composer $composer, final int $changed, final int i) {
         Function0 function02;
         final Function0 onMenu;
-        ?? r17;
+        int r17;
         int i2;
         int $dirty;
         Object next;
@@ -216,7 +216,7 @@ public final class PrayerTimesScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1276960632, "CC(remember):PrayerTimesScreen.kt#9igjgp");
             Object rememberedValue6 = $composer2.rememberedValue();
             if (rememberedValue6 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(Boolean.valueOf((boolean) r17), null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt__SnapshotStateKt.mutableStateOf$default(Boolean.valueOf(r17 != 0), null, 2, null);
                 $composer2.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue6 = mutableStateOf$default2;
             }
@@ -285,7 +285,7 @@ public final class PrayerTimesScreenKt {
             while (true) {
                 if (listIterator.hasPrevious()) {
                     Object previous = listIterator.previous();
-                    if (((Number) ((Triple) previous).getSecond()).longValue() <= PrayerTimesScreen$lambda$17(now$delegate) ? true : r17) {
+                    if (((Number) ((Triple) previous).getSecond()).longValue() <= PrayerTimesScreen$lambda$17(now$delegate) ? true : (r17 != 0)) {
                         obj = previous;
                         break;
                     }
@@ -332,7 +332,7 @@ public final class PrayerTimesScreenKt {
                 String gregorian4 = gregorian2;
                 String gregorian5 = formatPrayerTime(longValue);
                 String str4 = str2;
-                arrayList.add(new PrayerRowDisplay(str3, gregorian5, (Intrinsics.areEqual(str3, ((Triple) next2).getFirst()) && longValue == ((Number) ((Triple) next2).getSecond()).longValue()) ? true : r17, imageVector));
+                arrayList.add(new PrayerRowDisplay(str3, gregorian5, (Intrinsics.areEqual(str3, ((Triple) next2).getFirst()) && longValue == ((Number) ((Triple) next2).getSecond()).longValue()) ? true : (r17 != 0), imageVector));
                 hijri2 = hijri4;
                 iterable = iterable3;
                 list = iterable2;
