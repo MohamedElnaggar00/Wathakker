@@ -1,10 +1,60 @@
-name: Legacy debug build disabled
+name: Build Android APK
+
+# Build from source and upload the debug APK as a workflow artifact.
+# No releases and no tags are created here - releases are published manually.
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
-permissions:
-  contents: read
+
 jobs:
-  notice:
-    runs-on: ubuntu-24.04
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - run: echo 'Legacy debug signing and automatic releases are disabled. Use Sign Wathakker V3.0.0 for the Morphe-signed APK.'
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Generate Debug Keystore
+        run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+
+      - name: Build APK
+        id: build
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          gradle assembleDebug --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee build.log
+
+      - name: Save build log summary
+        run: |
+          mkdir -p build-logs
+          { echo "outcome: ${{ steps.build.outcome }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; grep -n -E "error:|error\)|warning: \[|FAILED|What went wrong|AAPT|Execution failed|Caused by|BUILD" build.log | head -400; } > build-logs/last.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add build-logs/last.txt
+          git commit -m "build-logs: summary of run ${{ github.run_id }}" || echo "no log change"
+          git pull --rebase origin main || true
+          git push origin HEAD:main || true
+
+      - name: Fail if build failed
+        if: steps.build.outcome == 'failure'
+        run: exit 1
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
