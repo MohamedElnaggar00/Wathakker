@@ -186,3 +186,30 @@ dependencies {
 """
 open(os.path.join(ROOT, 'app/build.gradle.kts'), 'w').write(gradle)
 print('wrote app/build.gradle.kts')
+
+# 7. real Java sources of the widget renderers from the repo's patch zip (jadx output for these two is not valid Java)
+import zipfile
+zp = os.path.join(ROOT, '1-widget-production-shortfix.zip')
+with zipfile.ZipFile(zp) as z:
+    for name in ('src/com/example/lockwidgets/LockWidgets.java', 'src/com/example/lockwidgets/HomeWidgets.java'):
+        dst = os.path.join(MAIN, 'java', name[len('src/'):])
+        with open(dst, 'wb') as f:
+            f.write(z.read(name))
+        print('override', dst)
+
+# 8. targeted fixes for jadx type-inference leftovers
+def patch(rel, subs):
+    p = os.path.join(MAIN, 'java', rel)
+    s = open(p, encoding='utf-8').read()
+    for a, b in subs:
+        if a not in s:
+            print('PATCH MISS', rel, a)
+        s = s.replace(a, b)
+    open(p, 'w', encoding='utf-8').write(s)
+
+patch('com/example/prayer/PrayerTimesScreenKt.java', [
+    ('        ?? r17;\n', '        int r17;\n'),
+    ('Boolean.valueOf((boolean) r17)', 'Boolean.valueOf(r17 != 0)'),
+    ('? true : r17)', '? true : (r17 != 0))'),
+    ('? true : r17,', '? true : (r17 != 0),'),
+])
