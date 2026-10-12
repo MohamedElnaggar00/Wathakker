@@ -32,9 +32,9 @@ jobs:
       - name: Patch exact shipped DEX only
         run: |
           echo '034a37d6d48541cb9f9443c944726a9517c380b3a96a3af4ecbaddb1bedf5944  shipped/Wathakker-V3.0.4.apk' | sha256sum -c
-          PATCH=$(find . -maxdepth 1 -name '*startup-art-verifier-fix.zip' -print -quit)
+          PATCH=$(find . -maxdepth 1 -name '*startup-credit-fix.zip' -print -quit)
           test -n "$PATCH"
-          echo "488a1c2b07e2f944ef4a08d8c049ff64000d620c9b0f6737a45b892f25daa354  $PATCH" | sha256sum -c
+          echo "6341f671bbb8e35304f9171fac566e75bd3993568d3282f9bb554c852d39a334  $PATCH" | sha256sum -c
           unzip -q "$PATCH" -d patch
           python3 - <<'PYCODE'
           import zipfile,struct
@@ -48,7 +48,7 @@ jobs:
           with zipfile.ZipFile('candidate-unsigned.apk','w') as dst:
             for i in src.infolist():
               if i.filename.startswith('META-INF/') and i.filename.endswith(('.RSA','.SF','.MF')):continue
-              dst.writestr(i,manifest if i.filename=='AndroidManifest.xml' else open('patch/classes6.dex','rb').read() if i.filename=='classes6.dex' else src.read(i.filename))
+              dst.writestr(i,manifest if i.filename=='AndroidManifest.xml' else open('patch/'+i.filename,'rb').read() if i.filename in ('classes6.dex','classes7.dex') else src.read(i.filename))
           PYCODE
           mkdir -p runtime-evidence
       - name: Ensure signing tools are installed
@@ -145,34 +145,44 @@ jobs:
             adb pull /sdcard/drawer.png runtime-evidence/drawer-screen.png
             adb shell uiautomator dump /sdcard/drawer.xml
             adb pull /sdcard/drawer.xml runtime-evidence/drawer-ui.xml
-            adb shell input keyevent 4
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 3
             adb shell input tap 120 224
             sleep 2
             adb shell screencap -p /sdcard/settings.png
             adb pull /sdcard/settings.png runtime-evidence/settings-screen.png
             adb shell uiautomator dump /sdcard/settings.xml
             adb pull /sdcard/settings.xml runtime-evidence/settings-ui.xml
-            adb shell input keyevent 4
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 3
             adb shell input tap 346 2220
             sleep 2
             adb shell screencap -p /sdcard/fajr.png
             adb pull /sdcard/fajr.png runtime-evidence/fajr-screen.png
             adb shell uiautomator dump /sdcard/fajr.xml
             adb pull /sdcard/fajr.xml runtime-evidence/fajr-ui.xml
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 3
             adb shell input tap 735 2220
             sleep 2
             adb shell screencap -p /sdcard/azkar.png
             adb pull /sdcard/azkar.png runtime-evidence/azkar-screen.png
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 3
             adb shell input tap 540 2220
             sleep 2
             adb shell screencap -p /sdcard/hisn.png
             adb pull /sdcard/hisn.png runtime-evidence/hisn-screen.png
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 3
             adb shell input tap 150 2220
             sleep 2
             adb shell screencap -p /sdcard/tasbih.png
             adb pull /sdcard/tasbih.png runtime-evidence/tasbih-screen.png
             adb logcat -d -v threadtime > runtime-evidence/navigation-logcat.txt
             adb shell pidof com.wathakker.app > runtime-evidence/navigation-pid.txt
+            adb shell dumpsys activity activities > runtime-evidence/navigation-activities.txt
+            grep -E '(topResumedActivity=|mResumedActivity:).*com.wathakker.app/com.example.MainActivity' runtime-evidence/navigation-activities.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/fresh-logcat.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/upgrade-logcat.txt
             ! grep -q 'FATAL EXCEPTION' runtime-evidence/navigation-logcat.txt
