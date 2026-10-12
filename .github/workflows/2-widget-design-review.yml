@@ -37,7 +37,7 @@ jobs:
           curl -fsSL https://repo.maven.apache.org/maven2/org/smali/smali/2.5.2/smali-2.5.2.jar -o smali.jar
           mkdir -p lib
           for spec in org/smali/dexlib2/2.5.2/dexlib2-2.5.2 org/smali/util/2.5.2/util-2.5.2 com/google/guava/guava/27.1-android/guava-27.1-android com/beust/jcommander/1.64/jcommander-1.64 org/antlr/antlr/3.5.2/antlr-3.5.2 org/antlr/antlr-runtime/3.5.2/antlr-runtime-3.5.2 org/antlr/stringtemplate/3.2.1/stringtemplate-3.2.1; do curl -fsSL "https://repo.maven.apache.org/maven2/$spec.jar" -o "lib/$(basename "$spec").jar"; done
-          unzip -q 2-widget-production-306.zip -d patch
+          unzip -q 1-widget-production-shortfix.zip -d patch
           mkdir -p patch/classes patch/dex runtime-evidence
           javac -encoding UTF-8 -source 8 -target 8 -cp "$ANDROID" -d patch/classes $(find patch/src -name '*.java')
           rm patch/classes/com/example/lockwidgets/LockWidgets*.class patch/classes/com/example/widget/BaseWathakkerWidgetProvider.class
@@ -165,7 +165,8 @@ jobs:
             adb pull /sdcard/drawer.png runtime-evidence/drawer-screen.png
             adb shell uiautomator dump /sdcard/drawer.xml
             adb pull /sdcard/drawer.xml runtime-evidence/drawer-ui.xml
-            adb shell input keyevent 4
+            adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 2
             adb shell input tap 120 224
             sleep 2
             adb shell screencap -p /sdcard/settings.png
@@ -194,6 +195,8 @@ jobs:
             adb shell screencap -p /sdcard/hisn.png
             adb pull /sdcard/hisn.png runtime-evidence/hisn-screen.png
             adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity
+            sleep 2
+            adb shell input tap 150 2220
             sleep 2
             adb shell input tap 150 2220
             sleep 2
