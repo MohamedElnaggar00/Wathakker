@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:id="@id/facewidget_root" android:background="@drawable/facewidget_bg" android:padding="14.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layoutDirection="rtl"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="16.0sp" android:textStyle="bold" android:textColor="#ffffffff" android:id="@id/facewidget_prayer_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="العصر" android:textDirection="locale" />
+        <TextView android:textSize="16.0sp" android:textStyle="bold" android:textColor="#ffffffff" android:gravity="left" android:id="@id/facewidget_prayer_time" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="4:07 م" android:layout_weight="1.0" android:textDirection="locale" />
+    </LinearLayout>
+    <ProgressBar android:id="@id/facewidget_progress" android:layout_width="fill_parent" android:layout_height="6.0dip" android:layout_marginTop="6.0dip" android:max="100" android:progress="50" android:progressDrawable="@drawable/widget_progress_white" style="?android:progressBarStyleHorizontal" />
+    <TextView android:textSize="13.0sp" android:textColor="#ffc9c9ce" android:gravity="right" android:id="@id/facewidget_remaining" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:text="باقي على صلاة العصر 2 س 27 د" android:textDirection="locale" />
+</LinearLayout>

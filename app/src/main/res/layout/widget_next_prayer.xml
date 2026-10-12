@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/widget_bg" android:padding="8.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layoutDirection="rtl"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:gravity="center" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">
+        <TextView android:textSize="16.0sp" android:textColor="#ffffffff" android:id="@id/widget_prayer_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="الظهر" android:includeFontPadding="false" android:fontFamily="@font/expoarabic_medium" android:textDirection="rtl" />
+        <TextView android:textSize="18.0sp" android:textColor="#ffffffff" android:id="@id/widget_prayer_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="12:50 م" android:includeFontPadding="false" android:fontFamily="@font/expoarabic_semibold" android:textDirection="rtl" />
+    </LinearLayout>
+    <Chronometer android:textSize="12.0sp" android:textColor="#ffc9c9ce" android:id="@id/widget_countdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:format="باقي %s" android:includeFontPadding="false" android:fontFamily="@font/expoarabic_medium" />
+</LinearLayout>
