@@ -1,0 +1,149 @@
+package com.example.ui.oneui
+
+import android.os.Build
+import android.view.View
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
+
+@Composable
+fun BlurBehindDialogWindow(radiusDp: Int = 28) {
+    val view = LocalView.current
+    val density = LocalDensity.current
+    SideEffect {
+        val window = (view.parent as? DialogWindowProvider)?.window ?: return@SideEffect
+        if (Build.VERSION.SDK_INT >= 31) {
+            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+            val attrs = window.attributes
+            attrs.blurBehindRadius = with(density) { radiusDp.dp.roundToPx() }
+            window.attributes = attrs
+            window.setDimAmount(0.28f)
+        } else {
+            window.setDimAmount(0.5f)
+        }
+    }
+}
+
+@Composable
+fun OneUIDialogSurface(
+    title: String,
+    onDismiss: () -> Unit,
+    onConfirm: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+    confirmText: String = "حفظ",
+    dismissText: String = "إلغاء",
+    confirmEnabled: Boolean = true,
+    scrollable: Boolean = true,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    val cs = MaterialTheme.colorScheme
+    CompositionLocalProvider(LocalContentColor provides cs.onSurface) {
+        Column(modifier = modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(cs.surface)
+            ) {
+                Text(
+                    title,
+                    modifier = Modifier.fillMaxWidth().padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 12.dp),
+                    color = cs.onSurface,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Column(
+                    modifier = Modifier
+                        .weight(1f, fill = false)
+                        .then(if (scrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier)
+                        .padding(horizontal = 24.dp),
+                    content = content
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .clip(RoundedCornerShape(28.dp))
+                        .background(cs.surfaceContainerHighest),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onDismiss),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(dismissText, color = cs.onSurface, style = MaterialTheme.typography.labelLarge)
+                    }
+                    if (onConfirm != null) {
+                        Box(modifier = Modifier.width(0.5.dp).fillMaxHeight().background(cs.outline))
+                        Box(
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(enabled = confirmEnabled, onClick = onConfirm),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                confirmText,
+                                color = if (confirmEnabled) cs.onSurface else cs.onSurfaceVariant,
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun OneUIDialog(
+    title: String,
+    onDismiss: () -> Unit,
+    onConfirm: (() -> Unit)? = null,
+    confirmText: String = "حفظ",
+    dismissText: String = "إلغاء",
+    confirmEnabled: Boolean = true,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
+        BlurBehindDialogWindow()
+        OneUIDialogSurface(
+            title = title,
+            onDismiss = onDismiss,
+            onConfirm = onConfirm,
+            modifier = Modifier.padding(horizontal = 24.dp),
+            confirmText = confirmText,
+            dismissText = dismissText,
+            confirmEnabled = confirmEnabled,
+            content = content
+        )
+    }
+}
