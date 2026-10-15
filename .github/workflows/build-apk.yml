@@ -11,6 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        bom: ['2025.04.01', '2025.06.01', '2025.08.00', '2025.09.01', '2025.10.01']
     permissions:
       contents: write
     steps:
@@ -36,26 +40,26 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          gradle assembleDebug --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee build.log
+          gradle assembleDebug -PcomposeBom=${{ matrix.bom }} --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee build.log
 
       - name: Save build log summary
         run: |
           mkdir -p build-logs
-          { echo "outcome: ${{ steps.build.outcome }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; grep -n -A2 -E "error:|What went wrong|Execution failed|BUILD" build.log | head -1500; } > build-logs/run-${{ github.run_number }}.txt
+          F=build-logs/run-${{ github.run_number }}-bom-${{ matrix.bom }}.txt
+          { echo "outcome: ${{ steps.build.outcome }}  bom: ${{ matrix.bom }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; echo "errors: $(grep -c 'error:' build.log)"; grep -n -A4 -E "error:|What went wrong|Execution failed|BUILD" build.log | head -2500; } > $F
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add build-logs/run-${{ github.run_number }}.txt
-          git commit -m "build-logs: summary of run ${{ github.run_id }}" || echo "no log change"
-          git pull --rebase origin main || true
-          git push origin HEAD:main || true
+          git add $F
+          git commit -m "build-logs: bom ${{ matrix.bom }} run ${{ github.run_id }}" || echo "no log change"
+          for i in 1 2 3 4; do git pull --rebase origin main && git push origin HEAD:main && break; sleep $((RANDOM % 8 + 2)); done
+
+      - name: Upload APK
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-bom-${{ matrix.bom }}.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Fail if build failed
         if: steps.build.outcome == 'failure'
         run: exit 1
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug.apk
-          path: app/build/outputs/apk/debug/app-debug.apk
-
