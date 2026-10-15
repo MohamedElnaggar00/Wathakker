@@ -41,6 +41,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -142,28 +143,48 @@ fun OneUIScreen(
             }
             content()
         }
+        // Top bar: menu or back on one side, settings and extra actions on the other.
+        // The row itself is always visible; only the tile behind each group and the small title fade in on scroll.
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, top = statusTop + 10.dp, end = 16.dp)
-                .alpha(barAlpha),
+                .padding(start = 16.dp, top = statusTop + 10.dp, end = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (onBack != null) {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+            Row(
+                modifier = HeaderTools.scrollTile(Modifier.weight(1f, fill = false), barAlpha)
+                    .height(52.dp)
+                    .padding(horizontal = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                val leading = onBack ?: onMenu
+                if (leading != null) {
+                    IconButton(onClick = leading) {
+                        if (onMenu != null) {
+                            Icon(Icons.Outlined.Menu, contentDescription = "القائمة", tint = MaterialTheme.colorScheme.onBackground)
+                        } else {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                        }
                     }
                     Spacer(modifier = Modifier.width(14.dp))
                 }
-                Text(title, color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.titleMedium, fontSize = 18.sp)
+                Text(
+                    title,
+                    modifier = Modifier.alpha(barAlpha),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 18.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = HeaderTools.scrollTile(Modifier, barAlpha).height(52.dp).padding(horizontal = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HeaderTools.SettingsButton()
                 actions?.invoke(this)
-                if (onMenu != null) {
-                    IconButton(onClick = onMenu) { SettingsGlyph() }
-                }
             }
         }
     }
