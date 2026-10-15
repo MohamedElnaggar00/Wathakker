@@ -27,18 +27,8 @@ PY
 }
 dismiss_anr
 shot 00-home
-# tap each bottom-bar element (y in lowest 15% of screen), screenshot after each
-python3 - "$OUT/00-home.xml" > "$OUT/bottom-targets.txt" <<'PY'
-import re,sys
-x=open(sys.argv[1],encoding='utf-8').read()
-H=max([int(m.group(4)) for m in re.finditer(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x)] or [2400])
-seen=set()
-for m in re.finditer(r'<node[^>]*?clickable="true"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
-    a,b,c,d=map(int,m.groups())
-    cy=(b+d)//2
-    if cy>H*0.85 and (a+c)//2 not in seen:
-        seen.add((a+c)//2); print((a+c)//2,cy)
-PY
+# bottom bar tab centres on a 1080x2400 screen (RTL order), then settings gear and menu
+printf '735 2221\n540 2221\n345 2221\n150 2221\n930 2221\n' > "$OUT/bottom-targets.txt"
 i=1
 while read -u 3 cx cy; do
   dismiss_anr
@@ -48,6 +38,9 @@ while read -u 3 cx cy; do
   # also tap first scrollable list item / top-right settings-ish icons are not guessed here
   i=$((i+1))
 done 3< "$OUT/bottom-targets.txt"
+adb shell input tap 122 222; sleep 3; shot 10-gear; adb shell input keyevent KEYCODE_BACK; sleep 2
+adb shell input tap 968 222; sleep 3; shot 11-menu; adb shell input keyevent KEYCODE_BACK; sleep 2
+adb shell input swipe 540 1800 540 600 400; sleep 2; shot 12-scrolled
 adb logcat -d -v threadtime > "$OUT/logcat.txt"
 grep -E 'FATAL EXCEPTION|AndroidRuntime|ANR in' "$OUT/logcat.txt" > "$OUT/crashes.txt" || true
 adb shell pidof com.wathakker.app > "$OUT/pid.txt" || true
