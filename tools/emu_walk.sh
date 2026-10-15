@@ -23,12 +23,12 @@ for m in re.finditer(r'<node[^>]*?clickable="true"[^>]*?bounds="\[(\d+),(\d+)\]\
         seen.add((a+c)//2); print((a+c)//2,cy)
 PY
 i=1
-while read cx cy; do
+while read -u 3 cx cy; do
   adb shell input tap $cx $cy; sleep 3
   shot $(printf '%02d' $i)-tab
   # also tap first scrollable list item / top-right settings-ish icons are not guessed here
   i=$((i+1))
-done < "$OUT/bottom-targets.txt"
+done 3< "$OUT/bottom-targets.txt"
 adb logcat -d -v threadtime > "$OUT/logcat.txt"
 grep -E 'FATAL EXCEPTION|AndroidRuntime|ANR in' "$OUT/logcat.txt" > "$OUT/crashes.txt" || true
 adb shell pidof com.wathakker.app > "$OUT/pid.txt" || true
