@@ -31,7 +31,7 @@ public final class FajrViewModel$refreshFajrTimeManually$1 extends SuspendLambda
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new FajrViewModel$refreshFajrTimeManually$1(this.this$0, (Continuation) continuation);
+        return (Continuation) new FajrViewModel$refreshFajrTimeManually$1(this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

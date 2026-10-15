@@ -174,7 +174,7 @@ public final class DhikrRepository {
                 }
             }
         }
-        dhikrRepository$markAsRead$1 = new DhikrRepository$markAsRead$1(this, continuation);
+        dhikrRepository$markAsRead$1 = new DhikrRepository$markAsRead$1(this, (Continuation) continuation);
         Object $result2 = dhikrRepository$markAsRead$1.result;
         Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
         switch (dhikrRepository$markAsRead$1.label) {
@@ -242,7 +242,7 @@ public final class DhikrRepository {
                 }
             }
         }
-        dhikrRepository$delete$1 = new DhikrRepository$delete$1(this, continuation);
+        dhikrRepository$delete$1 = new DhikrRepository$delete$1(this, (Continuation) continuation);
         Object $result2 = dhikrRepository$delete$1.result;
         Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
         switch (dhikrRepository$delete$1.label) {
@@ -310,7 +310,7 @@ public final class DhikrRepository {
                 }
             }
         }
-        dhikrRepository$deleteTag$1 = new DhikrRepository$deleteTag$1(this, continuation);
+        dhikrRepository$deleteTag$1 = new DhikrRepository$deleteTag$1(this, (Continuation) continuation);
         Object $result2 = dhikrRepository$deleteTag$1.result;
         Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
         switch (dhikrRepository$deleteTag$1.label) {
@@ -404,7 +404,7 @@ public final class DhikrRepository {
                 }
             }
         }
-        dhikrRepository$getOrCreateTagByName$1 = new DhikrRepository$getOrCreateTagByName$1(this, continuation);
+        dhikrRepository$getOrCreateTagByName$1 = new DhikrRepository$getOrCreateTagByName$1(this, (Continuation) continuation);
         Object $result2 = dhikrRepository$getOrCreateTagByName$1.result;
         Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
         switch (dhikrRepository$getOrCreateTagByName$1.label) {

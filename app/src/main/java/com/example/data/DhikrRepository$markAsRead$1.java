@@ -22,7 +22,7 @@ public final class DhikrRepository$markAsRead$1 extends ContinuationImpl {
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public DhikrRepository$markAsRead$1(DhikrRepository dhikrRepository, Continuation<? super DhikrRepository$markAsRead$1> continuation) {
-        super(continuation);
+        super((Continuation) continuation);
         this.this$0 = dhikrRepository;
     }
 

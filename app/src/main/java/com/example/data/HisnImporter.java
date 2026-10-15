@@ -203,7 +203,7 @@ public final class HisnImporter {
                 }
             }
         }
-        hisnImporter$ensureImported$1 = new HisnImporter$ensureImported$1(this, continuation);
+        hisnImporter$ensureImported$1 = new HisnImporter$ensureImported$1(this, (Continuation) continuation);
         Object $result3 = hisnImporter$ensureImported$1.result;
         Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
         switch (hisnImporter$ensureImported$1.label) {

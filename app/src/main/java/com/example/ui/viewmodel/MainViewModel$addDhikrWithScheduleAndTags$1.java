@@ -46,7 +46,7 @@ public final class MainViewModel$addDhikrWithScheduleAndTags$1 extends SuspendLa
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$addDhikrWithScheduleAndTags$1(this.$title, this.$content, this.$times, this.this$0, this.$tagIds, (Continuation) continuation);
+        return (Continuation) new MainViewModel$addDhikrWithScheduleAndTags$1(this.$title, this.$content, this.$times, this.this$0, this.$tagIds, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

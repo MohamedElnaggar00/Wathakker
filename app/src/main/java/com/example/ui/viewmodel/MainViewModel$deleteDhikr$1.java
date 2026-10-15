@@ -33,7 +33,7 @@ public final class MainViewModel$deleteDhikr$1 extends SuspendLambda implements 
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$deleteDhikr$1(this.this$0, this.$dhikr, (Continuation) continuation);
+        return (Continuation) new MainViewModel$deleteDhikr$1(this.this$0, this.$dhikr, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

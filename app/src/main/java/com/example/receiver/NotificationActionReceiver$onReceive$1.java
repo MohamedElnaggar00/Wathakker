@@ -39,7 +39,7 @@ final class NotificationActionReceiver$onReceive$1 extends SuspendLambda impleme
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new NotificationActionReceiver$onReceive$1(this.$context, this.$dhikrId, this.$pendingResult, (Continuation) continuation);
+        return (Continuation) new NotificationActionReceiver$onReceive$1(this.$context, this.$dhikrId, this.$pendingResult, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

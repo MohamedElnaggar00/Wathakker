@@ -38,7 +38,7 @@ public final class MainViewModel$updateTimes$1 extends SuspendLambda implements 
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$updateTimes$1(this.$dhikr, this.$newTimes, this.this$0, (Continuation) continuation);
+        return (Continuation) new MainViewModel$updateTimes$1(this.$dhikr, this.$newTimes, this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

@@ -28,6 +28,6 @@ public final class Converters {
 
     public final String toString(List<String> list) {
         Intrinsics.checkNotNullParameter(list, "list");
-        return CollectionsKt.joinToString$default(list, ",", null, null, 0, null, null, 62, null);
+        return String.join(",", list);
     }
 }

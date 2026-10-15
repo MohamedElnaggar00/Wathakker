@@ -223,8 +223,8 @@ public final class WidgetUpdater {
         PrayerTimesCalculator prayerTimesCalculator = PrayerTimesCalculator.INSTANCE;
         Intrinsics.checkNotNull(cal);
         PrayerTimesCalculator.DayPrayerTimes today = prayerTimesCalculator.calculateAll(cal, prefs2.getLatitude(), prefs2.getLongitude(), method);
-        List times = CollectionsKt.listOf((Object[]) new Long[]{Long.valueOf(today.getFajr()), Long.valueOf(today.getSunrise()), Long.valueOf(today.getDhuhr()), Long.valueOf(today.getAsr()), Long.valueOf(today.getMaghrib()), Long.valueOf(today.getIsha())});
-        List names2 = CollectionsKt.listOf((Object[]) new String[]{"الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء"});
+        List times = java.util.Arrays.asList(new Long[]{Long.valueOf(today.getFajr()), Long.valueOf(today.getSunrise()), Long.valueOf(today.getDhuhr()), Long.valueOf(today.getAsr()), Long.valueOf(today.getMaghrib()), Long.valueOf(today.getIsha())});
+        List names2 = java.util.Arrays.asList(new String[]{"الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء"});
         int i3 = 0;
         Iterator it = times.iterator();
         while (true) {
@@ -411,7 +411,7 @@ public final class WidgetUpdater {
         Object obj3;
         W active;
         W nextAfter;
-        List iqamaPrayers = CollectionsKt.listOf((Object[]) new String[]{"الفجر", "الظهر", "العصر", "المغرب", "العشاء"});
+        List iqamaPrayers = java.util.Arrays.asList(new String[]{"الفجر", "الظهر", "العصر", "المغرب", "العشاء"});
         List windows = new ArrayList();
         int size = state.getNames().size();
         for (int i = 0; i < size; i++) {
@@ -513,7 +513,7 @@ public final class WidgetUpdater {
     }
 
     private static final long computeIqamaState$iqamaOf(String name, long adhan) {
-        return ((iqamaOffsets.get(name) != null ? r0.intValue() : 15) * 60000) + adhan;
+        return ((iqamaOffsets.get(name) != null ? iqamaOffsets.get(name).intValue() : 15) * 60000) + adhan;
     }
 
     private final void updateIqama(Context context, AppWidgetManager mgr, PrayerState state, long now) {
@@ -720,8 +720,8 @@ public final class WidgetUpdater {
 
     private final void updateSchedule(Context context, AppWidgetManager mgr, PrayerState state) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_schedule);
-        List nameIds = CollectionsKt.listOf((Object[]) new Integer[]{Integer.valueOf(R.id.widget_name_0), Integer.valueOf(R.id.widget_name_1), Integer.valueOf(R.id.widget_name_2), Integer.valueOf(R.id.widget_name_3), Integer.valueOf(R.id.widget_name_4), Integer.valueOf(R.id.widget_name_5)});
-        List timeIds = CollectionsKt.listOf((Object[]) new Integer[]{Integer.valueOf(R.id.widget_time_0), Integer.valueOf(R.id.widget_time_1), Integer.valueOf(R.id.widget_time_2), Integer.valueOf(R.id.widget_time_3), Integer.valueOf(R.id.widget_time_4), Integer.valueOf(R.id.widget_time_5)});
+        List nameIds = java.util.Arrays.asList(new Integer[]{Integer.valueOf(R.id.widget_name_0), Integer.valueOf(R.id.widget_name_1), Integer.valueOf(R.id.widget_name_2), Integer.valueOf(R.id.widget_name_3), Integer.valueOf(R.id.widget_name_4), Integer.valueOf(R.id.widget_name_5)});
+        List timeIds = java.util.Arrays.asList(new Integer[]{Integer.valueOf(R.id.widget_time_0), Integer.valueOf(R.id.widget_time_1), Integer.valueOf(R.id.widget_time_2), Integer.valueOf(R.id.widget_time_3), Integer.valueOf(R.id.widget_time_4), Integer.valueOf(R.id.widget_time_5)});
         int i = 0;
         while (i < 6) {
             views.setTextViewText(((Number) nameIds.get(i)).intValue(), state.getNames().get(i));

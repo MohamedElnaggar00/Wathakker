@@ -32,12 +32,12 @@ final class TagDao_Impl$updateDhikrTags$2 extends SuspendLambda implements Funct
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Continuation<?> continuation) {
-        return new TagDao_Impl$updateDhikrTags$2(this.this$0, this.$dhikrId, this.$tagIds, (Continuation) continuation);
+        return (Continuation) new TagDao_Impl$updateDhikrTags$2(this.this$0, this.$dhikrId, this.$tagIds, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function1
     public final Object invoke(Continuation<? super Unit> continuation) {
-        return ((TagDao_Impl$updateDhikrTags$2) create(continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((TagDao_Impl$updateDhikrTags$2) (Object) create(continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

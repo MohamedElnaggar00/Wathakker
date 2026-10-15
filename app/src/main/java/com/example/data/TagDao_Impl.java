@@ -139,7 +139,7 @@ public final class TagDao_Impl implements TagDao {
     /* JADX INFO: Access modifiers changed from: package-private */
     public static final Unit insertDhikrTagCrossRef$lambda$1(TagDao_Impl this$0, DhikrTagCrossRef $crossRef, SQLiteConnection _connection) {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
-        this$0.__insertAdapterOfDhikrTagCrossRef.insert(_connection, (SQLiteConnection) $crossRef);
+        this$0.__insertAdapterOfDhikrTagCrossRef.insert(_connection, $crossRef);
         return Unit.INSTANCE;
     }
 
@@ -312,7 +312,7 @@ public final class TagDao_Impl implements TagDao {
         return FlowUtil.createFlow(this.__db, true, new String[]{"dhikr_tag_cross_ref", "tag_table", "dhikr_table"}, new Function1() { // from class: com.example.data.TagDao_Impl$$ExternalSyntheticLambda2
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return TagDao_Impl.getDhikrsWithTags$lambda$8(_sql, this, (SQLiteConnection) obj);
+                return TagDao_Impl.getDhikrsWithTags$lambda$8(_sql, HisnDao_Impl.this, (SQLiteConnection) obj);
             }
         });
     }
@@ -331,7 +331,7 @@ public final class TagDao_Impl implements TagDao {
             int _columnIndexOfIsEnabled = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "isEnabled");
             int _columnIndexOfReadCount = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "readCount");
             int _columnIndexOfLastReadTime = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "lastReadTime");
-            LongSparseArray _collectionTags = new LongSparseArray(0, 1, null);
+            LongSparseArray _collectionTags = new LongSparseArray(0);
             while (_stmt.step()) {
                 long _tmpKey = _stmt.getLong(_columnIndexOfId);
                 if (!_collectionTags.containsKey(_tmpKey)) {
@@ -355,7 +355,7 @@ public final class TagDao_Impl implements TagDao {
                 long _tmpLastReadTime = _stmt.getLong(_columnIndexOfLastReadTime);
                 Dhikr _tmpDhikr = new Dhikr(_tmpId, _tmpTitle, _tmpContent, _tmpIsFavorite, _tmpReminderTimes, _tmpIsEnabled, _tmpReadCount, _tmpLastReadTime);
                 long _tmpKey_1 = _stmt.getLong(_columnIndexOfId);
-                List<Tag> list = _collectionTags.get(_tmpKey_1);
+                List<Tag> list = (List<Tag>) _collectionTags.get(_tmpKey_1);
                 if (list == null) {
                     throw new IllegalStateException("Required value was null.".toString());
                 }
@@ -378,7 +378,7 @@ public final class TagDao_Impl implements TagDao {
         return DBUtil.performSuspending(this.__db, true, true, new Function1() { // from class: com.example.data.TagDao_Impl$$ExternalSyntheticLambda9
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return TagDao_Impl.getDhikrWithTagsById$lambda$9(_sql, dhikrId, this, (SQLiteConnection) obj);
+                return TagDao_Impl.getDhikrWithTagsById$lambda$9(_sql, dhikrId, HisnDao_Impl.this, (SQLiteConnection) obj);
             }
         }, continuation);
     }
@@ -399,7 +399,7 @@ public final class TagDao_Impl implements TagDao {
             int _columnIndexOfIsEnabled = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt2, "isEnabled");
             int _columnIndexOfReadCount = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt2, "readCount");
             int _columnIndexOfLastReadTime = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt2, "lastReadTime");
-            LongSparseArray _collectionTags = new LongSparseArray(0, 1, null);
+            LongSparseArray _collectionTags = new LongSparseArray(0);
             while (_stmt2.step()) {
                 long _tmpKey = _stmt2.getLong(_columnIndexOfId);
                 _stmt = _stmt2;
@@ -433,7 +433,7 @@ public final class TagDao_Impl implements TagDao {
                 long _tmpLastReadTime = _stmt3.getLong(_columnIndexOfLastReadTime);
                 Dhikr _tmpDhikr = new Dhikr(_tmpId, _tmpTitle, _tmpContent, _tmpIsFavorite, _tmpReminderTimes, _tmpIsEnabled, _tmpReadCount, _tmpLastReadTime);
                 long _tmpKey_1 = _stmt3.getLong(_columnIndexOfId);
-                List<Tag> list = _collectionTags.get(_tmpKey_1);
+                List<Tag> list = (List<Tag>) _collectionTags.get(_tmpKey_1);
                 if (list == null) {
                     throw new IllegalStateException("Required value was null.".toString());
                 }
@@ -445,8 +445,8 @@ public final class TagDao_Impl implements TagDao {
             _stmt3.close();
             return _result;
         } catch (Throwable th2) {
-            th = th2;
-            _stmt = _stmt2;
+            _stmt2.close();
+            throw th2;
         }
     }
 
@@ -654,7 +654,8 @@ public final class TagDao_Impl implements TagDao {
                     longSparseArray = _map;
                 }
             } catch (Throwable th2) {
-                th = th2;
+                _stmt.close();
+                throw th2;
             }
         }
         _stmt.close();

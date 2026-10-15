@@ -32,7 +32,7 @@ public final class MainViewModel$updateTag$1 extends SuspendLambda implements Fu
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$updateTag$1(this.this$0, this.$tag, (Continuation) continuation);
+        return (Continuation) new MainViewModel$updateTag$1(this.this$0, this.$tag, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

@@ -32,7 +32,7 @@ public final class MainViewModel$toggleFavorite$1 extends SuspendLambda implemen
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$toggleFavorite$1(this.this$0, this.$dhikr, (Continuation) continuation);
+        return (Continuation) new MainViewModel$toggleFavorite$1(this.this$0, this.$dhikr, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

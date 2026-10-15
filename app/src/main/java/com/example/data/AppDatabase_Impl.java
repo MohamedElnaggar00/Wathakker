@@ -230,7 +230,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 _columnsHisnFavorite.put("itemId", new TableInfo.Column("itemId", "INTEGER", true, 0, null, 1));
                 Set _foreignKeysHisnFavorite = new LinkedHashSet();
                 Set _indicesHisnFavorite = new LinkedHashSet();
-                _indicesHisnFavorite.add(new TableInfo.Index("index_hisn_favorite_chapterId_itemId", true, CollectionsKt.listOf((Object[]) new String[]{"chapterId", "itemId"}), CollectionsKt.listOf((Object[]) new String[]{"ASC", "ASC"})));
+                _indicesHisnFavorite.add(new TableInfo.Index("index_hisn_favorite_chapterId_itemId", true, java.util.Arrays.asList(new String[]{"chapterId", "itemId"}), java.util.Arrays.asList(new String[]{"ASC", "ASC"})));
                 TableInfo _infoHisnFavorite = new TableInfo("hisn_favorite", _columnsHisnFavorite, _foreignKeysHisnFavorite, _indicesHisnFavorite);
                 TableInfo _existingHisnFavorite = TableInfo.INSTANCE.read(connection, "hisn_favorite");
                 if (!_infoHisnFavorite.equals(_existingHisnFavorite)) {

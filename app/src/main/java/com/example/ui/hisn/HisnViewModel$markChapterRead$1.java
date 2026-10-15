@@ -32,7 +32,7 @@ public final class HisnViewModel$markChapterRead$1 extends SuspendLambda impleme
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new HisnViewModel$markChapterRead$1(this.this$0, this.$chapterId, (Continuation) continuation);
+        return (Continuation) new HisnViewModel$markChapterRead$1(this.this$0, this.$chapterId, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

@@ -41,7 +41,7 @@ public final class MainViewModel$updateDhikrWithTags$1 extends SuspendLambda imp
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$updateDhikrWithTags$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, this.$tagIds, (Continuation) continuation);
+        return (Continuation) new MainViewModel$updateDhikrWithTags$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, this.$tagIds, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

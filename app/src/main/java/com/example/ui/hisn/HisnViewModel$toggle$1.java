@@ -37,7 +37,7 @@ public final class HisnViewModel$toggle$1 extends SuspendLambda implements Funct
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new HisnViewModel$toggle$1(this.this$0, this.$chapterId, this.$itemId, (Continuation) continuation);
+        return (Continuation) new HisnViewModel$toggle$1(this.this$0, this.$chapterId, this.$itemId, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

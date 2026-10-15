@@ -24,7 +24,7 @@ public final class HisnImporter$ensureImported$1 extends ContinuationImpl {
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public HisnImporter$ensureImported$1(HisnImporter hisnImporter, Continuation<? super HisnImporter$ensureImported$1> continuation) {
-        super(continuation);
+        super((Continuation) continuation);
         this.this$0 = hisnImporter;
     }
 

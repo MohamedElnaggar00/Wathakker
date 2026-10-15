@@ -34,7 +34,7 @@ public final class MainViewModel$toggleEnabled$1 extends SuspendLambda implement
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$toggleEnabled$1(this.$dhikr, this.this$0, (Continuation) continuation);
+        return (Continuation) new MainViewModel$toggleEnabled$1(this.$dhikr, this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

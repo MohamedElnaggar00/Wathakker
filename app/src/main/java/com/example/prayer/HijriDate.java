@@ -15,7 +15,7 @@ import kotlin.ranges.RangesKt;
 /* loaded from: classes10.dex */
 public final class HijriDate {
     public static final HijriDate INSTANCE = new HijriDate();
-    private static final List<String> monthNames = CollectionsKt.listOf((Object[]) new String[]{"محرم", "صفر", "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الثانية", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"});
+    private static final List<String> monthNames = java.util.Arrays.asList(new String[]{"محرم", "صفر", "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الثانية", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"});
     public static final int $stable = 8;
 
     private HijriDate() {

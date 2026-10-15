@@ -37,7 +37,7 @@ final class MainViewModel$updateDhikrText$1 extends SuspendLambda implements Fun
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$updateDhikrText$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, (Continuation) continuation);
+        return (Continuation) new MainViewModel$updateDhikrText$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

@@ -23,7 +23,7 @@ public final class DhikrRepository$getOrCreateTagByName$1 extends ContinuationIm
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public DhikrRepository$getOrCreateTagByName$1(DhikrRepository dhikrRepository, Continuation<? super DhikrRepository$getOrCreateTagByName$1> continuation) {
-        super(continuation);
+        super((Continuation) continuation);
         this.this$0 = dhikrRepository;
     }
 

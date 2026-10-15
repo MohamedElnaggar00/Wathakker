@@ -33,12 +33,12 @@ public final class MainViewModel$addTag$1 extends SuspendLambda implements Funct
         this.this$0 = mainViewModel;
         this.$name = str;
         this.$colorHex = str2;
-        this.$onCreated = function1;
+        this.$onCreated = (Function1) function1;
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$addTag$1(this.this$0, this.$name, this.$colorHex, this.$onCreated, (Continuation) continuation);
+        return (Continuation) new MainViewModel$addTag$1(this.this$0, this.$name, this.$colorHex, this.$onCreated, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2

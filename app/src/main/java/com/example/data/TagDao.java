@@ -131,7 +131,7 @@ public interface TagDao {
                     }
                 }
             }
-            tagDao$updateDhikrTags$1 = new TagDao$updateDhikrTags$1($this2, continuation);
+            tagDao$updateDhikrTags$1 = new TagDao$updateDhikrTags$1($this2, (Continuation) continuation);
             Object $result2 = tagDao$updateDhikrTags$1.result;
             Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
             switch (tagDao$updateDhikrTags$1.label) {

@@ -142,7 +142,7 @@ public final class DhikrDao_Impl implements DhikrDao {
         return FlowUtil.createFlow(this.__db, false, new String[]{"dhikr_table"}, new Function1() { // from class: com.example.data.DhikrDao_Impl$$ExternalSyntheticLambda8
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return DhikrDao_Impl.getAllDhikr$lambda$3(_sql, this, (SQLiteConnection) obj);
+                return DhikrDao_Impl.getAllDhikr$lambda$3(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
             }
         });
     }
@@ -190,7 +190,7 @@ public final class DhikrDao_Impl implements DhikrDao {
         return FlowUtil.createFlow(this.__db, false, new String[]{"dhikr_table"}, new Function1() { // from class: com.example.data.DhikrDao_Impl$$ExternalSyntheticLambda7
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return DhikrDao_Impl.getFavoriteDhikr$lambda$4(_sql, this, (SQLiteConnection) obj);
+                return DhikrDao_Impl.getFavoriteDhikr$lambda$4(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
             }
         });
     }
@@ -238,7 +238,7 @@ public final class DhikrDao_Impl implements DhikrDao {
         return FlowUtil.createFlow(this.__db, false, new String[]{"dhikr_table"}, new Function1() { // from class: com.example.data.DhikrDao_Impl$$ExternalSyntheticLambda3
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return DhikrDao_Impl.getEnabledDhikr$lambda$5(_sql, this, (SQLiteConnection) obj);
+                return DhikrDao_Impl.getEnabledDhikr$lambda$5(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
             }
         });
     }
@@ -286,7 +286,7 @@ public final class DhikrDao_Impl implements DhikrDao {
         return DBUtil.performSuspending(this.__db, true, false, new Function1() { // from class: com.example.data.DhikrDao_Impl$$ExternalSyntheticLambda9
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return DhikrDao_Impl.getEnabledDhikrSync$lambda$6(_sql, this, (SQLiteConnection) obj);
+                return DhikrDao_Impl.getEnabledDhikrSync$lambda$6(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
             }
         }, continuation);
     }
@@ -334,7 +334,7 @@ public final class DhikrDao_Impl implements DhikrDao {
         return DBUtil.performSuspending(this.__db, true, false, new Function1() { // from class: com.example.data.DhikrDao_Impl$$ExternalSyntheticLambda2
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return DhikrDao_Impl.getDhikrById$lambda$7(_sql, id, this, (SQLiteConnection) obj);
+                return DhikrDao_Impl.getDhikrById$lambda$7(_sql, id, TagDao_Impl.this, (SQLiteConnection) obj);
             }
         }, continuation);
     }

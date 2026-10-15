@@ -33,7 +33,7 @@ public final class MainViewModel$onDhikrSelectedFromNotification$1 extends Suspe
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$onDhikrSelectedFromNotification$1(this.this$0, this.$dhikrId, (Continuation) continuation);
+        return (Continuation) new MainViewModel$onDhikrSelectedFromNotification$1(this.this$0, this.$dhikrId, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
