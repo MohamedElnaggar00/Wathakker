@@ -1,0 +1,234 @@
+package com.example.ui.screens
+
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Label
+import androidx.compose.material.icons.automirrored.outlined.MenuBook
+import androidx.compose.material.icons.outlined.Alarm
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.FormatListBulleted
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Mosque
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.R
+import com.example.fajr.ui.FajrSettingsScreen
+import com.example.fajr.ui.FajrViewModel
+import com.example.lockwidgets.HomeWidgets
+import com.example.prayer.PrayerTimesScreen
+import com.example.ui.hisn.HisnChapterScreen
+import com.example.ui.hisn.HisnListScreen
+import com.example.ui.hisn.HisnViewModel
+import com.example.ui.oneui.BottomTab
+import com.example.ui.oneui.HeaderTools
+import com.example.ui.oneui.LocalHazeState
+import com.example.ui.oneui.OneUIBottomBar
+import com.example.ui.oneui.OneUIDrawer
+import com.example.ui.oneui.OneUIDrawerItem
+import com.example.ui.viewmodel.MainViewModel
+import dev.chrisbanes.haze.rememberHazeState
+import kotlinx.coroutines.launch
+
+val oneUITabs: List<BottomTab> = listOf(
+    BottomTab("prayer", "الصلاة") { c ->
+        Icon(Icons.Outlined.Mosque, null, Modifier.size(24.dp), tint = c)
+    },
+    BottomTab("azkar", "الأذكار") { c ->
+        Icon(Icons.Outlined.FormatListBulleted, null, Modifier.size(24.dp), tint = c)
+    },
+    BottomTab("hisn", "حصن المسلم") { c ->
+        Icon(Icons.AutoMirrored.Outlined.MenuBook, null, Modifier.size(24.dp), tint = c)
+    },
+    BottomTab("fajr_settings", "الفجر") { c ->
+        Icon(Icons.Outlined.Alarm, null, Modifier.size(24.dp), tint = c)
+    },
+    BottomTab("tasbeeh", "السبحة") { c ->
+        Icon(painterResource(R.drawable.ic_tasbeeh), null, Modifier.size(24.dp), tint = c)
+    }
+)
+
+val oneUIDrawerItems: List<OneUIDrawerItem> = listOf(
+    OneUIDrawerItem("favorites", "المفضلة", Icons.Outlined.Star, Color(4293243989L)),
+    OneUIDrawerItem("reminders", "التنبيهات", Icons.Outlined.Notifications, Color(4293243989L)),
+    OneUIDrawerItem("statistics", "الإحصائيات", Icons.Outlined.BarChart, Color(4283289796L)),
+    OneUIDrawerItem("tags", "التصنيفات", Icons.AutoMirrored.Outlined.Label, Color(4290617322L)),
+    OneUIDrawerItem("settings", "الإعدادات", Icons.Outlined.Settings, Color(4287669422L)),
+    OneUIDrawerItem("about", "حول التطبيق", Icons.Outlined.Info, Color(4287532691L))
+)
+
+private val tabEnter: EnterTransition =
+    slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
+private val tabPopExit: ExitTransition =
+    slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
+
+@Composable
+fun MainScreen(viewModel: MainViewModel) {
+    val navController = rememberNavController()
+    HeaderTools.setNav(navController)
+    val hazeState = rememberHazeState()
+    val selectedDhikrNotif by viewModel.selectedDhikrFromNotification.collectAsStateWithLifecycle()
+    val allTags by viewModel.allTags.collectAsStateWithLifecycle()
+    val hisnViewModel: HisnViewModel = viewModel()
+    var showAddDialog by remember { mutableStateOf(false) }
+    var drawerOpen by remember { mutableStateOf(false) }
+    val pagerState = rememberPagerState(initialPage = HomeWidgets.initialPage()) { oneUITabs.size }
+    val scope = rememberCoroutineScope()
+    val backEntry by navController.currentBackStackEntryAsState()
+    val route = backEntry?.destination?.route
+    val isTab = route == "tabs"
+    val currentTabRoute = oneUITabs[pagerState.currentPage.coerceIn(0, oneUITabs.size - 1)].route
+
+    CompositionLocalProvider(LocalHazeState provides hazeState) {
+        Box(Modifier.fillMaxSize()) {
+            NavHost(
+                navController = navController,
+                startDestination = "tabs",
+                modifier = Modifier.fillMaxSize(),
+                enterTransition = { tabEnter },
+                exitTransition = { ExitTransition.None },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { tabPopExit }
+            ) {
+                composable("tabs") {
+                    HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                        when (oneUITabs[page].route) {
+                            "fajr_settings" -> FajrTabScreen { drawerOpen = true }
+                            "tasbeeh" -> TasbeehScreen(viewModel) { drawerOpen = true }
+                            "prayer" -> PrayerTimesScreen { drawerOpen = true }
+                            "hisn" -> HisnListScreen(
+                                hisnViewModel,
+                                { chapter -> navController.navigate("hisn/" + chapter.id) },
+                                { drawerOpen = true }
+                            )
+                            "home" -> DashboardScreen(
+                                viewModel,
+                                { navController.navigate(it) },
+                                { drawerOpen = true }
+                            )
+                            else -> AzkarListScreen(viewModel, { showAddDialog = true }, { drawerOpen = true })
+                        }
+                    }
+                }
+                composable(
+                    "hisn/{id}",
+                    arguments = listOf(navArgument("id") { type = NavType.IntType })
+                ) { entry ->
+                    val id = entry.arguments?.getInt("id") ?: 0
+                    HisnChapterScreen(
+                        id,
+                        hisnViewModel,
+                        { navController.popBackStack() },
+                        { title, content -> viewModel.addDhikrWithSchedule(title, content, listOf("09:00")) }
+                    )
+                }
+                composable("favorites") { FavoritesScreen(viewModel) { navController.popBackStack() } }
+                composable("reminders") { RemindersScreen(viewModel) { navController.popBackStack() } }
+                composable("statistics") { StatisticsScreen(viewModel) { navController.popBackStack() } }
+                composable("tags") { TagsScreen(viewModel) { navController.popBackStack() } }
+                composable("settings") {
+                    SettingsScreen(
+                        viewModel,
+                        { navController.popBackStack() },
+                        { navController.navigate("fajr_settings") }
+                    )
+                }
+                composable("fajr_settings") {
+                    val fajrViewModel: FajrViewModel = viewModel()
+                    FajrSettingsScreen(fajrViewModel) { navController.popBackStack() }
+                }
+                composable("about") { AboutScreen { navController.popBackStack() } }
+            }
+            if (isTab) {
+                OneUIBottomBar(
+                    tabs = oneUITabs,
+                    selectedRoute = currentTabRoute,
+                    onSelect = { tab ->
+                        val i = oneUITabs.indexOf(tab)
+                        if (i >= 0) scope.launch { pagerState.animateScrollToPage(i) }
+                    },
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
+            }
+            OneUIDrawer(
+                open = drawerOpen,
+                currentRoute = if (isTab) currentTabRoute else (route ?: ""),
+                items = oneUIDrawerItems,
+                onSelect = {
+                    drawerOpen = false
+                    navController.navigate(it)
+                },
+                onDismiss = { drawerOpen = false },
+                footer = {
+                    val uri = LocalUriHandler.current
+                    Text(
+                        "brought to you by Instinct",
+                        modifier = Modifier.clickable { uri.openUri("https://instinct.com") },
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            )
+            if (showAddDialog) {
+                DhikrAddDialog(
+                    allTags = allTags,
+                    onDismiss = { showAddDialog = false },
+                    onConfirm = { title, content, times, tagIds ->
+                        viewModel.addDhikrWithScheduleAndTags(title, content, times, tagIds)
+                        showAddDialog = false
+                    },
+                    onCreateTag = { viewModel.addTag(it, "#008080", null) }
+                )
+            }
+            val notifDhikr = selectedDhikrNotif
+            if (notifDhikr != null) {
+                DhikrDetailDialog(
+                    dhikr = notifDhikr,
+                    onDismiss = { viewModel.clearSelectedDhikrFromNotification() },
+                    onMarkAsRead = { viewModel.markAsRead(notifDhikr.id) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FajrTabScreen(onMenu: () -> Unit) {
+    val fajrViewModel: FajrViewModel = viewModel()
+    FajrSettingsScreen(fajrViewModel, onMenu)
+}
