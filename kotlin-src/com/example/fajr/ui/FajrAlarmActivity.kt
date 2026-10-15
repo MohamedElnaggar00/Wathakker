@@ -1,5 +1,24 @@
 package com.example.fajr.ui
 
+import android.app.KeyguardManager
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
+import com.example.fajr.alarm.FajrAlarmScheduler
+import com.example.fajr.data.FajrPreferences
+import com.example.fajr.sound.RingtoneHelper
+import com.example.ui.theme.MyApplicationTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -149,5 +168,116 @@ fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
                 }
             }
         }
+    }
+}
+
+
+class FajrAlarmActivity : ComponentActivity() {
+    private val handler = Handler(Looper.getMainLooper())
+    private var mediaPlayer: MediaPlayer? = null
+    private var vibrator: Vibrator? = null
+    private var autoStopRunnable: Runnable? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 27) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+            val km = getSystemService("keyguard") as KeyguardManager
+            km.requestDismissKeyguard(this, null)
+        } else {
+            @Suppress("DEPRECATION")
+            window.addFlags(6815872)
+        }
+        val prefs = FajrPreferences(this)
+        startAlarmEffects(prefs)
+        setContent {
+            MyApplicationTheme {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    FajrAlarmScreen(
+                        onDismiss = { stopAndFinish() },
+                        onSnooze = { minutes ->
+                            val p = FajrPreferences(this@FajrAlarmActivity)
+                            p.snoozeCount = p.snoozeCount + 1
+                            FajrAlarmScheduler(this@FajrAlarmActivity).scheduleSnooze(minutes)
+                            stopAndFinish()
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun startAlarmEffects(prefs: FajrPreferences) {
+        try {
+            val uri = RingtoneHelper(this).getValidRingtoneUri(prefs)
+            val volume = prefs.alarmVolume / 100.0f
+            val mp = MediaPlayer()
+            mp.setAudioAttributes(AudioAttributes.Builder().setUsage(4).setContentType(2).build())
+            mp.setDataSource(this, uri)
+            mp.isLooping = true
+            mp.setVolume(volume, volume)
+            mp.prepare()
+            mp.start()
+            mediaPlayer = mp
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        if (prefs.isVibrationEnabled) {
+            try {
+                vibrator = if (Build.VERSION.SDK_INT >= 31) {
+                    (getSystemService("vibrator_manager") as VibratorManager).defaultVibrator
+                } else {
+                    @Suppress("DEPRECATION")
+                    getSystemService("vibrator") as Vibrator
+                }
+                val pattern = longArrayOf(0, 800, 500, 800, 500)
+                if (Build.VERSION.SDK_INT >= 26) {
+                    vibrator?.vibrate(VibrationEffect.createWaveform(pattern, 0))
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator?.vibrate(pattern, 0)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        val r = Runnable { handleAutoStop() }
+        autoStopRunnable = r
+        handler.postDelayed(r, 60000L)
+    }
+
+    private fun handleAutoStop() {
+        val prefs = FajrPreferences(this)
+        if (prefs.snoozeCount < 3) {
+            prefs.snoozeCount = prefs.snoozeCount + 1
+            FajrAlarmScheduler(this).scheduleSnooze(prefs.maxDurationMinutes)
+        }
+        stopAndFinish()
+    }
+
+    private fun stopAndFinish() {
+        autoStopRunnable?.let { handler.removeCallbacks(it) }
+        try {
+            mediaPlayer?.let {
+                if (it.isPlaying) it.stop()
+                it.release()
+            }
+            mediaPlayer = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        try {
+            vibrator?.cancel()
+            vibrator = null
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        finish()
+    }
+
+    override fun onDestroy() {
+        stopAndFinish()
+        super.onDestroy()
     }
 }
