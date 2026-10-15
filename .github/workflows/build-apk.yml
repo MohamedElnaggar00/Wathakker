@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        bom: ['2025.04.01', '2025.06.01', '2025.08.00', '2025.09.01', '2025.10.01']
+        bom: ['2025.10.01']
     permissions:
       contents: write
     steps:
@@ -46,7 +46,7 @@ jobs:
         run: |
           mkdir -p build-logs
           F=build-logs/run-${{ github.run_number }}-bom-${{ matrix.bom }}.txt
-          { echo "outcome: ${{ steps.build.outcome }}  bom: ${{ matrix.bom }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; echo "errors: $(grep -c 'error:' build.log)"; grep -n -A4 -E "error:|What went wrong|Execution failed|BUILD" build.log | head -2500; } > $F
+          { echo "outcome: ${{ steps.build.outcome }}  bom: ${{ matrix.bom }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; echo "errors: $(grep -c 'error:' build.log)"; echo "--- per file"; grep -o '[A-Za-z0-9_$]*\.java:[0-9]*: error' build.log | sed -E 's/:[0-9]+: error//' | sort | uniq -c | sort -rn | head -80; echo "--- per symbol"; grep -A3 "error: cannot find symbol" build.log | grep -o 'symbol: .*' | sed -E 's/\(.*//' | sort | uniq -c | sort -rn | head -60; echo "--- details"; grep -n -A4 -E "error:|What went wrong|Execution failed|BUILD" build.log | head -700; } > $F
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add $F
