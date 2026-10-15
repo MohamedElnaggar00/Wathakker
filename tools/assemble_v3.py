@@ -265,3 +265,195 @@ for dp, _, fs in os.walk(os.path.join(MAIN, 'java')):
             open(fp, 'w', encoding='utf-8').write(n)
             fixed += 1
 print('cleaned files', fixed)
+
+
+# 10. more jadx repairs (round 2)
+def read(rel):
+    return open(os.path.join(MAIN, 'java', rel), encoding='utf-8').read()
+def write(rel, s):
+    open(os.path.join(MAIN, 'java', rel), 'w', encoding='utf-8').write(s)
+
+# 10a. compose BOM selectable from the command line (-PcomposeBom=...)
+gp = os.path.join(ROOT, 'app/build.gradle.kts')
+g = open(gp).read()
+g = g.replace('implementation(platform(libs.androidx.compose.bom))',
+              'implementation(platform("androidx.compose:compose-bom:${providers.gradleProperty("composeBom").getOrElse("2025.09.00")}"))')
+open(gp, 'w').write(g)
+
+# 10b. hand-written class that was a D8 synthetic in the shipped APK (3.0.4 binary patch)
+write('com/example/ui/screens/FajrDrawerAction.java', '''package com.example.ui.screens;
+
+import androidx.compose.runtime.MutableState;
+import kotlin.jvm.functions.Function0;
+
+public final class FajrDrawerAction implements Function0<Object> {
+    public final MutableState f$0;
+
+    public FajrDrawerAction(MutableState state) {
+        this.f$0 = state;
+    }
+
+    @Override
+    public Object invoke() {
+        return MainScreenKt.MainScreen$lambda$88$lambda$76$lambda$69$lambda$68$lambda$38$lambda$37$lambda$26$lambda$25(this.f$0);
+    }
+}
+''')
+
+# 10c. CalculationMethod: jadx could not restore the enum, rewritten from its dump
+write('com/example/fajr/calculation/CalculationMethod.java', '''package com.example.fajr.calculation;
+
+public enum CalculationMethod {
+    MUSLIM_WORLD_LEAGUE(0, "\\u0631\\u0627\\u0628\\u0637\\u0629 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645 \\u0627\\u0644\\u0625\\u0633\\u0644\\u0627\\u0645\\u064a (18\\u00b0)", 18.0d, 17.0d, null),
+    EGYPTIAN(1, "\\u0627\\u0644\\u0647\\u064a\\u0626\\u0629 \\u0627\\u0644\\u0645\\u0635\\u0631\\u064a\\u0629 \\u0627\\u0644\\u0639\\u0627\\u0645\\u0629 \\u0644\\u0644\\u0645\\u0633\\u0627\\u062d\\u0629 (19.5\\u00b0)", 19.5d, 17.5d, null),
+    UMM_AL_QURA(2, "\\u0623\\u0645 \\u0627\\u0644\\u0642\\u0631\\u0649 - \\u0645\\u0643\\u0629 \\u0627\\u0644\\u0645\\u0643\\u0631\\u0645\\u0629 (18.5\\u00b0)", 18.5d, null, 90),
+    ISNA(3, "\\u0627\\u0644\\u062c\\u0645\\u0639\\u064a\\u0629 \\u0627\\u0644\\u0625\\u0633\\u0644\\u0627\\u0645\\u064a\\u0629 \\u0644\\u0634\\u0645\\u0627\\u0644 \\u0623\\u0645\\u0631\\u064a\\u0643\\u0627 (15\\u00b0)", 15.0d, 15.0d, null),
+    KARACHI(4, "\\u062c\\u0627\\u0645\\u0639\\u0629 \\u0627\\u0644\\u0639\\u0644\\u0648\\u0645 \\u0627\\u0644\\u0625\\u0633\\u0644\\u0627\\u0645\\u064a\\u0629 \\u0628\\u0643\\u0631\\u0627\\u062a\\u0634\\u064a (18\\u00b0)", 18.0d, 18.0d, null),
+    DUBAI(5, "\\u062f\\u0628\\u064a (18.2\\u00b0)", 18.2d, 18.2d, null),
+    KUWAIT(6, "\\u0627\\u0644\\u0643\\u0648\\u064a\\u062a (18\\u00b0)", 18.0d, 17.5d, null),
+    QATAR(7, "\\u0642\\u0637\\u0631 (18\\u00b0)", 18.0d, null, 90);
+
+    public static final Companion INSTANCE = new Companion();
+    private final double fajrAngle;
+    private final int id;
+    private final Double ishaAngle;
+    private final Integer ishaMinutesAfterMaghrib;
+    private final String titleAr;
+
+    CalculationMethod(int id, String titleAr, double fajrAngle, Double ishaAngle, Integer ishaMinutesAfterMaghrib) {
+        this.id = id;
+        this.titleAr = titleAr;
+        this.fajrAngle = fajrAngle;
+        this.ishaAngle = ishaAngle;
+        this.ishaMinutesAfterMaghrib = ishaMinutesAfterMaghrib;
+    }
+
+    public final double getFajrAngle() { return this.fajrAngle; }
+    public final int getId() { return this.id; }
+    public final Double getIshaAngle() { return this.ishaAngle; }
+    public final Integer getIshaMinutesAfterMaghrib() { return this.ishaMinutesAfterMaghrib; }
+    public final String getTitleAr() { return this.titleAr; }
+
+    public static final class Companion {
+        private Companion() {
+        }
+
+        public final CalculationMethod fromId(int id) {
+            for (CalculationMethod m : CalculationMethod.values()) {
+                if (m.getId() == id) {
+                    return m;
+                }
+            }
+            return CalculationMethod.MUSLIM_WORLD_LEAGUE;
+        }
+    }
+}
+''')
+
+# 10d. AppDatabase: companion field clashes with the volatile INSTANCE
+s = read('com/example/data/AppDatabase.java')
+s = s.replace('public static final Companion INSTANCE = new Companion(null);', 'public static final Companion Companion = new Companion(null);')
+write('com/example/data/AppDatabase.java', s)
+for dp, _, fs in os.walk(os.path.join(MAIN, 'java')):
+    for f in fs:
+        fp = os.path.join(dp, f)
+        t = open(fp, encoding='utf-8').read()
+        n = re.sub(r'\bAppDatabase\.INSTANCE\.(getDatabase|getMIGRATION_7_8)', r'AppDatabase.Companion.\1', t)
+        if n != t and f != 'AppDatabase.java':
+            open(fp, 'w', encoding='utf-8').write(n)
+
+# 10e. LocationManagerHelper leftovers
+s = read('com/example/fajr/location/LocationManagerHelper.java')
+s = s.replace('Address address = addresses.get(0);', 'Address address = (Address) addresses.get(0);')
+s = s.replace('            e = e2;\n            e.printStackTrace();', '            e2.printStackTrace();')
+write('com/example/fajr/location/LocationManagerHelper.java', s)
+
+# 10f. FajrSettingsState synthetic default-args constructor
+s = read('com/example/fajr/ui/FajrSettingsState.java')
+m = re.search(r'    public /\* synthetic \*/ FajrSettingsState\(boolean z, .*?DefaultConstructorMarker defaultConstructorMarker\) \{\n', s)
+if m:
+    i = m.end()
+    depth = 1
+    while depth:
+        c = s[i]
+        depth += (c == '{') - (c == '}')
+        i += 1
+    new = ('    public /* synthetic */ FajrSettingsState(boolean z, boolean z2, String str, double d, double d2, String str2, long j, CalculationMethod calculationMethod, String str3, boolean z3, int i, int i2, boolean z4, boolean z5, boolean z6, int i3, DefaultConstructorMarker defaultConstructorMarker) {\n'
+           '        this((i3 & 1) != 0 ? false : z, (i3 & 2) != 0 ? true : z2, (i3 & 4) != 0 ? "\\u0627\\u0644\\u0642\\u0627\\u0647\\u0631\\u0629\\u060c \\u0645\\u0635\\u0631" : str, (i3 & 8) != 0 ? 30.0444d : d, (i3 & 16) != 0 ? 31.2357d : d2, (i3 & 32) != 0 ? "--:--" : str2, (i3 & 64) != 0 ? 0L : j, (i3 & 128) != 0 ? CalculationMethod.EGYPTIAN : calculationMethod, (i3 & 256) != 0 ? "\\u0646\\u063a\\u0645\\u0629 \\u0627\\u0644\\u0645\\u0646\\u0628\\u0647 \\u0627\\u0644\\u0627\\u0641\\u062a\\u0631\\u0627\\u0636\\u064a\\u0629" : str3, (i3 & 512) != 0 ? true : z3, (i3 & 1024) != 0 ? 5 : i, (i3 & 2048) != 0 ? 80 : i2, (i3 & 4096) != 0 ? false : z4, (i3 & 8192) != 0 ? true : z5, (i3 & 16384) != 0 ? false : z6);\n'
+           '    }\n')
+    s = s[:m.start()] + new + s[i:]
+    write('com/example/fajr/ui/FajrSettingsState.java', s)
+else:
+    print('PATCH MISS FajrSettingsState ctor')
+
+# 10g. Kotlin synthetic $default helpers that are not visible from Java
+def find_close(s, i):
+    depth = 1
+    while depth:
+        c = s[i]
+        if c == '(':
+            depth += 1
+        elif c == ')':
+            depth -= 1
+        i += 1
+    return i
+
+def split_args(a):
+    out, d, cur, instr = [], 0, '', False
+    k = 0
+    while k < len(a):
+        c = a[k]
+        if instr:
+            cur += c
+            if c == '\\':
+                cur += a[k + 1]
+                k += 1
+            elif c == '"':
+                instr = False
+        elif c == '"':
+            instr = True
+            cur += c
+        elif c in '([{':
+            d += 1
+            cur += c
+        elif c in ')]}':
+            d -= 1
+            cur += c
+        elif c == ',' and d == 0:
+            out.append(cur.strip())
+            cur = ''
+        else:
+            cur += c
+        k += 1
+    out.append(cur.strip())
+    return out
+
+count_ms = count_l = 0
+for dp, _, fs in os.walk(os.path.join(MAIN, 'java')):
+    for f in fs:
+        fp = os.path.join(dp, f)
+        t = open(fp, encoding='utf-8').read()
+        o = t
+        for needle, kind in (('SnapshotStateKt.mutableStateOf$default(', 'ms'), ('BuildersKt.launch$default(', 'l')):
+            pos = 0
+            while True:
+                j = t.find(needle, pos)
+                if j < 0:
+                    break
+                st = j + len(needle)
+                en = find_close(t, st)
+                args = split_args(t[st:en - 1])
+                if kind == 'ms' and len(args) == 4 and args[1] == 'null':
+                    rep = 'SnapshotStateKt.mutableStateOf(%s, SnapshotStateKt.structuralEqualityPolicy())' % args[0]
+                    count_ms += 1
+                elif kind == 'l' and len(args) == 6 and args[2] == 'null':
+                    rep = 'BuildersKt.launch(%s, %s, kotlinx.coroutines.CoroutineStart.DEFAULT, %s)' % (args[0], args[1], args[3])
+                    count_l += 1
+                else:
+                    pos = en
+                    continue
+                t = t[:j] + rep + t[en:]
+                pos = j + len(rep)
+        if t != o:
+            open(fp, 'w', encoding='utf-8').write(t)
+print('rewrote mutableStateOf$default', count_ms, 'launch$default', count_l)
