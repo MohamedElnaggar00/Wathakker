@@ -1,0 +1,33 @@
+outcome: failure  bom: 2025.10.01  run: 38776510073  sha: 544fb56854d347fa229992414591303c497e2ce3
+errors: 9
+--- per file
+--- per symbol
+--- details
+52:* What went wrong:
+53:Execution failed for task ':app:processDebugResources'.
+54-> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+55-   > Android resource linking failed
+56:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_day_name_info (aka com.wathakker.app:xml/lock_day_name_info) not found.
+57-         
+58:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_tasbih_info (aka com.wathakker.app:xml/lock_tasbih_info) not found.
+59-         
+60:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_hijri_date_info (aka com.wathakker.app:xml/lock_hijri_date_info) not found.
+61-         
+62:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_gregorian_date_info (aka com.wathakker.app:xml/lock_gregorian_date_info) not found.
+63-         
+64:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_next_prayer_info (aka com.wathakker.app:xml/lock_next_prayer_info) not found.
+65-         
+66:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_prayer_bar_info (aka com.wathakker.app:xml/lock_prayer_bar_info) not found.
+67-         
+68:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_prayer_countdown_info (aka com.wathakker.app:xml/lock_prayer_countdown_info) not found.
+69-         
+70:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/lock_prayer_countdown_clean_info (aka com.wathakker.app:xml/lock_prayer_countdown_clean_info) not found.
+71-         
+72:     ERROR: /home/runner/work/Wathakker/Wathakker/app/src/main/AndroidManifest.xml:28:13-116: AAPT: error: resource xml/widget_hero_large_info (aka com.wathakker.app:xml/widget_hero_large_info) not found.
+73-         
+74-
+75-* Try:
+76-> Run with --stacktrace option to get the stack trace.
+--
+81:BUILD FAILED in 4m 57s
+82-23 actionable tasks: 23 executed
