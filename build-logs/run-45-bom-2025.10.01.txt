@@ -1,0 +1,39 @@
+outcome: failure  bom: 2025.10.01  run: 38790796440  sha: 58edd48f6dbd4b87a4531b8a87305eff396bb1c4
+errors: 0
+--- per file
+--- per symbol
+kotlin errors: 20
+--- kotlin per file
+     14 MainScreen.kt
+      6 CitySearchDialog.kt
+--- kotlin details
+e: com/example/fajr/ui/CitySearchDialog.kt:47:26 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/fajr/ui/CitySearchDialog.kt:47:65 Unresolved reference 'searchCities'.
+e: com/example/fajr/ui/CitySearchDialog.kt:90:58 Unresolved reference 'countryNameEn'.
+e: com/example/fajr/ui/CitySearchDialog.kt:90:83 Unresolved reference 'cityNameEn'.
+e: com/example/fajr/ui/CitySearchDialog.kt:91:41 Argument type mismatch: actual type is 'Int', but 'CityItem' was expected.
+e: com/example/fajr/ui/CitySearchDialog.kt:92:48 Argument type mismatch: actual type is 'Int', but 'CityItem' was expected.
+e: com/example/ui/screens/MainScreen.kt:51:28 Unresolved reference 'FajrSettingsScreen'.
+e: com/example/ui/screens/MainScreen.kt:54:27 Unresolved reference 'PrayerTimesScreen'.
+e: com/example/ui/screens/MainScreen.kt:55:28 Unresolved reference 'HisnChapterScreen'.
+e: com/example/ui/screens/MainScreen.kt:56:28 Unresolved reference 'HisnListScreen'.
+e: com/example/ui/screens/MainScreen.kt:133:41 Unresolved reference 'PrayerTimesScreen'.
+e: com/example/ui/screens/MainScreen.kt:134:39 Unresolved reference 'HisnListScreen'.
+e: com/example/ui/screens/MainScreen.kt:136:35 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/screens/MainScreen.kt:136:87 Unresolved reference 'id'.
+e: com/example/ui/screens/MainScreen.kt:153:21 Unresolved reference 'HisnChapterScreen'.
+e: com/example/ui/screens/MainScreen.kt:157:27 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/screens/MainScreen.kt:157:34 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/screens/MainScreen.kt:165:21 Unresolved reference 'SettingsScreen'.
+e: com/example/ui/screens/MainScreen.kt:173:21 Unresolved reference 'FajrSettingsScreen'.
+e: com/example/ui/screens/MainScreen.kt:233:5 Unresolved reference 'FajrSettingsScreen'.
+--- details
+69:* What went wrong:
+70:Execution failed for task ':app:compileDebugKotlin'.
+71-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+72-   > Compilation error. See log for more details
+73-
+74-* Try:
+--
+80:BUILD FAILED in 4m
+81-23 actionable tasks: 23 executed
