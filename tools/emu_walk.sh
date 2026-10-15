@@ -9,6 +9,23 @@ adb logcat -c
 adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity > "$OUT/launch.txt" 2>&1
 sleep 8
 shot() { adb shell screencap -p /sdcard/s.png && adb pull /sdcard/s.png "$OUT/$1.png" >/dev/null; adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml "$OUT/$1.xml" >/dev/null 2>&1; }
+dismiss_anr() {
+  for k in 1 2 3; do
+    adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/u.xml >/dev/null 2>&1
+    C=$(python3 - <<'PY'
+import re
+x=open('/tmp/u.xml',encoding='utf-8').read() if __import__('os').path.exists('/tmp/u.xml') else ''
+if "isn't responding" in x or 'isn\u2019t responding' in x or 'not responding' in x:
+    m=re.search(r'text="Wait"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x)
+    if m:
+        a,b,c,d=map(int,m.groups()); print((a+c)//2,(b+d)//2)
+PY
+)
+    [ -z "$C" ] && break
+    adb shell input tap $C; sleep 2
+  done
+}
+dismiss_anr
 shot 00-home
 # tap each bottom-bar element (y in lowest 15% of screen), screenshot after each
 python3 - "$OUT/00-home.xml" > "$OUT/bottom-targets.txt" <<'PY'
@@ -24,7 +41,9 @@ for m in re.finditer(r'<node[^>]*?clickable="true"[^>]*?bounds="\[(\d+),(\d+)\]\
 PY
 i=1
 while read -u 3 cx cy; do
+  dismiss_anr
   adb shell input tap $cx $cy; sleep 3
+  dismiss_anr
   shot $(printf '%02d' $i)-tab
   # also tap first scrollable list item / top-right settings-ish icons are not guessed here
   i=$((i+1))
