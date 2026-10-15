@@ -84,7 +84,7 @@ public final class FajrViewModel extends AndroidViewModel {
     }
 
     public final void updateLocationFromGps() {
-        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new FajrViewModel$updateLocationFromGps$1(this, null), 2, null);
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), kotlinx.coroutines.CoroutineStart.DEFAULT, new FajrViewModel$updateLocationFromGps$1(this, null));
     }
 
     public final void setCity(CityItem city) {
@@ -139,7 +139,7 @@ public final class FajrViewModel extends AndroidViewModel {
     }
 
     public final void refreshFajrTimeManually() {
-        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new FajrViewModel$refreshFajrTimeManually$1(this, null), 2, null);
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), kotlinx.coroutines.CoroutineStart.DEFAULT, new FajrViewModel$refreshFajrTimeManually$1(this, null));
     }
 
     /* JADX INFO: Access modifiers changed from: private */

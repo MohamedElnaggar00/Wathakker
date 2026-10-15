@@ -1477,7 +1477,7 @@ public final class HomeScreenKt {
             Object rememberedValue = $composer3.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
                 cs = cs2;
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue = mutableStateOf$default;
             } else {

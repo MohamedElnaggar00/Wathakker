@@ -50,7 +50,7 @@ public final class NotificationActionReceiver extends BroadcastReceiver {
                 case -929181687:
                     if (action.equals(ACTION_MARK_AS_READ) && dhikrId != -1) {
                         BroadcastReceiver.PendingResult pendingResult = goAsync();
-                        BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new NotificationActionReceiver$onReceive$1(context, dhikrId, pendingResult, null), 3, null);
+                        BuildersKt.launch(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new NotificationActionReceiver$onReceive$1(context, dhikrId, pendingResult, null));
                         return;
                     }
                     return;

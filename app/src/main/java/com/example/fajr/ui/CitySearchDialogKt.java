@@ -112,7 +112,7 @@ public final class CitySearchDialogKt {
             ComposerKt.sourceInformationMarkerStart($composer2, -558746380, "CC(remember):CitySearchDialog.kt#9igjgp");
             Object rememberedValue = $composer2.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default("", null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf("", SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue = mutableStateOf$default;
             }

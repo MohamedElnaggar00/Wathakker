@@ -159,7 +159,7 @@ public final class MainScreenKt {
             Object rememberedValue = $composer3.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
                 navController = navController2;
-                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue = mutableStateOf$default2;
             } else {
@@ -170,7 +170,7 @@ public final class MainScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer3, -90843589, "CC(remember):MainScreen.kt#9igjgp");
             Object rememberedValue2 = $composer3.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue2 = mutableStateOf$default;
             }
@@ -1454,7 +1454,7 @@ public final class MainScreenKt {
         Intrinsics.checkNotNullParameter(tab, "tab");
         int i = oneUITabs.indexOf(tab);
         if (i >= 0) {
-            BuildersKt.launch$default($scope, null, null, new MainScreenKt$MainScreen$1$1$6$1$1($pagerState, i, null), 3, null);
+            BuildersKt.launch($scope, null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainScreenKt$MainScreen$1$1$6$1$1($pagerState, i, null));
         }
         return Unit.INSTANCE;
     }

@@ -496,7 +496,7 @@ public final class OneUIKt {
             Object rememberedValue3 = $composer3.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
                 expandedPx = expandedPx2;
-                rememberedValue3 = SnapshotStateKt.mutableStateOf$default(true, null, 2, null);
+                rememberedValue3 = SnapshotStateKt.mutableStateOf(true, SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(rememberedValue3);
             } else {
                 expandedPx = expandedPx2;

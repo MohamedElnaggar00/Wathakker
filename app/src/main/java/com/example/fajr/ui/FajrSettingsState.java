@@ -109,31 +109,9 @@ public final /* data */ class FajrSettingsState {
         Code decompiled incorrectly, please refer to instructions dump.
     */
     public /* synthetic */ FajrSettingsState(boolean z, boolean z2, String str, double d, double d2, String str2, long j, CalculationMethod calculationMethod, String str3, boolean z3, int i, int i2, boolean z4, boolean z5, boolean z6, int i3, DefaultConstructorMarker defaultConstructorMarker) {
-        this(r16, r20, r21, r22, r24, r26, r27, r29, r30, r31, r2, r4, r19, (i3 & 8192) != 0 ? true : z5, (i3 & 16384) != 0 ? false : z6);
-        boolean z7 = (i3 & 1) != 0 ? false : z;
-        boolean z8 = (i3 & 2) != 0 ? true : z2;
-        String str4 = (i3 & 4) != 0 ? "القاهرة، مصر" : str;
-        double d3 = (i3 & 8) != 0 ? 30.0444d : d;
-        double d4 = (i3 & 16) != 0 ? 31.2357d : d2;
-        String str5 = (i3 & 32) != 0 ? "--:--" : str2;
-        long j2 = (i3 & 64) != 0 ? 0L : j;
-        CalculationMethod calculationMethod2 = (i3 & 128) != 0 ? CalculationMethod.EGYPTIAN : calculationMethod;
-        String str6 = (i3 & 256) != 0 ? "نغمة المنبه الافتراضية" : str3;
-        boolean z9 = (i3 & 512) != 0 ? true : z3;
-        int i4 = (i3 & 1024) != 0 ? 5 : i;
-        int i5 = (i3 & 2048) != 0 ? 80 : i2;
-        boolean z10 = z7;
-        boolean z11 = (i3 & 4096) != 0 ? false : z4;
-        boolean z12 = z8;
-        String str7 = str4;
-        double d5 = d3;
-        double d6 = d4;
-        String str8 = str5;
-        long j3 = j2;
-        CalculationMethod calculationMethod3 = calculationMethod2;
-        String str9 = str6;
-        boolean z13 = z9;
+        this((i3 & 1) != 0 ? false : z, (i3 & 2) != 0 ? true : z2, (i3 & 4) != 0 ? "\u0627\u0644\u0642\u0627\u0647\u0631\u0629\u060c \u0645\u0635\u0631" : str, (i3 & 8) != 0 ? 30.0444d : d, (i3 & 16) != 0 ? 31.2357d : d2, (i3 & 32) != 0 ? "--:--" : str2, (i3 & 64) != 0 ? 0L : j, (i3 & 128) != 0 ? CalculationMethod.EGYPTIAN : calculationMethod, (i3 & 256) != 0 ? "\u0646\u063a\u0645\u0629 \u0627\u0644\u0645\u0646\u0628\u0647 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a\u0629" : str3, (i3 & 512) != 0 ? true : z3, (i3 & 1024) != 0 ? 5 : i, (i3 & 2048) != 0 ? 80 : i2, (i3 & 4096) != 0 ? false : z4, (i3 & 8192) != 0 ? true : z5, (i3 & 16384) != 0 ? false : z6);
     }
+
 
     public final boolean isAlarmEnabled() {
         return this.isAlarmEnabled;

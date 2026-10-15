@@ -178,7 +178,7 @@ public final class PrayerTimesScreenKt {
             Object rememberedValue2 = $composer2.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
                 i2 = 1;
-                mutableStateOf$default6 = SnapshotStateKt.mutableStateOf$default(Double.valueOf(prefs.getLatitude()), null, 2, null);
+                mutableStateOf$default6 = SnapshotStateKt.mutableStateOf(Double.valueOf(prefs.getLatitude()), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default6);
                 rememberedValue2 = mutableStateOf$default6;
             } else {
@@ -189,7 +189,7 @@ public final class PrayerTimesScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1276954338, "CC(remember):PrayerTimesScreen.kt#9igjgp");
             Object rememberedValue3 = $composer2.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default5 = SnapshotStateKt.mutableStateOf$default(Double.valueOf(prefs.getLongitude()), null, 2, null);
+                mutableStateOf$default5 = SnapshotStateKt.mutableStateOf(Double.valueOf(prefs.getLongitude()), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default5);
                 rememberedValue3 = mutableStateOf$default5;
             }
@@ -198,7 +198,7 @@ public final class PrayerTimesScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1276956289, "CC(remember):PrayerTimesScreen.kt#9igjgp");
             Object rememberedValue4 = $composer2.rememberedValue();
             if (rememberedValue4 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default4 = SnapshotStateKt.mutableStateOf$default(prefs.getCityName(), null, 2, null);
+                mutableStateOf$default4 = SnapshotStateKt.mutableStateOf(prefs.getCityName(), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default4);
                 rememberedValue4 = mutableStateOf$default4;
             }
@@ -207,7 +207,7 @@ public final class PrayerTimesScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1276958308, "CC(remember):PrayerTimesScreen.kt#9igjgp");
             Object rememberedValue5 = $composer2.rememberedValue();
             if (rememberedValue5 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf$default(prefs.getCountryName(), null, 2, null);
+                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf(prefs.getCountryName(), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default3);
                 rememberedValue5 = mutableStateOf$default3;
             }
@@ -216,7 +216,7 @@ public final class PrayerTimesScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1276960632, "CC(remember):PrayerTimesScreen.kt#9igjgp");
             Object rememberedValue6 = $composer2.rememberedValue();
             if (rememberedValue6 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(Boolean.valueOf(r17 != 0), null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(Boolean.valueOf(r17 != 0), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue6 = mutableStateOf$default2;
             }
@@ -225,7 +225,7 @@ public final class PrayerTimesScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1276962285, "CC(remember):PrayerTimesScreen.kt#9igjgp");
             Object rememberedValue7 = $composer2.rememberedValue();
             if (rememberedValue7 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(Long.valueOf(System.currentTimeMillis()), null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(Long.valueOf(System.currentTimeMillis()), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue7 = mutableStateOf$default;
             }

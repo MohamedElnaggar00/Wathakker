@@ -59,7 +59,7 @@ final class BootReceiver$onReceive$1 extends SuspendLambda implements Function2<
                 switch (this.label) {
                     case 0:
                         ResultKt.throwOnFailure($result);
-                        AppDatabase db = AppDatabase.INSTANCE.getDatabase(this.$context);
+                        AppDatabase db = AppDatabase.Companion.getDatabase(this.$context);
                         DhikrDao dao = db.dhikrDao();
                         this.L$0 = SpillingKt.nullOutSpilledVariable(db);
                         this.L$1 = SpillingKt.nullOutSpilledVariable(dao);

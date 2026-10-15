@@ -123,7 +123,7 @@ public final class SettingsScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1939172719, "CC(remember):SettingsScreen.kt#9igjgp");
             Object rememberedValue = $composer2.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue = mutableStateOf$default2;
             }
@@ -132,7 +132,7 @@ public final class SettingsScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1939174703, "CC(remember):SettingsScreen.kt#9igjgp");
             Object rememberedValue2 = $composer2.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue2 = mutableStateOf$default;
             }

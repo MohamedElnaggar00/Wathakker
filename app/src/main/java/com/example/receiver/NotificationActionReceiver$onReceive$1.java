@@ -55,7 +55,7 @@ final class NotificationActionReceiver$onReceive$1 extends SuspendLambda impleme
                 switch (this.label) {
                     case 0:
                         ResultKt.throwOnFailure($result);
-                        AppDatabase db = AppDatabase.INSTANCE.getDatabase(this.$context);
+                        AppDatabase db = AppDatabase.Companion.getDatabase(this.$context);
                         DhikrRepository repo = new DhikrRepository(db.dhikrDao(), db.tagDao(), db.historyDao());
                         this.L$0 = SpillingKt.nullOutSpilledVariable(db);
                         this.L$1 = SpillingKt.nullOutSpilledVariable(repo);

@@ -68,7 +68,7 @@ public final class HisnViewModel extends AndroidViewModel {
     public HisnViewModel(Application application) {
         super(application);
         Intrinsics.checkNotNullParameter(application, "application");
-        this.dao = AppDatabase.INSTANCE.getDatabase(application).hisnDao();
+        this.dao = AppDatabase.Companion.getDatabase(application).hisnDao();
         this._query = StateFlowKt.MutableStateFlow("");
         this.query = FlowKt.asStateFlow(this._query);
         this._onlyFavorites = StateFlowKt.MutableStateFlow(false);
@@ -275,7 +275,7 @@ public final class HisnViewModel extends AndroidViewModel {
                 return collect == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? collect : Unit.INSTANCE;
             }
         }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), SetsKt.emptySet());
-        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new AnonymousClass1(null), 2, null);
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), kotlinx.coroutines.CoroutineStart.DEFAULT, new AnonymousClass1(null));
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -378,10 +378,10 @@ public final class HisnViewModel extends AndroidViewModel {
     }
 
     private final void toggle(int chapterId, int itemId) {
-        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new HisnViewModel$toggle$1(this, chapterId, itemId, null), 2, null);
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), kotlinx.coroutines.CoroutineStart.DEFAULT, new HisnViewModel$toggle$1(this, chapterId, itemId, null));
     }
 
     public final void markChapterRead(int chapterId) {
-        BuildersKt.launch$default(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), null, new HisnViewModel$markChapterRead$1(this, chapterId, null), 2, null);
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), kotlinx.coroutines.CoroutineStart.DEFAULT, new HisnViewModel$markChapterRead$1(this, chapterId, null));
     }
 }

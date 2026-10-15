@@ -45,7 +45,7 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 dependencies {
-  implementation(platform(libs.androidx.compose.bom))
+  implementation(platform("androidx.compose:compose-bom:${providers.gradleProperty("composeBom").getOrElse("2025.09.00")}"))
   implementation(libs.androidx.activity.compose)
   implementation(libs.androidx.compose.material.icons.core)
   implementation(libs.androidx.compose.material.icons.extended)

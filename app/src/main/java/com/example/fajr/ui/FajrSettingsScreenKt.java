@@ -284,7 +284,7 @@ public final class FajrSettingsScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1267079103, "CC(remember):FajrSettingsScreen.kt#9igjgp");
             Object rememberedValue2 = $composer2.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default3);
                 rememberedValue2 = mutableStateOf$default3;
             }
@@ -293,7 +293,7 @@ public final class FajrSettingsScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1267081119, "CC(remember):FajrSettingsScreen.kt#9igjgp");
             Object rememberedValue3 = $composer2.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue3 = mutableStateOf$default2;
             }
@@ -302,7 +302,7 @@ public final class FajrSettingsScreenKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1267083135, "CC(remember):FajrSettingsScreen.kt#9igjgp");
             Object rememberedValue4 = $composer2.rememberedValue();
             if (rememberedValue4 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue4 = mutableStateOf$default;
             }

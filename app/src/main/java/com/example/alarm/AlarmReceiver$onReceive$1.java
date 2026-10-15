@@ -53,7 +53,7 @@ final class AlarmReceiver$onReceive$1 extends SuspendLambda implements Function2
             switch (this.label) {
                 case 0:
                     ResultKt.throwOnFailure($result);
-                    AppDatabase db = AppDatabase.INSTANCE.getDatabase(this.$context);
+                    AppDatabase db = AppDatabase.Companion.getDatabase(this.$context);
                     this.L$0 = SpillingKt.nullOutSpilledVariable(db);
                     this.label = 1;
                     dhikrById = db.dhikrDao().getDhikrById(this.$id, this);

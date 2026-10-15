@@ -1338,7 +1338,7 @@ public final class HisnScreensKt {
     /* JADX INFO: Access modifiers changed from: package-private */
     public static final MutableState HisnItemCard$lambda$44$lambda$43() {
         MutableState mutableStateOf$default;
-        mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+        mutableStateOf$default = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
         return mutableStateOf$default;
     }
 

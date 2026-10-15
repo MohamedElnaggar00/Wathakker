@@ -91,7 +91,7 @@ public final class LocationManagerHelper {
             if (list != null && !list.isEmpty()) {
                 z = false;
                 if (z) {
-                    Address address = addresses.get(0);
+                    Address address = (Address) addresses.get(0);
                     String city = address.getLocality();
                     if (city == null && (city = address.getSubAdminArea()) == null) {
                         city = address.getAdminArea();
@@ -130,8 +130,7 @@ public final class LocationManagerHelper {
             if (z) {
             }
         } catch (Exception e2) {
-            e = e2;
-            e.printStackTrace();
+            e2.printStackTrace();
             StringCompanionObject stringCompanionObject2 = StringCompanionObject.INSTANCE;
             String format2 = String.format(Locale.US, "%.2f, %.2f", Arrays.copyOf(new Object[]{Double.valueOf(latitude), Double.valueOf(longitude)}, 2));
             Intrinsics.checkNotNullExpressionValue(format2, "format(...)");

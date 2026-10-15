@@ -20,9 +20,9 @@ public final class DhikrDialogState {
     public DhikrDialogState() {
         MutableState mutableStateOf$default;
         MutableState mutableStateOf$default2;
-        mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
+        mutableStateOf$default = SnapshotStateKt.mutableStateOf(null, SnapshotStateKt.structuralEqualityPolicy());
         this.times = mutableStateOf$default;
-        mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(null, null, 2, null);
+        mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(null, SnapshotStateKt.structuralEqualityPolicy());
         this.edit = mutableStateOf$default2;
     }
 

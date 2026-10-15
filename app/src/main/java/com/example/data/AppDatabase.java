@@ -19,7 +19,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     /* renamed from: Companion, reason: from kotlin metadata */
-    public static final Companion INSTANCE = new Companion(null);
+    public static final Companion Companion = new Companion(null);
     public static final int $stable = 8;
     private static final Migration MIGRATION_7_8 = new Migration() { // from class: com.example.data.AppDatabase$Companion$MIGRATION_7_8$1
         @Override // androidx.room.migration.Migration
@@ -72,7 +72,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     public void onCreate(SupportSQLiteDatabase db) {
                         Intrinsics.checkNotNullParameter(db, "db");
                         super.onCreate(db);
-                        BuildersKt.launch$default(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, null, new AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1(null), 3, null);
+                        BuildersKt.launch(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1(null));
                     }
                 }).build();
                 Companion companion = AppDatabase.INSTANCE;

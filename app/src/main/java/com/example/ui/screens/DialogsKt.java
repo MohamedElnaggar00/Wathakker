@@ -191,7 +191,7 @@ public final class DialogsKt {
             ComposerKt.sourceInformationMarkerStart($composer3, 1149471410, "CC(remember):Dialogs.kt#9igjgp");
             Object rememberedValue = $composer3.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf$default("", null, 2, null);
+                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf("", SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default3);
                 rememberedValue = mutableStateOf$default3;
             }
@@ -200,7 +200,7 @@ public final class DialogsKt {
             ComposerKt.sourceInformationMarkerStart($composer3, 1149473042, "CC(remember):Dialogs.kt#9igjgp");
             Object rememberedValue2 = $composer3.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default("", null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf("", SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue2 = mutableStateOf$default2;
             }
@@ -209,7 +209,7 @@ public final class DialogsKt {
             ComposerKt.sourceInformationMarkerStart($composer3, 1149474623, "CC(remember):Dialogs.kt#9igjgp");
             Object rememberedValue3 = $composer3.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(CollectionsKt.listOf("09:00"), null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(CollectionsKt.listOf("09:00"), SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue3 = mutableStateOf$default;
             }
@@ -436,7 +436,7 @@ public final class DialogsKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1408798163, "CC(remember):Dialogs.kt#9igjgp");
             Object rememberedValue = $composer2.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(dhikr.getTitle(), null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(dhikr.getTitle(), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue = mutableStateOf$default2;
             }
@@ -445,7 +445,7 @@ public final class DialogsKt {
             ComposerKt.sourceInformationMarkerStart($composer2, 1408800085, "CC(remember):Dialogs.kt#9igjgp");
             Object rememberedValue2 = $composer2.rememberedValue();
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(dhikr.getContent(), null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(dhikr.getContent(), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue2 = mutableStateOf$default;
             }
@@ -655,7 +655,7 @@ public final class DialogsKt {
             Object rememberedValue2 = $composer3.rememberedValue();
             int $dirty2 = $dirty;
             if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default2);
                 rememberedValue2 = mutableStateOf$default2;
             }
@@ -665,7 +665,7 @@ public final class DialogsKt {
             Object rememberedValue3 = $composer3.rememberedValue();
             if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
                 showNew$delegate = showNew$delegate3;
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default("", null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf("", SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default);
                 rememberedValue3 = mutableStateOf$default;
             } else {
@@ -1285,7 +1285,7 @@ public final class DialogsKt {
             Object rememberedValue = $composer2.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
                 z = true;
-                mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(dhikr.getReminderTimes(), null, 2, null);
+                mutableStateOf$default = SnapshotStateKt.mutableStateOf(dhikr.getReminderTimes(), SnapshotStateKt.structuralEqualityPolicy());
                 $composer2.updateRememberedValue(mutableStateOf$default);
                 rememberedValue = mutableStateOf$default;
             } else {
@@ -1424,7 +1424,7 @@ public final class DialogsKt {
             ComposerKt.sourceInformationMarkerStart($composer3, 194677316, "CC(remember):Dialogs.kt#9igjgp");
             Object rememberedValue = $composer3.rememberedValue();
             if (rememberedValue == Composer.INSTANCE.getEmpty()) {
-                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf$default(false, null, 2, null);
+                mutableStateOf$default3 = SnapshotStateKt.mutableStateOf(false, SnapshotStateKt.structuralEqualityPolicy());
                 $composer3.updateRememberedValue(mutableStateOf$default3);
                 rememberedValue = mutableStateOf$default3;
             }
@@ -1509,7 +1509,7 @@ public final class DialogsKt {
                     ComposerKt.sourceInformationMarkerStart($composer3, 194706723, "CC(remember):Dialogs.kt#9igjgp");
                     Object rememberedValue3 = $composer3.rememberedValue();
                     if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
-                        mutableStateOf$default2 = SnapshotStateKt.mutableStateOf$default(Integer.valueOf(hour3), null, 2, null);
+                        mutableStateOf$default2 = SnapshotStateKt.mutableStateOf(Integer.valueOf(hour3), SnapshotStateKt.structuralEqualityPolicy());
                         $composer3.updateRememberedValue(mutableStateOf$default2);
                         rememberedValue3 = mutableStateOf$default2;
                     }
@@ -1518,7 +1518,7 @@ public final class DialogsKt {
                     ComposerKt.sourceInformationMarkerStart($composer3, 194708357, "CC(remember):Dialogs.kt#9igjgp");
                     Object rememberedValue4 = $composer3.rememberedValue();
                     if (rememberedValue4 == Composer.INSTANCE.getEmpty()) {
-                        mutableStateOf$default = SnapshotStateKt.mutableStateOf$default(Integer.valueOf(minute2), null, 2, null);
+                        mutableStateOf$default = SnapshotStateKt.mutableStateOf(Integer.valueOf(minute2), SnapshotStateKt.structuralEqualityPolicy());
                         $composer3.updateRememberedValue(mutableStateOf$default);
                         rememberedValue4 = mutableStateOf$default;
                     }
