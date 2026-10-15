@@ -58,51 +58,42 @@ public final class MainViewModel$updateDhikrWithTags$1 extends SuspendLambda imp
         Code decompiled incorrectly, please refer to instructions dump.
     */
     public final Object invokeSuspend(Object $result) {
-        Dhikr updated;
-        DhikrRepository dhikrRepository;
-        DhikrRepository dhikrRepository2;
-        Dhikr updated2;
-        AlarmScheduler alarmScheduler;
         Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        Dhikr updated;
         switch (this.label) {
             case 0:
                 ResultKt.throwOnFailure($result);
                 updated = Dhikr.copy$default(this.$dhikr, 0, this.$newTitle, this.$newContent, false, null, false, 0, 0L, 249, null);
-                dhikrRepository = this.this$0.repository;
                 this.L$0 = updated;
                 this.label = 1;
-                if (dhikrRepository.update(updated, this) == coroutine_suspended) {
+                if (this.this$0.repository.update(updated, this) == coroutine_suspended) {
                     return coroutine_suspended;
                 }
-                dhikrRepository2 = this.this$0.repository;
-                this.L$0 = updated;
-                this.label = 2;
-                if (dhikrRepository2.updateDhikrTags(this.$dhikr.getId(), this.$tagIds, this) != coroutine_suspended) {
-                    return coroutine_suspended;
-                }
-                updated2 = updated;
-                if (updated2.isEnabled()) {
-                    alarmScheduler = this.this$0.alarmScheduler;
-                    alarmScheduler.schedule(updated2);
-                }
-                return Unit.INSTANCE;
+                break;
             case 1:
                 updated = (Dhikr) this.L$0;
                 ResultKt.throwOnFailure($result);
-                dhikrRepository2 = this.this$0.repository;
-                this.L$0 = updated;
-                this.label = 2;
-                if (dhikrRepository2.updateDhikrTags(this.$dhikr.getId(), this.$tagIds, this) != coroutine_suspended) {
-                }
                 break;
             case 2:
-                updated2 = (Dhikr) this.L$0;
+                updated = (Dhikr) this.L$0;
                 ResultKt.throwOnFailure($result);
-                if (updated2.isEnabled()) {
+                if (updated.isEnabled()) {
+                    this.this$0.alarmScheduler.schedule(updated);
                 }
                 return Unit.INSTANCE;
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
+        if (this.label == 1) {
+            this.L$0 = updated;
+            this.label = 2;
+            if (this.this$0.repository.updateDhikrTags(this.$dhikr.getId(), this.$tagIds, this) == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+        }
+        if (updated.isEnabled()) {
+            this.this$0.alarmScheduler.schedule(updated);
+        }
+        return Unit.INSTANCE;
     }
 }
