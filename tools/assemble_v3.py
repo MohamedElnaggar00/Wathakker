@@ -448,7 +448,7 @@ for dp, _, fs in os.walk(os.path.join(MAIN, 'java')):
                     rep = 'SnapshotStateKt.mutableStateOf(%s, SnapshotStateKt.structuralEqualityPolicy())' % args[0]
                     count_ms += 1
                 elif kind == 'l' and len(args) == 6 and args[2] == 'null':
-                    rep = 'BuildersKt.launch(%s, %s, kotlinx.coroutines.CoroutineStart.DEFAULT, %s)' % (args[0], args[1], args[3])
+                    rep = 'BuildersKt.launch(%s, %s, kotlinx.coroutines.CoroutineStart.DEFAULT, %s)' % (args[0], ('(kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE' if args[1] == 'null' else args[1]), args[3])
                     count_l += 1
                 else:
                     pos = en
