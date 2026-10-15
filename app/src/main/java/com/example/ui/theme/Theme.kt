@@ -5,6 +5,9 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -102,7 +105,8 @@ fun MyApplicationTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         shapes = OneUIShapes,
-        typography = getTypography(fontChoice),
-        content = content
-    )
+        typography = getTypography(fontChoice)
+    ) {
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl, content = content)
+    }
 }
