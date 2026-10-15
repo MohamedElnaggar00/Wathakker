@@ -230,5 +230,5 @@ fun MainScreen(viewModel: MainViewModel) {
 @Composable
 private fun FajrTabScreen(onMenu: () -> Unit) {
     val fajrViewModel: FajrViewModel = viewModel()
-    FajrSettingsScreen(fajrViewModel, onMenu)
+    FajrSettingsScreen(fajrViewModel, onMenu = onMenu)
 }
