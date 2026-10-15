@@ -71,7 +71,7 @@ fun TagsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
             tag = null,
             onDismiss = { showAdd = false },
             onConfirm = { name, color ->
-                viewModel.addTag(name, color)
+                viewModel.addTag(name, color) { }
                 showAdd = false
             }
         )

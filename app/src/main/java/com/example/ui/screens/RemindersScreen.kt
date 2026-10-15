@@ -30,7 +30,7 @@ fun RemindersScreen(viewModel: com.example.ui.viewmodel.MainViewModel, onBack: (
 
 @Composable
 fun RemindersContent(all: List<Dhikr>, onBack: () -> Unit, onToggle: (Dhikr) -> Unit) {
-    val active = all.count { it.isEnabled }
+    val active = all.count { it.getIsEnabled() }
     OneUIScreen(title = "التنبيهات", subtitle = "$active من ${all.size} مفعّلة", onBack = onBack) {
         if (all.isEmpty()) {
             item { OneUIEmptyState("لا توجد تنبيهات", Icons.Outlined.NotificationsOff) }
@@ -60,7 +60,7 @@ fun ReminderRow(dhikr: Dhikr, onToggle: () -> Unit) {
             Column(modifier = Modifier.width(72.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     first.substringBefore(' '),
-                    color = if (dhikr.isEnabled) cs.onSurface else cs.onSurfaceVariant,
+                    color = if (dhikr.getIsEnabled()) cs.onSurface else cs.onSurfaceVariant,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
@@ -70,6 +70,6 @@ fun ReminderRow(dhikr: Dhikr, onToggle: () -> Unit) {
                 )
             }
         },
-        trailing = { OneUISwitch(dhikr.isEnabled, { onToggle() }) }
+        trailing = { OneUISwitch(dhikr.getIsEnabled(), { onToggle() }) }
     )
 }
