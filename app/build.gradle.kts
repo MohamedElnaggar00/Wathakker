@@ -42,7 +42,7 @@ android {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-  options.compilerArgs.addAll(listOf("-Xmaxerrs", "3000", "-Xmaxwarns", "50", "-Xlint:none"))
+  options.compilerArgs.addAll(listOf("-Xmaxerrs", "200000", "-Xmaxwarns", "50", "-Xlint:none"))
 }
 
 dependencies {
