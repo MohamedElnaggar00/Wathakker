@@ -34,6 +34,7 @@ res_dst = os.path.join(MAIN, 'res')
 os.makedirs(res_dst)
 file_types = {'drawable': 'drawable', 'layout': 'layout', 'mipmap': 'mipmap', 'raw': 'raw',
               'font': 'font', 'xml': 'xml', 'color': 'color', 'anim': 'anim', 'menu': 'menu'}
+LIBP = ('abc_','mtrl_','m3_','material_','design_','notification_','tooltip','select_dialog','support_simple','ime_base','custom_dialog','browser_actions','autofill_','androidx','text_view','expand_button','preference','fallback','btn_','common_','ic_call','ic_arrow_down','ic_other','ic_clock','ic_keyboard','ic_m3','ic_mtrl','ic_search','ic_menu','ic_launcher_foreground_unused','okhttp','m3c_')
 kept = 0
 for d in sorted(os.listdir(res_src)):
     base = d.split('-')[0]
@@ -43,7 +44,7 @@ for d in sorted(os.listdir(res_src)):
         names = R.get(t, set())
         for f in os.listdir(src):
             stem = f.rsplit('.', 1)[0]
-            if stem in names or t == 'xml':
+            if stem in names or t == 'xml' or not stem.startswith(LIBP):
                 os.makedirs(os.path.join(res_dst, d), exist_ok=True)
                 shutil.copy2(os.path.join(src, f), os.path.join(res_dst, d, f))
                 kept += 1
