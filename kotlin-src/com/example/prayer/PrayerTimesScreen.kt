@@ -20,6 +20,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.FilterDrama
+import androidx.compose.material.icons.outlined.Mosque
+import androidx.compose.foundation.layout.offset
+import com.example.ui.oneui.OneUIDimens
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.NightsStay
@@ -119,7 +122,7 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
         countdownText = formatCountdown(remaining),
         progress = progress,
         rows = ordered.map { (name, time, icon) ->
-            PrayerRowDisplay(name, formatPrayerTime(time), name == next.first, icon)
+            PrayerRowDisplay(name, formatPrayerTime(time), name == next.first && time == next.second, icon)
         },
         onChangeCity = { showCitySearch = true },
         onMenu = onMenu
@@ -174,8 +177,9 @@ fun PrayerTimesContent(
     onMenu: (() -> Unit)? = null
 ) {
     val cs = MaterialTheme.colorScheme
-    OneUIScreen(title = "أوقات الصلاة", subtitle = "$city، $country", onMenu = onMenu) {
-        item {
+    OneUIScreen(title = "مواعيد الصلاة", onMenu = onMenu) {
+        item(key = "prayer-overview") {
+            // One card: date and location, a divider, then the next-prayer block.
             OneUICard(padding = PaddingValues(20.dp)) {
                 Text(
                     hijriText,
@@ -199,16 +203,23 @@ fun PrayerTimesContent(
                     Spacer(Modifier.width(6.dp))
                     Text(SavedCity(), color = cs.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
                 }
-            }
-        }
-        item {
-            OneUICard(padding = PaddingValues(20.dp)) {
-                Text(
-                    "الصلاة القادمة",
-                    modifier = Modifier.padding(top = 6.dp),
-                    color = cs.onSurfaceVariant,
-                    style = MaterialTheme.typography.titleSmall
-                )
+                OneUIDivider(12.dp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier.size(40.dp).clip(CircleShape).background(cs.surfaceVariant),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Outlined.Mosque, null, modifier = Modifier.size(22.dp), tint = OneUIActiveGreen)
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        "الصلاة القادمة",
+                        modifier = Modifier.offset(0.dp, 6.dp),
+                        color = cs.onSurfaceVariant,
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
+                Spacer(Modifier.height(18.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -231,25 +242,26 @@ fun PrayerTimesContent(
                         Text(nextPrayerTime, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(14.dp))
                 OneUIProgressBar(progress, color = OneUIActiveGreen)
             }
         }
-        item {
+        item(key = "prayer-list") {
             OneUICard {
                 rows.forEachIndexed { index, row ->
                     if (index > 0 && !row.isNext && !rows[index - 1].isNext) OneUIDivider()
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .clip(RoundedCornerShape(OneUIDimens.CardRadius))
                             .background(if (row.isNext) OneUIActiveGreen.copy(alpha = 0.14f) else Color.Transparent)
-                            .heightIn(min = 60.dp)
-                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(38.dp)
                                 .clip(CircleShape)
                                 .background(if (row.isNext) OneUIActiveGreen.copy(alpha = 0.18f) else cs.surfaceVariant),
                             contentAlignment = Alignment.Center
@@ -257,7 +269,7 @@ fun PrayerTimesContent(
                             Icon(
                                 row.icon,
                                 null,
-                                modifier = Modifier.size(22.dp),
+                                modifier = Modifier.size(20.dp),
                                 tint = if (row.isNext) OneUIActiveGreen else cs.onSurfaceVariant
                             )
                         }
