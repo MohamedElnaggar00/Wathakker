@@ -411,7 +411,6 @@ public final class TagDao_Impl implements TagDao {
                         _stmt2 = _stmt;
                     }
                 } catch (Throwable th) {
-                    th = th;
                     _stmt.close();
                     throw th;
                 }
@@ -646,7 +645,6 @@ public final class TagDao_Impl implements TagDao {
                         _itemKeyIndex = _itemKeyIndex2;
                         _stringBuilder = _stringBuilder2;
                     } catch (Throwable th) {
-                        th = th;
                         _stmt.close();
                         throw th;
                     }
