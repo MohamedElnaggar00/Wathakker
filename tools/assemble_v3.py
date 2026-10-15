@@ -676,3 +676,36 @@ fix_ctor('com/example/data/HisnRead.java',
   '    public /* synthetic */ HisnRead(long j, int i, String str, long j2, int i2, DefaultConstructorMarker defaultConstructorMarker) {\n'
   '        this((i2 & 1) != 0 ? 0L : j, i, str, j2);\n'
   '    }\n')
+
+# 14. jadx expands Flow.map { } into an anonymous Flow with a hand-unrolled state machine; restore the map call
+MAP_EXPR = {
+    'MainViewModel.java': ['this.calculateStats((java.util.List) value)'],
+    'HisnViewModel.java': [
+        '{ java.util.LinkedHashMap m = new java.util.LinkedHashMap(); for (Object o : (java.util.List) value) { ChapterItemCount cc = (ChapterItemCount) o; m.put(Integer.valueOf(cc.getChapterId()), Integer.valueOf(cc.getItemCount())); } return m; }',
+        'CollectionsKt.toSet((java.util.List) value)',
+    ],
+}
+for p in all_java():
+    base = os.path.basename(p)
+    s = open(p, encoding='utf-8').read()
+    o = s
+    s = s.replace('FontChoice.INSTANCE', 'FontChoice.Companion')
+    s = re.sub(r'public final int compare\(T t, T t2\)', 'public final int compare(Object t, Object t2)', s)
+    if base in MAP_EXPR:
+        exprs = list(MAP_EXPR[base])
+        def repl(m):
+            e = exprs.pop(0)
+            body = e if e.startswith('{') else '{ return ' + e + '; }'
+            return (m.group(1) + 'FlowKt.map((Flow) ' + m.group(2) + ', (kotlin.jvm.functions.Function2) (value, c) -> ' + body + ')' + m.group(3))
+        s = re.sub(r'(final Flow (\w+) = [^\n]*;\n        this\.\w+ = FlowKt\.stateIn\()new Flow<[^\n]*\{ // from class: [\w.$]*special\$\$inlined\$map\$\d\n.*?\n        \}(, ViewModelKt)', repl, s, flags=re.S)
+        if exprs:
+            print('PATCH MISS flow map', base, len(exprs))
+    if s != o:
+        open(p, 'w', encoding='utf-8').write(s)
+
+# 14b. extracted lambda that reads the enclosing ViewModel must be an inner class
+p = os.path.join(JAVA, 'com/example/ui/hisn/HisnViewModel.java')
+if os.path.isfile(p):
+    s = open(p, encoding='utf-8').read()
+    s = s.replace('    static final class AnonymousClass1 extends SuspendLambda', '    final class AnonymousClass1 extends SuspendLambda')
+    open(p, 'w', encoding='utf-8').write(s)
