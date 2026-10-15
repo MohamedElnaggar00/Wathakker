@@ -659,6 +659,49 @@ for p in all_java():
     if base == 'HisnViewModelKt.java':
         _line = 'return s.replaceAll("[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED\\u0640]", "").replaceAll("[\\u0622\\u0623\\u0625\\u0671]", "\u0627").replace((char) 1609, (char) 1610).replace((char) 1577, (char) 1607);\n'
         s = re.sub(r'return StringsKt\.replace\$default\(.*\n', lambda m: _line, s)
+    if base == 'MainViewModel$updateDhikrWithTags$1.java':
+        i = s.index('    public final Object invokeSuspend(Object $result) {')
+        s = s[:i] + """    public final Object invokeSuspend(Object $result) {
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        Dhikr updated;
+        switch (this.label) {
+            case 0:
+                ResultKt.throwOnFailure($result);
+                updated = Dhikr.copy$default(this.$dhikr, 0, this.$newTitle, this.$newContent, false, null, false, 0, 0L, 249, null);
+                this.L$0 = updated;
+                this.label = 1;
+                if (this.this$0.repository.update(updated, this) == coroutine_suspended) {
+                    return coroutine_suspended;
+                }
+                break;
+            case 1:
+                updated = (Dhikr) this.L$0;
+                ResultKt.throwOnFailure($result);
+                break;
+            case 2:
+                updated = (Dhikr) this.L$0;
+                ResultKt.throwOnFailure($result);
+                if (updated.isEnabled()) {
+                    this.this$0.alarmScheduler.schedule(updated);
+                }
+                return Unit.INSTANCE;
+            default:
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+        if (this.label == 1) {
+            this.L$0 = updated;
+            this.label = 2;
+            if (this.this$0.repository.updateDhikrTags(this.$dhikr.getId(), this.$tagIds, this) == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+        }
+        if (updated.isEnabled()) {
+            this.this$0.alarmScheduler.schedule(updated);
+        }
+        return Unit.INSTANCE;
+    }
+}
+"""
     # outer-class fields read by the extracted lambda classes
     base = os.path.basename(p)
     if base in ('FajrViewModel.java', 'MainViewModel.java', 'HisnViewModel.java', 'DhikrRepository.java'):
