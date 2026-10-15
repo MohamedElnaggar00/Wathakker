@@ -1,0 +1,211 @@
+outcome: failure  bom: 2025.10.01  run: 38798085238  sha: ec8013426bacdd919f28b2640a0917253a919e45
+errors: 48
+--- per file
+     20 AppDatabase_Impl.java
+     10 DhikrDao_Impl.java
+      8 DhikrRepository.java
+      4 TagDao_Impl.java
+      4 HisnDao_Impl.java
+      2 HisnViewModelKt.java
+--- per symbol
+     16 symbol:   variable INSTANCE
+      2 symbol:   method replace$default
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- details
+59:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:182: error: missing return statement
+60-    }
+61-    ^
+62:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:250: error: missing return statement
+63-    }
+64-    ^
+65:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:318: error: missing return statement
+66-    }
+67-    ^
+68:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:412: error: missing return statement
+69-    }
+70-    ^
+71:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/hisn/HisnViewModelKt.java:14: error: cannot find symbol
+72-        return StringsKt.replace$default(StringsKt.replace$default(new Regex("[\\u0622\\u0623\\u0625\\u0671]").replace(new Regex("[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED\\u0640]").replace(s, ""), "ا"), (char) 1609, (char) 1610, false, 4, (Object) null), (char) 1577, (char) 1607, false, 4, (Object) null);
+73-                                                  ^
+74-  symbol:   method replace$default(String,char,char,boolean,int,Object)
+75-  location: class StringsKt
+76:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:315: error: not an enclosing class: HisnDao_Impl
+77-                return TagDao_Impl.getDhikrsWithTags$lambda$8(_sql, HisnDao_Impl.this, (SQLiteConnection) obj);
+78-                                                                                ^
+79:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:381: error: not an enclosing class: HisnDao_Impl
+80-                return TagDao_Impl.getDhikrWithTagsById$lambda$9(_sql, dhikrId, HisnDao_Impl.this, (SQLiteConnection) obj);
+81-                                                                                            ^
+82:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnDao_Impl.java:163: error: incompatible types: HisnFavorite cannot be converted to SQLiteConnection
+83-        this$0.__insertAdapterOfHisnFavorite.insert(_connection, (SQLiteConnection) $fav);
+84-                                                                                    ^
+85:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnDao_Impl.java:181: error: incompatible types: HisnRead cannot be converted to SQLiteConnection
+86-        this$0.__insertAdapterOfHisnRead.insert(_connection, (SQLiteConnection) $read);
+87-                                                                                ^
+88:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:145: error: not an enclosing class: TagDao_Impl
+89-                return DhikrDao_Impl.getAllDhikr$lambda$3(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+90-                                                                           ^
+91:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:193: error: not an enclosing class: TagDao_Impl
+92-                return DhikrDao_Impl.getFavoriteDhikr$lambda$4(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+93-                                                                                ^
+94:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:241: error: not an enclosing class: TagDao_Impl
+95-                return DhikrDao_Impl.getEnabledDhikr$lambda$5(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+96-                                                                               ^
+97:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:289: error: not an enclosing class: TagDao_Impl
+98-                return DhikrDao_Impl.getEnabledDhikrSync$lambda$6(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+99-                                                                                   ^
+100:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:337: error: not an enclosing class: TagDao_Impl
+101-                return DhikrDao_Impl.getDhikrById$lambda$7(_sql, id, TagDao_Impl.this, (SQLiteConnection) obj);
+102-                                                                                ^
+103:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:81: error: constructor RoomOpenDelegate in class RoomOpenDelegate cannot be applied to given types;
+104-        RoomOpenDelegate _openDelegate = new RoomOpenDelegate() { // from class: com.example.data.AppDatabase_Impl$createOpenDelegate$_openDelegate$1
+105-                                         ^
+106-  required: int,String,String
+107-  found:    no arguments
+--
+109:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:84: error: call to super must be first statement in constructor
+110-                super(8, "60976a860ef541fdb8dbbcef870846bb", "ffdd9bb93b8df39ebcfb05ab32ef0022");
+111-                     ^
+112:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:160: error: cannot find symbol
+113-                TableInfo _existingDhikrTable = TableInfo.INSTANCE.read(connection, "dhikr_table");
+114-                                                         ^
+115-  symbol:   variable INSTANCE
+116-  location: class TableInfo
+117:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:171: error: cannot find symbol
+118-                TableInfo _existingTagTable = TableInfo.INSTANCE.read(connection, "tag_table");
+119-                                                       ^
+120-  symbol:   variable INSTANCE
+121-  location: class TableInfo
+122:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:183: error: cannot find symbol
+123-                TableInfo _existingDhikrTagCrossRef = TableInfo.INSTANCE.read(connection, "dhikr_tag_cross_ref");
+124-                                                               ^
+125-  symbol:   variable INSTANCE
+126-  location: class TableInfo
+127:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:195: error: cannot find symbol
+128-                TableInfo _existingDhikrHistory = TableInfo.INSTANCE.read(connection, "dhikr_history");
+129-                                                           ^
+130-  symbol:   variable INSTANCE
+131-  location: class TableInfo
+132:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:206: error: cannot find symbol
+133-                TableInfo _existingHisnChapter = TableInfo.INSTANCE.read(connection, "hisn_chapter");
+134-                                                          ^
+135-  symbol:   variable INSTANCE
+136-  location: class TableInfo
+137:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:223: error: cannot find symbol
+138-                TableInfo _existingHisnItem = TableInfo.INSTANCE.read(connection, "hisn_item");
+139-                                                       ^
+140-  symbol:   variable INSTANCE
+141-  location: class TableInfo
+142:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:235: error: cannot find symbol
+143-                TableInfo _existingHisnFavorite = TableInfo.INSTANCE.read(connection, "hisn_favorite");
+144-                                                           ^
+145-  symbol:   variable INSTANCE
+146-  location: class TableInfo
+147:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:247: error: cannot find symbol
+148-                TableInfo _existingHisnRead = TableInfo.INSTANCE.read(connection, "hisn_read");
+149-                                                       ^
+150-  symbol:   variable INSTANCE
+151-  location: class TableInfo
+--
+164:* What went wrong:
+165:Execution failed for task ':app:compileDebugJavaWithJavac'.
+166-> Compilation failed; see the compiler output below.
+167:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:81: error: constructor RoomOpenDelegate in class RoomOpenDelegate cannot be applied to given types;
+168-          RoomOpenDelegate _openDelegate = new RoomOpenDelegate() { // from class: com.example.data.AppDatabase_Impl$createOpenDelegate$_openDelegate$1
+169-                                           ^
+170-    required: int,String,String
+171-    found:    no arguments
+--
+173:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:315: error: not an enclosing class: HisnDao_Impl
+174-                  return TagDao_Impl.getDhikrsWithTags$lambda$8(_sql, HisnDao_Impl.this, (SQLiteConnection) obj);
+175-                                                                                  ^
+176:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:381: error: not an enclosing class: HisnDao_Impl
+177-                  return TagDao_Impl.getDhikrWithTagsById$lambda$9(_sql, dhikrId, HisnDao_Impl.this, (SQLiteConnection) obj);
+178-                                                                                              ^
+179:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:145: error: not an enclosing class: TagDao_Impl
+180-                  return DhikrDao_Impl.getAllDhikr$lambda$3(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+181-                                                                             ^
+182:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:193: error: not an enclosing class: TagDao_Impl
+183-                  return DhikrDao_Impl.getFavoriteDhikr$lambda$4(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+184-                                                                                  ^
+185:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:241: error: not an enclosing class: TagDao_Impl
+186-                  return DhikrDao_Impl.getEnabledDhikr$lambda$5(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+187-                                                                                 ^
+188:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:289: error: not an enclosing class: TagDao_Impl
+189-                  return DhikrDao_Impl.getEnabledDhikrSync$lambda$6(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
+190-                                                                                     ^
+191:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:337: error: not an enclosing class: TagDao_Impl
+192-                  return DhikrDao_Impl.getDhikrById$lambda$7(_sql, id, TagDao_Impl.this, (SQLiteConnection) obj);
+193-                                                                                  ^
+194:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:182: error: missing return statement
+195-      }
+196-      ^
+197:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:250: error: missing return statement
+198-      }
+199-      ^
+200:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:318: error: missing return statement
+201-      }
+202-      ^
+203:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:412: error: missing return statement
+204-      }
+205-      ^
+206-  Note: Recompile with -Xlint:deprecation for details.
+207:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:84: error: call to super must be first statement in constructor
+208-                  super(8, "60976a860ef541fdb8dbbcef870846bb", "ffdd9bb93b8df39ebcfb05ab32ef0022");
+209-                       ^
+210:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnDao_Impl.java:163: error: incompatible types: HisnFavorite cannot be converted to SQLiteConnection
+211-          this$0.__insertAdapterOfHisnFavorite.insert(_connection, (SQLiteConnection) $fav);
+212-                                                                                      ^
+213:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnDao_Impl.java:181: error: incompatible types: HisnRead cannot be converted to SQLiteConnection
+214-          this$0.__insertAdapterOfHisnRead.insert(_connection, (SQLiteConnection) $read);
+215-                                                                                  ^
+216:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:160: error: cannot find symbol
+217-                  TableInfo _existingDhikrTable = TableInfo.INSTANCE.read(connection, "dhikr_table");
+218-                                                           ^
+219-    symbol:   variable INSTANCE
+220-    location: class TableInfo
+221:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:171: error: cannot find symbol
+222-                  TableInfo _existingTagTable = TableInfo.INSTANCE.read(connection, "tag_table");
+223-                                                         ^
+224-    symbol:   variable INSTANCE
+225-    location: class TableInfo
+226:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:183: error: cannot find symbol
+227-                  TableInfo _existingDhikrTagCrossRef = TableInfo.INSTANCE.read(connection, "dhikr_tag_cross_ref");
+228-                                                                 ^
+229-    symbol:   variable INSTANCE
+230-    location: class TableInfo
+231:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:195: error: cannot find symbol
+232-                  TableInfo _existingDhikrHistory = TableInfo.INSTANCE.read(connection, "dhikr_history");
+233-                                                             ^
+234-    symbol:   variable INSTANCE
+235-    location: class TableInfo
+236:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:206: error: cannot find symbol
+237-                  TableInfo _existingHisnChapter = TableInfo.INSTANCE.read(connection, "hisn_chapter");
+238-                                                            ^
+239-    symbol:   variable INSTANCE
+240-    location: class TableInfo
+241:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:223: error: cannot find symbol
+242-                  TableInfo _existingHisnItem = TableInfo.INSTANCE.read(connection, "hisn_item");
+243-                                                         ^
+244-    symbol:   variable INSTANCE
+245-    location: class TableInfo
+246:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:235: error: cannot find symbol
+247-                  TableInfo _existingHisnFavorite = TableInfo.INSTANCE.read(connection, "hisn_favorite");
+248-                                                             ^
+249-    symbol:   variable INSTANCE
+250-    location: class TableInfo
+251:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:247: error: cannot find symbol
+252-                  TableInfo _existingHisnRead = TableInfo.INSTANCE.read(connection, "hisn_read");
+253-                                                         ^
+254-    symbol:   variable INSTANCE
+255-    location: class TableInfo
+--
+259:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/hisn/HisnViewModelKt.java:14: error: cannot find symbol
+260-          return StringsKt.replace$default(StringsKt.replace$default(new Regex("[\\u0622\\u0623\\u0625\\u0671]").replace(new Regex("[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED\\u0640]").replace(s, ""), "ا"), (char) 1609, (char) 1610, false, 4, (Object) null), (char) 1577, (char) 1607, false, 4, (Object) null);
+261-                                                    ^
+262-    symbol:   method replace$default(String,char,char,boolean,int,Object)
+263-    location: class StringsKt
+--
+270:BUILD FAILED in 4m 8s
+271-25 actionable tasks: 25 executed
