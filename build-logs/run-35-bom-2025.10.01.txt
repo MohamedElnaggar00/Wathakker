@@ -1,0 +1,771 @@
+outcome: failure  bom: 2025.10.01  run: 38775465360  sha: 05702e486f880235199b8b8c977e96ec312b2dcd
+errors: 6000
+--- per file
+   2944 FajrSettingsScreenKt.java
+   1622 FajrAlarmActivityKt.java
+    368 CitySearchDialogKt.java
+    324 StatisticsScreenKt.java
+    266 TagsScreenKt.java
+    202 WheelTimePickerKt.java
+     36 FajrViewModel$updateLocationFromGps$1.java
+     36 ComposableSingletons$FajrAlarmActivityKt.java
+     30 MainViewModel.java
+     28 ComposableSingletons$FajrSettingsScreenKt.java
+     22 ComposableSingletons$AboutScreenKt.java
+     20 FajrViewModel$refreshFajrTimeManually$1.java
+     18 FajrAlarmActivity.java
+     16 ComposableSingletons$CitySearchDialogKt.java
+      8 WheelTimePickerKt$WheelTimePicker$1$1.java
+      8 WheelTimePickerKt$WheelPickerColumn$1$1.java
+      8 MainScreenKt$MainScreen$1$1$6$1$1.java
+      8 DhikrRepository.java
+      8 AlarmScheduler.java
+      6 MainActivity$onCreate$1$1$1.java
+      6 FajrAlarmActivityKt$FajrAlarmScreen$1$1.java
+      4 DhikrHistory.java
+      2 TagDao.java
+      2 RemindersScreenKt$RemindersScreen$1$1.java
+      2 HomeScreenKt$AzkarListScreen$7$1.java
+      2 FontChoice.java
+      2 DateTimeUtilsKt.java
+      2 CitiesDatabase.java
+--- per symbol
+   3482 symbol:   variable INSTANCE
+    732 symbol:   method m7226constructorimpl
+    326 symbol:   method m3828constructorimpl
+    160 symbol:   variable r12
+    146 symbol:   variable CC
+    104 symbol:   method getOnSurfaceVariant
+    102 symbol:   method getPrimary
+     56 symbol:   method m1932buttonColorsro_MJ88
+     48 symbol:   variable r86
+     48 symbol:   method getOnSurface
+     44 symbol:   method m2816Text4IGK_g
+     32 symbol:   variable r56
+     26 symbol:   variable r4
+     24 symbol:   variable r3
+     24 symbol:   method m231backgroundbw27NRU$default
+     20 symbol:   method m4492getBlueimpl
+     10 symbol:   variable r53
+     10 symbol:   method m264clickableXHw0xAI$default
+      8 symbol:   variable r22
+      8 symbol:   variable r19
+      8 symbol:   variable r15
+      8 symbol:   variable r14
+      8 symbol:   method m2273Iconww6aTOc
+      8 symbol:   method getError
+      6 symbol:   variable e
+      4 symbol: class T
+      4 symbol:   method split$default
+      4 symbol:   method m4526getWhite0d7_KjU
+      2 symbol:   variable sp
+      2 symbol:   variable r29
+      2 symbol:   variable r1
+      2 symbol:   variable bold
+      2 symbol:   variable $VALUES
+      2 symbol:   method setContent$default
+      2 symbol:   method getSurfaceVariant
+      2 symbol:   method getSurface
+      2 symbol:   method fillMaxWidth$default
+      2 symbol:   method animateScrollToPage$default
+--- details
+30:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:99: error: cannot find symbol
+31-            if (rememberedValue == Composer.INSTANCE.getEmpty()) {
+32-                                           ^
+33-  symbol:   variable INSTANCE
+34-  location: interface Composer
+35:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:108: error: cannot find symbol
+36-            if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
+37-                                            ^
+38-  symbol:   variable INSTANCE
+39-  location: interface Composer
+40:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:117: error: cannot find symbol
+41-            if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
+42-                                            ^
+43-  symbol:   variable INSTANCE
+44-  location: interface Composer
+45:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:127: error: cannot find symbol
+46-            if (rememberedValue4 == Composer.INSTANCE.getEmpty()) {
+47-                                            ^
+48-  symbol:   variable INSTANCE
+49-  location: interface Composer
+50:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:134: error: cannot assign a value to final variable onSnooze
+51-            onSnooze = function1;
+52-            ^
+53:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:136: error: cannot find symbol
+54-            SurfaceKt.m2666SurfaceT9BRK9s(SizeKt.fillMaxSize$default(Modifier.INSTANCE, 0.0f, 1, null), null, ColorKt.Color(4279179050L), 0L, 0.0f, 0.0f, null, ComposableLambdaKt.rememberComposableLambda(-1482650557, true, new Function2() { // from class: com.example.fajr.ui.FajrAlarmActivityKt$$ExternalSyntheticLambda0
+55-                                                                             ^
+56-  symbol:   variable INSTANCE
+57-  location: interface Modifier
+58:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:139: error: not an enclosing class: MutableState
+59-                    return FajrAlarmActivityKt.FajrAlarmScreen$lambda$28(MutableState.this, currentDateStr$delegate, showSnoozeOptions$delegate, onSnooze, onDismiss, (Composer) obj2, ((Integer) obj3).intValue());
+60-                                                                                     ^
+61:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:151: error: not an enclosing class: Function0
+62-                    return FajrAlarmActivityKt.FajrAlarmScreen$lambda$29(Function0.this, onSnooze, $changed, (Composer) obj2, ((Integer) obj3).intValue());
+63-                                                                                  ^
+64:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:234: error: cannot find symbol
+65-            Modifier m730padding3ABfNKs = PaddingKt.m730padding3ABfNKs(SizeKt.fillMaxSize$default(Modifier.INSTANCE, 0.0f, 1, null), Dp.m7226constructorimpl(24));
+66-                                                                                                          ^
+67-  symbol:   variable INSTANCE
+68-  location: interface Modifier
+69:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:234: error: cannot find symbol
+70-            Modifier m730padding3ABfNKs = PaddingKt.m730padding3ABfNKs(SizeKt.fillMaxSize$default(Modifier.INSTANCE, 0.0f, 1, null), Dp.m7226constructorimpl(24));
+71-                                                                                                                                       ^
+72-  symbol:   method m7226constructorimpl(int)
+73-  location: class Dp
+74:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:235: error: cannot find symbol
+75-            Alignment center = Alignment.INSTANCE.getCenter();
+76-                                        ^
+77-  symbol:   variable INSTANCE
+78-  location: interface Alignment
+79:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:242: error: cannot find symbol
+80-            Function0 constructor = ComposeUiNode.INSTANCE.getConstructor();
+81-                                                 ^
+82-  symbol:   variable INSTANCE
+83-  location: interface ComposeUiNode
+84:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:256: error: cannot find symbol
+85-            Composer m3828constructorimpl7 = Updater.m3828constructorimpl($composer);
+86-                                                    ^
+87-  symbol:   method m3828constructorimpl(Composer)
+88-  location: class Updater
+89:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:257: error: cannot find symbol
+90-            Updater.m3835setimpl(m3828constructorimpl7, maybeCachedBoxMeasurePolicy, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+91-                                                                                                  ^
+92-  symbol:   variable INSTANCE
+93-  location: interface ComposeUiNode
+94:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:258: error: cannot find symbol
+95-            Updater.m3835setimpl(m3828constructorimpl7, currentCompositionLocalMap, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+96-                                                                                                 ^
+97-  symbol:   variable INSTANCE
+98-  location: interface ComposeUiNode
+99:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:259: error: cannot find symbol
+100-            Function2 setCompositeKeyHash = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+101-                                                         ^
+102-  symbol:   variable INSTANCE
+103-  location: interface ComposeUiNode
+104:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:265: error: cannot find symbol
+105-                    Updater.m3835setimpl(m3828constructorimpl7, materializeModifier, ComposeUiNode.INSTANCE.getSetModifier());
+106-                                                                                                  ^
+107-  symbol:   variable INSTANCE
+108-  location: interface ComposeUiNode
+109:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:271: error: cannot find symbol
+110-                    Alignment.Horizontal centerHorizontally = Alignment.INSTANCE.getCenterHorizontally();
+111-                                                                       ^
+112-  symbol:   variable INSTANCE
+113-  location: interface Alignment
+114:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:273: error: cannot find symbol
+115-                    Modifier fillMaxHeight$default = SizeKt.fillMaxHeight$default(Modifier.INSTANCE, 0.0f, 1, null);
+116-                                                                                          ^
+117-  symbol:   variable INSTANCE
+118-  location: interface Modifier
+119:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:280: error: cannot find symbol
+120-                    Function0 constructor2 = ComposeUiNode.INSTANCE.getConstructor();
+121-                                                          ^
+122-  symbol:   variable INSTANCE
+123-  location: interface ComposeUiNode
+124:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:294: error: cannot find symbol
+125-                    m3828constructorimpl = Updater.m3828constructorimpl($composer);
+126-                                                  ^
+127-  symbol:   method m3828constructorimpl(Composer)
+128-  location: class Updater
+129:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:295: error: cannot find symbol
+130-                    Updater.m3835setimpl(m3828constructorimpl, columnMeasurePolicy, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+131-                                                                                                 ^
+132-  symbol:   variable INSTANCE
+133-  location: interface ComposeUiNode
+134:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:296: error: cannot find symbol
+135-                    Updater.m3835setimpl(m3828constructorimpl, currentCompositionLocalMap2, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+136-                                                                                                         ^
+137-  symbol:   variable INSTANCE
+138-  location: interface ComposeUiNode
+139:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:297: error: cannot find symbol
+140-                    Function2 setCompositeKeyHash2 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+141-                                                                  ^
+142-  symbol:   variable INSTANCE
+143-  location: interface ComposeUiNode
+144:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:299: error: cannot find symbol
+145-                        Updater.m3835setimpl(m3828constructorimpl, materializeModifier2, ComposeUiNode.INSTANCE.getSetModifier());
+146-                                                                                                      ^
+147-  symbol:   variable INSTANCE
+148-  location: interface ComposeUiNode
+149:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:305: error: cannot find symbol
+150-                        SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(32)), $composer, 6);
+151-                                                                         ^
+152-  symbol:   variable INSTANCE
+153-  location: interface Modifier
+154:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:305: error: cannot find symbol
+155-                        SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(32)), $composer, 6);
+156-                                                                                      ^
+157-  symbol:   method m7226constructorimpl(int)
+158-  location: class Dp
+159:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:306: error: cannot find symbol
+160-                        Alignment.Horizontal centerHorizontally2 = Alignment.INSTANCE.getCenterHorizontally();
+161-                                                                            ^
+162-  symbol:   variable INSTANCE
+163-  location: interface Alignment
+164:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:308: error: cannot find symbol
+165-                        Modifier modifier = Modifier.INSTANCE;
+166-                                                    ^
+167-  symbol:   variable INSTANCE
+168-  location: interface Modifier
+169:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:314: error: cannot find symbol
+170-                        Function0 constructor3 = ComposeUiNode.INSTANCE.getConstructor();
+171-                                                              ^
+172-  symbol:   variable INSTANCE
+173-  location: interface ComposeUiNode
+174:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:328: error: cannot find symbol
+175-                        m3828constructorimpl2 = Updater.m3828constructorimpl($composer);
+176-                                                       ^
+177-  symbol:   method m3828constructorimpl(Composer)
+178-  location: class Updater
+179:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:329: error: cannot find symbol
+180-                        Updater.m3835setimpl(m3828constructorimpl2, columnMeasurePolicy2, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+181-                                                                                                       ^
+182-  symbol:   variable INSTANCE
+183-  location: interface ComposeUiNode
+184:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:330: error: cannot find symbol
+185-                        Updater.m3835setimpl(m3828constructorimpl2, currentCompositionLocalMap3, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+186-                                                                                                              ^
+187-  symbol:   variable INSTANCE
+188-  location: interface ComposeUiNode
+189:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:331: error: cannot find symbol
+190-                        Function2 setCompositeKeyHash3 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+191-                                                                      ^
+192-  symbol:   variable INSTANCE
+193-  location: interface ComposeUiNode
+194:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:333: error: cannot find symbol
+195-                            Updater.m3835setimpl(m3828constructorimpl2, materializeModifier3, ComposeUiNode.INSTANCE.getSetModifier());
+196-                                                                                                           ^
+197-  symbol:   variable INSTANCE
+198-  location: interface ComposeUiNode
+199:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:339: error: cannot find symbol
+200-                            Modifier clip = ClipKt.clip(SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(90)), RoundedCornerShapeKt.getCircleShape());
+201-                                                                                       ^
+202-  symbol:   variable INSTANCE
+203-  location: interface Modifier
+204:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:339: error: cannot find symbol
+205-                            Modifier clip = ClipKt.clip(SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(90)), RoundedCornerShapeKt.getCircleShape());
+206-                                                                                                    ^
+207-  symbol:   method m7226constructorimpl(int)
+208-  location: class Dp
+209:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+210-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+211-                                                                      ^
+212-  symbol:   variable r86
+213-  location: class FajrAlarmActivityKt
+214:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+215-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+216-                                                                            ^
+217-  symbol:   variable r12
+218-  location: class FajrAlarmActivityKt
+219:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+220-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+221-                                                                                                                    ^
+222-  symbol:   variable r86
+223-  location: class FajrAlarmActivityKt
+224:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+225-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+226-                                                                                                                                  ^
+227-  symbol:   variable r12
+228-  location: class FajrAlarmActivityKt
+229:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+230-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+231-                                                                                                                                                                        ^
+232-  symbol:   variable r86
+233-  location: class FajrAlarmActivityKt
+234:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+235-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+236-                                                                                                                                                                                      ^
+237-  symbol:   variable r12
+238-  location: class FajrAlarmActivityKt
+239:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+240-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+241-                                                                                                                                                                                                                              ^
+242-  symbol:   variable r86
+243-  location: class FajrAlarmActivityKt
+244:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+245-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+246-                                                                                                                                                                                                                                            ^
+247-  symbol:   variable r12
+248-  location: class FajrAlarmActivityKt
+249:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:340: error: cannot find symbol
+250-                            m4487copywmQWz5c = Color.m4487copywmQWz5c(r86, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r86) : 0.2f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r86) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r86) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(ColorKt.Color(4282090230L)) : 0.0f);
+251-                                                                                                                                                                                                                                                                 ^
+252-  symbol:   method m4492getBlueimpl(long)
+253-  location: class Color
+254:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:341: error: cannot find symbol
+255-                            Modifier m231backgroundbw27NRU$default = BackgroundKt.m231backgroundbw27NRU$default(clip, m4487copywmQWz5c, null, 2, null);
+256-                                                                                 ^
+257-  symbol:   method m231backgroundbw27NRU$default(Modifier,long,<null>,int,<null>)
+258-  location: class BackgroundKt
+259:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:342: error: cannot find symbol
+260-                            Alignment center2 = Alignment.INSTANCE.getCenter();
+261-                                                         ^
+262-  symbol:   variable INSTANCE
+263-  location: interface Alignment
+264:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:349: error: cannot find symbol
+265-                            Function0 constructor4 = ComposeUiNode.INSTANCE.getConstructor();
+266-                                                                  ^
+267-  symbol:   variable INSTANCE
+268-  location: interface ComposeUiNode
+269:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:363: error: cannot find symbol
+270-                            m3828constructorimpl3 = Updater.m3828constructorimpl($composer);
+271-                                                           ^
+272-  symbol:   method m3828constructorimpl(Composer)
+273-  location: class Updater
+274:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:364: error: cannot find symbol
+275-                            Updater.m3835setimpl(m3828constructorimpl3, maybeCachedBoxMeasurePolicy2, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+276-                                                                                                                   ^
+277-  symbol:   variable INSTANCE
+278-  location: interface ComposeUiNode
+279:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:365: error: cannot find symbol
+280-                            Updater.m3835setimpl(m3828constructorimpl3, currentCompositionLocalMap4, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+281-                                                                                                                  ^
+282-  symbol:   variable INSTANCE
+283-  location: interface ComposeUiNode
+284:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:366: error: cannot find symbol
+285-                            Function2 setCompositeKeyHash4 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+286-                                                                          ^
+287-  symbol:   variable INSTANCE
+288-  location: interface ComposeUiNode
+289:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:368: error: cannot find symbol
+290-                                Updater.m3835setimpl(m3828constructorimpl3, materializeModifier4, ComposeUiNode.INSTANCE.getSetModifier());
+291-                                                                                                               ^
+292-  symbol:   variable INSTANCE
+293-  location: interface ComposeUiNode
+294:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:374: error: cannot find symbol
+295-                                IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), "Fajr Alarm", SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(50)), ColorKt.Color(4284524026L), $composer, 3504, 0);
+296-                                                                                                                                                ^
+297-  symbol:   variable INSTANCE
+298-  location: interface Modifier
+299:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:374: error: cannot find symbol
+300-                                IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), "Fajr Alarm", SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(50)), ColorKt.Color(4284524026L), $composer, 3504, 0);
+301-                                                                                                                                                             ^
+302-  symbol:   method m7226constructorimpl(int)
+303-  location: class Dp
+304:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:381: error: cannot find symbol
+305-                                SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(20)), $composer, 6);
+306-                                                                                 ^
+307-  symbol:   variable INSTANCE
+308-  location: interface Modifier
+309:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:381: error: cannot find symbol
+310-                                SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(20)), $composer, 6);
+311-                                                                                              ^
+312-  symbol:   method m7226constructorimpl(int)
+313-  location: class Dp
+314:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:382: error: cannot find symbol
+315-                                TextKt.m2816Text4IGK_g("صلاة الفجر", (Modifier) null, Color.INSTANCE.m4526getWhite0d7_KjU(), TextUnitKt.getSp(32), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 200070, 0, 131026);
+316-                                                                                           ^
+317-  symbol:   variable INSTANCE
+318-  location: class Color
+319:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:382: error: cannot find symbol
+320-                                TextKt.m2816Text4IGK_g("صلاة الفجر", (Modifier) null, Color.INSTANCE.m4526getWhite0d7_KjU(), TextUnitKt.getSp(32), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 200070, 0, 131026);
+321-                                                                                                                                                                               ^
+322-  symbol:   variable INSTANCE
+323-  location: class FontWeight
+324:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:383: error: cannot find symbol
+325-                                SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(8)), $composer, 6);
+326-                                                                                 ^
+327-  symbol:   variable INSTANCE
+328-  location: interface Modifier
+329:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:383: error: cannot find symbol
+330-                                SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(8)), $composer, 6);
+331-                                                                                              ^
+332-  symbol:   method m7226constructorimpl(int)
+333-  location: class Dp
+334:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:384: error: cannot find symbol
+335-                                TextKt.m2816Text4IGK_g("حان الآن موعد صلاة الفجر", (Modifier) null, ColorKt.Color(4287931320L), TextUnitKt.getSp(18), (FontStyle) null, (FontWeight) null, (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 3462, 0, 131058);
+336-                                      ^
+337-  symbol:   method m2816Text4IGK_g(String,Modifier,long,long,FontStyle,FontWeight,FontFamily,long,TextDecoration,TextAlign,long,int,boolean,int,int,Function1<CAP#1,Unit>,TextStyle,Composer,int,int,int)
+338-  location: class TextKt
+--
+341:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:391: error: cannot find symbol
+342-                                Alignment.Horizontal centerHorizontally3 = Alignment.INSTANCE.getCenterHorizontally();
+343-                                                                                    ^
+344-  symbol:   variable INSTANCE
+345-  location: interface Alignment
+346:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:393: error: cannot find symbol
+347-                                Modifier modifier2 = Modifier.INSTANCE;
+348-                                                             ^
+349-  symbol:   variable INSTANCE
+350-  location: interface Modifier
+351:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:399: error: cannot find symbol
+352-                                Function0 constructor5 = ComposeUiNode.INSTANCE.getConstructor();
+353-                                                                      ^
+354-  symbol:   variable INSTANCE
+355-  location: interface ComposeUiNode
+356:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:413: error: cannot find symbol
+357-                                m3828constructorimpl4 = Updater.m3828constructorimpl($composer);
+358-                                                               ^
+359-  symbol:   method m3828constructorimpl(Composer)
+360-  location: class Updater
+361:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:414: error: cannot find symbol
+362-                                Updater.m3835setimpl(m3828constructorimpl4, columnMeasurePolicy3, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+363-                                                                                                               ^
+364-  symbol:   variable INSTANCE
+365-  location: interface ComposeUiNode
+366:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:415: error: cannot find symbol
+367-                                Updater.m3835setimpl(m3828constructorimpl4, currentCompositionLocalMap5, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+368-                                                                                                                      ^
+369-  symbol:   variable INSTANCE
+370-  location: interface ComposeUiNode
+371:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:416: error: cannot find symbol
+372-                                Function2 setCompositeKeyHash5 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+373-                                                                              ^
+374-  symbol:   variable INSTANCE
+375-  location: interface ComposeUiNode
+376:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:418: error: cannot find symbol
+377-                                    Updater.m3835setimpl(m3828constructorimpl4, materializeModifier5, ComposeUiNode.INSTANCE.getSetModifier());
+378-                                                                                                                   ^
+379-  symbol:   variable INSTANCE
+380-  location: interface ComposeUiNode
+381:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:424: error: cannot find symbol
+382-                                    TextKt.m2816Text4IGK_g(FajrAlarmScreen$lambda$1($currentTimeStr$delegate), (Modifier) null, Color.INSTANCE.m4526getWhite0d7_KjU(), TextUnitKt.getSp(48), (FontStyle) null, FontWeight.INSTANCE.getExtraBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 200064, 0, 131026);
+383-                                                                                                                                     ^
+384-  symbol:   variable INSTANCE
+385-  location: class Color
+386:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:424: error: cannot find symbol
+387-                                    TextKt.m2816Text4IGK_g(FajrAlarmScreen$lambda$1($currentTimeStr$delegate), (Modifier) null, Color.INSTANCE.m4526getWhite0d7_KjU(), TextUnitKt.getSp(48), (FontStyle) null, FontWeight.INSTANCE.getExtraBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 200064, 0, 131026);
+388-                                                                                                                                                                                                                         ^
+389-  symbol:   variable INSTANCE
+390-  location: class FontWeight
+391:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:425: error: cannot find symbol
+392-                                    SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(8)), $composer, 6);
+393-                                                                                     ^
+394-  symbol:   variable INSTANCE
+395-  location: interface Modifier
+396:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:425: error: cannot find symbol
+397-                                    SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(8)), $composer, 6);
+398-                                                                                                  ^
+399-  symbol:   method m7226constructorimpl(int)
+400-  location: class Dp
+401:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:426: error: cannot find symbol
+402-                                    TextKt.m2816Text4IGK_g(FajrAlarmScreen$lambda$4($currentDateStr$delegate), (Modifier) null, ColorKt.Color(4291548641L), TextUnitKt.getSp(16), (FontStyle) null, (FontWeight) null, (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 3456, 0, 131058);
+403-                                          ^
+404-  symbol:   method m2816Text4IGK_g(String,Modifier,long,long,FontStyle,FontWeight,FontFamily,long,TextDecoration,TextAlign,long,int,boolean,int,int,Function1<CAP#1,Unit>,TextStyle,Composer,int,int,int)
+405-  location: class TextKt
+--
+408:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:433: error: cannot find symbol
+409-                                    Modifier fillMaxWidth$default = SizeKt.fillMaxWidth$default(Modifier.INSTANCE, 0.0f, 1, null);
+410-                                                                                                        ^
+411-  symbol:   variable INSTANCE
+412-  location: interface Modifier
+413:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:434: error: cannot find symbol
+414-                                    Alignment.Horizontal centerHorizontally4 = Alignment.INSTANCE.getCenterHorizontally();
+415-                                                                                        ^
+416-  symbol:   variable INSTANCE
+417-  location: interface Alignment
+418:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:441: error: cannot find symbol
+419-                                    Function0 constructor6 = ComposeUiNode.INSTANCE.getConstructor();
+420-                                                                          ^
+421-  symbol:   variable INSTANCE
+422-  location: interface ComposeUiNode
+423:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:455: error: cannot find symbol
+424-                                    m3828constructorimpl5 = Updater.m3828constructorimpl($composer);
+425-                                                                   ^
+426-  symbol:   method m3828constructorimpl(Composer)
+427-  location: class Updater
+428:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:456: error: cannot find symbol
+429-                                    Updater.m3835setimpl(m3828constructorimpl5, columnMeasurePolicy4, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+430-                                                                                                                   ^
+431-  symbol:   variable INSTANCE
+432-  location: interface ComposeUiNode
+433:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:457: error: cannot find symbol
+434-                                    Updater.m3835setimpl(m3828constructorimpl5, currentCompositionLocalMap6, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+435-                                                                                                                          ^
+436-  symbol:   variable INSTANCE
+437-  location: interface ComposeUiNode
+438:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:458: error: cannot find symbol
+439-                                    Function2 setCompositeKeyHash6 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+440-                                                                                  ^
+441-  symbol:   variable INSTANCE
+442-  location: interface ComposeUiNode
+443:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:460: error: cannot find symbol
+444-                                        Updater.m3835setimpl(m3828constructorimpl5, materializeModifier6, ComposeUiNode.INSTANCE.getSetModifier());
+445-                                                                                                                       ^
+446-  symbol:   variable INSTANCE
+447-  location: interface ComposeUiNode
+448:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:469: error: cannot find symbol
+449-                                            SurfaceKt.m2666SurfaceT9BRK9s(SizeKt.fillMaxWidth$default(Modifier.INSTANCE, 0.0f, 1, null), RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(24)), ColorKt.Color(4280166715L), 0L, 0.0f, 0.0f, null, ComposableLambdaKt.rememberComposableLambda(-821954973, true, new Function2() { // from class: com.example.fajr.ui.FajrAlarmActivityKt$$ExternalSyntheticLambda5
+450-                                                                                                              ^
+451-  symbol:   variable INSTANCE
+452-  location: interface Modifier
+453:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:469: error: cannot find symbol
+454-                                            SurfaceKt.m2666SurfaceT9BRK9s(SizeKt.fillMaxWidth$default(Modifier.INSTANCE, 0.0f, 1, null), RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(24)), ColorKt.Color(4280166715L), 0L, 0.0f, 0.0f, null, ComposableLambdaKt.rememberComposableLambda(-821954973, true, new Function2() { // from class: com.example.fajr.ui.FajrAlarmActivityKt$$ExternalSyntheticLambda5
+455-                                                                                                                                                                                               ^
+456-  symbol:   method m7226constructorimpl(int)
+457-  location: class Dp
+458:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:472: error: not an enclosing class: Function1
+459-                                                    return FajrAlarmActivityKt.FajrAlarmScreen$lambda$28$lambda$27$lambda$26$lambda$25$lambda$21(Function1.this, (Composer) obj, ((Integer) obj2).intValue());
+460-                                                                                                                                                          ^
+461:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:475: error: cannot find symbol
+462-                                            SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(12)), $composer, 6);
+463-                                                                                             ^
+464-  symbol:   variable INSTANCE
+465-  location: interface Modifier
+466:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:475: error: cannot find symbol
+467-                                            SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(12)), $composer, 6);
+468-                                                                                                          ^
+469-  symbol:   method m7226constructorimpl(int)
+470-  location: class Dp
+471:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:480: error: cannot find symbol
+472-                                        Modifier fillMaxWidth$default2 = SizeKt.fillMaxWidth$default(Modifier.INSTANCE, 0.0f, 1, null);
+473-                                                                                                             ^
+474-  symbol:   variable INSTANCE
+475-  location: interface Modifier
+476:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:481: error: cannot find symbol
+477-                                        Arrangement.Horizontal m610spacedBy0680j_4 = Arrangement.INSTANCE.m610spacedBy0680j_4(Dp.m7226constructorimpl(12));
+478-                                                                                                                                ^
+479-  symbol:   method m7226constructorimpl(int)
+480-  location: class Dp
+481:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:483: error: cannot find symbol
+482-                                        MeasurePolicy rowMeasurePolicy = RowKt.rowMeasurePolicy(m610spacedBy0680j_4, Alignment.INSTANCE.getTop(), $composer, ((54 >> 3) & 14) | ((54 >> 3) & 112));
+483-                                                                                                                              ^
+484-  symbol:   variable INSTANCE
+485-  location: interface Alignment
+486:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:488: error: cannot find symbol
+487-                                        Function0 constructor7 = ComposeUiNode.INSTANCE.getConstructor();
+488-                                                                              ^
+489-  symbol:   variable INSTANCE
+490-  location: interface ComposeUiNode
+491:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:502: error: cannot find symbol
+492-                                        m3828constructorimpl6 = Updater.m3828constructorimpl($composer);
+493-                                                                       ^
+494-  symbol:   method m3828constructorimpl(Composer)
+495-  location: class Updater
+496:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:503: error: cannot find symbol
+497-                                        Updater.m3835setimpl(m3828constructorimpl6, rowMeasurePolicy, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+498-                                                                                                                   ^
+499-  symbol:   variable INSTANCE
+500-  location: interface ComposeUiNode
+501:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:504: error: cannot find symbol
+502-                                        Updater.m3835setimpl(m3828constructorimpl6, currentCompositionLocalMap7, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+503-                                                                                                                              ^
+504-  symbol:   variable INSTANCE
+505-  location: interface ComposeUiNode
+506:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:505: error: cannot find symbol
+507-                                        Function2 setCompositeKeyHash7 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+508-                                                                                      ^
+509-  symbol:   variable INSTANCE
+510-  location: interface ComposeUiNode
+511:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:507: error: cannot find symbol
+512-                                            Updater.m3835setimpl(m3828constructorimpl6, materializeModifier7, ComposeUiNode.INSTANCE.getSetModifier());
+513-                                                                                                                           ^
+514-  symbol:   variable INSTANCE
+515-  location: interface ComposeUiNode
+516:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:513: error: cannot find symbol
+517-                                            RoundedCornerShape m1024RoundedCornerShape0680j_4 = RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20));
+518-                                                                                                                                                      ^
+519-  symbol:   method m7226constructorimpl(int)
+520-  location: class Dp
+521:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:514: error: cannot find symbol
+522-                                            Modifier m763height3ABfNKs = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+523-                                                                                                                                               ^
+524-  symbol:   variable INSTANCE
+525-  location: interface Modifier
+526:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:514: error: cannot find symbol
+527-                                            Modifier m763height3ABfNKs = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+528-                                                                                                          ^
+529-  symbol:   variable CC
+530-  location: interface RowScope
+531:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:514: error: cannot find symbol
+532-                                            Modifier m763height3ABfNKs = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+533-                                                                                                                                                                                   ^
+534-  symbol:   method m7226constructorimpl(int)
+535-  location: class Dp
+536:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:517: error: cannot find symbol
+537-                                            if (rememberedValue != Composer.INSTANCE.getEmpty()) {
+538-                                                                           ^
+539-  symbol:   variable INSTANCE
+540-  location: interface Composer
+541:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:521: error: not an enclosing class: MutableState
+542-                                                        return FajrAlarmActivityKt.FajrAlarmScreen$lambda$28$lambda$27$lambda$26$lambda$25$lambda$24$lambda$23$lambda$22(MutableState.this);
+543-                                                                                                                                                                                     ^
+544:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:528: error: cannot find symbol
+545-                                            ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+546-                                                                                                                                              ^
+547-  symbol:   variable INSTANCE
+548-  location: interface Modifier
+549:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:528: error: cannot find symbol
+550-                                            ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+551-                                                                                                         ^
+552-  symbol:   variable CC
+553-  location: interface RowScope
+554:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:528: error: cannot find symbol
+555-                                            ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+556-                                                                                                                                                                                  ^
+557-  symbol:   method m7226constructorimpl(int)
+558-  location: class Dp
+559:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:528: error: cannot find symbol
+560-                                            ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+561-                                                                                                                                                                                                                                                                           ^
+562-  symbol:   method m7226constructorimpl(int)
+563-  location: class Dp
+564:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:528: error: cannot find symbol
+565-                                            ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+566-                                                                                                                                                                                                                                                                                                                              ^
+567-  symbol:   method m1932buttonColorsro_MJ88(long,long,long,long,Composer,int,int)
+568-  location: variable INSTANCE of type ButtonDefaults
+569:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:535: error: cannot find symbol
+570-                                            SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), $composer, 6);
+571-                                                                                             ^
+572-  symbol:   variable INSTANCE
+573-  location: interface Modifier
+574:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:535: error: cannot find symbol
+575-                                            SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), $composer, 6);
+576-                                                                                                          ^
+577-  symbol:   method m7226constructorimpl(int)
+578-  location: class Dp
+579:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:560: error: cannot find symbol
+580-                                        Updater.m3835setimpl(m3828constructorimpl6, materializeModifier7, ComposeUiNode.INSTANCE.getSetModifier());
+581-                                                                                                                       ^
+582-  symbol:   variable INSTANCE
+583-  location: interface ComposeUiNode
+584:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:566: error: cannot find symbol
+585-                                        RoundedCornerShape m1024RoundedCornerShape0680j_42 = RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20));
+586-                                                                                                                                                   ^
+587-  symbol:   method m7226constructorimpl(int)
+588-  location: class Dp
+589:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:567: error: cannot find symbol
+590-                                        Modifier m763height3ABfNKs2 = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+591-                                                                                                                                             ^
+592-  symbol:   variable INSTANCE
+593-  location: interface Modifier
+594:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:567: error: cannot find symbol
+595-                                        Modifier m763height3ABfNKs2 = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+596-                                                                                                       ^
+597-  symbol:   variable CC
+598-  location: interface RowScope
+599:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:567: error: cannot find symbol
+600-                                        Modifier m763height3ABfNKs2 = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+601-                                                                                                                                                                                 ^
+602-  symbol:   method m7226constructorimpl(int)
+603-  location: class Dp
+604:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:570: error: cannot find symbol
+605-                                        if (rememberedValue != Composer.INSTANCE.getEmpty()) {
+606-                                                                       ^
+607-  symbol:   variable INSTANCE
+608-  location: interface Composer
+609:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:574: error: cannot find symbol
+610-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+611-                                                                                                                                           ^
+612-  symbol:   variable INSTANCE
+613-  location: interface Modifier
+614:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:574: error: cannot find symbol
+615-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+616-                                                                                                     ^
+617-  symbol:   variable CC
+618-  location: interface RowScope
+619:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:574: error: cannot find symbol
+620-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+621-                                                                                                                                                                               ^
+622-  symbol:   method m7226constructorimpl(int)
+623-  location: class Dp
+624:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:574: error: cannot find symbol
+625-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+626-                                                                                                                                                                                                                                                                        ^
+627-  symbol:   method m7226constructorimpl(int)
+628-  location: class Dp
+629:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:574: error: cannot find symbol
+630-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope2, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+631-                                                                                                                                                                                                                                                                                                                           ^
+632-  symbol:   method m1932buttonColorsro_MJ88(long,long,long,long,Composer,int,int)
+633-  location: variable INSTANCE of type ButtonDefaults
+634:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:581: error: cannot find symbol
+635-                                        SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), $composer, 6);
+636-                                                                                         ^
+637-  symbol:   variable INSTANCE
+638-  location: interface Modifier
+639:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:581: error: cannot find symbol
+640-                                        SpacerKt.Spacer(SizeKt.m763height3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), $composer, 6);
+641-                                                                                                      ^
+642-  symbol:   method m7226constructorimpl(int)
+643-  location: class Dp
+644:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:605: error: cannot find symbol
+645-                                    Updater.m3835setimpl(m3828constructorimpl5, materializeModifier6, ComposeUiNode.INSTANCE.getSetModifier());
+646-                                                                                                                   ^
+647-  symbol:   variable INSTANCE
+648-  location: interface ComposeUiNode
+649:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:614: error: cannot find symbol
+650-                                    Modifier fillMaxWidth$default22 = SizeKt.fillMaxWidth$default(Modifier.INSTANCE, 0.0f, 1, null);
+651-                                                                                                          ^
+652-  symbol:   variable INSTANCE
+653-  location: interface Modifier
+654:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:615: error: cannot find symbol
+655-                                    Arrangement.Horizontal m610spacedBy0680j_42 = Arrangement.INSTANCE.m610spacedBy0680j_4(Dp.m7226constructorimpl(12));
+656-                                                                                                                             ^
+657-  symbol:   method m7226constructorimpl(int)
+658-  location: class Dp
+659:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:617: error: cannot find symbol
+660-                                    MeasurePolicy rowMeasurePolicy2 = RowKt.rowMeasurePolicy(m610spacedBy0680j_42, Alignment.INSTANCE.getTop(), $composer, ((54 >> 3) & 14) | ((54 >> 3) & 112));
+661-                                                                                                                            ^
+662-  symbol:   variable INSTANCE
+663-  location: interface Alignment
+664:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:622: error: cannot find symbol
+665-                                    Function0 constructor72 = ComposeUiNode.INSTANCE.getConstructor();
+666-                                                                           ^
+667-  symbol:   variable INSTANCE
+668-  location: interface ComposeUiNode
+669:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:630: error: cannot find symbol
+670-                                    m3828constructorimpl6 = Updater.m3828constructorimpl($composer);
+671-                                                                   ^
+672-  symbol:   method m3828constructorimpl(Composer)
+673-  location: class Updater
+674:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:631: error: cannot find symbol
+675-                                    Updater.m3835setimpl(m3828constructorimpl6, rowMeasurePolicy2, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+676-                                                                                                                ^
+677-  symbol:   variable INSTANCE
+678-  location: interface ComposeUiNode
+679:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:632: error: cannot find symbol
+680-                                    Updater.m3835setimpl(m3828constructorimpl6, currentCompositionLocalMap72, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+681-                                                                                                                           ^
+682-  symbol:   variable INSTANCE
+683-  location: interface ComposeUiNode
+684:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:633: error: cannot find symbol
+685-                                    Function2 setCompositeKeyHash72 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+686-                                                                                   ^
+687-  symbol:   variable INSTANCE
+688-  location: interface ComposeUiNode
+689:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:635: error: cannot find symbol
+690-                                        Updater.m3835setimpl(m3828constructorimpl6, materializeModifier72, ComposeUiNode.INSTANCE.getSetModifier());
+691-                                                                                                                        ^
+692-  symbol:   variable INSTANCE
+693-  location: interface ComposeUiNode
+694:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:641: error: cannot find symbol
+695-                                        RoundedCornerShape m1024RoundedCornerShape0680j_422 = RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20));
+696-                                                                                                                                                    ^
+697-  symbol:   method m7226constructorimpl(int)
+698-  location: class Dp
+699:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:642: error: cannot find symbol
+700-                                        Modifier m763height3ABfNKs22 = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope22, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+701-                                                                                                                                               ^
+702-  symbol:   variable INSTANCE
+703-  location: interface Modifier
+704:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:642: error: cannot find symbol
+705-                                        Modifier m763height3ABfNKs22 = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope22, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+706-                                                                                                        ^
+707-  symbol:   variable CC
+708-  location: interface RowScope
+709:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:642: error: cannot find symbol
+710-                                        Modifier m763height3ABfNKs22 = SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope22, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56));
+711-                                                                                                                                                                                   ^
+712-  symbol:   method m7226constructorimpl(int)
+713-  location: class Dp
+714:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:645: error: cannot find symbol
+715-                                        if (rememberedValue != Composer.INSTANCE.getEmpty()) {
+716-                                                                       ^
+717-  symbol:   variable INSTANCE
+718-  location: interface Composer
+719:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:649: error: cannot find symbol
+720-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope22, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+721-                                                                                                                                            ^
+722-  symbol:   variable INSTANCE
+723-  location: interface Modifier
+724:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:649: error: cannot find symbol
+725-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope22, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+726-                                                                                                     ^
+727-  symbol:   variable CC
+728-  location: interface RowScope
+729:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrAlarmActivityKt.java:649: error: cannot find symbol
+730-                                        ButtonKt.Button($onDismiss, SizeKt.m763height3ABfNKs(RowScope.CC.weight$default(rowScope22, Modifier.INSTANCE, 1.0f, false, 2, null), Dp.m7226constructorimpl(56)), false, RoundedCornerShapeKt.m1024RoundedCornerShape0680j_4(Dp.m7226constructorimpl(20)), ButtonDefaults.INSTANCE.m1932buttonColorsro_MJ88(ColorKt.Color(4293870660L), 0L, 0L, 0L, $composer, (ButtonDefaults.$stable << 12) | 6, 14), null, null, null, null, ComposableSingletons$FajrAlarmActivityKt.INSTANCE.m7670getLambda$591054335$app(), $composer, 805306368, 484);
+731-                                                                                                                                                                                ^
