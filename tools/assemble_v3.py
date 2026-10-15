@@ -628,6 +628,7 @@ PRIVATE_FIELD = re.compile(r'^(    )private ((?:final |volatile )*(?!static)[\w<
 for p in all_java():
     s = open(p, encoding='utf-8').read()
     o = s
+    base = os.path.basename(p)
     # Room impls: jadx renamed the SQLiteStatement setters
     s = re.sub(r'\bmo\d+(bind(?:Long|Text|Double|Blob|Null))\(', r'\1(', s)
     # kotlinx.coroutines SharingStarted default-arg helper
