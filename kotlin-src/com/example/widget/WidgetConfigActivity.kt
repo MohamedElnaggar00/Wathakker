@@ -1,5 +1,13 @@
 package com.example.widget
 
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
+import com.example.fajr.data.FajrPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -80,6 +88,28 @@ fun ConfigScreen(current: String, onPick: (String) -> Unit) {
                         fontSize = 15.sp,
                         fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
                     )
+                }
+            }
+        }
+    }
+}
+
+/** Configure screen shown when a widget is added: picks the progress-bar colour. */
+class WidgetConfigActivity : ComponentActivity() {
+    private var appWidgetId = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setResult(RESULT_CANCELED)
+        appWidgetId = intent?.getIntExtra("appWidgetId", 0) ?: 0
+        val prefs = FajrPreferences(this)
+        setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                ConfigScreen(prefs.widgetBarColor) { choice ->
+                    prefs.widgetBarColor = choice
+                    WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
+                    setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
+                    finish()
                 }
             }
         }
