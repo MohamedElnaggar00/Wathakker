@@ -1,0 +1,36 @@
+outcome: failure  bom: 2025.10.01  run: 38777537160  sha: 64c6b68d44ef6b1364b32e9970aeaf425c7307a9
+errors: 20
+--- per file
+--- per symbol
+--- details
+53:* What went wrong:
+54:Execution failed for task ':app:processDebugResources'.
+55-> A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
+56-   > Android resource linking failed
+57:     com.example.app-main-46:/layout/widget_clock.xml:5: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+58:     com.example.app-main-46:/layout/widget_clock.xml:6: error: resource font/expoarabic_semibold (aka com.wathakker.app:font/expoarabic_semibold) not found.
+59:     com.example.app-main-46:/layout/widget_clock.xml:8: error: resource font/expoarabic_semibold (aka com.wathakker.app:font/expoarabic_semibold) not found.
+60:     com.example.app-main-46:/layout/widget_clock.xml:10: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+61:     com.example.app-main-46:/layout/widget_clock.xml:11: error: resource font/expoarabic_semibold (aka com.wathakker.app:font/expoarabic_semibold) not found.
+62:     com.example.app-main-46:/layout/widget_day_prayer.xml:4: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+63:     com.example.app-main-46:/layout/widget_day_prayer.xml:5: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+64:     com.example.app-main-46:/layout/widget_gregorian.xml:4: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+65:     com.example.app-main-46:/layout/widget_gregorian.xml:5: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+66:     com.example.app-main-46:/layout/widget_gregorian.xml:6: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+67:     com.example.app-main-46:/layout/widget_hero.xml:5: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+68:     com.example.app-main-46:/layout/widget_hero.xml:6: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+69:     com.example.app-main-46:/layout/widget_hero.xml:10: error: resource font/expoarabic_semibold (aka com.wathakker.app:font/expoarabic_semibold) not found.
+70:     com.example.app-main-46:/layout/widget_hero.xml:11: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+71:     com.example.app-main-46:/layout/widget_hero.xml:12: error: resource font/expoarabic_semibold (aka com.wathakker.app:font/expoarabic_semibold) not found.
+72:     com.example.app-main-46:/layout/widget_hero.xml:15: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+73:     com.example.app-main-46:/layout/widget_hero.xml:16: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+74:     com.example.app-main-46:/layout/widget_hero_amber.xml:5: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+75:     com.example.app-main-46:/layout/widget_hero_amber.xml:6: error: resource font/expoarabic_medium (aka com.wathakker.app:font/expoarabic_medium) not found.
+76:     com.example.app-main-46:/layout/widget_hero_amber.xml:10: error: resource font/expoarabic_semibold (aka com.wathakker.app:font/expoarabic_semibold) not found.
+77-
+78-
+79-* Try:
+80-> Run with --stacktrace option to get the stack trace.
+--
+85:BUILD FAILED in 5m 28s
+86-25 actionable tasks: 25 executed
