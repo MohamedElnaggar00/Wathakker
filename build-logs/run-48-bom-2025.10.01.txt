@@ -1,0 +1,768 @@
+outcome: failure  bom: 2025.10.01  run: 38795229421  sha: d7d6eb0fd06f5ed03dbb6400fd1796e9638d14ff
+errors: 210
+--- per file
+     30 MainActivity.java
+     22 AppDatabase_Impl.java
+     18 TagDao_Impl.java
+     16 AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java
+     12 WidgetConfigActivity.java
+     10 DhikrDao_Impl.java
+      8 DhikrRepository.java
+      6 MergedPrayerCardContent.java
+      6 AppDatabase.java
+      4 TagDao_Impl$updateDhikrTags$2.java
+      4 MainViewModel$addTag$1.java
+      4 HisnDao_Impl.java
+      2 WidgetUpdater.java
+      2 TagDao.java
+      2 TagDao$updateDhikrTags$1.java
+      2 NotificationActionReceiver$onReceive$1.java
+      2 MergedPrayerCard.java
+      2 MainViewModel$updateTimes$1.java
+      2 MainViewModel$updateTag$1.java
+      2 MainViewModel$updateDhikrWithTags$1.java
+      2 MainViewModel$updateDhikrText$1.java
+      2 MainViewModel$updateDhikrTags$1.java
+      2 MainViewModel$toggleFavorite$1.java
+      2 MainViewModel$toggleEnabled$1.java
+      2 MainViewModel$onDhikrSelectedFromNotification$1.java
+      2 MainViewModel$markAsRead$1.java
+      2 MainViewModel$deleteTag$1.java
+      2 MainViewModel$deleteDhikr$1.java
+      2 MainViewModel$addDhikrWithScheduleAndTags$1.java
+      2 MainViewModel$addDhikrWithSchedule$1.java
+      2 MainActivity$onCreate$1$1$1.java
+      2 HisnViewModelKt.java
+      2 HisnViewModel.java
+      2 HisnViewModel$toggle$1.java
+      2 HisnViewModel$markChapterRead$1.java
+      2 HisnImporter.java
+      2 HisnImporter$ensureImported$1.java
+      2 HijriDate.java
+      2 FajrViewModel$updateLocationFromGps$1.java
+      2 FajrViewModel$refreshFajrTimeManually$1.java
+      2 DhikrRepository$markAsRead$1.java
+      2 DhikrRepository$getOrCreateTagByName$1.java
+      2 DhikrRepository$deleteTag$1.java
+      2 DhikrRepository$delete$1.java
+      2 Converters.java
+      2 BootReceiver$onReceive$1.java
+      2 AlarmReceiver$onReceive$1.java
+--- per symbol
+     22 symbol:   variable INSTANCE
+      8 symbol:   variable e
+      4 symbol:   variable th
+      4 symbol:   method setContent$default
+      2 symbol:   variable r0
+      2 symbol:   method replace$default
+      2 symbol:   method m7682OneUIDividerkHDZbjc
+      2 symbol:   method m723PaddingValues0680j_4
+      2 symbol:   method joinToString$default
+      2 symbol:   method getMIGRATION_7_8
+      2 symbol:   method enable$default
+      2 symbol:   method PrayerTimesContent$lambda$49$lambda$48$lambda$42$lambda$41
+      2 symbol:   method PrayerTimesContent$lambda$49$lambda$48$lambda$36$lambda$35
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- details
+59:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:34: error: incompatible types: FajrViewModel$refreshFajrTimeManually$1 cannot be converted to Continuation<Unit>
+60-        return new FajrViewModel$refreshFajrTimeManually$1(this.this$0, (Continuation) continuation);
+61-               ^
+62:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$updateLocationFromGps$1.java:35: error: incompatible types: FajrViewModel$updateLocationFromGps$1 cannot be converted to Continuation<Unit>
+63-        return new FajrViewModel$updateLocationFromGps$1(this.this$0, (Continuation) continuation);
+64-               ^
+65:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity$onCreate$1$1$1.java:33: error: incompatible types: MainActivity$onCreate$1$1$1 cannot be converted to Continuation<Unit>
+66-        return new MainActivity$onCreate$1$1$1(this.$launcher, (Continuation) continuation);
+67-               ^
+68:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$toggleEnabled$1.java:37: error: incompatible types: MainViewModel$toggleEnabled$1 cannot be converted to Continuation<Unit>
+69-        return new MainViewModel$toggleEnabled$1(this.$dhikr, this.this$0, (Continuation) continuation);
+70-               ^
+71:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:177: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$markAsRead$1>
+72-        dhikrRepository$markAsRead$1 = new DhikrRepository$markAsRead$1(this, continuation);
+73-                                                                              ^
+74-  where CAP#1 is a fresh type-variable:
+75-    CAP#1 extends Object super: Unit from capture of ? super Unit
+76:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:245: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$delete$1>
+77-        dhikrRepository$delete$1 = new DhikrRepository$delete$1(this, continuation);
+78-                                                                      ^
+79-  where CAP#1 is a fresh type-variable:
+80-    CAP#1 extends Object super: Unit from capture of ? super Unit
+81:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:313: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$deleteTag$1>
+82-        dhikrRepository$deleteTag$1 = new DhikrRepository$deleteTag$1(this, continuation);
+83-                                                                            ^
+84-  where CAP#1 is a fresh type-variable:
+85-    CAP#1 extends Object super: Unit from capture of ? super Unit
+86:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:407: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$getOrCreateTagByName$1>
+87-        dhikrRepository$getOrCreateTagByName$1 = new DhikrRepository$getOrCreateTagByName$1(this, continuation);
+88-                                                                                                  ^
+89-  where CAP#1 is a fresh type-variable:
+90-    CAP#1 extends Object super: Tag from capture of ? super Tag
+91:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao.java:134: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super TagDao$updateDhikrTags$1>
+92-            tagDao$updateDhikrTags$1 = new TagDao$updateDhikrTags$1($this2, continuation);
+93-                                                                            ^
+94-  where CAP#1 is a fresh type-variable:
+95-    CAP#1 extends Object super: Unit from capture of ? super Unit
+96:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$addDhikrWithScheduleAndTags$1.java:49: error: incompatible types: MainViewModel$addDhikrWithScheduleAndTags$1 cannot be converted to Continuation<Unit>
+97-        return new MainViewModel$addDhikrWithScheduleAndTags$1(this.$title, this.$content, this.$times, this.this$0, this.$tagIds, (Continuation) continuation);
+98-               ^
+99:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$updateDhikrTags$1.java:36: error: incompatible types: MainViewModel$updateDhikrTags$1 cannot be converted to Continuation<Unit>
+100-        return new MainViewModel$updateDhikrTags$1(this.this$0, this.$dhikrId, this.$tagIds, (Continuation) continuation);
+101-               ^
+102:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$deleteTag$1.java:36: error: incompatible types: MainViewModel$deleteTag$1 cannot be converted to Continuation<Unit>
+103-        return new MainViewModel$deleteTag$1(this.this$0, this.$tag, (Continuation) continuation);
+104-               ^
+105:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$updateTag$1.java:35: error: incompatible types: MainViewModel$updateTag$1 cannot be converted to Continuation<Unit>
+106-        return new MainViewModel$updateTag$1(this.this$0, this.$tag, (Continuation) continuation);
+107-               ^
+108:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$updateDhikrWithTags$1.java:44: error: incompatible types: MainViewModel$updateDhikrWithTags$1 cannot be converted to Continuation<Unit>
+109-        return new MainViewModel$updateDhikrWithTags$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, this.$tagIds, (Continuation) continuation);
+110-               ^
+111:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$deleteDhikr$1.java:36: error: incompatible types: MainViewModel$deleteDhikr$1 cannot be converted to Continuation<Unit>
+112-        return new MainViewModel$deleteDhikr$1(this.this$0, this.$dhikr, (Continuation) continuation);
+113-               ^
+114:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$updateDhikrText$1.java:40: error: incompatible types: MainViewModel$updateDhikrText$1 cannot be converted to Continuation<Unit>
+115-        return new MainViewModel$updateDhikrText$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, (Continuation) continuation);
+116-               ^
+117:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$markAsRead$1.java:34: error: incompatible types: MainViewModel$markAsRead$1 cannot be converted to Continuation<Unit>
+118-        return new MainViewModel$markAsRead$1(this.this$0, this.$dhikrId, (Continuation) continuation);
+119-               ^
+120:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$addTag$1.java:36: error: incompatible types: Function1<CAP#1,Unit> cannot be converted to Function1<Tag,Unit>
+121-        this.$onCreated = function1;
+122-                          ^
+123-  where CAP#1 is a fresh type-variable:
+124-    CAP#1 extends Object super: Tag from capture of ? super Tag
+125:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$addTag$1.java:41: error: incompatible types: MainViewModel$addTag$1 cannot be converted to Continuation<Unit>
+126-        return new MainViewModel$addTag$1(this.this$0, this.$name, this.$colorHex, this.$onCreated, (Continuation) continuation);
+127-               ^
+128:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$updateTimes$1.java:41: error: incompatible types: MainViewModel$updateTimes$1 cannot be converted to Continuation<Unit>
+129-        return new MainViewModel$updateTimes$1(this.$dhikr, this.$newTimes, this.this$0, (Continuation) continuation);
+130-               ^
+131:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$onDhikrSelectedFromNotification$1.java:36: error: incompatible types: MainViewModel$onDhikrSelectedFromNotification$1 cannot be converted to Continuation<Unit>
+132-        return new MainViewModel$onDhikrSelectedFromNotification$1(this.this$0, this.$dhikrId, (Continuation) continuation);
+133-               ^
+134:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$addDhikrWithSchedule$1.java:43: error: incompatible types: MainViewModel$addDhikrWithSchedule$1 cannot be converted to Continuation<Unit>
+135-        return new MainViewModel$addDhikrWithSchedule$1(this.$title, this.$content, this.$times, this.this$0, (Continuation) continuation);
+136-               ^
+137:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$toggleFavorite$1.java:35: error: incompatible types: MainViewModel$toggleFavorite$1 cannot be converted to Continuation<Unit>
+138-        return new MainViewModel$toggleFavorite$1(this.this$0, this.$dhikr, (Continuation) continuation);
+139-               ^
+140:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/hisn/HisnViewModel.java:144: error: incompatible types: HisnViewModel.AnonymousClass1 cannot be converted to Continuation<Unit>
+141-            return new AnonymousClass1((Continuation) continuation);
+142-                   ^
+143:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/hisn/HisnViewModel$toggle$1.java:40: error: incompatible types: HisnViewModel$toggle$1 cannot be converted to Continuation<Unit>
+144-        return new HisnViewModel$toggle$1(this.this$0, this.$chapterId, this.$itemId, (Continuation) continuation);
+145-               ^
+146:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/hisn/HisnViewModel$markChapterRead$1.java:35: error: incompatible types: HisnViewModel$markChapterRead$1 cannot be converted to Continuation<Unit>
+147-        return new HisnViewModel$markChapterRead$1(this.this$0, this.$chapterId, (Continuation) continuation);
+148-               ^
+149:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/hisn/HisnViewModelKt.java:14: error: cannot find symbol
+150-        return StringsKt.replace$default(StringsKt.replace$default(new Regex("[\\u0622\\u0623\\u0625\\u0671]").replace(new Regex("[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED\\u0640]").replace(s, ""), "ا"), (char) 1609, (char) 1610, false, 4, (Object) null), (char) 1577, (char) 1607, false, 4, (Object) null);
+151-                                                  ^
+152-  symbol:   method replace$default(String,char,char,boolean,int,Object)
+153-  location: class StringsKt
+154:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:52: error: call to super must be first statement in constructor
+155-                super(0);
+156-                     ^
+157:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:52: error: constructor Object in class Object cannot be applied to given types;
+158-                super(0);
+159-                ^
+160-  required: no arguments
+161-  found:    int
+--
+163:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:58: error: not an enclosing class: ComponentActivity
+164-                return ComponentActivity.this.getViewModelStore();
+165-                                        ^
+166:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:62: error: call to super must be first statement in constructor
+167-                super(0);
+168-                     ^
+169:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:62: error: constructor Object in class Object cannot be applied to given types;
+170-                super(0);
+171-                ^
+172-  required: no arguments
+173-  found:    int
+--
+175:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:68: error: not an enclosing class: ComponentActivity
+176-                return ComponentActivity.this.getDefaultViewModelProviderFactory();
+177-                                        ^
+178:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:73: error: call to super must be first statement in constructor
+179-                super(0);
+180-                     ^
+181:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:73: error: constructor Object in class Object cannot be applied to given types;
+182-                super(0);
+183-                ^
+184-  required: no arguments
+185-  found:    int
+--
+187:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:80: error: not an enclosing class: Function0
+188-                Function0 function02 = Function0.this;
+189-                                                ^
+190:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:98: error: cannot find symbol
+191-        EdgeToEdge.enable$default(this, null, null, 3, null);
+192-                  ^
+193-  symbol:   method enable$default(MainActivity,<null>,<null>,int,<null>)
+194-  location: class EdgeToEdge
+195:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:99: error: cannot find symbol
+196-        ComponentActivityKt.setContent$default(this, null, ComposableLambdaKt.composableLambdaInstance(-601144069, true, new Function2() { // from class: com.example.MainActivity$$ExternalSyntheticLambda2
+197-                           ^
+198-  symbol:   method setContent$default(MainActivity,<null>,ComposableLambda,int,<null>)
+199-  location: class ComponentActivityKt
+200:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:120: error: cannot find symbol
+201-            if (rememberedValue == Composer.INSTANCE.getEmpty()) {
+202-                                           ^
+203-  symbol:   variable INSTANCE
+204-  location: interface Composer
+205:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:139: error: cannot find symbol
+206-            if (changedInstance || rememberedValue2 == Composer.INSTANCE.getEmpty()) {
+207-                                                               ^
+208-  symbol:   variable INSTANCE
+209-  location: interface Composer
+210:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:146: error: incompatible types: ComposableLambda cannot be converted to Function2<? super Composer,? super Integer,Unit>
+211-            ThemeKt.MyApplicationTheme(onCreate$lambda$5$lambda$0(appFont$delegate), false, false, ComposableLambdaKt.rememberComposableLambda(2120670566, true, new Function2() { // from class: com.example.MainActivity$$ExternalSyntheticLambda1
+212-                                                                                                                                              ^
+213:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:149: error: non-static variable this cannot be referenced from a static context
+214-                    return MainActivity.onCreate$lambda$5$lambda$4(MainActivity.this, (Composer) obj3, ((Integer) obj4).intValue());
+215-                                                                               ^
+216:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/receiver/BootReceiver$onReceive$1.java:45: error: incompatible types: BootReceiver$onReceive$1 cannot be converted to Continuation<Unit>
+217-        return new BootReceiver$onReceive$1(this.$context, this.$pendingResult, (Continuation) continuation);
+218-               ^
+219:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/receiver/NotificationActionReceiver$onReceive$1.java:42: error: incompatible types: NotificationActionReceiver$onReceive$1 cannot be converted to Continuation<Unit>
+220-        return new NotificationActionReceiver$onReceive$1(this.$context, this.$dhikrId, this.$pendingResult, (Continuation) continuation);
+221-               ^
+222:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl$updateDhikrTags$2.java:35: error: incompatible types: TagDao_Impl$updateDhikrTags$2 cannot be converted to Continuation<Unit>
+223-        return new TagDao_Impl$updateDhikrTags$2(this.this$0, this.$dhikrId, this.$tagIds, (Continuation) continuation);
+224-               ^
+225:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl$updateDhikrTags$2.java:40: error: incompatible types: Continuation<Unit> cannot be converted to TagDao_Impl$updateDhikrTags$2
+226-        return ((TagDao_Impl$updateDhikrTags$2) create(continuation)).invokeSuspend(Unit.INSTANCE);
+227-                                                      ^
+228:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:142: error: incompatible types: DhikrTagCrossRef cannot be converted to SQLiteConnection
+229-        this$0.__insertAdapterOfDhikrTagCrossRef.insert(_connection, (SQLiteConnection) $crossRef);
+230-                                                                                        ^
+231:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:315: error: incompatible types: <anonymous Function1> cannot be converted to TagDao_Impl
+232-                return TagDao_Impl.getDhikrsWithTags$lambda$8(_sql, this, (SQLiteConnection) obj);
+233-                                                                    ^
+234:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:334: error: no suitable constructor found for LongSparseArray(int,int,<null>)
+235-            LongSparseArray _collectionTags = new LongSparseArray(0, 1, null);
+236-                                              ^
+237-    constructor LongSparseArray.LongSparseArray(int) is not applicable
+238-      (actual and formal argument lists differ in length)
+--
+241:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:358: error: incompatible types: Object cannot be converted to List<Tag>
+242-                List<Tag> list = _collectionTags.get(_tmpKey_1);
+243-                                                    ^
+244:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:381: error: incompatible types: <anonymous Function1> cannot be converted to TagDao_Impl
+245-                return TagDao_Impl.getDhikrWithTagsById$lambda$9(_sql, dhikrId, this, (SQLiteConnection) obj);
+246-                                                                                ^
+247:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:402: error: no suitable constructor found for LongSparseArray(int,int,<null>)
+248-            LongSparseArray _collectionTags = new LongSparseArray(0, 1, null);
+249-                                              ^
+250-    constructor LongSparseArray.LongSparseArray(int) is not applicable
+251-      (actual and formal argument lists differ in length)
+--
+254:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:436: error: incompatible types: Object cannot be converted to List<Tag>
+255-                List<Tag> list = _collectionTags.get(_tmpKey_1);
+256-                                                    ^
+257:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:448: error: cannot find symbol
+258-            th = th2;
+259-            ^
+260-  symbol:   variable th
+261-  location: class TagDao_Impl
+262:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:657: error: cannot find symbol
+263-                th = th2;
+264-                ^
+265-  symbol:   variable th
+266-  location: class TagDao_Impl
+267:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/Converters.java:31: error: cannot find symbol
+268-        return CollectionsKt.joinToString$default(list, ",", null, null, 0, null, null, 62, null);
+269-                            ^
+270-  symbol:   method joinToString$default(List<String>,String,<null>,<null>,int,<null>,<null>,int,<null>)
+271-  location: class CollectionsKt
+272:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao$updateDhikrTags$1.java:26: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<Object>
+273-        super(continuation);
+274-              ^
+275-  where CAP#1 is a fresh type-variable:
+276-    CAP#1 extends Object super: TagDao$updateDhikrTags$1 from capture of ? super TagDao$updateDhikrTags$1
+277:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnImporter.java:206: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super HisnImporter$ensureImported$1>
+278-        hisnImporter$ensureImported$1 = new HisnImporter$ensureImported$1(this, continuation);
+279-                                                                                ^
+280-  where CAP#1 is a fresh type-variable:
+281-    CAP#1 extends Object super: Unit from capture of ? super Unit
+282:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository$deleteTag$1.java:22: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<Object>
+283-        super(continuation);
+284-              ^
+285-  where CAP#1 is a fresh type-variable:
+286-    CAP#1 extends Object super: DhikrRepository$deleteTag$1 from capture of ? super DhikrRepository$deleteTag$1
+287:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnDao_Impl.java:163: error: incompatible types: HisnFavorite cannot be converted to SQLiteConnection
+288-        this$0.__insertAdapterOfHisnFavorite.insert(_connection, (SQLiteConnection) $fav);
+289-                                                                                    ^
+290:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnDao_Impl.java:181: error: incompatible types: HisnRead cannot be converted to SQLiteConnection
+291-        this$0.__insertAdapterOfHisnRead.insert(_connection, (SQLiteConnection) $read);
+292-                                                                                ^
+293:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:145: error: incompatible types: <anonymous Function1> cannot be converted to DhikrDao_Impl
+294-                return DhikrDao_Impl.getAllDhikr$lambda$3(_sql, this, (SQLiteConnection) obj);
+295-                                                                ^
+296:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:193: error: incompatible types: <anonymous Function1> cannot be converted to DhikrDao_Impl
+297-                return DhikrDao_Impl.getFavoriteDhikr$lambda$4(_sql, this, (SQLiteConnection) obj);
+298-                                                                     ^
+299:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:241: error: incompatible types: <anonymous Function1> cannot be converted to DhikrDao_Impl
+300-                return DhikrDao_Impl.getEnabledDhikr$lambda$5(_sql, this, (SQLiteConnection) obj);
+301-                                                                    ^
+302:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:289: error: incompatible types: <anonymous Function1> cannot be converted to DhikrDao_Impl
+303-                return DhikrDao_Impl.getEnabledDhikrSync$lambda$6(_sql, this, (SQLiteConnection) obj);
+304-                                                                        ^
+305:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrDao_Impl.java:337: error: incompatible types: <anonymous Function1> cannot be converted to DhikrDao_Impl
+306-                return DhikrDao_Impl.getDhikrById$lambda$7(_sql, id, this, (SQLiteConnection) obj);
+307-                                                                     ^
+308:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase.java:24: error: constructor Migration in class Migration cannot be applied to given types;
+309-    private static final Migration MIGRATION_7_8 = new Migration() { // from class: com.example.data.AppDatabase$Companion$MIGRATION_7_8$1
+310-                                                   ^
+311-  required: int,int
+312-  found:    no arguments
+--
+314:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase.java:70: error: cannot find symbol
+315-                appDatabase = (AppDatabase) Room.databaseBuilder(applicationContext, AppDatabase.class, "wazakkir_database").addMigrations(AppDatabase.INSTANCE.getMIGRATION_7_8()).fallbackToDestructiveMigration().addCallback(new RoomDatabase.Callback() { // from class: com.example.data.AppDatabase$Companion$getDatabase$1$instance$1
+316-                                                                                                                                                               ^
+317-  symbol:   method getMIGRATION_7_8()
+318-  location: variable INSTANCE of type AppDatabase
+319:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase.java:78: error: incompatible types: AppDatabase cannot be converted to Companion
+320-                Companion companion = AppDatabase.INSTANCE;
+321-                                                 ^
+322:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:81: error: constructor RoomOpenDelegate in class RoomOpenDelegate cannot be applied to given types;
+323-        RoomOpenDelegate _openDelegate = new RoomOpenDelegate() { // from class: com.example.data.AppDatabase_Impl$createOpenDelegate$_openDelegate$1
+324-                                         ^
+325-  required: int,String,String
+326-  found:    no arguments
+--
+328:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:84: error: call to super must be first statement in constructor
+329-                super(8, "60976a860ef541fdb8dbbcef870846bb", "ffdd9bb93b8df39ebcfb05ab32ef0022");
+330-                     ^
+331:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:160: error: cannot find symbol
+332-                TableInfo _existingDhikrTable = TableInfo.INSTANCE.read(connection, "dhikr_table");
+333-                                                         ^
+334-  symbol:   variable INSTANCE
+335-  location: class TableInfo
+336:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:171: error: cannot find symbol
+337-                TableInfo _existingTagTable = TableInfo.INSTANCE.read(connection, "tag_table");
+338-                                                       ^
+339-  symbol:   variable INSTANCE
+340-  location: class TableInfo
+341:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:183: error: cannot find symbol
+342-                TableInfo _existingDhikrTagCrossRef = TableInfo.INSTANCE.read(connection, "dhikr_tag_cross_ref");
+343-                                                               ^
+344-  symbol:   variable INSTANCE
+345-  location: class TableInfo
+346:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:195: error: cannot find symbol
+347-                TableInfo _existingDhikrHistory = TableInfo.INSTANCE.read(connection, "dhikr_history");
+348-                                                           ^
+349-  symbol:   variable INSTANCE
+350-  location: class TableInfo
+351:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:206: error: cannot find symbol
+352-                TableInfo _existingHisnChapter = TableInfo.INSTANCE.read(connection, "hisn_chapter");
+353-                                                          ^
+354-  symbol:   variable INSTANCE
+355-  location: class TableInfo
+356:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:223: error: cannot find symbol
+357-                TableInfo _existingHisnItem = TableInfo.INSTANCE.read(connection, "hisn_item");
+358-                                                       ^
+359-  symbol:   variable INSTANCE
+360-  location: class TableInfo
+361:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:233: error: incompatible types: inference variable T has incompatible bounds
+362-                _indicesHisnFavorite.add(new TableInfo.Index("index_hisn_favorite_chapterId_itemId", true, CollectionsKt.listOf((Object[]) new String[]{"chapterId", "itemId"}), CollectionsKt.listOf((Object[]) new String[]{"ASC", "ASC"})));
+363-                                         ^
+364-    equality constraints: String
+365-    lower bounds: Object
+--
+368:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:235: error: cannot find symbol
+369-                TableInfo _existingHisnFavorite = TableInfo.INSTANCE.read(connection, "hisn_favorite");
+370-                                                           ^
+371-  symbol:   variable INSTANCE
+372-  location: class TableInfo
+373:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:247: error: cannot find symbol
+374-                TableInfo _existingHisnRead = TableInfo.INSTANCE.read(connection, "hisn_read");
+375-                                                       ^
+376-  symbol:   variable INSTANCE
+377-  location: class TableInfo
+378:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository$delete$1.java:23: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<Object>
+379-        super(continuation);
+380-              ^
+381-  where CAP#1 is a fresh type-variable:
+382-    CAP#1 extends Object super: DhikrRepository$delete$1 from capture of ? super DhikrRepository$delete$1
+383:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository$markAsRead$1.java:25: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<Object>
+384-        super(continuation);
+385-              ^
+386-  where CAP#1 is a fresh type-variable:
+387-    CAP#1 extends Object super: DhikrRepository$markAsRead$1 from capture of ? super DhikrRepository$markAsRead$1
+388:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:41: error: incompatible types: AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1 cannot be converted to Continuation<Unit>
+389-        return new AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1((Continuation) continuation);
+390-               ^
+391:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:85: error: INSTANCE has private access in AppDatabase
+392-                    AppDatabase appDatabase2 = AppDatabase.INSTANCE;
+393-                                                          ^
+394:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:96: error: INSTANCE has private access in AppDatabase
+395-                    appDatabase = AppDatabase.INSTANCE;
+396-                                             ^
+397:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:98: error: cannot find symbol
+398-                    e = e2;
+399-                    ^
+400-  symbol:   variable e
+401-  location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+402:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:99: error: cannot find symbol
+403-                    e.printStackTrace();
+404-                    ^
+405-  symbol:   variable e
+406-  location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+407:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:154: error: cannot find symbol
+408-                    e = e3;
+409-                    ^
+410-  symbol:   variable e
+411-  location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+412:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:155: error: cannot find symbol
+413-                    e.printStackTrace();
+414-                    ^
+415-  symbol:   variable e
+416-  location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+417:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:162: error: INSTANCE has private access in AppDatabase
+418-                appDatabase = AppDatabase.INSTANCE;
+419-                                         ^
+420:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository$getOrCreateTagByName$1.java:26: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<Object>
+421-        super(continuation);
+422-              ^
+423-  where CAP#1 is a fresh type-variable:
+424-    CAP#1 extends Object super: DhikrRepository$getOrCreateTagByName$1 from capture of ? super DhikrRepository$getOrCreateTagByName$1
+425:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/HisnImporter$ensureImported$1.java:27: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<Object>
+426-        super(continuation);
+427-              ^
+428-  where CAP#1 is a fresh type-variable:
+429-    CAP#1 extends Object super: HisnImporter$ensureImported$1 from capture of ? super HisnImporter$ensureImported$1
+430:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetUpdater.java:516: error: cannot find symbol
+431-        return ((iqamaOffsets.get(name) != null ? r0.intValue() : 15) * 60000) + adhan;
+432-                                                  ^
+433-  symbol:   variable r0
+434-  location: class WidgetUpdater
+435:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:36: error: cannot find symbol
+436-        ComponentActivityKt.setContent$default(this, null, ComposableLambdaKt.composableLambdaInstance(-2001601843, true, new Function2() { // from class: com.example.widget.WidgetConfigActivity$$ExternalSyntheticLambda2
+437-                           ^
+438-  symbol:   method setContent$default(WidgetConfigActivity,<null>,ComposableLambda,int,<null>)
+439-  location: class ComponentActivityKt
+440:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:39: error: not an enclosing class: FajrPreferences
+441-                return WidgetConfigActivity.onCreate$lambda$3(FajrPreferences.this, this, (Composer) obj, ((Integer) obj2).intValue());
+442-                                                                             ^
+443:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:53: error: no suitable method found for CompositionLocalProvider(ProvidedValue<LayoutDirection>,ComposableLambda,Composer,int)
+444-            CompositionLocalKt.CompositionLocalProvider(CompositionLocalsKt.getLocalLayoutDirection().provides(LayoutDirection.Rtl), ComposableLambdaKt.rememberComposableLambda(-895058035, true, new Function2() { // from class: com.example.widget.WidgetConfigActivity$$ExternalSyntheticLambda0
+445-                              ^
+446-    method CompositionLocalKt.CompositionLocalProvider(ProvidedValue<?>[],Function2<? super Composer,? super Integer,Unit>,Composer,int) is not applicable
+447-      (argument mismatch; ProvidedValue<LayoutDirection> cannot be converted to ProvidedValue<?>[])
+--
+452:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:56: error: not an enclosing class: FajrPreferences
+453-                    return WidgetConfigActivity.onCreate$lambda$3$lambda$2(FajrPreferences.this, this$0, (Composer) obj, ((Integer) obj2).intValue());
+454-                                                                                          ^
+455:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:79: error: cannot find symbol
+456-            if (changedInstance || rememberedValue == Composer.INSTANCE.getEmpty()) {
+457-                                                              ^
+458-  symbol:   variable INSTANCE
+459-  location: interface Composer
+460:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:83: error: not an enclosing class: FajrPreferences
+461-                        return WidgetConfigActivity.onCreate$lambda$3$lambda$2$lambda$1$lambda$0(FajrPreferences.this, this$0, (String) obj2);
+462-                                                                                                                ^
+463:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/alarm/AlarmReceiver$onReceive$1.java:40: error: incompatible types: AlarmReceiver$onReceive$1 cannot be converted to Continuation<Unit>
+464-        return new AlarmReceiver$onReceive$1(this.$context, this.$id, this.$pendingResult, (Continuation) continuation);
+465-               ^
+466:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCardContent.java:38: error: cannot find symbol
+467-        PrayerTimesScreenKt.PrayerTimesContent$lambda$49$lambda$48$lambda$36$lambda$35(this.f0, this.f1, this.f2, this.f3, columnScope, composer, 0);
+468-                           ^
+469-  symbol:   method PrayerTimesContent$lambda$49$lambda$48$lambda$36$lambda$35(ColorScheme,String,String,Function0,ColumnScope,Composer,int)
+470-  location: class PrayerTimesScreenKt
+471:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCardContent.java:39: error: cannot find symbol
+472-        OneUIKt.m7682OneUIDividerkHDZbjc(12.0f, composer, 0, 0);
+473-               ^
+474-  symbol:   method m7682OneUIDividerkHDZbjc(float,Composer,int,int)
+475-  location: class OneUIKt
+476:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCardContent.java:40: error: cannot find symbol
+477-        PrayerTimesScreenKt.PrayerTimesContent$lambda$49$lambda$48$lambda$42$lambda$41(this.f4, this.f0, this.f5, this.f6, this.f7, columnScope, composer, 0);
+478-                           ^
+479-  symbol:   method PrayerTimesContent$lambda$49$lambda$48$lambda$42$lambda$41(float,ColorScheme,String,String,String,ColumnScope,Composer,int)
+480-  location: class PrayerTimesScreenKt
+481:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/HijriDate.java:18: error: incompatible types: inference variable T has incompatible bounds
+482-    private static final List<String> monthNames = CollectionsKt.listOf((Object[]) new String[]{"محرم", "صفر", "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الثانية", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"});
+483-                                                                       ^
+484-    equality constraints: String
+485-    lower bounds: Object
+--
+488:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCard.java:37: error: cannot find symbol
+489-        OneUIKt.m7680OneUICarduDo3WH8(null, null, PaddingKt.m723PaddingValues0680j_4(20.0f), 0L, mergedPrayerCardContent, (Composer) obj2, 0, 11);
+490-                                                           ^
+491-  symbol:   method m723PaddingValues0680j_4(float)
+492-  location: class PaddingKt
+--
+506:* What went wrong:
+507:Execution failed for task ':app:compileDebugJavaWithJavac'.
+508-> Compilation failed; see the compiler output below.
+509:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:52: error: constructor Object in class Object cannot be applied to given types;
+510-                  super(0);
+511-                  ^
+512-    required: no arguments
+513-    found:    int
+--
+515:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:62: error: constructor Object in class Object cannot be applied to given types;
+516-                  super(0);
+517-                  ^
+518-    required: no arguments
+519-    found:    int
+--
+521:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:73: error: constructor Object in class Object cannot be applied to given types;
+522-                  super(0);
+523-                  ^
+524-    required: no arguments
+525-    found:    int
+--
+527:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase.java:24: error: constructor Migration in class Migration cannot be applied to given types;
+528-      private static final Migration MIGRATION_7_8 = new Migration() { // from class: com.example.data.AppDatabase$Companion$MIGRATION_7_8$1
+529-                                                     ^
+530-    required: int,int
+531-    found:    no arguments
+--
+533:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:81: error: constructor RoomOpenDelegate in class RoomOpenDelegate cannot be applied to given types;
+534-          RoomOpenDelegate _openDelegate = new RoomOpenDelegate() { // from class: com.example.data.AppDatabase_Impl$createOpenDelegate$_openDelegate$1
+535-                                           ^
+536-    required: int,String,String
+537-    found:    no arguments
+--
+539:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:334: error: no suitable constructor found for LongSparseArray(int,int,<null>)
+540-              LongSparseArray _collectionTags = new LongSparseArray(0, 1, null);
+541-                                                ^
+542-      constructor LongSparseArray.LongSparseArray(int) is not applicable
+543-        (actual and formal argument lists differ in length)
+--
+546:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:402: error: no suitable constructor found for LongSparseArray(int,int,<null>)
+547-              LongSparseArray _collectionTags = new LongSparseArray(0, 1, null);
+548-                                                ^
+549-      constructor LongSparseArray.LongSparseArray(int) is not applicable
+550-        (actual and formal argument lists differ in length)
+--
+553:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:53: error: no suitable method found for CompositionLocalProvider(ProvidedValue<LayoutDirection>,ComposableLambda,Composer,int)
+554-              CompositionLocalKt.CompositionLocalProvider(CompositionLocalsKt.getLocalLayoutDirection().provides(LayoutDirection.Rtl), ComposableLambdaKt.rememberComposableLambda(-895058035, true, new Function2() { // from class: com.example.widget.WidgetConfigActivity$$ExternalSyntheticLambda0
+555-                                ^
+556-      method CompositionLocalKt.CompositionLocalProvider(ProvidedValue<?>[],Function2<? super Composer,? super Integer,Unit>,Composer,int) is not applicable
+557-        (argument mismatch; ProvidedValue<LayoutDirection> cannot be converted to ProvidedValue<?>[])
+--
+562:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:58: error: not an enclosing class: ComponentActivity
+563-                  return ComponentActivity.this.getViewModelStore();
+564-                                          ^
+565:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:68: error: not an enclosing class: ComponentActivity
+566-                  return ComponentActivity.this.getDefaultViewModelProviderFactory();
+567-                                          ^
+568:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:80: error: not an enclosing class: Function0
+569-                  Function0 function02 = Function0.this;
+570-                                                  ^
+571:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:39: error: not an enclosing class: FajrPreferences
+572-                  return WidgetConfigActivity.onCreate$lambda$3(FajrPreferences.this, this, (Composer) obj, ((Integer) obj2).intValue());
+573-                                                                               ^
+574:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:56: error: not an enclosing class: FajrPreferences
+575-                      return WidgetConfigActivity.onCreate$lambda$3$lambda$2(FajrPreferences.this, this$0, (Composer) obj, ((Integer) obj2).intValue());
+576-                                                                                            ^
+577:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:83: error: not an enclosing class: FajrPreferences
+578-                          return WidgetConfigActivity.onCreate$lambda$3$lambda$2$lambda$1$lambda$0(FajrPreferences.this, this$0, (String) obj2);
+579-                                                                                                                  ^
+580-  Note: Recompile with -Xlint:deprecation for details.
+581:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:52: error: call to super must be first statement in constructor
+582-                  super(0);
+583-                       ^
+584:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:62: error: call to super must be first statement in constructor
+585-                  super(0);
+586-                       ^
+587:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:73: error: call to super must be first statement in constructor
+588-                  super(0);
+589-                       ^
+590:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:84: error: call to super must be first statement in constructor
+591-                  super(8, "60976a860ef541fdb8dbbcef870846bb", "ffdd9bb93b8df39ebcfb05ab32ef0022");
+592-                       ^
+593:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:120: error: cannot find symbol
+594-              if (rememberedValue == Composer.INSTANCE.getEmpty()) {
+595-                                             ^
+596-    symbol:   variable INSTANCE
+597-    location: interface Composer
+598:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:139: error: cannot find symbol
+599-              if (changedInstance || rememberedValue2 == Composer.INSTANCE.getEmpty()) {
+600-                                                                 ^
+601-    symbol:   variable INSTANCE
+602-    location: interface Composer
+603:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:448: error: cannot find symbol
+604-              th = th2;
+605-              ^
+606-    symbol:   variable th
+607-    location: class TagDao_Impl
+608:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:657: error: cannot find symbol
+609-                  th = th2;
+610-                  ^
+611-    symbol:   variable th
+612-    location: class TagDao_Impl
+613:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:160: error: cannot find symbol
+614-                  TableInfo _existingDhikrTable = TableInfo.INSTANCE.read(connection, "dhikr_table");
+615-                                                           ^
+616-    symbol:   variable INSTANCE
+617-    location: class TableInfo
+618:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:171: error: cannot find symbol
+619-                  TableInfo _existingTagTable = TableInfo.INSTANCE.read(connection, "tag_table");
+620-                                                         ^
+621-    symbol:   variable INSTANCE
+622-    location: class TableInfo
+623:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:183: error: cannot find symbol
+624-                  TableInfo _existingDhikrTagCrossRef = TableInfo.INSTANCE.read(connection, "dhikr_tag_cross_ref");
+625-                                                                 ^
+626-    symbol:   variable INSTANCE
+627-    location: class TableInfo
+628:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:195: error: cannot find symbol
+629-                  TableInfo _existingDhikrHistory = TableInfo.INSTANCE.read(connection, "dhikr_history");
+630-                                                             ^
+631-    symbol:   variable INSTANCE
+632-    location: class TableInfo
+633:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:206: error: cannot find symbol
+634-                  TableInfo _existingHisnChapter = TableInfo.INSTANCE.read(connection, "hisn_chapter");
+635-                                                            ^
+636-    symbol:   variable INSTANCE
+637-    location: class TableInfo
+638:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:223: error: cannot find symbol
+639-                  TableInfo _existingHisnItem = TableInfo.INSTANCE.read(connection, "hisn_item");
+640-                                                         ^
+641-    symbol:   variable INSTANCE
+642-    location: class TableInfo
+643:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:235: error: cannot find symbol
+644-                  TableInfo _existingHisnFavorite = TableInfo.INSTANCE.read(connection, "hisn_favorite");
+645-                                                             ^
+646-    symbol:   variable INSTANCE
+647-    location: class TableInfo
+648:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase_Impl.java:247: error: cannot find symbol
+649-                  TableInfo _existingHisnRead = TableInfo.INSTANCE.read(connection, "hisn_read");
+650-                                                         ^
+651-    symbol:   variable INSTANCE
+652-    location: class TableInfo
+653:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:98: error: cannot find symbol
+654-                      e = e2;
+655-                      ^
+656-    symbol:   variable e
+657-    location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+658:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:99: error: cannot find symbol
+659-                      e.printStackTrace();
+660-                      ^
+661-    symbol:   variable e
+662-    location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+663:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:154: error: cannot find symbol
+664-                      e = e3;
+665-                      ^
+666-    symbol:   variable e
+667-    location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+668:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:155: error: cannot find symbol
+669-                      e.printStackTrace();
+670-                      ^
+671-    symbol:   variable e
+672-    location: class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1
+673:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetUpdater.java:516: error: cannot find symbol
+674-          return ((iqamaOffsets.get(name) != null ? r0.intValue() : 15) * 60000) + adhan;
+675-                                                    ^
+676-    symbol:   variable r0
+677-    location: class WidgetUpdater
+678:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:79: error: cannot find symbol
+679-              if (changedInstance || rememberedValue == Composer.INSTANCE.getEmpty()) {
+680-                                                                ^
+681-    symbol:   variable INSTANCE
+682-    location: interface Composer
+683:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:85: error: INSTANCE has private access in AppDatabase
+684-                      AppDatabase appDatabase2 = AppDatabase.INSTANCE;
+685-                                                            ^
+686:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:96: error: INSTANCE has private access in AppDatabase
+687-                      appDatabase = AppDatabase.INSTANCE;
+688-                                               ^
+689:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java:162: error: INSTANCE has private access in AppDatabase
+690-                  appDatabase = AppDatabase.INSTANCE;
+691-                                           ^
+692-  Note: Recompile with -Xlint:unchecked for details.
+693-  Note: Some input files use or override a deprecated API.
+--
+695:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/hisn/HisnViewModelKt.java:14: error: cannot find symbol
+696-          return StringsKt.replace$default(StringsKt.replace$default(new Regex("[\\u0622\\u0623\\u0625\\u0671]").replace(new Regex("[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED\\u0640]").replace(s, ""), "ا"), (char) 1609, (char) 1610, false, 4, (Object) null), (char) 1577, (char) 1607, false, 4, (Object) null);
+697-                                                    ^
+698-    symbol:   method replace$default(String,char,char,boolean,int,Object)
+699-    location: class StringsKt
+700:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:98: error: cannot find symbol
+701-          EdgeToEdge.enable$default(this, null, null, 3, null);
+702-                    ^
+703-    symbol:   method enable$default(MainActivity,<null>,<null>,int,<null>)
+704-    location: class EdgeToEdge
+705:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity.java:99: error: cannot find symbol
+706-          ComponentActivityKt.setContent$default(this, null, ComposableLambdaKt.composableLambdaInstance(-601144069, true, new Function2() { // from class: com.example.MainActivity$$ExternalSyntheticLambda2
+707-                             ^
+708-    symbol:   method setContent$default(MainActivity,<null>,ComposableLambda,int,<null>)
+709-    location: class ComponentActivityKt
+710:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/Converters.java:31: error: cannot find symbol
+711-          return CollectionsKt.joinToString$default(list, ",", null, null, 0, null, null, 62, null);
+712-                              ^
+713-    symbol:   method joinToString$default(List<String>,String,<null>,<null>,int,<null>,<null>,int,<null>)
+714-    location: class CollectionsKt
+715:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/AppDatabase.java:70: error: cannot find symbol
+716-                  appDatabase = (AppDatabase) Room.databaseBuilder(applicationContext, AppDatabase.class, "wazakkir_database").addMigrations(AppDatabase.INSTANCE.getMIGRATION_7_8()).fallbackToDestructiveMigration().addCallback(new RoomDatabase.Callback() { // from class: com.example.data.AppDatabase$Companion$getDatabase$1$instance$1
+717-                                                                                                                                                                 ^
+718-    symbol:   method getMIGRATION_7_8()
+719-    location: variable INSTANCE of type AppDatabase
+720:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetConfigActivity.java:36: error: cannot find symbol
+721-          ComponentActivityKt.setContent$default(this, null, ComposableLambdaKt.composableLambdaInstance(-2001601843, true, new Function2() { // from class: com.example.widget.WidgetConfigActivity$$ExternalSyntheticLambda2
+722-                             ^
+723-    symbol:   method setContent$default(WidgetConfigActivity,<null>,ComposableLambda,int,<null>)
+724-    location: class ComponentActivityKt
+725:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCardContent.java:38: error: cannot find symbol
+726-          PrayerTimesScreenKt.PrayerTimesContent$lambda$49$lambda$48$lambda$36$lambda$35(this.f0, this.f1, this.f2, this.f3, columnScope, composer, 0);
+727-                             ^
+728-    symbol:   method PrayerTimesContent$lambda$49$lambda$48$lambda$36$lambda$35(ColorScheme,String,String,Function0,ColumnScope,Composer,int)
+729-    location: class PrayerTimesScreenKt
+730:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCardContent.java:39: error: cannot find symbol
+731-          OneUIKt.m7682OneUIDividerkHDZbjc(12.0f, composer, 0, 0);
+732-                 ^
+733-    symbol:   method m7682OneUIDividerkHDZbjc(float,Composer,int,int)
+734-    location: class OneUIKt
+735:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCardContent.java:40: error: cannot find symbol
+736-          PrayerTimesScreenKt.PrayerTimesContent$lambda$49$lambda$48$lambda$42$lambda$41(this.f4, this.f0, this.f5, this.f6, this.f7, columnScope, composer, 0);
+737-                             ^
+738-    symbol:   method PrayerTimesContent$lambda$49$lambda$48$lambda$42$lambda$41(float,ColorScheme,String,String,String,ColumnScope,Composer,int)
+739-    location: class PrayerTimesScreenKt
+740:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/prayer/MergedPrayerCard.java:37: error: cannot find symbol
+741-          OneUIKt.m7680OneUICarduDo3WH8(null, null, PaddingKt.m723PaddingValues0680j_4(20.0f), 0L, mergedPrayerCardContent, (Composer) obj2, 0, 11);
+742-                                                             ^
+743-    symbol:   method m723PaddingValues0680j_4(float)
+744-    location: class PaddingKt
+745:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:34: error: incompatible types: FajrViewModel$refreshFajrTimeManually$1 cannot be converted to Continuation<Unit>
+746-          return new FajrViewModel$refreshFajrTimeManually$1(this.this$0, (Continuation) continuation);
+747-                 ^
+748:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$updateLocationFromGps$1.java:35: error: incompatible types: FajrViewModel$updateLocationFromGps$1 cannot be converted to Continuation<Unit>
+749-          return new FajrViewModel$updateLocationFromGps$1(this.this$0, (Continuation) continuation);
+750-                 ^
+751:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/MainActivity$onCreate$1$1$1.java:33: error: incompatible types: MainActivity$onCreate$1$1$1 cannot be converted to Continuation<Unit>
+752-          return new MainActivity$onCreate$1$1$1(this.$launcher, (Continuation) continuation);
+753-                 ^
+754:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$toggleEnabled$1.java:37: error: incompatible types: MainViewModel$toggleEnabled$1 cannot be converted to Continuation<Unit>
+755-          return new MainViewModel$toggleEnabled$1(this.$dhikr, this.this$0, (Continuation) continuation);
+756-                 ^
+757:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:177: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$markAsRead$1>
+758-          dhikrRepository$markAsRead$1 = new DhikrRepository$markAsRead$1(this, continuation);
+759-                                                                                ^
+760-    where CAP#1 is a fresh type-variable:
+761-      CAP#1 extends Object super: Unit from capture of ? super Unit
+762:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:245: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$delete$1>
+763-          dhikrRepository$delete$1 = new DhikrRepository$delete$1(this, continuation);
+764-                                                                        ^
+765-    where CAP#1 is a fresh type-variable:
+766-      CAP#1 extends Object super: Unit from capture of ? super Unit
+767:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:313: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$deleteTag$1>
+768-          dhikrRepository$deleteTag$1 = new DhikrRepository$deleteTag$1(this, continuation);
+769-                                                                              ^
+770-    where CAP#1 is a fresh type-variable:
+771-      CAP#1 extends Object super: Unit from capture of ? super Unit
+772:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/DhikrRepository.java:407: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super DhikrRepository$getOrCreateTagByName$1>
+773-          dhikrRepository$getOrCreateTagByName$1 = new DhikrRepository$getOrCreateTagByName$1(this, continuation);
+774-                                                                                                    ^
+775-    where CAP#1 is a fresh type-variable:
+776-      CAP#1 extends Object super: Tag from capture of ? super Tag
+777:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao.java:134: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super TagDao$updateDhikrTags$1>
+778-              tagDao$updateDhikrTags$1 = new TagDao$updateDhikrTags$1($this2, continuation);
+779-                                                                              ^
+780-    where CAP#1 is a fresh type-variable:
+781-      CAP#1 extends Object super: Unit from capture of ? super Unit
+782:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/viewmodel/MainViewModel$addDhikrWithScheduleAndTags$1.java:49: error: incompatible types: MainViewModel$addDhikrWithScheduleAndTags$1 cannot be converted to Continuation<Unit>
