@@ -73,7 +73,7 @@ public final class AlarmReceiver extends BroadcastReceiver {
             showNotification(context, id, title, content);
             if (!isSnooze) {
                 BroadcastReceiver.PendingResult pendingResult = goAsync();
-                BuildersKt.launch(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new AlarmReceiver$onReceive$1(context, id, pendingResult, null));
+                BuildersKt.launch(CoroutineScopeKt.CoroutineScope(Dispatchers.getIO()), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new AlarmReceiver$onReceive$1(context, id, pendingResult, null));
             }
         }
     }

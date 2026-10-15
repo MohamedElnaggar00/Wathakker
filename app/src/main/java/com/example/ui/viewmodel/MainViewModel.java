@@ -297,25 +297,25 @@ public final class MainViewModel extends AndroidViewModel {
 
     public final void toggleFavorite(Dhikr dhikr) {
         Intrinsics.checkNotNullParameter(dhikr, "dhikr");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$toggleFavorite$1(this, dhikr, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$toggleFavorite$1(this, dhikr, null));
     }
 
     public final void toggleEnabled(Dhikr dhikr) {
         Intrinsics.checkNotNullParameter(dhikr, "dhikr");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$toggleEnabled$1(dhikr, this, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$toggleEnabled$1(dhikr, this, null));
     }
 
     public final void updateTimes(Dhikr dhikr, List<String> newTimes) {
         Intrinsics.checkNotNullParameter(dhikr, "dhikr");
         Intrinsics.checkNotNullParameter(newTimes, "newTimes");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateTimes$1(dhikr, newTimes, this, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateTimes$1(dhikr, newTimes, this, null));
     }
 
     public final void addDhikrWithSchedule(String title, String content, List<String> times) {
         Intrinsics.checkNotNullParameter(title, "title");
         Intrinsics.checkNotNullParameter(content, "content");
         Intrinsics.checkNotNullParameter(times, "times");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$addDhikrWithSchedule$1(title, content, times, this, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$addDhikrWithSchedule$1(title, content, times, this, null));
     }
 
     public final void addDhikrWithScheduleAndTags(String title, String content, List<String> times, List<Long> tagIds) {
@@ -323,7 +323,7 @@ public final class MainViewModel extends AndroidViewModel {
         Intrinsics.checkNotNullParameter(content, "content");
         Intrinsics.checkNotNullParameter(times, "times");
         Intrinsics.checkNotNullParameter(tagIds, "tagIds");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$addDhikrWithScheduleAndTags$1(title, content, times, this, tagIds, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$addDhikrWithScheduleAndTags$1(title, content, times, this, tagIds, null));
     }
 
     public final void updateDhikrWithTags(Dhikr dhikr, String newTitle, String newContent, List<Long> tagIds) {
@@ -331,19 +331,19 @@ public final class MainViewModel extends AndroidViewModel {
         Intrinsics.checkNotNullParameter(newTitle, "newTitle");
         Intrinsics.checkNotNullParameter(newContent, "newContent");
         Intrinsics.checkNotNullParameter(tagIds, "tagIds");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateDhikrWithTags$1(dhikr, newTitle, newContent, this, tagIds, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateDhikrWithTags$1(dhikr, newTitle, newContent, this, tagIds, null));
     }
 
     public final void updateDhikrText(Dhikr dhikr, String newTitle, String newContent) {
         Intrinsics.checkNotNullParameter(dhikr, "dhikr");
         Intrinsics.checkNotNullParameter(newTitle, "newTitle");
         Intrinsics.checkNotNullParameter(newContent, "newContent");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateDhikrText$1(dhikr, newTitle, newContent, this, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateDhikrText$1(dhikr, newTitle, newContent, this, null));
     }
 
     public final void updateDhikrTags(int dhikrId, List<Long> tagIds) {
         Intrinsics.checkNotNullParameter(tagIds, "tagIds");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateDhikrTags$1(this, dhikrId, tagIds, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateDhikrTags$1(this, dhikrId, tagIds, null));
     }
 
     /* JADX WARN: Multi-variable type inference failed */
@@ -360,22 +360,22 @@ public final class MainViewModel extends AndroidViewModel {
     public final void addTag(String name, String colorHex, Function1<? super Tag, Unit> onCreated) {
         Intrinsics.checkNotNullParameter(name, "name");
         Intrinsics.checkNotNullParameter(colorHex, "colorHex");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$addTag$1(this, name, colorHex, onCreated, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$addTag$1(this, name, colorHex, onCreated, null));
     }
 
     public final void updateTag(Tag tag) {
         Intrinsics.checkNotNullParameter(tag, "tag");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateTag$1(this, tag, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$updateTag$1(this, tag, null));
     }
 
     public final void deleteTag(Tag tag) {
         Intrinsics.checkNotNullParameter(tag, "tag");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$deleteTag$1(this, tag, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$deleteTag$1(this, tag, null));
     }
 
     public final void deleteDhikr(Dhikr dhikr) {
         Intrinsics.checkNotNullParameter(dhikr, "dhikr");
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$deleteDhikr$1(this, dhikr, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$deleteDhikr$1(this, dhikr, null));
     }
 
     public final void incrementTasbeeh() {
@@ -389,7 +389,7 @@ public final class MainViewModel extends AndroidViewModel {
     }
 
     public final void onDhikrSelectedFromNotification(int dhikrId) {
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$onDhikrSelectedFromNotification$1(this, dhikrId, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$onDhikrSelectedFromNotification$1(this, dhikrId, null));
     }
 
     public final void clearSelectedDhikrFromNotification() {
@@ -397,7 +397,7 @@ public final class MainViewModel extends AndroidViewModel {
     }
 
     public final void markAsRead(int dhikrId) {
-        BuildersKt.launch(ViewModelKt.getViewModelScope(this), null, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$markAsRead$1(this, dhikrId, null));
+        BuildersKt.launch(ViewModelKt.getViewModelScope(this), (kotlin.coroutines.CoroutineContext) kotlin.coroutines.EmptyCoroutineContext.INSTANCE, kotlinx.coroutines.CoroutineStart.DEFAULT, new MainViewModel$markAsRead$1(this, dhikrId, null));
     }
 
     public final void markAsRead(Dhikr dhikr) {
