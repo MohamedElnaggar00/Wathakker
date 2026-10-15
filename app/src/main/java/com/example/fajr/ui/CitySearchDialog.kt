@@ -44,7 +44,7 @@ import com.example.fajr.data.CityItem
 @Composable
 fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) {
     var searchQuery by remember { mutableStateOf("") }
-    val filteredCities = remember(searchQuery) { CitiesDatabase.searchCities(searchQuery) }
+    val filteredCities: List<CityItem> = remember(searchQuery) { CitiesDatabase.INSTANCE.searchCities(searchQuery) }
     val cs = MaterialTheme.colorScheme
     Dialog(onDismissRequest = onDismiss) {
         Surface(
