@@ -702,6 +702,44 @@ for p in all_java():
     }
 }
 """
+    if base == 'HisnViewModel$toggle$1.java':
+        i = s.index('    public final Object invokeSuspend(Object $result) {')
+        s = s[:i] + """    public final Object invokeSuspend(Object $result) {
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        switch (this.label) {
+            case 0:
+                ResultKt.throwOnFailure($result);
+                boolean isFav = false;
+                for (Object o : (Iterable) this.this$0.getFavorites().getValue()) {
+                    HisnFavorite f = (HisnFavorite) o;
+                    if (f.getChapterId() == this.$chapterId && f.getItemId() == this.$itemId) {
+                        isFav = true;
+                        break;
+                    }
+                }
+                HisnDao hisnDao = this.this$0.dao;
+                if (!isFav) {
+                    this.label = 2;
+                    if (hisnDao.addFavorite(new HisnFavorite(0L, this.$chapterId, this.$itemId, 1, null), this) == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                } else {
+                    this.label = 1;
+                    if (hisnDao.removeFavorite(this.$chapterId, this.$itemId, this) == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                }
+                return Unit.INSTANCE;
+            case 1:
+            case 2:
+                ResultKt.throwOnFailure($result);
+                return Unit.INSTANCE;
+            default:
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+        }
+    }
+}
+"""
     # outer-class fields read by the extracted lambda classes
     base = os.path.basename(p)
     if base in ('FajrViewModel.java', 'MainViewModel.java', 'HisnViewModel.java', 'DhikrRepository.java'):
