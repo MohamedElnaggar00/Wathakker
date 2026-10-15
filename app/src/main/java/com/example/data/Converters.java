@@ -16,7 +16,7 @@ public final class Converters {
 
     public final List<String> fromString(String value) {
         Intrinsics.checkNotNullParameter(value, "value");
-        Iterable split$default = StringsKt.split$default((CharSequence) value, new String[]{","}, false, 0, 6, (Object) null);
+        Iterable split$default = StringsKt.split((CharSequence) value, new String[]{","}, false, 0);
         Collection arrayList = new ArrayList();
         for (Object obj : split$default) {
             if (!StringsKt.isBlank((String) obj)) {

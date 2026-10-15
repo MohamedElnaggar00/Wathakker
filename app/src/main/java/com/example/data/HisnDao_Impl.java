@@ -49,9 +49,9 @@ public final class HisnDao_Impl implements HisnDao {
             public void bind(SQLiteStatement statement, HisnChapter entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getId());
-                statement.mo7532bindLong(2, entity.getOrder());
-                statement.mo7534bindText(3, entity.getName());
+                statement.bindLong(1, entity.getId());
+                statement.bindLong(2, entity.getOrder());
+                statement.bindText(3, entity.getName());
             }
         };
         this.__insertAdapterOfHisnItem = new EntityInsertAdapter<HisnItem>() { // from class: com.example.data.HisnDao_Impl.2
@@ -65,14 +65,14 @@ public final class HisnDao_Impl implements HisnDao {
             public void bind(SQLiteStatement statement, HisnItem entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getId());
-                statement.mo7532bindLong(2, entity.getChapterId());
-                statement.mo7532bindLong(3, entity.getOrder());
-                statement.mo7534bindText(4, entity.getText());
-                statement.mo7532bindLong(5, entity.getCount());
-                statement.mo7534bindText(6, entity.getFadl());
-                statement.mo7534bindText(7, entity.getSource());
-                statement.mo7534bindText(8, entity.getHokm());
+                statement.bindLong(1, entity.getId());
+                statement.bindLong(2, entity.getChapterId());
+                statement.bindLong(3, entity.getOrder());
+                statement.bindText(4, entity.getText());
+                statement.bindLong(5, entity.getCount());
+                statement.bindText(6, entity.getFadl());
+                statement.bindText(7, entity.getSource());
+                statement.bindText(8, entity.getHokm());
             }
         };
         this.__insertAdapterOfHisnFavorite = new EntityInsertAdapter<HisnFavorite>() { // from class: com.example.data.HisnDao_Impl.3
@@ -86,9 +86,9 @@ public final class HisnDao_Impl implements HisnDao {
             public void bind(SQLiteStatement statement, HisnFavorite entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getId());
-                statement.mo7532bindLong(2, entity.getChapterId());
-                statement.mo7532bindLong(3, entity.getItemId());
+                statement.bindLong(1, entity.getId());
+                statement.bindLong(2, entity.getChapterId());
+                statement.bindLong(3, entity.getItemId());
             }
         };
         this.__insertAdapterOfHisnRead = new EntityInsertAdapter<HisnRead>() { // from class: com.example.data.HisnDao_Impl.4
@@ -102,10 +102,10 @@ public final class HisnDao_Impl implements HisnDao {
             public void bind(SQLiteStatement statement, HisnRead entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getId());
-                statement.mo7532bindLong(2, entity.getChapterId());
-                statement.mo7534bindText(3, entity.getDateString());
-                statement.mo7532bindLong(4, entity.getTimestamp());
+                statement.bindLong(1, entity.getId());
+                statement.bindLong(2, entity.getChapterId());
+                statement.bindText(3, entity.getDateString());
+                statement.bindLong(4, entity.getTimestamp());
             }
         };
     }
@@ -368,8 +368,8 @@ public final class HisnDao_Impl implements HisnDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $chapterId);
-            _stmt.mo7534bindText(2, $date);
+            _stmt.bindLong(1, $chapterId);
+            _stmt.bindText(2, $date);
             if (_stmt.step()) {
                 _tmp = (int) _stmt.getLong(0);
             } else {
@@ -398,7 +398,7 @@ public final class HisnDao_Impl implements HisnDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7534bindText(1, $date);
+            _stmt.bindText(1, $date);
             List _result = new ArrayList();
             while (_stmt.step()) {
                 int _item = (int) _stmt.getLong(0);
@@ -427,8 +427,8 @@ public final class HisnDao_Impl implements HisnDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $chapterId);
-            _stmt.mo7532bindLong(2, $itemId);
+            _stmt.bindLong(1, $chapterId);
+            _stmt.bindLong(2, $itemId);
             _stmt.step();
             _stmt.close();
             return Unit.INSTANCE;

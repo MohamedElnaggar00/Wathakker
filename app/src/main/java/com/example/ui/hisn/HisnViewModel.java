@@ -53,16 +53,16 @@ import kotlinx.coroutines.flow.StateFlowKt;
 /* loaded from: classes9.dex */
 public final class HisnViewModel extends AndroidViewModel {
     public static final int $stable = 8;
-    private final MutableStateFlow<Boolean> _onlyFavorites;
-    private final MutableStateFlow<String> _query;
-    private final StateFlow<List<HisnItem>> allItems;
-    private final StateFlow<List<HisnChapter>> chapters;
-    private final HisnDao dao;
-    private final StateFlow<List<HisnFavorite>> favorites;
-    private final StateFlow<Map<Integer, Integer>> itemCounts;
-    private final StateFlow<Boolean> onlyFavorites;
-    private final StateFlow<String> query;
-    private final StateFlow<Set<Integer>> readToday;
+    final MutableStateFlow<Boolean> _onlyFavorites;
+    final MutableStateFlow<String> _query;
+    final StateFlow<List<HisnItem>> allItems;
+    final StateFlow<List<HisnChapter>> chapters;
+    final HisnDao dao;
+    final StateFlow<List<HisnFavorite>> favorites;
+    final StateFlow<Map<Integer, Integer>> itemCounts;
+    final StateFlow<Boolean> onlyFavorites;
+    final StateFlow<String> query;
+    final StateFlow<Set<Integer>> readToday;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public HisnViewModel(Application application) {
@@ -73,8 +73,8 @@ public final class HisnViewModel extends AndroidViewModel {
         this.query = FlowKt.asStateFlow(this._query);
         this._onlyFavorites = StateFlowKt.MutableStateFlow(false);
         this.onlyFavorites = FlowKt.asStateFlow(this._onlyFavorites);
-        this.chapters = FlowKt.stateIn(this.dao.chapters(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
-        this.allItems = FlowKt.stateIn(this.dao.allItems(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
+        this.chapters = FlowKt.stateIn(this.dao.chapters(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
+        this.allItems = FlowKt.stateIn(this.dao.allItems(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         final Flow itemCounts = this.dao.itemCounts();
         this.itemCounts = FlowKt.stateIn(new Flow<Map<Integer, ? extends Integer>>() { // from class: com.example.ui.hisn.HisnViewModel$special$$inlined$map$1
 
@@ -176,8 +176,8 @@ public final class HisnViewModel extends AndroidViewModel {
                 Object collect = Flow.this.collect(new AnonymousClass2(flowCollector), $completion);
                 return collect == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? collect : Unit.INSTANCE;
             }
-        }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), MapsKt.emptyMap());
-        this.favorites = FlowKt.stateIn(this.dao.favorites(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
+        }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), MapsKt.emptyMap());
+        this.favorites = FlowKt.stateIn(this.dao.favorites(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         final Flow chaptersReadOn = this.dao.chaptersReadOn(getToday());
         this.readToday = FlowKt.stateIn(new Flow<Set<? extends Integer>>() { // from class: com.example.ui.hisn.HisnViewModel$special$$inlined$map$2
 
@@ -274,7 +274,7 @@ public final class HisnViewModel extends AndroidViewModel {
                 Object collect = Flow.this.collect(new AnonymousClass2(flowCollector), $completion);
                 return collect == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? collect : Unit.INSTANCE;
             }
-        }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), SetsKt.emptySet());
+        }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), SetsKt.emptySet());
         BuildersKt.launch(ViewModelKt.getViewModelScope(this), Dispatchers.getIO(), kotlinx.coroutines.CoroutineStart.DEFAULT, new AnonymousClass1(null));
     }
 
@@ -331,17 +331,17 @@ public final class HisnViewModel extends AndroidViewModel {
         int label;
 
         AnonymousClass1(Continuation<? super AnonymousClass1> continuation) {
-            super(2, continuation);
+            super(2, (Continuation) continuation);
         }
 
         @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
         public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-            return new AnonymousClass1(continuation);
+            return new AnonymousClass1((Continuation) continuation);
         }
 
         @Override // kotlin.jvm.functions.Function2
         public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-            return ((AnonymousClass1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+            return ((AnonymousClass1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
         }
 
         @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

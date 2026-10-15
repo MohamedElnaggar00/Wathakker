@@ -65,19 +65,10 @@ public final /* data */ class HisnRead {
         this.timestamp = timestamp;
     }
 
-    /* JADX WARN: Illegal instructions before constructor call */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-    */
     public /* synthetic */ HisnRead(long j, int i, String str, long j2, int i2, DefaultConstructorMarker defaultConstructorMarker) {
-        this(r1, i, str, j2);
-        long j3;
-        if ((i2 & 1) == 0) {
-            j3 = j;
-        } else {
-            j3 = 0;
-        }
+        this((i2 & 1) != 0 ? 0L : j, i, str, j2);
     }
+
 
     public final long getId() {
         return this.id;

@@ -24,18 +24,18 @@ public final class MainActivity$onCreate$1$1$1 extends SuspendLambda implements 
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainActivity$onCreate$1$1$1(ManagedActivityResultLauncher<String, Boolean> managedActivityResultLauncher, Continuation<? super MainActivity$onCreate$1$1$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.$launcher = managedActivityResultLauncher;
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainActivity$onCreate$1$1$1(this.$launcher, continuation);
+        return new MainActivity$onCreate$1$1$1(this.$launcher, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainActivity$onCreate$1$1$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainActivity$onCreate$1$1$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

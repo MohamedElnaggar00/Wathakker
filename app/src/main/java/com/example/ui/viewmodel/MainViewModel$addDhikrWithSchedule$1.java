@@ -31,7 +31,7 @@ public final class MainViewModel$addDhikrWithSchedule$1 extends SuspendLambda im
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel$addDhikrWithSchedule$1(String str, String str2, List<String> list, MainViewModel mainViewModel, Continuation<? super MainViewModel$addDhikrWithSchedule$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.$title = str;
         this.$content = str2;
         this.$times = list;
@@ -40,12 +40,12 @@ public final class MainViewModel$addDhikrWithSchedule$1 extends SuspendLambda im
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$addDhikrWithSchedule$1(this.$title, this.$content, this.$times, this.this$0, continuation);
+        return new MainViewModel$addDhikrWithSchedule$1(this.$title, this.$content, this.$times, this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$addDhikrWithSchedule$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$addDhikrWithSchedule$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

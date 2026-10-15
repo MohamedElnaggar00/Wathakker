@@ -29,12 +29,12 @@ import kotlinx.coroutines.flow.StateFlowKt;
 /* loaded from: classes11.dex */
 public final class FajrViewModel extends AndroidViewModel {
     public static final int $stable = 8;
-    private final MutableStateFlow<FajrSettingsState> _uiState;
-    private final LocationManagerHelper locationHelper;
-    private final FajrPreferences prefs;
-    private final RingtoneHelper ringtoneHelper;
-    private final FajrAlarmScheduler scheduler;
-    private final StateFlow<FajrSettingsState> uiState;
+    final MutableStateFlow<FajrSettingsState> _uiState;
+    final LocationManagerHelper locationHelper;
+    final FajrPreferences prefs;
+    final RingtoneHelper ringtoneHelper;
+    final FajrAlarmScheduler scheduler;
+    final StateFlow<FajrSettingsState> uiState;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public FajrViewModel(Application application) {

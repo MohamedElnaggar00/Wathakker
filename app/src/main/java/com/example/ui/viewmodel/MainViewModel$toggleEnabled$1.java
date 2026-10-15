@@ -27,19 +27,19 @@ public final class MainViewModel$toggleEnabled$1 extends SuspendLambda implement
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel$toggleEnabled$1(Dhikr dhikr, MainViewModel mainViewModel, Continuation<? super MainViewModel$toggleEnabled$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.$dhikr = dhikr;
         this.this$0 = mainViewModel;
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$toggleEnabled$1(this.$dhikr, this.this$0, continuation);
+        return new MainViewModel$toggleEnabled$1(this.$dhikr, this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$toggleEnabled$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$toggleEnabled$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

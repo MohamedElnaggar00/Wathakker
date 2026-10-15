@@ -24,7 +24,7 @@ final class TagDao_Impl$updateDhikrTags$2 extends SuspendLambda implements Funct
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public TagDao_Impl$updateDhikrTags$2(TagDao_Impl tagDao_Impl, int i, List<Long> list, Continuation<? super TagDao_Impl$updateDhikrTags$2> continuation) {
-        super(1, continuation);
+        super(1, (Continuation) continuation);
         this.this$0 = tagDao_Impl;
         this.$dhikrId = i;
         this.$tagIds = list;
@@ -32,7 +32,7 @@ final class TagDao_Impl$updateDhikrTags$2 extends SuspendLambda implements Funct
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Continuation<?> continuation) {
-        return new TagDao_Impl$updateDhikrTags$2(this.this$0, this.$dhikrId, this.$tagIds, continuation);
+        return new TagDao_Impl$updateDhikrTags$2(this.this$0, this.$dhikrId, this.$tagIds, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function1

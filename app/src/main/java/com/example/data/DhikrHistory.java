@@ -65,25 +65,10 @@ public final /* data */ class DhikrHistory {
         this.dateString = dateString;
     }
 
-    /* JADX WARN: Illegal instructions before constructor call */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-    */
     public /* synthetic */ DhikrHistory(long j, int i, long j2, String str, int i2, DefaultConstructorMarker defaultConstructorMarker) {
-        this(r1, i, r4, str);
-        long j3;
-        long j4;
-        if ((i2 & 1) == 0) {
-            j3 = j;
-        } else {
-            j3 = 0;
-        }
-        if ((i2 & 4) == 0) {
-            j4 = j2;
-        } else {
-            j4 = System.currentTimeMillis();
-        }
+        this((i2 & 1) != 0 ? 0L : j, i, (i2 & 4) != 0 ? System.currentTimeMillis() : j2, str);
     }
+
 
     public final long getHistoryId() {
         return this.historyId;

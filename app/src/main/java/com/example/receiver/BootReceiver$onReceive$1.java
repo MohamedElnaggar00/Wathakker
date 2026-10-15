@@ -35,19 +35,19 @@ final class BootReceiver$onReceive$1 extends SuspendLambda implements Function2<
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public BootReceiver$onReceive$1(Context context, BroadcastReceiver.PendingResult pendingResult, Continuation<? super BootReceiver$onReceive$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.$context = context;
         this.$pendingResult = pendingResult;
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new BootReceiver$onReceive$1(this.$context, this.$pendingResult, continuation);
+        return new BootReceiver$onReceive$1(this.$context, this.$pendingResult, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((BootReceiver$onReceive$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((BootReceiver$onReceive$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

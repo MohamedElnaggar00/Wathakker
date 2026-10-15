@@ -28,7 +28,7 @@ final class MainViewModel$updateDhikrText$1 extends SuspendLambda implements Fun
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel$updateDhikrText$1(Dhikr dhikr, String str, String str2, MainViewModel mainViewModel, Continuation<? super MainViewModel$updateDhikrText$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.$dhikr = dhikr;
         this.$newTitle = str;
         this.$newContent = str2;
@@ -37,12 +37,12 @@ final class MainViewModel$updateDhikrText$1 extends SuspendLambda implements Fun
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$updateDhikrText$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, continuation);
+        return new MainViewModel$updateDhikrText$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$updateDhikrText$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$updateDhikrText$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

@@ -24,19 +24,19 @@ public final class MainViewModel$markAsRead$1 extends SuspendLambda implements F
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel$markAsRead$1(MainViewModel mainViewModel, int i, Continuation<? super MainViewModel$markAsRead$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.this$0 = mainViewModel;
         this.$dhikrId = i;
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$markAsRead$1(this.this$0, this.$dhikrId, continuation);
+        return new MainViewModel$markAsRead$1(this.this$0, this.$dhikrId, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$markAsRead$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$markAsRead$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

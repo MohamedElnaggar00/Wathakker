@@ -20,17 +20,17 @@ import kotlinx.coroutines.flow.Flow;
 /* loaded from: classes7.dex */
 public final class DhikrRepository {
     public static final int $stable = 8;
-    private final Flow<List<Dhikr>> allDhikr;
-    private final Flow<List<DhikrHistory>> allHistory;
-    private final Flow<List<Tag>> allTags;
-    private final DhikrDao dhikrDao;
-    private final Flow<List<DhikrWithTags>> dhikrsWithTags;
-    private final Flow<List<String>> distinctReadDates;
-    private final Flow<List<Dhikr>> enabledDhikr;
-    private final Flow<List<Dhikr>> favoriteDhikr;
-    private final HistoryDao historyDao;
-    private final TagDao tagDao;
-    private final Flow<Integer> totalHistoryCount;
+    final Flow<List<Dhikr>> allDhikr;
+    final Flow<List<DhikrHistory>> allHistory;
+    final Flow<List<Tag>> allTags;
+    final DhikrDao dhikrDao;
+    final Flow<List<DhikrWithTags>> dhikrsWithTags;
+    final Flow<List<String>> distinctReadDates;
+    final Flow<List<Dhikr>> enabledDhikr;
+    final Flow<List<Dhikr>> favoriteDhikr;
+    final HistoryDao historyDao;
+    final TagDao tagDao;
+    final Flow<Integer> totalHistoryCount;
 
     public DhikrRepository(DhikrDao dhikrDao, TagDao tagDao, HistoryDao historyDao) {
         Intrinsics.checkNotNullParameter(dhikrDao, "dhikrDao");

@@ -55,9 +55,9 @@ public final class TagDao_Impl implements TagDao {
             public void bind(SQLiteStatement statement, Tag entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getTagId());
-                statement.mo7534bindText(2, entity.getName());
-                statement.mo7534bindText(3, entity.getColorHex());
+                statement.bindLong(1, entity.getTagId());
+                statement.bindText(2, entity.getName());
+                statement.bindText(3, entity.getColorHex());
             }
         };
         this.__insertAdapterOfDhikrTagCrossRef = new EntityInsertAdapter<DhikrTagCrossRef>() { // from class: com.example.data.TagDao_Impl.2
@@ -71,8 +71,8 @@ public final class TagDao_Impl implements TagDao {
             public void bind(SQLiteStatement statement, DhikrTagCrossRef entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getDhikrId());
-                statement.mo7532bindLong(2, entity.getTagId());
+                statement.bindLong(1, entity.getDhikrId());
+                statement.bindLong(2, entity.getTagId());
             }
         };
         this.__deleteAdapterOfTag = new EntityDeleteOrUpdateAdapter<Tag>() { // from class: com.example.data.TagDao_Impl.3
@@ -86,7 +86,7 @@ public final class TagDao_Impl implements TagDao {
             public void bind(SQLiteStatement statement, Tag entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getTagId());
+                statement.bindLong(1, entity.getTagId());
             }
         };
         this.__updateAdapterOfTag = new EntityDeleteOrUpdateAdapter<Tag>() { // from class: com.example.data.TagDao_Impl.4
@@ -100,10 +100,10 @@ public final class TagDao_Impl implements TagDao {
             public void bind(SQLiteStatement statement, Tag entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getTagId());
-                statement.mo7534bindText(2, entity.getName());
-                statement.mo7534bindText(3, entity.getColorHex());
-                statement.mo7532bindLong(4, entity.getTagId());
+                statement.bindLong(1, entity.getTagId());
+                statement.bindText(2, entity.getName());
+                statement.bindText(3, entity.getColorHex());
+                statement.bindLong(4, entity.getTagId());
             }
         };
     }
@@ -253,7 +253,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $tagId);
+            _stmt.bindLong(1, $tagId);
             int _columnIndexOfTagId = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "tagId");
             int _columnIndexOfName = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, HintConstants.AUTOFILL_HINT_NAME);
             int _columnIndexOfColorHex = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "colorHex");
@@ -288,7 +288,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7534bindText(1, $name);
+            _stmt.bindText(1, $name);
             int _columnIndexOfTagId = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "tagId");
             int _columnIndexOfName = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, HintConstants.AUTOFILL_HINT_NAME);
             int _columnIndexOfColorHex = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "colorHex");
@@ -390,7 +390,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt2 = _connection.prepare($_sql);
         try {
-            _stmt2.mo7532bindLong(1, $dhikrId);
+            _stmt2.bindLong(1, $dhikrId);
             int _columnIndexOfId = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt2, "id");
             int _columnIndexOfTitle = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt2, "title");
             int _columnIndexOfContent = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt2, "content");
@@ -466,7 +466,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $dhikrId);
+            _stmt.bindLong(1, $dhikrId);
             int _columnIndexOfTagId = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "tagId");
             int _columnIndexOfName = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, HintConstants.AUTOFILL_HINT_NAME);
             int _columnIndexOfColorHex = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "colorHex");
@@ -500,7 +500,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $dhikrId);
+            _stmt.bindLong(1, $dhikrId);
             int _columnIndexOfTagId = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "tagId");
             int _columnIndexOfName = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, HintConstants.AUTOFILL_HINT_NAME);
             int _columnIndexOfColorHex = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "colorHex");
@@ -535,7 +535,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $tagId);
+            _stmt.bindLong(1, $tagId);
             _stmt.step();
             _stmt.close();
             return Unit.INSTANCE;
@@ -562,7 +562,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $dhikrId);
+            _stmt.bindLong(1, $dhikrId);
             _stmt.step();
             _stmt.close();
             return Unit.INSTANCE;
@@ -589,7 +589,7 @@ public final class TagDao_Impl implements TagDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $tagId);
+            _stmt.bindLong(1, $tagId);
             _stmt.step();
             _stmt.close();
             return Unit.INSTANCE;
@@ -625,7 +625,7 @@ public final class TagDao_Impl implements TagDao {
         int i = 1;
         for (int _argIndex = 0; _argIndex < size; _argIndex++) {
             long _item = longSparseArray.keyAt(_argIndex);
-            _stmt.mo7532bindLong(i, _item);
+            _stmt.bindLong(i, _item);
             i++;
         }
         int _itemKeyIndex = 3;

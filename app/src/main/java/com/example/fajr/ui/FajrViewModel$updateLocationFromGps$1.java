@@ -26,18 +26,18 @@ public final class FajrViewModel$updateLocationFromGps$1 extends SuspendLambda i
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public FajrViewModel$updateLocationFromGps$1(FajrViewModel fajrViewModel, Continuation<? super FajrViewModel$updateLocationFromGps$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.this$0 = fajrViewModel;
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new FajrViewModel$updateLocationFromGps$1(this.this$0, continuation);
+        return new FajrViewModel$updateLocationFromGps$1(this.this$0, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((FajrViewModel$updateLocationFromGps$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((FajrViewModel$updateLocationFromGps$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

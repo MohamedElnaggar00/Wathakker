@@ -15,7 +15,7 @@ public final class DateTimeUtilsKt {
     public static final String formatTimeStr12h(String timeStr) {
         boolean isAm;
         Intrinsics.checkNotNullParameter(timeStr, "timeStr");
-        List parts = StringsKt.split$default((CharSequence) timeStr, new String[]{":"}, false, 0, 6, (Object) null);
+        List parts = StringsKt.split((CharSequence) timeStr, new String[]{":"}, false, 0);
         if (parts.size() != 2) {
             return timeStr;
         }

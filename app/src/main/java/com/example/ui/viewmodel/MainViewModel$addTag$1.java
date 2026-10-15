@@ -29,7 +29,7 @@ public final class MainViewModel$addTag$1 extends SuspendLambda implements Funct
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     /* JADX WARN: Multi-variable type inference failed */
     public MainViewModel$addTag$1(MainViewModel mainViewModel, String str, String str2, Function1<? super Tag, Unit> function1, Continuation<? super MainViewModel$addTag$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.this$0 = mainViewModel;
         this.$name = str;
         this.$colorHex = str2;
@@ -38,12 +38,12 @@ public final class MainViewModel$addTag$1 extends SuspendLambda implements Funct
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$addTag$1(this.this$0, this.$name, this.$colorHex, this.$onCreated, continuation);
+        return new MainViewModel$addTag$1(this.this$0, this.$name, this.$colorHex, this.$onCreated, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$addTag$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$addTag$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

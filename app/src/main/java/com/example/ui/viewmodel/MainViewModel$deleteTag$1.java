@@ -26,19 +26,19 @@ public final class MainViewModel$deleteTag$1 extends SuspendLambda implements Fu
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel$deleteTag$1(MainViewModel mainViewModel, Tag tag, Continuation<? super MainViewModel$deleteTag$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.this$0 = mainViewModel;
         this.$tag = tag;
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$deleteTag$1(this.this$0, this.$tag, continuation);
+        return new MainViewModel$deleteTag$1(this.this$0, this.$tag, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$deleteTag$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$deleteTag$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl

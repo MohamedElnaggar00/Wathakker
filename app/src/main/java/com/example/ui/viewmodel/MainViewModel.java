@@ -51,35 +51,35 @@ import kotlinx.coroutines.flow.StateFlowKt;
 /* loaded from: classes11.dex */
 public final class MainViewModel extends AndroidViewModel {
     public static final int $stable = 8;
-    private final MutableStateFlow<FontChoice> _appFont;
-    private final MutableStateFlow<String> _language;
-    private final MutableStateFlow<String> _notificationSound;
-    private final MutableStateFlow<String> _searchQuery;
-    private final MutableStateFlow<Dhikr> _selectedDhikrFromNotification;
-    private final MutableStateFlow<Tag> _selectedTag;
-    private final MutableStateFlow<Integer> _tasbeehCount;
-    private final MutableStateFlow<Boolean> _useDeviceFont;
-    private final MutableStateFlow<Boolean> _vibrationEnabled;
-    private final AlarmScheduler alarmScheduler;
-    private final StateFlow<List<Dhikr>> allDhikr;
-    private final StateFlow<List<DhikrHistory>> allHistory;
-    private final StateFlow<List<Tag>> allTags;
-    private final StateFlow<FontChoice> appFont;
-    private final SharedPreferences appPrefs;
-    private final StateFlow<List<DhikrWithTags>> dhikrsWithTags;
-    private final StateFlow<List<Dhikr>> enabledDhikr;
-    private final StateFlow<List<Dhikr>> favoriteDhikr;
-    private final StateFlow<String> language;
-    private final StateFlow<String> notificationSound;
-    private final SharedPreferences prefs;
-    private final DhikrRepository repository;
-    private final StateFlow<String> searchQuery;
-    private final StateFlow<Dhikr> selectedDhikrFromNotification;
-    private final StateFlow<Tag> selectedTag;
-    private final StateFlow<DhikrStats> stats;
-    private final StateFlow<Integer> tasbeehCount;
-    private final StateFlow<Boolean> useDeviceFont;
-    private final StateFlow<Boolean> vibrationEnabled;
+    final MutableStateFlow<FontChoice> _appFont;
+    final MutableStateFlow<String> _language;
+    final MutableStateFlow<String> _notificationSound;
+    final MutableStateFlow<String> _searchQuery;
+    final MutableStateFlow<Dhikr> _selectedDhikrFromNotification;
+    final MutableStateFlow<Tag> _selectedTag;
+    final MutableStateFlow<Integer> _tasbeehCount;
+    final MutableStateFlow<Boolean> _useDeviceFont;
+    final MutableStateFlow<Boolean> _vibrationEnabled;
+    final AlarmScheduler alarmScheduler;
+    final StateFlow<List<Dhikr>> allDhikr;
+    final StateFlow<List<DhikrHistory>> allHistory;
+    final StateFlow<List<Tag>> allTags;
+    final StateFlow<FontChoice> appFont;
+    final SharedPreferences appPrefs;
+    final StateFlow<List<DhikrWithTags>> dhikrsWithTags;
+    final StateFlow<List<Dhikr>> enabledDhikr;
+    final StateFlow<List<Dhikr>> favoriteDhikr;
+    final StateFlow<String> language;
+    final StateFlow<String> notificationSound;
+    final SharedPreferences prefs;
+    final DhikrRepository repository;
+    final StateFlow<String> searchQuery;
+    final StateFlow<Dhikr> selectedDhikrFromNotification;
+    final StateFlow<Tag> selectedTag;
+    final StateFlow<DhikrStats> stats;
+    final StateFlow<Integer> tasbeehCount;
+    final StateFlow<Boolean> useDeviceFont;
+    final StateFlow<Boolean> vibrationEnabled;
 
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel(Application application) {
@@ -110,7 +110,7 @@ public final class MainViewModel extends AndroidViewModel {
         AppDatabase db = AppDatabase.Companion.getDatabase(application);
         this.repository = new DhikrRepository(db.dhikrDao(), db.tagDao(), db.historyDao());
         this.alarmScheduler = new AlarmScheduler(application);
-        this.allHistory = FlowKt.stateIn(this.repository.getAllHistory(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
+        this.allHistory = FlowKt.stateIn(this.repository.getAllHistory(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         final Flow allHistory = this.repository.getAllHistory();
         this.stats = FlowKt.stateIn(new Flow<DhikrStats>() { // from class: com.example.ui.viewmodel.MainViewModel$special$$inlined$map$1
             @Override // kotlinx.coroutines.flow.Flow
@@ -209,12 +209,12 @@ public final class MainViewModel extends AndroidViewModel {
                     return Unit.INSTANCE;
                 }
             }
-        }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), new DhikrStats(0, 0, 0, 0, 0, null, 63, null));
-        this.allDhikr = FlowKt.stateIn(this.repository.getAllDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
-        this.favoriteDhikr = FlowKt.stateIn(this.repository.getFavoriteDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
-        this.enabledDhikr = FlowKt.stateIn(this.repository.getEnabledDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
-        this.allTags = FlowKt.stateIn(this.repository.getAllTags(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
-        this.dhikrsWithTags = FlowKt.stateIn(this.repository.getDhikrsWithTags(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null), CollectionsKt.emptyList());
+        }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), new DhikrStats(0, 0, 0, 0, 0, null, 63, null));
+        this.allDhikr = FlowKt.stateIn(this.repository.getAllDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
+        this.favoriteDhikr = FlowKt.stateIn(this.repository.getFavoriteDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
+        this.enabledDhikr = FlowKt.stateIn(this.repository.getEnabledDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
+        this.allTags = FlowKt.stateIn(this.repository.getAllTags(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
+        this.dhikrsWithTags = FlowKt.stateIn(this.repository.getDhikrsWithTags(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         this._selectedDhikrFromNotification = StateFlowKt.MutableStateFlow(null);
         this.selectedDhikrFromNotification = FlowKt.asStateFlow(this._selectedDhikrFromNotification);
     }

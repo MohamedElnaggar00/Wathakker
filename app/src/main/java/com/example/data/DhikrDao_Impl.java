@@ -49,14 +49,14 @@ public final class DhikrDao_Impl implements DhikrDao {
             public void bind(SQLiteStatement statement, Dhikr entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getId());
-                statement.mo7534bindText(2, entity.getTitle());
-                statement.mo7534bindText(3, entity.getContent());
-                statement.mo7532bindLong(4, entity.isFavorite() ? 1L : 0L);
-                statement.mo7534bindText(5, DhikrDao_Impl.this.__converters.toString(entity.getReminderTimes()));
-                statement.mo7532bindLong(6, entity.isEnabled() ? 1L : 0L);
-                statement.mo7532bindLong(7, entity.getReadCount());
-                statement.mo7532bindLong(8, entity.getLastReadTime());
+                statement.bindLong(1, entity.getId());
+                statement.bindText(2, entity.getTitle());
+                statement.bindText(3, entity.getContent());
+                statement.bindLong(4, entity.isFavorite() ? 1L : 0L);
+                statement.bindText(5, DhikrDao_Impl.this.__converters.toString(entity.getReminderTimes()));
+                statement.bindLong(6, entity.isEnabled() ? 1L : 0L);
+                statement.bindLong(7, entity.getReadCount());
+                statement.bindLong(8, entity.getLastReadTime());
             }
         };
         this.__updateAdapterOfDhikr = new EntityDeleteOrUpdateAdapter<Dhikr>() { // from class: com.example.data.DhikrDao_Impl.2
@@ -70,15 +70,15 @@ public final class DhikrDao_Impl implements DhikrDao {
             public void bind(SQLiteStatement statement, Dhikr entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getId());
-                statement.mo7534bindText(2, entity.getTitle());
-                statement.mo7534bindText(3, entity.getContent());
-                statement.mo7532bindLong(4, entity.isFavorite() ? 1L : 0L);
-                statement.mo7534bindText(5, DhikrDao_Impl.this.__converters.toString(entity.getReminderTimes()));
-                statement.mo7532bindLong(6, entity.isEnabled() ? 1L : 0L);
-                statement.mo7532bindLong(7, entity.getReadCount());
-                statement.mo7532bindLong(8, entity.getLastReadTime());
-                statement.mo7532bindLong(9, entity.getId());
+                statement.bindLong(1, entity.getId());
+                statement.bindText(2, entity.getTitle());
+                statement.bindText(3, entity.getContent());
+                statement.bindLong(4, entity.isFavorite() ? 1L : 0L);
+                statement.bindText(5, DhikrDao_Impl.this.__converters.toString(entity.getReminderTimes()));
+                statement.bindLong(6, entity.isEnabled() ? 1L : 0L);
+                statement.bindLong(7, entity.getReadCount());
+                statement.bindLong(8, entity.getLastReadTime());
+                statement.bindLong(9, entity.getId());
             }
         };
     }
@@ -345,7 +345,7 @@ public final class DhikrDao_Impl implements DhikrDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $id);
+            _stmt.bindLong(1, $id);
             int _columnIndexOfId = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "id");
             int _columnIndexOfTitle = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "title");
             int _columnIndexOfContent = SQLiteStatementUtil.getColumnIndexOrThrow(_stmt, "content");
@@ -393,8 +393,8 @@ public final class DhikrDao_Impl implements DhikrDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $lastReadTime);
-            _stmt.mo7532bindLong(2, $id);
+            _stmt.bindLong(1, $lastReadTime);
+            _stmt.bindLong(2, $id);
             _stmt.step();
             _stmt.close();
             return Unit.INSTANCE;
@@ -421,7 +421,7 @@ public final class DhikrDao_Impl implements DhikrDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $id);
+            _stmt.bindLong(1, $id);
             _stmt.step();
             _stmt.close();
             return Unit.INSTANCE;

@@ -33,17 +33,17 @@ final class AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1 extends Su
 
     /* JADX INFO: Access modifiers changed from: package-private */
     public AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1(Continuation<? super AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
     }
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1(continuation);
+        return new AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1((Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     /* JADX WARN: Failed to find 'out' block for switch in B:3:0x000d. Please report as an issue. */

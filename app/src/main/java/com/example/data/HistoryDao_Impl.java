@@ -45,10 +45,10 @@ public final class HistoryDao_Impl implements HistoryDao {
             public void bind(SQLiteStatement statement, DhikrHistory entity) {
                 Intrinsics.checkNotNullParameter(statement, "statement");
                 Intrinsics.checkNotNullParameter(entity, "entity");
-                statement.mo7532bindLong(1, entity.getHistoryId());
-                statement.mo7532bindLong(2, entity.getDhikrId());
-                statement.mo7532bindLong(3, entity.getTimestamp());
-                statement.mo7534bindText(4, entity.getDateString());
+                statement.bindLong(1, entity.getHistoryId());
+                statement.bindLong(2, entity.getDhikrId());
+                statement.bindLong(3, entity.getTimestamp());
+                statement.bindText(4, entity.getDateString());
             }
         };
     }
@@ -122,7 +122,7 @@ public final class HistoryDao_Impl implements HistoryDao {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
         SQLiteStatement _stmt = _connection.prepare($_sql);
         try {
-            _stmt.mo7532bindLong(1, $startTime);
+            _stmt.bindLong(1, $startTime);
             if (_stmt.step()) {
                 _tmp = (int) _stmt.getLong(0);
             } else {

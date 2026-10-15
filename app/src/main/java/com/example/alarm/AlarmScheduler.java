@@ -55,7 +55,7 @@ public final class AlarmScheduler {
                 CollectionsKt.throwIndexOverflow();
             }
             int i5 = i3;
-            List split$default = StringsKt.split$default((CharSequence) next, new String[]{":"}, false, 0, 6, (Object) null);
+            List split$default = StringsKt.split((CharSequence) next, new String[]{":"}, false, 0);
             if (split$default.size() != 2) {
                 iterable = reminderTimes;
                 i = i2;

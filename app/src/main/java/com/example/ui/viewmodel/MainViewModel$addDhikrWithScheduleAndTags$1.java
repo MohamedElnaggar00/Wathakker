@@ -36,7 +36,7 @@ public final class MainViewModel$addDhikrWithScheduleAndTags$1 extends SuspendLa
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel$addDhikrWithScheduleAndTags$1(String str, String str2, List<String> list, MainViewModel mainViewModel, List<Long> list2, Continuation<? super MainViewModel$addDhikrWithScheduleAndTags$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.$title = str;
         this.$content = str2;
         this.$times = list;
@@ -46,12 +46,12 @@ public final class MainViewModel$addDhikrWithScheduleAndTags$1 extends SuspendLa
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$addDhikrWithScheduleAndTags$1(this.$title, this.$content, this.$times, this.this$0, this.$tagIds, continuation);
+        return new MainViewModel$addDhikrWithScheduleAndTags$1(this.$title, this.$content, this.$times, this.this$0, this.$tagIds, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$addDhikrWithScheduleAndTags$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$addDhikrWithScheduleAndTags$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     /* JADX WARN: Failed to find 'out' block for switch in B:2:0x0008. Please report as an issue. */

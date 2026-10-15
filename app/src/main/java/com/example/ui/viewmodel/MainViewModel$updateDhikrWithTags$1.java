@@ -31,7 +31,7 @@ public final class MainViewModel$updateDhikrWithTags$1 extends SuspendLambda imp
     /* JADX INFO: Access modifiers changed from: package-private */
     /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
     public MainViewModel$updateDhikrWithTags$1(Dhikr dhikr, String str, String str2, MainViewModel mainViewModel, List<Long> list, Continuation<? super MainViewModel$updateDhikrWithTags$1> continuation) {
-        super(2, continuation);
+        super(2, (Continuation) continuation);
         this.$dhikr = dhikr;
         this.$newTitle = str;
         this.$newContent = str2;
@@ -41,12 +41,12 @@ public final class MainViewModel$updateDhikrWithTags$1 extends SuspendLambda imp
 
     @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
     public final Continuation<Unit> create(Object obj, Continuation<?> continuation) {
-        return new MainViewModel$updateDhikrWithTags$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, this.$tagIds, continuation);
+        return new MainViewModel$updateDhikrWithTags$1(this.$dhikr, this.$newTitle, this.$newContent, this.this$0, this.$tagIds, (Continuation) continuation);
     }
 
     @Override // kotlin.jvm.functions.Function2
     public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
-        return ((MainViewModel$updateDhikrWithTags$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+        return ((MainViewModel$updateDhikrWithTags$1) (Object) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
     }
 
     /* JADX WARN: Failed to find 'out' block for switch in B:2:0x0006. Please report as an issue. */
