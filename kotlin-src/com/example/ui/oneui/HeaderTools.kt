@@ -1,6 +1,8 @@
 package com.example.ui.oneui
 
 import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +24,17 @@ object HeaderTools {
     @JvmStatic
     fun settings() {
         (nav?.get() as? NavController)?.navigate("settings")
+    }
+
+    @androidx.compose.runtime.Composable
+    fun SettingsButton() {
+        androidx.compose.material3.IconButton(onClick = { settings() }) {
+            androidx.compose.material3.Icon(
+                Icons.Outlined.Settings,
+                contentDescription = null,
+                tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 
     @JvmStatic
