@@ -1,0 +1,845 @@
+outcome: failure  bom: 2025.10.01  run: 38780100351  sha: 7493a369804e8029f97e884a896303f745304fa1
+errors: 11886
+--- per file
+   2944 FajrSettingsScreenKt.java
+   1600 OneUIKt.java
+   1266 HomeScreenKt.java
+    676 PrayerTimesScreenKt.java
+    600 StatisticsScreenKt.java
+    586 OneUIDialogKt.java
+    552 HisnScreensKt.java
+    456 DialogsKt.java
+    368 CitySearchDialogKt.java
+    328 DashboardScreenKt.java
+    300 TasbeehScreenKt.java
+    266 TagsScreenKt.java
+    240 MainScreenKt.java
+    194 WidgetConfigActivityKt.java
+    102 SettingsScreenKt.java
+     98 AboutScreenKt.java
+     68 RemindersScreenKt.java
+     64 MoreScreenKt.java
+     64 FontPickerDialogKt.java
+     56 TagDao_Impl.java
+     52 DialogsKt$SimpleFlowRow$1$1.java
+     52 DhikrDao_Impl.java
+     50 HisnDao_Impl.java
+     46 ComposableSingletons$MainScreenKt.java
+     44 GlassKt.java
+     40 HisnViewModel.java
+     38 ThemeKt.java
+     36 FajrViewModel$updateLocationFromGps$1.java
+     30 MainViewModel.java
+     30 MainActivity.java
+     30 HeaderTools.java
+     28 TypeKt.java
+     28 ComposableSingletons$FajrSettingsScreenKt.java
+     24 ComposableSingletons$SettingsScreenKt.java
+     22 FavoritesScreenKt.java
+     22 ComposableSingletons$AboutScreenKt.java
+     22 AppDatabase_Impl.java
+     20 FajrViewModel$refreshFajrTimeManually$1.java
+     20 ComposableSingletons$DashboardScreenKt.java
+     20 AppDatabase$Companion$getDatabase$1$instance$1$onCreate$1.java
+     18 FajrAlarmActivity.java
+     16 ComposableSingletons$CitySearchDialogKt.java
+     14 MainViewModel$updateDhikrWithTags$1.java
+     14 MainViewModel$addDhikrWithScheduleAndTags$1.java
+     12 WidgetConfigActivity.java
+     12 MainViewModel$toggleEnabled$1.java
+     12 MainViewModel$deleteTag$1.java
+     10 OneUIKt$OneUIScreen$1$1.java
+     10 MainViewModel$updateTimes$1.java
+     10 MainViewModel$updateDhikrText$1.java
+     10 MainViewModel$onDhikrSelectedFromNotification$1.java
+     10 MainViewModel$deleteDhikr$1.java
+     10 MainViewModel$addTag$1.java
+     10 MainViewModel$addDhikrWithSchedule$1.java
+     10 HistoryDao_Impl.java
+     10 ComposableSingletons$StatisticsScreenKt.java
+      8 OneUIDimens.java
+      8 MainViewModel$updateTag$1.java
+      8 MainViewModel$updateDhikrTags$1.java
+      8 MainViewModel$toggleFavorite$1.java
+      8 MainViewModel$markAsRead$1.java
+      8 MainScreenKt$MainScreen$1$1$6$1$1.java
+      8 HisnViewModel$toggle$1.java
+      8 HisnViewModel$markChapterRead$1.java
+      8 DhikrRepository.java
+      8 AlarmScheduler.java
+      6 WidgetUpdater.java
+      6 TagDao_Impl$updateDhikrTags$2.java
+      6 PrayerTimesScreenKt$PrayerTimesScreen$1$1.java
+      6 NotificationActionReceiver$onReceive$1.java
+      6 MainActivity$onCreate$1$1$1.java
+      6 FajrTabIcon.java
+      6 BootReceiver$onReceive$1.java
+      6 AppDatabase.java
+      6 AlarmReceiver$onReceive$1.java
+      4 DhikrHistory.java
+      4 Converters.java
+      4 ComposableSingletons$OneUIKt.java
+      2 TasbeehScreenKt$TasbeehScreen$2$1.java
+      2 TasbeehScreenKt$TasbeehScreen$1$1.java
+--- per symbol
+   5856 symbol:   variable INSTANCE
+   1384 symbol:   method m7226constructorimpl
+    524 symbol:   method m3828constructorimpl
+    318 symbol:   method getOnSurfaceVariant
+    312 symbol:   variable CC
+    272 symbol:   variable r12
+    224 symbol:   method getOnSurface
+    188 symbol:   method getPrimary
+     96 symbol:   method mo7532bindLong
+     84 symbol:   method m2816Text4IGK_g
+     60 symbol:   method m264clickableXHw0xAI$default
+     42 symbol:   method getSurfaceVariant
+     40 symbol:   method mo7534bindText
+     38 symbol:   variable r14
+     36 symbol:   method getSurface
+     32 symbol:   variable r56
+     30 symbol:   method tween$default
+     30 symbol:   method m231backgroundbw27NRU$default
+     28 symbol:   method m4479boximpl
+     28 symbol:   method getOutline
+     26 symbol:   variable r4
+     24 symbol:   variable r37
+     24 symbol:   variable r3
+     24 symbol:   method m4499unboximpl
+     24 symbol:   method m4492getBlueimpl
+     18 symbol:   variable r59
+     18 symbol:   method composable$default
+     16 symbol:   variable r54
+     16 symbol:   variable r41
+     16 symbol:   method getError
+     16 symbol:   method fillMaxWidth$default
+     14 symbol:   variable r53
+     14 symbol:   variable e
+     14 symbol:   method getOnBackground
+     12 symbol: class T
+     12 symbol:   variable r9
+     12 symbol:   method getSurfaceContainerHighest
+     10 symbol:   variable r17
+     10 symbol:   variable r0
+     10 symbol:   method split$default
+     10 symbol:   method navigate$default
+     10 symbol:   method mo4984getSizeNHjbRc
+     10 symbol:   method m4495getRedimpl
+     10 symbol:   method m4494getGreenimpl
+     10 symbol:   method m4491getAlphaimpl
+     10 symbol:   method m4487copywmQWz5c
+     10 symbol:   method m2273Iconww6aTOc
+     10 symbol:   method joinToString$default
+      8 symbol:   variable r8
+      8 symbol:   variable r65
+      8 symbol:   variable r48
+      8 symbol:   variable r38
+      8 symbol:   variable r22
+      8 symbol:   variable r16
+      8 symbol:   variable r15
+      8 symbol:   method m4534compositeOverOWjLjI
+      8 symbol:   method m1024RoundedCornerShape0680j_4
+      6 symbol:   method setContent$default
+      6 symbol:   method m782width3ABfNKs
+      6 symbol:   method m7169getMaxWidthimpl
+--- details
+51:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:28: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<Object>
+52-        super(2, continuation);
+53-                 ^
+54-  where CAP#1 is a fresh type-variable:
+55-    CAP#1 extends Object super: FajrViewModel$refreshFajrTimeManually$1 from capture of ? super FajrViewModel$refreshFajrTimeManually$1
+56:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:34: error: incompatible types: Continuation<CAP#1> cannot be converted to Continuation<? super FajrViewModel$refreshFajrTimeManually$1>
+57-        return new FajrViewModel$refreshFajrTimeManually$1(this.this$0, continuation);
+58-                                                                        ^
+59-  where CAP#1 is a fresh type-variable:
+60-    CAP#1 extends Object from capture of ?
+61:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:39: error: incompatible types: Continuation<Unit> cannot be converted to FajrViewModel$refreshFajrTimeManually$1
+62-        return ((FajrViewModel$refreshFajrTimeManually$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+63-                                                                ^
+64:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:55: error: _uiState has private access in FajrViewModel
+65-                mutableStateFlow = this.this$0._uiState;
+66-                                              ^
+67:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:56: error: _uiState has private access in FajrViewModel
+68-                mutableStateFlow2 = this.this$0._uiState;
+69-                                               ^
+70:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:58: error: prefs has private access in FajrViewModel
+71-                fajrPreferences = this.this$0.prefs;
+72-                                             ^
+73:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:66: error: prefs has private access in FajrViewModel
+74-                fajrPreferences2 = this.this$0.prefs;
+75-                                              ^
+76:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:68: error: scheduler has private access in FajrViewModel
+77-                    fajrAlarmScheduler = this.this$0.scheduler;
+78-                                                    ^
+79:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:71: error: _uiState has private access in FajrViewModel
+80-                mutableStateFlow3 = this.this$0._uiState;
+81-                                               ^
+82:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrViewModel$refreshFajrTimeManually$1.java:72: error: _uiState has private access in FajrViewModel
+83-                mutableStateFlow4 = this.this$0._uiState;
+84-                                               ^
+85:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:29: error: incompatible types: ComposableLambda cannot be converted to Function2<Composer,Integer,Unit>
+86-    private static Function2<Composer, Integer, Unit> lambda$507763706 = ComposableLambdaKt.composableLambdaInstance(507763706, false, new Function2() { // from class: com.example.fajr.ui.ComposableSingletons$CitySearchDialogKt$$ExternalSyntheticLambda0
+87-                                                                                                                    ^
+88:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:35: error: incompatible types: ComposableLambda cannot be converted to Function2<Composer,Integer,Unit>
+89-    private static Function2<Composer, Integer, Unit> lambda$1579394866 = ComposableLambdaKt.composableLambdaInstance(1579394866, false, new Function2() { // from class: com.example.fajr.ui.ComposableSingletons$CitySearchDialogKt$$ExternalSyntheticLambda1
+90-                                                                                                                     ^
+91:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:41: error: incompatible types: ComposableLambda cannot be converted to Function2<Composer,Integer,Unit>
+92-    private static Function2<Composer, Integer, Unit> lambda$1443367569 = ComposableLambdaKt.composableLambdaInstance(1443367569, false, new Function2() { // from class: com.example.fajr.ui.ComposableSingletons$CitySearchDialogKt$$ExternalSyntheticLambda2
+93-                                                                                                                     ^
+94:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:49: error: incompatible types: ComposableLambda cannot be converted to Function2<Composer,Integer,Unit>
+95-    private static Function2<Composer, Integer, Unit> f81lambda$477638408 = ComposableLambdaKt.composableLambdaInstance(-477638408, false, new Function2() { // from class: com.example.fajr.ui.ComposableSingletons$CitySearchDialogKt$$ExternalSyntheticLambda3
+96-                                                                                                                       ^
+97:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:82: error: cannot find symbol
+98-            IconKt.m2273Iconww6aTOc(CloseKt.getClose(Icons.Outlined.INSTANCE), "Close", (Modifier) null, 0L, $composer, 48, 12);
+99-                  ^
+100-  symbol:   method m2273Iconww6aTOc(ImageVector,String,Modifier,long,Composer,int,int)
+101-  location: class IconKt
+102:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:97: error: cannot find symbol
+103-            TextKt.m2816Text4IGK_g("بحث عن مدينة أو دولة...", (Modifier) null, 0L, 0L, (FontStyle) null, (FontWeight) null, (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 6, 0, 131070);
+104-                  ^
+105-  symbol:   method m2816Text4IGK_g(String,Modifier,long,long,FontStyle,FontWeight,FontFamily,long,TextDecoration,TextAlign,long,int,boolean,int,int,Function1<CAP#1,Unit>,TextStyle,Composer,int,int,int)
+106-  location: class TextKt
+--
+109:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:114: error: cannot find symbol
+110-            IconKt.m2273Iconww6aTOc(SearchKt.getSearch(Icons.Outlined.INSTANCE), (String) null, (Modifier) null, 0L, $composer, 48, 12);
+111-                  ^
+112-  symbol:   method m2273Iconww6aTOc(ImageVector,String,Modifier,long,Composer,int,int)
+113-  location: class IconKt
+114:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/ComposableSingletons$CitySearchDialogKt.java:133: error: cannot find symbol
+115-            IconKt.m2273Iconww6aTOc(CloseKt.getClose(Icons.Outlined.INSTANCE), "Clear", (Modifier) null, 0L, $composer, 48, 12);
+116-                  ^
+117-  symbol:   method m2273Iconww6aTOc(ImageVector,String,Modifier,long,Composer,int,int)
+118-  location: class IconKt
+119:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:139: error: cannot find symbol
+120-        IconKt.m2273Iconww6aTOc(alarmOff, str, SizeKt.m777size3ABfNKs(PaddingKt.m730padding3ABfNKs(Modifier.INSTANCE, 11.0f), 24.0f), ColorKt.Color(j), composer, 0, 0);
+121-                                                                                                           ^
+122-  symbol:   variable INSTANCE
+123-  location: interface Modifier
+124:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:257: error: cannot find symbol
+125-                if (rememberedValue == Composer.INSTANCE.getEmpty()) {
+126-                                               ^
+127-  symbol:   variable INSTANCE
+128-  location: interface Composer
+129:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:286: error: cannot find symbol
+130-            if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
+131-                                            ^
+132-  symbol:   variable INSTANCE
+133-  location: interface Composer
+134:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:295: error: cannot find symbol
+135-            if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
+136-                                            ^
+137-  symbol:   variable INSTANCE
+138-  location: interface Composer
+139:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:304: error: cannot find symbol
+140-            if (rememberedValue4 == Composer.INSTANCE.getEmpty()) {
+141-                                            ^
+142-  symbol:   variable INSTANCE
+143-  location: interface Composer
+144:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:323: error: not an enclosing class: FajrViewModel
+145-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$14$lambda$13(FajrViewModel.this, (Map) obj2);
+146-                                                                                                    ^
+147:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:366: error: cannot find symbol
+148-            if (changedInstance4 || rememberedValue8 == Composer.INSTANCE.getEmpty()) {
+149-                                                                ^
+150-  symbol:   variable INSTANCE
+151-  location: interface Composer
+152:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:370: error: not an enclosing class: FajrViewModel
+153-                        return FajrSettingsScreenKt.FajrSettingsScreen$lambda$21$lambda$20(FajrViewModel.this, (DisposableEffectScope) obj3);
+154-                                                                                                        ^
+155:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:383: error: cannot find symbol
+156-                if (rememberedValue9 == Composer.INSTANCE.getEmpty()) {
+157-                                                ^
+158-  symbol:   variable INSTANCE
+159-  location: interface Composer
+160:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:387: error: not an enclosing class: MutableState
+161-                            return FajrSettingsScreenKt.FajrSettingsScreen$lambda$23$lambda$22(MutableState.this);
+162-                                                                                                           ^
+163:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:403: error: not an enclosing class: FajrViewModel
+164-                        return FajrSettingsScreenKt.FajrSettingsScreen$lambda$25$lambda$24(FajrViewModel.this, (CityItem) obj4);
+165-                                                                                                        ^
+166:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:419: error: cannot find symbol
+167-                if (rememberedValue11 == Composer.INSTANCE.getEmpty()) {
+168-                                                 ^
+169-  symbol:   variable INSTANCE
+170-  location: interface Composer
+171:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:423: error: not an enclosing class: MutableState
+172-                            return FajrSettingsScreenKt.FajrSettingsScreen$lambda$27$lambda$26(MutableState.this);
+173-                                                                                                           ^
+174:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:433: error: cannot find symbol
+175-                if (changedInstance6 || rememberedValue12 == Composer.INSTANCE.getEmpty()) {
+176-                                                                     ^
+177-  symbol:   variable INSTANCE
+178-  location: interface Composer
+179:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:437: error: not an enclosing class: FajrViewModel
+180-                            return FajrSettingsScreenKt.FajrSettingsScreen$lambda$29$lambda$28(FajrViewModel.this, (CalculationMethod) obj5);
+181-                                                                                                            ^
+182:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:461: error: not an enclosing class: FajrViewModel
+183-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$31$lambda$30(FajrViewModel.this, ((Boolean) obj6).booleanValue());
+184-                                                                                                    ^
+185:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:476: error: not an enclosing class: FajrViewModel
+186-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$33$lambda$32(FajrViewModel.this, locationPermissionLauncher, state$delegate);
+187-                                                                                                    ^
+188:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:491: error: not an enclosing class: FajrViewModel
+189-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$35$lambda$34(FajrViewModel.this);
+190-                                                                                                    ^
+191:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:499: error: cannot find symbol
+192-            if (rememberedValue16 == Composer.INSTANCE.getEmpty()) {
+193-                                             ^
+194-  symbol:   variable INSTANCE
+195-  location: interface Composer
+196:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:503: error: not an enclosing class: MutableState
+197-                        return FajrSettingsScreenKt.FajrSettingsScreen$lambda$37$lambda$36(MutableState.this);
+198-                                                                                                       ^
+199:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:512: error: cannot find symbol
+200-            if (rememberedValue17 == Composer.INSTANCE.getEmpty()) {
+201-                                             ^
+202-  symbol:   variable INSTANCE
+203-  location: interface Composer
+204:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:516: error: not an enclosing class: MutableState
+205-                        return FajrSettingsScreenKt.FajrSettingsScreen$lambda$39$lambda$38(MutableState.this);
+206-                                                                                                       ^
+207:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:531: error: not an enclosing class: FajrViewModel
+208-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$41$lambda$40(FajrViewModel.this);
+209-                                                                                                    ^
+210:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:546: error: not an enclosing class: FajrViewModel
+211-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$43$lambda$42(FajrViewModel.this, context, isPlayingPreview$delegate);
+212-                                                                                                    ^
+213:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:560: error: not an enclosing class: ManagedActivityResultLauncher
+214-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$46$lambda$45(ManagedActivityResultLauncher.this);
+215-                                                                                                                    ^
+216:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:574: error: not an enclosing class: ManagedActivityResultLauncher
+217-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$48$lambda$47(ManagedActivityResultLauncher.this);
+218-                                                                                                                    ^
+219:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:588: error: not an enclosing class: FajrViewModel
+220-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$50$lambda$49(FajrViewModel.this, ((Boolean) obj7).booleanValue());
+221-                                                                                                    ^
+222:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:602: error: not an enclosing class: FajrViewModel
+223-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$52$lambda$51(FajrViewModel.this, ((Integer) obj7).intValue());
+224-                                                                                                    ^
+225:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:616: error: not an enclosing class: FajrViewModel
+226-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$54$lambda$53(FajrViewModel.this, ((Integer) obj7).intValue());
+227-                                                                                                    ^
+228:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:636: error: not an enclosing class: FajrViewModel
+229-                    return FajrSettingsScreenKt.FajrSettingsScreen$lambda$55(FajrViewModel.this, onBack, $changed, i, (Composer) obj7, ((Integer) obj8).intValue());
+230-                                                                                          ^
+231:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:722: error: not an enclosing class: FajrViewModel
+232-                FajrViewModel.this.stopRingtonePreview();
+233-                             ^
+234:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1049: error: cannot find symbol
+235-                if (rememberedValue == Composer.INSTANCE.getEmpty()) {
+236-                                               ^
+237-  symbol:   variable INSTANCE
+238-  location: interface Composer
+239:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1068: error: cannot find symbol
+240-                if (rememberedValue2 == Composer.INSTANCE.getEmpty()) {
+241-                                                ^
+242-  symbol:   variable INSTANCE
+243-  location: interface Composer
+244:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1090: error: cannot find symbol
+245-                if (rememberedValue3 == Composer.INSTANCE.getEmpty()) {
+246-                                                ^
+247-  symbol:   variable INSTANCE
+248-  location: interface Composer
+249:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1112: error: cannot find symbol
+250-                if (rememberedValue4 == Composer.INSTANCE.getEmpty()) {
+251-                                                ^
+252-  symbol:   variable INSTANCE
+253-  location: interface Composer
+254:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1133: error: cannot find symbol
+255-                if (rememberedValue5 == Composer.INSTANCE.getEmpty()) {
+256-                                                ^
+257-  symbol:   variable INSTANCE
+258-  location: interface Composer
+259:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1153: error: cannot find symbol
+260-                if (rememberedValue6 == Composer.INSTANCE.getEmpty()) {
+261-                                                ^
+262-  symbol:   variable INSTANCE
+263-  location: interface Composer
+264:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1173: error: cannot find symbol
+265-                if (rememberedValue7 == Composer.INSTANCE.getEmpty()) {
+266-                                                ^
+267-  symbol:   variable INSTANCE
+268-  location: interface Composer
+269:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1195: error: cannot find symbol
+270-                if (rememberedValue8 == Composer.INSTANCE.getEmpty()) {
+271-                                                ^
+272-  symbol:   variable INSTANCE
+273-  location: interface Composer
+274:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1217: error: cannot find symbol
+275-                if (rememberedValue9 == Composer.INSTANCE.getEmpty()) {
+276-                                                ^
+277-  symbol:   variable INSTANCE
+278-  location: interface Composer
+279:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1239: error: cannot find symbol
+280-                if (rememberedValue10 == Composer.INSTANCE.getEmpty()) {
+281-                                                 ^
+282-  symbol:   variable INSTANCE
+283-  location: interface Composer
+284:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1261: error: cannot find symbol
+285-                if (rememberedValue11 == Composer.INSTANCE.getEmpty()) {
+286-                                                 ^
+287-  symbol:   variable INSTANCE
+288-  location: interface Composer
+289:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1284: error: cannot find symbol
+290-                if (rememberedValue12 == Composer.INSTANCE.getEmpty()) {
+291-                                                 ^
+292-  symbol:   variable INSTANCE
+293-  location: interface Composer
+294:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1307: error: cannot find symbol
+295-                if (rememberedValue13 == Composer.INSTANCE.getEmpty()) {
+296-                                                 ^
+297-  symbol:   variable INSTANCE
+298-  location: interface Composer
+299:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1332: error: cannot find symbol
+300-            if (z || rememberedValue14 == Composer.INSTANCE.getEmpty()) {
+301-                                                  ^
+302-  symbol:   variable INSTANCE
+303-  location: interface Composer
+304:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1348: error: not an enclosing class: FajrSettingsState
+305-                        return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123(FajrSettingsState.this, onToggleAlarm5, onPickSystemRingtone6, onPickAudioFile6, onChangeCity6, onChangeMethod4, onRefresh4, onTogglePreview3, isPlayingPreview5, onPickSystemRingtone5, onPickAudioFile5, onToggleVibration5, onSetVolume5, onSetMaxDuration4, (LazyListScope) obj14);
+306-                                                                                                               ^
+307:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1435: error: not an enclosing class: FajrSettingsState
+308-                    return FajrSettingsScreenKt.FajrSettingsContent$lambda$125(FajrSettingsState.this, onBack2, onToggleAlarm, onRefresh, onSelectManualCity2, onChangeCity2, onChangeMethod, onChangeCity, isPlayingPreview2, onTogglePreview, onPickSystemRingtone, onPickAudioFile, onToggleVibration, onSetVolume, onSetMaxDuration, $changed, $changed1, i, (Composer) obj14, ((Integer) obj15).intValue());
+309-                                                                                                ^
+310:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1444: error: cannot find symbol
+311-        LazyListScope.CC.item$default(OneUIScreen, null, null, ComposableLambdaKt.composableLambdaInstance(-1169439782, true, new Function3() { // from class: com.example.fajr.ui.FajrSettingsScreenKt$$ExternalSyntheticLambda46
+312-                     ^
+313-  symbol:   variable CC
+314-  location: interface LazyListScope
+315:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1447: error: not an enclosing class: FajrSettingsState
+316-                return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123$lambda$82(FajrSettingsState.this, (LazyItemScope) obj, (Composer) obj2, ((Integer) obj3).intValue());
+317-                                                                                                                 ^
+318:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1450: error: cannot find symbol
+319-        LazyListScope.CC.item$default(OneUIScreen, null, null, ComposableLambdaKt.composableLambdaInstance(-1140692797, true, new Function3() { // from class: com.example.fajr.ui.FajrSettingsScreenKt$$ExternalSyntheticLambda47
+320-                     ^
+321-  symbol:   variable CC
+322-  location: interface LazyListScope
+323:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1453: error: not an enclosing class: FajrSettingsState
+324-                return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123$lambda$88(FajrSettingsState.this, $onToggleAlarm, (LazyItemScope) obj, (Composer) obj2, ((Integer) obj3).intValue());
+325-                                                                                                                 ^
+326:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1456: error: cannot find symbol
+327-        LazyListScope.CC.item$default(OneUIScreen, null, null, ComposableLambdaKt.composableLambdaInstance(-87656030, true, new Function3() { // from class: com.example.fajr.ui.FajrSettingsScreenKt$$ExternalSyntheticLambda48
+328-                     ^
+329-  symbol:   variable CC
+330-  location: interface LazyListScope
+331:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1459: error: not an enclosing class: FajrSettingsState
+332-                return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123$lambda$94(FajrSettingsState.this, $onSelectGps, $onSelectManualCity, $onChangeCity, (LazyItemScope) obj, (Composer) obj2, ((Integer) obj3).intValue());
+333-                                                                                                                 ^
+334:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1462: error: cannot find symbol
+335-        LazyListScope.CC.item$default(OneUIScreen, null, null, ComposableLambdaKt.composableLambdaInstance(965380737, true, new Function3() { // from class: com.example.fajr.ui.FajrSettingsScreenKt$$ExternalSyntheticLambda49
+336-                     ^
+337-  symbol:   variable CC
+338-  location: interface LazyListScope
+339:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1465: error: not an enclosing class: Function0
+340-                return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123$lambda$100(Function0.this, $state, $onRefresh, (LazyItemScope) obj, (Composer) obj2, ((Integer) obj3).intValue());
+341-                                                                                                          ^
+342:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1468: error: cannot find symbol
+343-        LazyListScope.CC.item$default(OneUIScreen, null, null, ComposableLambdaKt.composableLambdaInstance(2018417504, true, new Function3() { // from class: com.example.fajr.ui.FajrSettingsScreenKt$$ExternalSyntheticLambda50
+344-                     ^
+345-  symbol:   variable CC
+346-  location: interface LazyListScope
+347:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1471: error: not an enclosing class: Function0
+348-                return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123$lambda$107(Function0.this, $state, $isPlayingPreview, $onPickSystemRingtone, $onPickAudioFile, (LazyItemScope) obj, (Composer) obj2, ((Integer) obj3).intValue());
+349-                                                                                                          ^
+350:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1474: error: cannot find symbol
+351-        LazyListScope.CC.item$default(OneUIScreen, null, null, ComposableLambdaKt.composableLambdaInstance(-1223513025, true, new Function3() { // from class: com.example.fajr.ui.FajrSettingsScreenKt$$ExternalSyntheticLambda51
+352-                     ^
+353-  symbol:   variable CC
+354-  location: interface LazyListScope
+355:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1477: error: not an enclosing class: FajrSettingsState
+356-                return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123$lambda$122(FajrSettingsState.this, $onToggleVibration, $onSetVolume, $onSetMaxDuration, (LazyItemScope) obj, (Composer) obj2, ((Integer) obj3).intValue());
+357-                                                                                                                  ^
+358:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1514: error: not an enclosing class: FajrSettingsState
+359-                    return FajrSettingsScreenKt.FajrSettingsContent$lambda$124$lambda$123$lambda$88$lambda$87(FajrSettingsState.this, $onToggleAlarm, (ColumnScope) obj, (Composer) obj2, ((Integer) obj3).intValue());
+360-                                                                                                                               ^
+361:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1511: error: cannot find symbol
+362-            OneUIKt.m7680OneUICarduDo3WH8(null, null, PaddingKt.m723PaddingValues0680j_4(Dp.m7226constructorimpl(18)), 0L, ComposableLambdaKt.rememberComposableLambda(395684152, true, new Function3() { // from class: com.example.fajr.ui.FajrSettingsScreenKt$$ExternalSyntheticLambda45
+363-                                                                                           ^
+364-  symbol:   method m7226constructorimpl(int)
+365-  location: class Dp
+366:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1561: error: cannot find symbol
+367-            Modifier fillMaxWidth$default = SizeKt.fillMaxWidth$default(Modifier.INSTANCE, 0.0f, 1, null);
+368-                                                                                ^
+369-  symbol:   variable INSTANCE
+370-  location: interface Modifier
+371:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1562: error: cannot find symbol
+372-            Alignment.Vertical centerVertically = Alignment.INSTANCE.getCenterVertically();
+373-                                                           ^
+374-  symbol:   variable INSTANCE
+375-  location: interface Alignment
+376:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1570: error: cannot find symbol
+377-            Function0 constructor = ComposeUiNode.INSTANCE.getConstructor();
+378-                                                 ^
+379-  symbol:   variable INSTANCE
+380-  location: interface ComposeUiNode
+381:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1584: error: cannot find symbol
+382-            Composer m3828constructorimpl4 = Updater.m3828constructorimpl($composer);
+383-                                                    ^
+384-  symbol:   method m3828constructorimpl(Composer)
+385-  location: class Updater
+386:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1585: error: cannot find symbol
+387-            Updater.m3835setimpl(m3828constructorimpl4, rowMeasurePolicy, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+388-                                                                                       ^
+389-  symbol:   variable INSTANCE
+390-  location: interface ComposeUiNode
+391:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1586: error: cannot find symbol
+392-            Updater.m3835setimpl(m3828constructorimpl4, currentCompositionLocalMap, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+393-                                                                                                 ^
+394-  symbol:   variable INSTANCE
+395-  location: interface ComposeUiNode
+396:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1587: error: cannot find symbol
+397-            Function2 setCompositeKeyHash = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+398-                                                         ^
+399-  symbol:   variable INSTANCE
+400-  location: interface ComposeUiNode
+401:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1589: error: cannot find symbol
+402-                Updater.m3835setimpl(m3828constructorimpl4, materializeModifier, ComposeUiNode.INSTANCE.getSetModifier());
+403-                                                                                              ^
+404-  symbol:   variable INSTANCE
+405-  location: interface ComposeUiNode
+406:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1595: error: cannot find symbol
+407-                Alignment.Vertical centerVertically2 = Alignment.INSTANCE.getCenterVertically();
+408-                                                                ^
+409-  symbol:   variable INSTANCE
+410-  location: interface Alignment
+411:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1597: error: cannot find symbol
+412-                Modifier modifier = Modifier.INSTANCE;
+413-                                            ^
+414-  symbol:   variable INSTANCE
+415-  location: interface Modifier
+416:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1603: error: cannot find symbol
+417-                Function0 constructor2 = ComposeUiNode.INSTANCE.getConstructor();
+418-                                                      ^
+419-  symbol:   variable INSTANCE
+420-  location: interface ComposeUiNode
+421:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1617: error: cannot find symbol
+422-                m3828constructorimpl = Updater.m3828constructorimpl($composer);
+423-                                              ^
+424-  symbol:   method m3828constructorimpl(Composer)
+425-  location: class Updater
+426:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1618: error: cannot find symbol
+427-                Updater.m3835setimpl(m3828constructorimpl, rowMeasurePolicy2, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+428-                                                                                           ^
+429-  symbol:   variable INSTANCE
+430-  location: interface ComposeUiNode
+431:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1619: error: cannot find symbol
+432-                Updater.m3835setimpl(m3828constructorimpl, currentCompositionLocalMap2, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+433-                                                                                                     ^
+434-  symbol:   variable INSTANCE
+435-  location: interface ComposeUiNode
+436:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1620: error: cannot find symbol
+437-                Function2 setCompositeKeyHash2 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+438-                                                              ^
+439-  symbol:   variable INSTANCE
+440-  location: interface ComposeUiNode
+441:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1622: error: cannot find symbol
+442-                    Updater.m3835setimpl(m3828constructorimpl, materializeModifier2, ComposeUiNode.INSTANCE.getSetModifier());
+443-                                                                                                  ^
+444-  symbol:   variable INSTANCE
+445-  location: interface ComposeUiNode
+446:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1628: error: cannot find symbol
+447-                    Modifier clip = ClipKt.clip(SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(44)), RoundedCornerShapeKt.getCircleShape());
+448-                                                                               ^
+449-  symbol:   variable INSTANCE
+450-  location: interface Modifier
+451:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1628: error: cannot find symbol
+452-                    Modifier clip = ClipKt.clip(SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(44)), RoundedCornerShapeKt.getCircleShape());
+453-                                                                                            ^
+454-  symbol:   method m7226constructorimpl(int)
+455-  location: class Dp
+456:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+457-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+458-                                                              ^
+459-  symbol:   variable r56
+460-  location: class FajrSettingsScreenKt
+461:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+462-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+463-                                                                    ^
+464-  symbol:   variable r12
+465-  location: class FajrSettingsScreenKt
+466:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+467-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+468-                                                                                                            ^
+469-  symbol:   variable r56
+470-  location: class FajrSettingsScreenKt
+471:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+472-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+473-                                                                                                                           ^
+474-  symbol:   variable r12
+475-  location: class FajrSettingsScreenKt
+476:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+477-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+478-                                                                                                                                                                 ^
+479-  symbol:   variable r56
+480-  location: class FajrSettingsScreenKt
+481:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+482-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+483-                                                                                                                                                                               ^
+484-  symbol:   variable r12
+485-  location: class FajrSettingsScreenKt
+486:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+487-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+488-                                                                                                                                                                                                                       ^
+489-  symbol:   variable r56
+490-  location: class FajrSettingsScreenKt
+491:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+492-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+493-                                                                                                                                                                                                                                     ^
+494-  symbol:   variable r12
+495-  location: class FajrSettingsScreenKt
+496:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1629: error: cannot find symbol
+497-                    m4487copywmQWz5c = Color.m4487copywmQWz5c(r56, (r12 & 1) != 0 ? Color.m4491getAlphaimpl(r56) : 0.15f, (r12 & 2) != 0 ? Color.m4495getRedimpl(r56) : 0.0f, (r12 & 4) != 0 ? Color.m4494getGreenimpl(r56) : 0.0f, (r12 & 8) != 0 ? Color.m4492getBlueimpl(MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary()) : 0.0f);
+498-                                                                                                                                                                                                                                                                                                                                                   ^
+499-  symbol:   method getPrimary()
+500-  location: class ColorScheme
+501:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1630: error: cannot find symbol
+502-                    Modifier m231backgroundbw27NRU$default = BackgroundKt.m231backgroundbw27NRU$default(clip, m4487copywmQWz5c, null, 2, null);
+503-                                                                         ^
+504-  symbol:   method m231backgroundbw27NRU$default(Modifier,long,<null>,int,<null>)
+505-  location: class BackgroundKt
+506:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1631: error: cannot find symbol
+507-                    Alignment center = Alignment.INSTANCE.getCenter();
+508-                                                ^
+509-  symbol:   variable INSTANCE
+510-  location: interface Alignment
+511:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1638: error: cannot find symbol
+512-                    Function0 constructor3 = ComposeUiNode.INSTANCE.getConstructor();
+513-                                                          ^
+514-  symbol:   variable INSTANCE
+515-  location: interface ComposeUiNode
+516:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1652: error: cannot find symbol
+517-                    m3828constructorimpl2 = Updater.m3828constructorimpl($composer);
+518-                                                   ^
+519-  symbol:   method m3828constructorimpl(Composer)
+520-  location: class Updater
+521:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1653: error: cannot find symbol
+522-                    Updater.m3835setimpl(m3828constructorimpl2, maybeCachedBoxMeasurePolicy, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+523-                                                                                                          ^
+524-  symbol:   variable INSTANCE
+525-  location: interface ComposeUiNode
+526:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1654: error: cannot find symbol
+527-                    Updater.m3835setimpl(m3828constructorimpl2, currentCompositionLocalMap3, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+528-                                                                                                          ^
+529-  symbol:   variable INSTANCE
+530-  location: interface ComposeUiNode
+531:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1655: error: cannot find symbol
+532-                    Function2 setCompositeKeyHash3 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+533-                                                                  ^
+534-  symbol:   variable INSTANCE
+535-  location: interface ComposeUiNode
+536:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1657: error: cannot find symbol
+537-                        Updater.m3835setimpl(m3828constructorimpl2, materializeModifier3, ComposeUiNode.INSTANCE.getSetModifier());
+538-                                                                                                       ^
+539-  symbol:   variable INSTANCE
+540-  location: interface ComposeUiNode
+541:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1663: error: cannot find symbol
+542-                        IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), (String) null, SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary(), $composer, 432, 0);
+543-                                                                                                                                         ^
+544-  symbol:   variable INSTANCE
+545-  location: interface Modifier
+546:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1663: error: cannot find symbol
+547-                        IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), (String) null, SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary(), $composer, 432, 0);
+548-                                                                                                                                                      ^
+549-  symbol:   method m7226constructorimpl(int)
+550-  location: class Dp
+551:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1663: error: cannot find symbol
+552-                        IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), (String) null, SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary(), $composer, 432, 0);
+553-                                                                                                                                                                                                                                                         ^
+554-  symbol:   method getPrimary()
+555-  location: class ColorScheme
+556:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1670: error: cannot find symbol
+557-                        SpacerKt.Spacer(SizeKt.m782width3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(14)), $composer, 6);
+558-                                                                        ^
+559-  symbol:   variable INSTANCE
+560-  location: interface Modifier
+561:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1670: error: cannot find symbol
+562-                        SpacerKt.Spacer(SizeKt.m782width3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(14)), $composer, 6);
+563-                                                                                     ^
+564-  symbol:   method m7226constructorimpl(int)
+565-  location: class Dp
+566:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1672: error: cannot find symbol
+567-                        Modifier modifier2 = Modifier.INSTANCE;
+568-                                                     ^
+569-  symbol:   variable INSTANCE
+570-  location: interface Modifier
+571:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1673: error: cannot find symbol
+572-                        MeasurePolicy columnMeasurePolicy = ColumnKt.columnMeasurePolicy(Arrangement.INSTANCE.getTop(), Alignment.INSTANCE.getStart(), $composer, ((0 >> 3) & 14) | ((0 >> 3) & 112));
+573-                                                                                                                                 ^
+574-  symbol:   variable INSTANCE
+575-  location: interface Alignment
+576:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1678: error: cannot find symbol
+577-                        Function0 constructor4 = ComposeUiNode.INSTANCE.getConstructor();
+578-                                                              ^
+579-  symbol:   variable INSTANCE
+580-  location: interface ComposeUiNode
+581:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1692: error: cannot find symbol
+582-                        m3828constructorimpl3 = Updater.m3828constructorimpl($composer);
+583-                                                       ^
+584-  symbol:   method m3828constructorimpl(Composer)
+585-  location: class Updater
+586:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1693: error: cannot find symbol
+587-                        Updater.m3835setimpl(m3828constructorimpl3, columnMeasurePolicy, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+588-                                                                                                      ^
+589-  symbol:   variable INSTANCE
+590-  location: interface ComposeUiNode
+591:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1694: error: cannot find symbol
+592-                        Updater.m3835setimpl(m3828constructorimpl3, currentCompositionLocalMap4, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+593-                                                                                                              ^
+594-  symbol:   variable INSTANCE
+595-  location: interface ComposeUiNode
+596:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1695: error: cannot find symbol
+597-                        Function2 setCompositeKeyHash4 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+598-                                                                      ^
+599-  symbol:   variable INSTANCE
+600-  location: interface ComposeUiNode
+601:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1697: error: cannot find symbol
+602-                            Updater.m3835setimpl(m3828constructorimpl3, materializeModifier4, ComposeUiNode.INSTANCE.getSetModifier());
+603-                                                                                                           ^
+604-  symbol:   variable INSTANCE
+605-  location: interface ComposeUiNode
+606:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1703: error: cannot find symbol
+607-                            TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+608-                                                                                                                                                                    ^
+609-  symbol:   method getOnSurface()
+610-  location: class ColorScheme
+611:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1703: error: cannot find symbol
+612-                            TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+613-                                                                                                                                                                                                                                       ^
+614-  symbol:   variable INSTANCE
+615-  location: class FontWeight
+616:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1704: error: cannot find symbol
+617-                            TextKt.m2816Text4IGK_g(!$state.isAlarmEnabled() ? "المنبه يعطي تنبيهاً وقت الفجر" : "المنبه متوقف حالياً", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurfaceVariant(), TextUnitKt.getSp(12), (FontStyle) null, (FontWeight) null, (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 3072, 0, 131058);
+618-                                                                                                                                                                                                                               ^
+619-  symbol:   method getOnSurfaceVariant()
+620-  location: class ColorScheme
+621:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1730: error: cannot find symbol
+622-                        Updater.m3835setimpl(m3828constructorimpl3, materializeModifier4, ComposeUiNode.INSTANCE.getSetModifier());
+623-                                                                                                       ^
+624-  symbol:   variable INSTANCE
+625-  location: interface ComposeUiNode
+626:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1736: error: cannot find symbol
+627-                        TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+628-                                                                                                                                                                ^
+629-  symbol:   method getOnSurface()
+630-  location: class ColorScheme
+631:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1736: error: cannot find symbol
+632-                        TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+633-                                                                                                                                                                                                                                   ^
+634-  symbol:   variable INSTANCE
+635-  location: class FontWeight
+636:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1739: error: cannot find symbol
+637-                        TextKt.m2816Text4IGK_g(!$state.isAlarmEnabled() ? "المنبه يعطي تنبيهاً وقت الفجر" : "المنبه متوقف حالياً", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurfaceVariant(), TextUnitKt.getSp(12), (FontStyle) null, (FontWeight) null, (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 3072, 0, 131058);
+638-                                                                                                                                                                                                                           ^
+639-  symbol:   method getOnSurfaceVariant()
+640-  location: class ColorScheme
+641:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1764: error: cannot find symbol
+642-                    Updater.m3835setimpl(m3828constructorimpl2, materializeModifier3, ComposeUiNode.INSTANCE.getSetModifier());
+643-                                                                                                   ^
+644-  symbol:   variable INSTANCE
+645-  location: interface ComposeUiNode
+646:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1770: error: cannot find symbol
+647-                    IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), (String) null, SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary(), $composer, 432, 0);
+648-                                                                                                                                     ^
+649-  symbol:   variable INSTANCE
+650-  location: interface Modifier
+651:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1770: error: cannot find symbol
+652-                    IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), (String) null, SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary(), $composer, 432, 0);
+653-                                                                                                                                                  ^
+654-  symbol:   method m7226constructorimpl(int)
+655-  location: class Dp
+656:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1770: error: cannot find symbol
+657-                    IconKt.m2273Iconww6aTOc(AlarmKt.getAlarm(Icons.Outlined.INSTANCE), (String) null, SizeKt.m777size3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(24)), MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getPrimary(), $composer, 432, 0);
+658-                                                                                                                                                                                                                                                     ^
+659-  symbol:   method getPrimary()
+660-  location: class ColorScheme
+661:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1777: error: cannot find symbol
+662-                    SpacerKt.Spacer(SizeKt.m782width3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(14)), $composer, 6);
+663-                                                                    ^
+664-  symbol:   variable INSTANCE
+665-  location: interface Modifier
+666:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1777: error: cannot find symbol
+667-                    SpacerKt.Spacer(SizeKt.m782width3ABfNKs(Modifier.INSTANCE, Dp.m7226constructorimpl(14)), $composer, 6);
+668-                                                                                 ^
+669-  symbol:   method m7226constructorimpl(int)
+670-  location: class Dp
+671:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1779: error: cannot find symbol
+672-                    Modifier modifier22 = Modifier.INSTANCE;
+673-                                                  ^
+674-  symbol:   variable INSTANCE
+675-  location: interface Modifier
+676:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1780: error: cannot find symbol
+677-                    MeasurePolicy columnMeasurePolicy2 = ColumnKt.columnMeasurePolicy(Arrangement.INSTANCE.getTop(), Alignment.INSTANCE.getStart(), $composer, ((0 >> 3) & 14) | ((0 >> 3) & 112));
+678-                                                                                                                              ^
+679-  symbol:   variable INSTANCE
+680-  location: interface Alignment
+681:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1785: error: cannot find symbol
+682-                    Function0 constructor42 = ComposeUiNode.INSTANCE.getConstructor();
+683-                                                           ^
+684-  symbol:   variable INSTANCE
+685-  location: interface ComposeUiNode
+686:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1793: error: cannot find symbol
+687-                    m3828constructorimpl3 = Updater.m3828constructorimpl($composer);
+688-                                                   ^
+689-  symbol:   method m3828constructorimpl(Composer)
+690-  location: class Updater
+691:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1794: error: cannot find symbol
+692-                    Updater.m3835setimpl(m3828constructorimpl3, columnMeasurePolicy2, ComposeUiNode.INSTANCE.getSetMeasurePolicy());
+693-                                                                                                   ^
+694-  symbol:   variable INSTANCE
+695-  location: interface ComposeUiNode
+696:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1795: error: cannot find symbol
+697-                    Updater.m3835setimpl(m3828constructorimpl3, currentCompositionLocalMap42, ComposeUiNode.INSTANCE.getSetResolvedCompositionLocals());
+698-                                                                                                           ^
+699-  symbol:   variable INSTANCE
+700-  location: interface ComposeUiNode
+701:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1796: error: cannot find symbol
+702-                    Function2 setCompositeKeyHash42 = ComposeUiNode.INSTANCE.getSetCompositeKeyHash();
+703-                                                                   ^
+704-  symbol:   variable INSTANCE
+705-  location: interface ComposeUiNode
+706:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1798: error: cannot find symbol
+707-                        Updater.m3835setimpl(m3828constructorimpl3, materializeModifier42, ComposeUiNode.INSTANCE.getSetModifier());
+708-                                                                                                        ^
+709-  symbol:   variable INSTANCE
+710-  location: interface ComposeUiNode
+711:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1804: error: cannot find symbol
+712-                        TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+713-                                                                                                                                                                ^
+714-  symbol:   method getOnSurface()
+715-  location: class ColorScheme
+716:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1804: error: cannot find symbol
+717-                        TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+718-                                                                                                                                                                                                                                   ^
+719-  symbol:   variable INSTANCE
+720-  location: class FontWeight
+721:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1807: error: cannot find symbol
+722-                        TextKt.m2816Text4IGK_g(!$state.isAlarmEnabled() ? "المنبه يعطي تنبيهاً وقت الفجر" : "المنبه متوقف حالياً", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurfaceVariant(), TextUnitKt.getSp(12), (FontStyle) null, (FontWeight) null, (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 3072, 0, 131058);
+723-                                                                                                                                                                                                                           ^
+724-  symbol:   method getOnSurfaceVariant()
+725-  location: class ColorScheme
+726:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1832: error: cannot find symbol
+727-                    Updater.m3835setimpl(m3828constructorimpl3, materializeModifier42, ComposeUiNode.INSTANCE.getSetModifier());
+728-                                                                                                    ^
+729-  symbol:   variable INSTANCE
+730-  location: interface ComposeUiNode
+731:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1838: error: cannot find symbol
+732-                    TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+733-                                                                                                                                                            ^
+734-  symbol:   method getOnSurface()
+735-  location: class ColorScheme
+736:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1838: error: cannot find symbol
+737-                    TextKt.m2816Text4IGK_g("تفعيل منبه صلاة الفجر", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurface(), TextUnitKt.getSp(16), (FontStyle) null, FontWeight.INSTANCE.getBold(), (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 199686, 0, 131026);
+738-                                                                                                                                                                                                                               ^
+739-  symbol:   variable INSTANCE
+740-  location: class FontWeight
+741:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1841: error: cannot find symbol
+742-                    TextKt.m2816Text4IGK_g(!$state.isAlarmEnabled() ? "المنبه يعطي تنبيهاً وقت الفجر" : "المنبه متوقف حالياً", (Modifier) null, MaterialTheme.INSTANCE.getColorScheme($composer, MaterialTheme.$stable).getOnSurfaceVariant(), TextUnitKt.getSp(12), (FontStyle) null, (FontWeight) null, (FontFamily) null, 0L, (TextDecoration) null, (TextAlign) null, 0L, 0, false, 0, 0, (Function1<? super TextLayoutResult, Unit>) null, (TextStyle) null, $composer, 3072, 0, 131058);
+743-                                                                                                                                                                                                                       ^
+744-  symbol:   method getOnSurfaceVariant()
+745-  location: class ColorScheme
+746:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1866: error: cannot find symbol
+747-                Updater.m3835setimpl(m3828constructorimpl, materializeModifier2, ComposeUiNode.INSTANCE.getSetModifier());
+748-                                                                                              ^
+749-  symbol:   variable INSTANCE
+750-  location: interface ComposeUiNode
+751:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/fajr/ui/FajrSettingsScreenKt.java:1872: error: cannot find symbol
