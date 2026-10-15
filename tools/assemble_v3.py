@@ -457,3 +457,44 @@ for dp, _, fs in os.walk(os.path.join(MAIN, 'java')):
         if t != o:
             open(fp, 'w', encoding='utf-8').write(t)
 print('rewrote mutableStateOf$default', count_ms, 'launch$default', count_l)
+
+# 10h. LocationManagerHelper.getCityNameFromCoordinates rewritten by hand (jadx dump was incorrect)
+s = read('com/example/fajr/location/LocationManagerHelper.java')
+a = s.index('    public final String getCityNameFromCoordinates(')
+i = s.index('{', a)
+depth = 1
+i += 1
+while depth:
+    depth += (s[i] == '{') - (s[i] == '}')
+    i += 1
+new = '''    public final String getCityNameFromCoordinates(double latitude, double longitude) {
+        try {
+            Geocoder geocoder = new Geocoder(this.context, new Locale("ar"));
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                String city = address.getLocality();
+                if (city == null) {
+                    city = address.getSubAdminArea();
+                }
+                if (city == null) {
+                    city = address.getAdminArea();
+                }
+                String country = address.getCountryName();
+                if (city != null && city.length() != 0 && country != null && country.length() != 0) {
+                    return city + "\\u060c " + country;
+                }
+                if (country == null) {
+                    return city == null ? "\\u0645\\u0648\\u0642\\u0639\\u0643 \\u0627\\u0644\\u062d\\u0627\\u0644\\u064a" : city;
+                }
+                return country;
+            }
+            return "\\u0645\\u0648\\u0642\\u0639\\u0643 \\u0627\\u0644\\u062d\\u0627\\u0644\\u064a (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "\\u0645\\u0648\\u0642\\u0639\\u0643 \\u0627\\u0644\\u062d\\u0627\\u0644\\u064a (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
+        }
+    }
+'''
+s = s[:a] + new + s[i:].lstrip('\n')
+write('com/example/fajr/location/LocationManagerHelper.java', s)
