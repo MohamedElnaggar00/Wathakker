@@ -1,0 +1,26 @@
+outcome: failure  bom: 2025.10.01  run: 38804216651  sha: b3ab5db2bc3670f2672892b2b249993a12e39a95
+errors: 2
+--- per file
+      2 TagDao.java
+--- per symbol
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- details
+58:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao.java:139: error: missing return statement
+59-        }
+60-        ^
+61-Note: Some input files use or override a deprecated API.
+62-Note: Recompile with -Xlint:deprecation for details.
+--
+73:* What went wrong:
+74:Execution failed for task ':app:compileDebugJavaWithJavac'.
+75-> Compilation failed; see the compiler output below.
+76:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao.java:139: error: missing return statement
+77-          }
+78-          ^
+79-  Note: Recompile with -Xlint:deprecation for details.
+80-  Note: Recompile with -Xlint:unchecked for details.
+--
+89:BUILD FAILED in 4m
+90-24 actionable tasks: 24 executed
