@@ -503,6 +503,7 @@ write('com/example/fajr/location/LocationManagerHelper.java', s)
 # 11. Kotlin rewrites of Compose screens (clean source, replaces the unusable jadx output)
 gp = os.path.join(ROOT, 'app/build.gradle.kts')
 g = open(gp).read()
+g = g.replace('dev.chrisbanes.haze:haze:1.0.2', 'dev.chrisbanes.haze:haze:1.6.0')
 g = g.replace('  alias(libs.plugins.android.application)\n}', '  alias(libs.plugins.android.application)\n  alias(libs.plugins.kotlin.compose)\n}', 1)
 open(gp, 'w').write(g)
 import shutil, glob, fnmatch
