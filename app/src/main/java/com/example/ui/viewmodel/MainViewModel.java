@@ -94,7 +94,7 @@ public final class MainViewModel extends AndroidViewModel {
         this.vibrationEnabled = FlowKt.asStateFlow(this._vibrationEnabled);
         this._useDeviceFont = StateFlowKt.MutableStateFlow(Boolean.valueOf(this.appPrefs.getBoolean("use_device_font", true)));
         this.useDeviceFont = FlowKt.asStateFlow(this._useDeviceFont);
-        FontChoice.Companion companion = FontChoice.INSTANCE;
+        FontChoice.Companion companion = FontChoice.Companion;
         String string2 = this.appPrefs.getString("app_font", null);
         this._appFont = StateFlowKt.MutableStateFlow(companion.fromId(string2 == null ? this.appPrefs.getBoolean("use_device_font", true) ? "system" : "app" : string2));
         this.appFont = FlowKt.asStateFlow(this._appFont);
@@ -112,104 +112,7 @@ public final class MainViewModel extends AndroidViewModel {
         this.alarmScheduler = new AlarmScheduler(application);
         this.allHistory = FlowKt.stateIn(this.repository.getAllHistory(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         final Flow allHistory = this.repository.getAllHistory();
-        this.stats = FlowKt.stateIn(new Flow<DhikrStats>() { // from class: com.example.ui.viewmodel.MainViewModel$special$$inlined$map$1
-            @Override // kotlinx.coroutines.flow.Flow
-            public Object collect(FlowCollector<? super DhikrStats> flowCollector, Continuation $completion) {
-                Object collect = Flow.this.collect(new AnonymousClass2(flowCollector, this), $completion);
-                return collect == IntrinsicsKt.getCOROUTINE_SUSPENDED() ? collect : Unit.INSTANCE;
-            }
-
-            /* compiled from: Emitters.kt */
-            @Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
-            /* renamed from: com.example.ui.viewmodel.MainViewModel$special$$inlined$map$1$2, reason: invalid class name */
-            /* loaded from: classes11.dex */
-            public static final class AnonymousClass2<T> implements FlowCollector {
-                final /* synthetic */ FlowCollector $this_unsafeFlow;
-                final /* synthetic */ MainViewModel this$0;
-
-                @Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
-                @DebugMetadata(c = "com.example.ui.viewmodel.MainViewModel$special$$inlined$map$1$2", f = "MainViewModel.kt", i = {0, 0, 0, 0, 0}, l = {AccessibilityNodeInfoCompat.MAX_NUMBER_OF_PREFETCHED_NODES}, m = "emit", n = {"value", "$completion", "value", "$this$map_u24lambda_u245", "$i$a$-unsafeTransform-FlowKt$map$1\\1\\49\\0"}, s = {"L$0", "L$1", "L$2", "L$3", "I$0"})
-                /* renamed from: com.example.ui.viewmodel.MainViewModel$special$$inlined$map$1$2$1, reason: invalid class name */
-                /* loaded from: classes11.dex */
-                public static final class AnonymousClass1 extends ContinuationImpl {
-                    int I$0;
-                    Object L$0;
-                    Object L$1;
-                    Object L$2;
-                    Object L$3;
-                    int label;
-                    /* synthetic */ Object result;
-
-                    public AnonymousClass1(Continuation continuation) {
-                        super(continuation);
-                    }
-
-                    @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
-                    public final Object invokeSuspend(Object obj) {
-                        this.result = obj;
-                        this.label |= Integer.MIN_VALUE;
-                        return AnonymousClass2.this.emit(null, this);
-                    }
-                }
-
-                public AnonymousClass2(FlowCollector flowCollector, MainViewModel mainViewModel) {
-                    this.$this_unsafeFlow = flowCollector;
-                    this.this$0 = mainViewModel;
-                }
-
-                /* JADX WARN: Removed duplicated region for block: B:11:0x002c  */
-                /* JADX WARN: Removed duplicated region for block: B:14:0x003e  */
-                /* JADX WARN: Removed duplicated region for block: B:8:0x0024  */
-                @Override // kotlinx.coroutines.flow.FlowCollector
-                /*
-                    Code decompiled incorrectly, please refer to instructions dump.
-                */
-                public final Object emit(Object value, Continuation $completion) {
-                    AnonymousClass1 $completion2;
-                    DhikrStats calculateStats;
-                    if ($completion instanceof AnonymousClass1) {
-                        $completion2 = (AnonymousClass1) $completion;
-                        if (($completion2.label & Integer.MIN_VALUE) != 0) {
-                            $completion2.label -= Integer.MIN_VALUE;
-                            Object $result = $completion2.result;
-                            Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-                            switch ($completion2.label) {
-                                case 0:
-                                    ResultKt.throwOnFailure($result);
-                                    FlowCollector $this$map_u24lambda_u245 = this.$this_unsafeFlow;
-                                    calculateStats = this.this$0.calculateStats((List) value);
-                                    $completion2.L$0 = SpillingKt.nullOutSpilledVariable(value);
-                                    $completion2.L$1 = SpillingKt.nullOutSpilledVariable($completion2);
-                                    $completion2.L$2 = SpillingKt.nullOutSpilledVariable(value);
-                                    $completion2.L$3 = SpillingKt.nullOutSpilledVariable($this$map_u24lambda_u245);
-                                    $completion2.I$0 = 0;
-                                    $completion2.label = 1;
-                                    if ($this$map_u24lambda_u245.emit(calculateStats, $completion2) != coroutine_suspended) {
-                                        break;
-                                    } else {
-                                        return coroutine_suspended;
-                                    }
-                                case 1:
-                                    int i = $completion2.I$0;
-                                    Object obj = $completion2.L$2;
-                                    Object value2 = $completion2.L$0;
-                                    ResultKt.throwOnFailure($result);
-                                    break;
-                                default:
-                                    throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
-                            }
-                            return Unit.INSTANCE;
-                        }
-                    }
-                    $completion2 = new AnonymousClass1($completion);
-                    Object $result2 = $completion2.result;
-                    Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-                    switch ($completion2.label) {
-                    }
-                    return Unit.INSTANCE;
-                }
-            }
-        }, ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), new DhikrStats(0, 0, 0, 0, 0, null, 63, null));
+        this.stats = FlowKt.stateIn(FlowKt.map((Flow) allHistory, (kotlin.jvm.functions.Function2) (value, c) -> { return this.calculateStats((java.util.List) value); }), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), new DhikrStats(0, 0, 0, 0, 0, null, 63, null));
         this.allDhikr = FlowKt.stateIn(this.repository.getAllDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         this.favoriteDhikr = FlowKt.stateIn(this.repository.getFavoriteDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         this.enabledDhikr = FlowKt.stateIn(this.repository.getEnabledDhikr(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
@@ -365,7 +268,7 @@ public final class MainViewModel extends AndroidViewModel {
         List topRead = CollectionsKt.sortedWith(MapsKt.toList(dhikrCountsMap), new Comparator() { // from class: com.example.ui.viewmodel.MainViewModel$calculateStats$$inlined$sortedByDescending$1
             /* JADX WARN: Multi-variable type inference failed */
             @Override // java.util.Comparator
-            public final int compare(T t, T t2) {
+            public final int compare(Object t, Object t2) {
                 return ComparisonsKt.compareValues((Integer) ((Pair) t2).getSecond(), (Integer) ((Pair) t).getSecond());
             }
         });

@@ -441,7 +441,7 @@ public final class WidgetUpdater {
         List all = CollectionsKt.sortedWith(CollectionsKt.plus((Collection) CollectionsKt.plus((Collection) CollectionsKt.listOf(yIsha), (Iterable) windows), (Iterable) CollectionsKt.listOf(tFajr)), new Comparator() { // from class: com.example.widget.WidgetUpdater$computeIqamaState$$inlined$sortedBy$1
             /* JADX WARN: Multi-variable type inference failed */
             @Override // java.util.Comparator
-            public final int compare(T t, T t2) {
+            public final int compare(Object t, Object t2) {
                 return ComparisonsKt.compareValues(Long.valueOf(((W) t).getAdhan()), Long.valueOf(((W) t2).getAdhan()));
             }
         });
