@@ -636,8 +636,28 @@ for p in all_java():
     s = re.sub(r'StringsKt\.split\$default\((.*?), (new String\[\]\{[^}]*\}), false, 0, 6, \(Object\) null\)', r'StringsKt.split(\1, \2, false, 0)', s)
     # coroutine state-machine classes: raw Continuation casts
     s = re.sub(r'(\n\s+super\(\d+, )continuation\);', r'\1(Continuation) continuation);', s)
-    s = re.sub(r'(return new [\w$]+\((?:[^;\n]*?, )?)continuation\);', r'\1(Continuation) continuation);', s)
-    s = re.sub(r'return \(\(([\w$]+)\) create\(coroutineScope, continuation\)\)', r'return ((\1) (Object) create(coroutineScope, continuation))', s)
+    s = re.sub(r'return new ([\w$.]+\((?:[^;\n]*?, )?)(?:\(Continuation\) )?continuation\);', r'return (Continuation) new \1(Continuation) continuation);', s)
+    s = re.sub(r'(= new [\w$]+\((?:[^;\n]*?, )?)continuation\);', r'\1(Continuation) continuation);', s)
+    s = re.sub(r'(\n\s+super\()continuation\);', r'\1(Continuation) continuation);', s)
+    s = re.sub(r'\(\(([\w$]+)\) create\(', r'((\1) (Object) create(', s).replace('(Object) (Object) create(', '(Object) create(')
+    s = s.replace('this.$onCreated = function1;', 'this.$onCreated = (Function1) function1;')
+    s = re.sub(r'CollectionsKt\.listOf\(\(Object\[\]\) new (\w+)\[\]\{', r'java.util.Arrays.asList(new \1[]{', s)
+    s = re.sub(r'CollectionsKt\.joinToString\$default\((\w+), ",", null, null, 0, null, null, 62, null\)', r'String.join(",", \1)', s)
+    s = s.replace('(iqamaOffsets.get(name) != null ? r0.intValue() : 15)', '(iqamaOffsets.get(name) != null ? iqamaOffsets.get(name).intValue() : 15)')
+    # Room impls
+    if base.endswith('_Impl.java') or '_Impl$' in base:
+        cls = base.split('$')[0].replace('.java', '')
+        s = s.replace('.insert(_connection, (SQLiteConnection) ', '.insert(_connection, ')
+        s = s.replace(', this, (SQLiteConnection) obj)', ', ' + cls + '.this, (SQLiteConnection) obj)')
+        s = s.replace('new LongSparseArray(0, 1, null)', 'new LongSparseArray(0)')
+        s = re.sub(r'List<Tag> (\w+) = (\w+)\.get\(', r'List<Tag> \1 = (List<Tag>) \2.get(', s)
+        s = s.replace('TableInfo.INSTANCE.read', 'TableInfo.Companion.read')
+        s = re.sub(r'th = th2;\n(\s*)_stmt = _stmt2;', r'_stmt2.close();\n\1throw th2;', s)
+        s = re.sub(r'th = th2;(\n\s*\})', r'_stmt.close();\n                throw th2;\1', s)
+        s = re.sub(r'new RoomOpenDelegate\(\) \{([^\n]*)\n\s*/\* JADX INFO[^\n]*\n\s*\{\n\s*super\((.*?)\);\n\s*\}\n', r'new RoomOpenDelegate(\2) {\1\n', s)
+    if base == 'HisnViewModelKt.java':
+        _line = 'return s.replaceAll("[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED\\u0640]", "").replaceAll("[\\u0622\\u0623\\u0625\\u0671]", "\u0627").replace((char) 1609, (char) 1610).replace((char) 1577, (char) 1607);\n'
+        s = re.sub(r'return StringsKt\.replace\$default\(.*\n', lambda m: _line, s)
     # outer-class fields read by the extracted lambda classes
     base = os.path.basename(p)
     if base in ('FajrViewModel.java', 'MainViewModel.java', 'HisnViewModel.java', 'DhikrRepository.java'):
