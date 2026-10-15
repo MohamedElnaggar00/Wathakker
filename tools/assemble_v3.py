@@ -653,6 +653,7 @@ for p in all_java():
         s = s.replace('new LongSparseArray(0, 1, null)', 'new LongSparseArray(0)')
         s = re.sub(r'List<Tag> (\w+) = (\w+)\.get\(', r'List<Tag> \1 = (List<Tag>) \2.get(', s)
         s = s.replace('TableInfo.INSTANCE.read', 'TableInfo.Companion.read')
+        s = re.sub(r'\n[ \t]*th = th;', '', s)
         s = re.sub(r'th = th2;\n(\s*)_stmt = _stmt2;', r'_stmt2.close();\n\1throw th2;', s)
         s = re.sub(r'th = th2;(\n\s*\})', r'_stmt.close();\n                throw th2;\1', s)
         s = re.sub(r'new RoomOpenDelegate\(\) \{([^\n]*)\n\s*/\* JADX INFO[^\n]*\n\s*\{\n\s*super\((.*?)\);\n\s*\}\n', r'new RoomOpenDelegate(\2) {\1\n', s)
