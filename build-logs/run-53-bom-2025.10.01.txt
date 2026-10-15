@@ -1,0 +1,32 @@
+outcome: failure  bom: 2025.10.01  run: 38802789757  sha: 8011d4c4dd50f5b23484aa35e18f344fa6f4a8c7
+errors: 4
+--- per file
+      4 TagDao_Impl.java
+--- per symbol
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- details
+58:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:449: error: unreported exception Throwable; must be caught or declared to be thrown
+59-            throw th2;
+60-            ^
+61:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:658: error: unreported exception Throwable; must be caught or declared to be thrown
+62-                throw th2;
+63-                ^
+64-Note: Some input files use or override a deprecated API.
+65-Note: Recompile with -Xlint:deprecation for details.
+--
+76:* What went wrong:
+77:Execution failed for task ':app:compileDebugJavaWithJavac'.
+78-> Compilation failed; see the compiler output below.
+79:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:449: error: unreported exception Throwable; must be caught or declared to be thrown
+80-              throw th2;
+81-              ^
+82:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/data/TagDao_Impl.java:658: error: unreported exception Throwable; must be caught or declared to be thrown
+83-                  throw th2;
+84-                  ^
+85-  Note: Recompile with -Xlint:deprecation for details.
+86-  Note: Recompile with -Xlint:unchecked for details.
+--
+95:BUILD FAILED in 5m 53s
+96-24 actionable tasks: 24 executed
