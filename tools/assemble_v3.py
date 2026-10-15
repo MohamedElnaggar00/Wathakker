@@ -498,3 +498,29 @@ new = '''    public final String getCityNameFromCoordinates(double latitude, dou
 '''
 s = s[:a] + new + s[i:].lstrip('\n')
 write('com/example/fajr/location/LocationManagerHelper.java', s)
+
+# 11. Kotlin rewrites of Compose screens (clean source, replaces the unusable jadx output)
+gp = os.path.join(ROOT, 'app/build.gradle.kts')
+g = open(gp).read()
+g = g.replace('  alias(libs.plugins.android.application)\n}', '  alias(libs.plugins.android.application)\n  alias(libs.plugins.kotlin.compose)\n}', 1)
+open(gp, 'w').write(g)
+import shutil, glob, fnmatch
+KS = os.path.join(ROOT, 'kotlin-src')
+replaced = {}
+if os.path.isdir(KS):
+    for dp, _, fs in os.walk(KS):
+        for f in fs:
+            if not f.endswith('.kt'):
+                continue
+            src = os.path.join(dp, f)
+            rel = os.path.relpath(src, KS)
+            d = os.path.join(MAIN, 'java', rel)
+            os.makedirs(os.path.dirname(d), exist_ok=True)
+            shutil.copy(src, d)
+            base = os.path.splitext(os.path.basename(rel))[0]
+            pkgdir = os.path.join(MAIN, 'java', os.path.dirname(rel))
+            for jf in os.listdir(pkgdir):
+                if jf.endswith('.java') and (jf == base + 'Kt.java' or jf.startswith(base + 'Kt$') or jf.startswith('ComposableSingletons$' + base + 'Kt')):
+                    os.remove(os.path.join(pkgdir, jf))
+                    print('removed jadx', jf)
+            print('kotlin', rel)
