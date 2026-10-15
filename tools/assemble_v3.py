@@ -43,7 +43,7 @@ for d in sorted(os.listdir(res_src)):
         names = R.get(t, set())
         for f in os.listdir(src):
             stem = f.rsplit('.', 1)[0]
-            if stem in names:
+            if stem in names or t == 'xml':
                 os.makedirs(os.path.join(res_dst, d), exist_ok=True)
                 shutil.copy2(os.path.join(src, f), os.path.join(res_dst, d, f))
                 kept += 1
