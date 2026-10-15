@@ -66,79 +66,56 @@ public interface TagDao {
             Code decompiled incorrectly, please refer to instructions dump.
         */
         public static /* synthetic */ Object updateDhikrTags$suspendImpl(TagDao $this, int dhikrId, List<Long> list, Continuation<? super Unit> continuation) {
-            TagDao$updateDhikrTags$1 tagDao$updateDhikrTags$1;
-            List tagIds;
-            Iterator it;
-            List refs;
-            TagDao $this2 = $this;
-            int dhikrId2 = dhikrId;
-            if (continuation instanceof TagDao$updateDhikrTags$1) {
-                tagDao$updateDhikrTags$1 = (TagDao$updateDhikrTags$1) continuation;
-                if ((tagDao$updateDhikrTags$1.label & Integer.MIN_VALUE) != 0) {
-                    tagDao$updateDhikrTags$1.label -= Integer.MIN_VALUE;
-                    Object $result = tagDao$updateDhikrTags$1.result;
-                    Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-                    switch (tagDao$updateDhikrTags$1.label) {
-                        case 0:
-                            ResultKt.throwOnFailure($result);
-                            tagDao$updateDhikrTags$1.L$0 = $this2;
-                            tagIds = list;
-                            tagDao$updateDhikrTags$1.L$1 = tagIds;
-                            tagDao$updateDhikrTags$1.I$0 = dhikrId2;
-                            tagDao$updateDhikrTags$1.label = 1;
-                            if ($this2.deleteTagsForDhikr(dhikrId2, tagDao$updateDhikrTags$1) == coroutine_suspended) {
-                                return coroutine_suspended;
-                            }
-                            List list2 = tagIds;
-                            Collection arrayList = new ArrayList(CollectionsKt.collectionSizeOrDefault(list2, 10));
-                            it = list2.iterator();
-                            while (it.hasNext()) {
-                                arrayList.add(new DhikrTagCrossRef(dhikrId2, ((Number) it.next()).longValue()));
-                            }
-                            refs = (List) arrayList;
-                            if (!refs.isEmpty()) {
-                                return Unit.INSTANCE;
-                            }
-                            tagDao$updateDhikrTags$1.L$0 = SpillingKt.nullOutSpilledVariable($this2);
-                            tagDao$updateDhikrTags$1.L$1 = SpillingKt.nullOutSpilledVariable(tagIds);
-                            tagDao$updateDhikrTags$1.L$2 = SpillingKt.nullOutSpilledVariable(refs);
-                            tagDao$updateDhikrTags$1.I$0 = dhikrId2;
-                            tagDao$updateDhikrTags$1.label = 2;
-                            if ($this2.insertDhikrTagCrossRefs(refs, tagDao$updateDhikrTags$1) == coroutine_suspended) {
-                                return coroutine_suspended;
-                            }
-                            return Unit.INSTANCE;
-                        case 1:
-                            dhikrId2 = tagDao$updateDhikrTags$1.I$0;
-                            tagIds = (List) tagDao$updateDhikrTags$1.L$1;
-                            $this2 = (TagDao) tagDao$updateDhikrTags$1.L$0;
-                            ResultKt.throwOnFailure($result);
-                            List list22 = tagIds;
-                            Collection arrayList2 = new ArrayList(CollectionsKt.collectionSizeOrDefault(list22, 10));
-                            it = list22.iterator();
-                            while (it.hasNext()) {
-                            }
-                            refs = (List) arrayList2;
-                            if (!refs.isEmpty()) {
-                            }
-                            break;
-                        case 2:
-                            int i = tagDao$updateDhikrTags$1.I$0;
-                            ResultKt.throwOnFailure($result);
-                            return Unit.INSTANCE;
-                        default:
-                            throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            TagDao$updateDhikrTags$1 c;
+            if (continuation instanceof TagDao$updateDhikrTags$1 && (((TagDao$updateDhikrTags$1) continuation).label & Integer.MIN_VALUE) != 0) {
+                c = (TagDao$updateDhikrTags$1) continuation;
+                c.label -= Integer.MIN_VALUE;
+            } else {
+                c = new TagDao$updateDhikrTags$1($this, (Continuation) continuation);
+            }
+            Object $result = c.result;
+            Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+            switch (c.label) {
+                case 0:
+                    ResultKt.throwOnFailure($result);
+                    c.L$0 = $this;
+                    c.L$1 = list;
+                    c.I$0 = dhikrId;
+                    c.label = 1;
+                    if ($this.deleteTagsForDhikr(dhikrId, c) == coroutine_suspended) {
+                        return coroutine_suspended;
                     }
-                }
+                    break;
+                case 1:
+                    dhikrId = c.I$0;
+                    list = (List) c.L$1;
+                    $this = (TagDao) c.L$0;
+                    ResultKt.throwOnFailure($result);
+                    break;
+                case 2:
+                    ResultKt.throwOnFailure($result);
+                    return Unit.INSTANCE;
+                default:
+                    throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
             }
-            tagDao$updateDhikrTags$1 = new TagDao$updateDhikrTags$1($this2, (Continuation) continuation);
-            Object $result2 = tagDao$updateDhikrTags$1.result;
-            Object coroutine_suspended2 = IntrinsicsKt.getCOROUTINE_SUSPENDED();
-            switch (tagDao$updateDhikrTags$1.label) {
+            List<DhikrTagCrossRef> refs = new java.util.ArrayList<>();
+            for (Long id : list) {
+                refs.add(new DhikrTagCrossRef(dhikrId, id.longValue()));
             }
+            if (refs.isEmpty()) {
+                return Unit.INSTANCE;
+            }
+            c.L$0 = $this;
+            c.L$1 = list;
+            c.L$2 = refs;
+            c.I$0 = dhikrId;
+            c.label = 2;
+            if ($this.insertDhikrTagCrossRefs(refs, c) == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+            return Unit.INSTANCE;
         }
     }
-
     /* compiled from: TagDao.kt */
     @Metadata(k = 3, mv = {2, 2, 0}, xi = 48)
     /* loaded from: classes7.dex */
