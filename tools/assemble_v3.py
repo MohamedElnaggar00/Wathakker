@@ -743,7 +743,7 @@ for p in all_java():
 """
     if base == 'TagDao.java':
         i = s.index('        public static /* synthetic */ Object updateDhikrTags$suspendImpl')
-        j = s.index('    /* compiled from: TagDao.kt */\n    /* loaded from: classes7.dex */\n    public static final class DefaultImpls')
+        j = s.rindex('    /* compiled from: TagDao.kt */', 0, s.index('public static final class DefaultImpls'))
         s = s[:i] + """        public static /* synthetic */ Object updateDhikrTags$suspendImpl(TagDao $this, int dhikrId, List<Long> list, Continuation<? super Unit> continuation) {
             TagDao$updateDhikrTags$1 c;
             if (continuation instanceof TagDao$updateDhikrTags$1 && (((TagDao$updateDhikrTags$1) continuation).label & Integer.MIN_VALUE) != 0) {
