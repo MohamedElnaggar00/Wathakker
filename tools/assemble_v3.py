@@ -614,3 +614,65 @@ os.makedirs(os.path.join(resdir, 'values'), exist_ok=True)
 ET.ElementTree(out).write(os.path.join(resdir, 'values', 'recovered.xml'), encoding='utf-8', xml_declaration=True)
 print('recovered resource entries', added, 'attrs', sorted(attr_names - declared))
 
+
+
+# 13. jadx repairs for non-UI code (round 3): coroutine lambdas, Room impls, default-arg constructors
+JAVA = os.path.join(MAIN, 'java')
+def all_java():
+    for dp, _, fs in os.walk(JAVA):
+        for f in fs:
+            if f.endswith('.java'):
+                yield os.path.join(dp, f)
+
+PRIVATE_FIELD = re.compile(r'^(    )private ((?:final |volatile )*(?!static)[\w<>\[\],.?$ ]+ \w+(?: = .*)?;)$', re.M)
+for p in all_java():
+    s = open(p, encoding='utf-8').read()
+    o = s
+    # Room impls: jadx renamed the SQLiteStatement setters
+    s = re.sub(r'\bmo\d+(bind(?:Long|Text|Double|Blob|Null))\(', r'\1(', s)
+    # kotlinx.coroutines SharingStarted default-arg helper
+    s = s.replace('SharingStarted.Companion.WhileSubscribed$default(SharingStarted.INSTANCE, 5000L, 0L, 2, null)', 'SharingStarted.Companion.WhileSubscribed(5000L, 0L)')
+    # StringsKt.split$default is synthetic
+    s = re.sub(r'StringsKt\.split\$default\((.*?), (new String\[\]\{[^}]*\}), false, 0, 6, \(Object\) null\)', r'StringsKt.split(\1, \2, false, 0)', s)
+    # coroutine state-machine classes: raw Continuation casts
+    s = re.sub(r'(\n\s+super\(\d+, )continuation\);', r'\1(Continuation) continuation);', s)
+    s = re.sub(r'(return new [\w$]+\((?:[^;\n]*?, )?)continuation\);', r'\1(Continuation) continuation);', s)
+    s = re.sub(r'return \(\(([\w$]+)\) create\(coroutineScope, continuation\)\)', r'return ((\1) (Object) create(coroutineScope, continuation))', s)
+    # outer-class fields read by the extracted lambda classes
+    base = os.path.basename(p)
+    if base in ('FajrViewModel.java', 'MainViewModel.java', 'HisnViewModel.java', 'DhikrRepository.java'):
+        s = PRIVATE_FIELD.sub(r'\1\2', s)
+    if base == 'CitiesDatabase.java':
+        s = s.replace('CollectionsKt.listOf((Object[]) new CityItem[]{', 'java.util.Arrays.asList(new CityItem[]{')
+    if s != o:
+        open(p, 'w', encoding='utf-8').write(s)
+
+# default-argument constructors jadx could not decompile
+def fix_ctor(rel, sig_re, new_body):
+    s = read(rel)
+    m = re.search(sig_re, s)
+    if not m:
+        print('PATCH MISS ctor', rel)
+        return
+    start = s.rfind('    /* JADX WARN: Illegal instructions before constructor call */', 0, m.start())
+    if start < 0:
+        start = m.start()
+    i = m.end()
+    depth = 1
+    while depth:
+        c = s[i]
+        depth += (c == '{') - (c == '}')
+        i += 1
+    s = s[:start] + new_body + s[i:]
+    write(rel, s)
+
+fix_ctor('com/example/data/DhikrHistory.java',
+  r'    public /\* synthetic \*/ DhikrHistory\(long j, int i, long j2, String str, int i2, DefaultConstructorMarker defaultConstructorMarker\) \{\n',
+  '    public /* synthetic */ DhikrHistory(long j, int i, long j2, String str, int i2, DefaultConstructorMarker defaultConstructorMarker) {\n'
+  '        this((i2 & 1) != 0 ? 0L : j, i, (i2 & 4) != 0 ? System.currentTimeMillis() : j2, str);\n'
+  '    }\n')
+fix_ctor('com/example/data/HisnRead.java',
+  r'    public /\* synthetic \*/ HisnRead\(long j, int i, String str, long j2, int i2, DefaultConstructorMarker defaultConstructorMarker\) \{\n',
+  '    public /* synthetic */ HisnRead(long j, int i, String str, long j2, int i2, DefaultConstructorMarker defaultConstructorMarker) {\n'
+  '        this((i2 & 1) != 0 ? 0L : j, i, str, j2);\n'
+  '    }\n')
