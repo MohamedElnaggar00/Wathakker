@@ -77,64 +77,31 @@ public final class LocationManagerHelper {
         Code decompiled incorrectly, please refer to instructions dump.
     */
     public final String getCityNameFromCoordinates(double latitude, double longitude) {
-        boolean z;
-        boolean z2;
-        boolean z3;
-        try {
-        } catch (Exception e) {
-            e = e;
-        }
         try {
             Geocoder geocoder = new Geocoder(this.context, new Locale("ar"));
-            List addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            List list = addresses;
-            if (list != null && !list.isEmpty()) {
-                z = false;
-                if (z) {
-                    Address address = (Address) addresses.get(0);
-                    String city = address.getLocality();
-                    if (city == null && (city = address.getSubAdminArea()) == null) {
-                        city = address.getAdminArea();
-                    }
-                    String country = address.getCountryName();
-                    String str = city;
-                    if (str != null && str.length() != 0) {
-                        z2 = false;
-                        if (!z2) {
-                            String str2 = country;
-                            if (str2 != null && str2.length() != 0) {
-                                z3 = false;
-                                if (!z3) {
-                                    return city + "، " + country;
-                                }
-                            }
-                            z3 = true;
-                            if (!z3) {
-                            }
-                        }
-                        return country != null ? city == null ? "موقعك الحالي" : city : country;
-                    }
-                    z2 = true;
-                    if (!z2) {
-                    }
-                    if (country != null) {
-                    }
-                } else {
-                    StringCompanionObject stringCompanionObject = StringCompanionObject.INSTANCE;
-                    String format = String.format(Locale.US, "%.2f, %.2f", Arrays.copyOf(new Object[]{Double.valueOf(latitude), Double.valueOf(longitude)}, 2));
-                    Intrinsics.checkNotNullExpressionValue(format, "format(...)");
-                    return "موقعك الحالي (" + format + ")";
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                String city = address.getLocality();
+                if (city == null) {
+                    city = address.getSubAdminArea();
                 }
+                if (city == null) {
+                    city = address.getAdminArea();
+                }
+                String country = address.getCountryName();
+                if (city != null && city.length() != 0 && country != null && country.length() != 0) {
+                    return city + "\u060c " + country;
+                }
+                if (country == null) {
+                    return city == null ? "\u0645\u0648\u0642\u0639\u0643 \u0627\u0644\u062d\u0627\u0644\u064a" : city;
+                }
+                return country;
             }
-            z = true;
-            if (z) {
-            }
-        } catch (Exception e2) {
-            e2.printStackTrace();
-            StringCompanionObject stringCompanionObject2 = StringCompanionObject.INSTANCE;
-            String format2 = String.format(Locale.US, "%.2f, %.2f", Arrays.copyOf(new Object[]{Double.valueOf(latitude), Double.valueOf(longitude)}, 2));
-            Intrinsics.checkNotNullExpressionValue(format2, "format(...)");
-            return "موقعك الحالي (" + format2 + ")";
+            return "\u0645\u0648\u0642\u0639\u0643 \u0627\u0644\u062d\u0627\u0644\u064a (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "\u0645\u0648\u0642\u0639\u0643 \u0627\u0644\u062d\u0627\u0644\u064a (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
         }
     }
 }
