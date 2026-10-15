@@ -160,7 +160,7 @@ public final class HisnDao_Impl implements HisnDao {
     /* JADX INFO: Access modifiers changed from: package-private */
     public static final Unit addFavorite$lambda$2(HisnDao_Impl this$0, HisnFavorite $fav, SQLiteConnection _connection) {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
-        this$0.__insertAdapterOfHisnFavorite.insert(_connection, (SQLiteConnection) $fav);
+        this$0.__insertAdapterOfHisnFavorite.insert(_connection, $fav);
         return Unit.INSTANCE;
     }
 
@@ -178,7 +178,7 @@ public final class HisnDao_Impl implements HisnDao {
     /* JADX INFO: Access modifiers changed from: package-private */
     public static final Unit insertRead$lambda$3(HisnDao_Impl this$0, HisnRead $read, SQLiteConnection _connection) {
         Intrinsics.checkNotNullParameter(_connection, "_connection");
-        this$0.__insertAdapterOfHisnRead.insert(_connection, (SQLiteConnection) $read);
+        this$0.__insertAdapterOfHisnRead.insert(_connection, $read);
         return Unit.INSTANCE;
     }
 

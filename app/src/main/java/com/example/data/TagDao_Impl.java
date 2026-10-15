@@ -312,7 +312,7 @@ public final class TagDao_Impl implements TagDao {
         return FlowUtil.createFlow(this.__db, true, new String[]{"dhikr_tag_cross_ref", "tag_table", "dhikr_table"}, new Function1() { // from class: com.example.data.TagDao_Impl$$ExternalSyntheticLambda2
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return TagDao_Impl.getDhikrsWithTags$lambda$8(_sql, HisnDao_Impl.this, (SQLiteConnection) obj);
+                return TagDao_Impl.getDhikrsWithTags$lambda$8(_sql, TagDao_Impl.this, (SQLiteConnection) obj);
             }
         });
     }
@@ -378,7 +378,7 @@ public final class TagDao_Impl implements TagDao {
         return DBUtil.performSuspending(this.__db, true, true, new Function1() { // from class: com.example.data.TagDao_Impl$$ExternalSyntheticLambda9
             @Override // kotlin.jvm.functions.Function1
             public final Object invoke(Object obj) {
-                return TagDao_Impl.getDhikrWithTagsById$lambda$9(_sql, dhikrId, HisnDao_Impl.this, (SQLiteConnection) obj);
+                return TagDao_Impl.getDhikrWithTagsById$lambda$9(_sql, dhikrId, TagDao_Impl.this, (SQLiteConnection) obj);
             }
         }, continuation);
     }

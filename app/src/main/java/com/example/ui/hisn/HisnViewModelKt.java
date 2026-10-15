@@ -11,6 +11,6 @@ import kotlin.text.StringsKt;
 public final class HisnViewModelKt {
     public static final String normalizeArabic(String s) {
         Intrinsics.checkNotNullParameter(s, "s");
-        return StringsKt.replace$default(StringsKt.replace$default(new Regex("[\\u0622\\u0623\\u0625\\u0671]").replace(new Regex("[\\u064B-\\u0652\\u0670\\u06D6-\\u06ED\\u0640]").replace(s, ""), "ا"), (char) 1609, (char) 1610, false, 4, (Object) null), (char) 1577, (char) 1607, false, 4, (Object) null);
+        return s.replaceAll("[\u064B-\u0652\u0670\u06D6-\u06ED\u0640]", "").replaceAll("[\u0622\u0623\u0625\u0671]", "ا").replace((char) 1609, (char) 1610).replace((char) 1577, (char) 1607);
     }
 }

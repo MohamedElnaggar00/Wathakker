@@ -78,11 +78,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     /* JADX INFO: Access modifiers changed from: protected */
     @Override // androidx.room.RoomDatabase
     public RoomOpenDelegate createOpenDelegate() {
-        RoomOpenDelegate _openDelegate = new RoomOpenDelegate() { // from class: com.example.data.AppDatabase_Impl$createOpenDelegate$_openDelegate$1
-            /* JADX INFO: Access modifiers changed from: package-private */
-            {
-                super(8, "60976a860ef541fdb8dbbcef870846bb", "ffdd9bb93b8df39ebcfb05ab32ef0022");
-            }
+        RoomOpenDelegate _openDelegate = new RoomOpenDelegate(8, "60976a860ef541fdb8dbbcef870846bb", "ffdd9bb93b8df39ebcfb05ab32ef0022") { // from class: com.example.data.AppDatabase_Impl$createOpenDelegate$_openDelegate$1
 
             @Override // androidx.room.RoomOpenDelegate
             public void createAllTables(SQLiteConnection connection) {
@@ -157,7 +153,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 _indicesDhikrTable.add(new TableInfo.Index("index_dhikr_table_isFavorite", false, CollectionsKt.listOf("isFavorite"), CollectionsKt.listOf("ASC")));
                 _indicesDhikrTable.add(new TableInfo.Index("index_dhikr_table_isEnabled", false, CollectionsKt.listOf("isEnabled"), CollectionsKt.listOf("ASC")));
                 TableInfo _infoDhikrTable = new TableInfo("dhikr_table", _columnsDhikrTable, _foreignKeysDhikrTable, _indicesDhikrTable);
-                TableInfo _existingDhikrTable = TableInfo.INSTANCE.read(connection, "dhikr_table");
+                TableInfo _existingDhikrTable = TableInfo.Companion.read(connection, "dhikr_table");
                 if (!_infoDhikrTable.equals(_existingDhikrTable)) {
                     return new RoomOpenDelegate.ValidationResult(false, "dhikr_table(com.example.data.Dhikr).\n Expected:\n" + _infoDhikrTable + "\n Found:\n" + _existingDhikrTable);
                 }
@@ -168,7 +164,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 Set _foreignKeysTagTable = new LinkedHashSet();
                 Set _indicesTagTable = new LinkedHashSet();
                 TableInfo _infoTagTable = new TableInfo("tag_table", _columnsTagTable, _foreignKeysTagTable, _indicesTagTable);
-                TableInfo _existingTagTable = TableInfo.INSTANCE.read(connection, "tag_table");
+                TableInfo _existingTagTable = TableInfo.Companion.read(connection, "tag_table");
                 if (!_infoTagTable.equals(_existingTagTable)) {
                     return new RoomOpenDelegate.ValidationResult(false, "tag_table(com.example.data.Tag).\n Expected:\n" + _infoTagTable + "\n Found:\n" + _existingTagTable);
                 }
@@ -180,7 +176,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 _indicesDhikrTagCrossRef.add(new TableInfo.Index("index_dhikr_tag_cross_ref_dhikrId", false, CollectionsKt.listOf("dhikrId"), CollectionsKt.listOf("ASC")));
                 _indicesDhikrTagCrossRef.add(new TableInfo.Index("index_dhikr_tag_cross_ref_tagId", false, CollectionsKt.listOf("tagId"), CollectionsKt.listOf("ASC")));
                 TableInfo _infoDhikrTagCrossRef = new TableInfo("dhikr_tag_cross_ref", _columnsDhikrTagCrossRef, _foreignKeysDhikrTagCrossRef, _indicesDhikrTagCrossRef);
-                TableInfo _existingDhikrTagCrossRef = TableInfo.INSTANCE.read(connection, "dhikr_tag_cross_ref");
+                TableInfo _existingDhikrTagCrossRef = TableInfo.Companion.read(connection, "dhikr_tag_cross_ref");
                 if (!_infoDhikrTagCrossRef.equals(_existingDhikrTagCrossRef)) {
                     return new RoomOpenDelegate.ValidationResult(false, "dhikr_tag_cross_ref(com.example.data.DhikrTagCrossRef).\n Expected:\n" + _infoDhikrTagCrossRef + "\n Found:\n" + _existingDhikrTagCrossRef);
                 }
@@ -192,7 +188,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 Set _foreignKeysDhikrHistory = new LinkedHashSet();
                 Set _indicesDhikrHistory = new LinkedHashSet();
                 TableInfo _infoDhikrHistory = new TableInfo("dhikr_history", _columnsDhikrHistory, _foreignKeysDhikrHistory, _indicesDhikrHistory);
-                TableInfo _existingDhikrHistory = TableInfo.INSTANCE.read(connection, "dhikr_history");
+                TableInfo _existingDhikrHistory = TableInfo.Companion.read(connection, "dhikr_history");
                 if (!_infoDhikrHistory.equals(_existingDhikrHistory)) {
                     return new RoomOpenDelegate.ValidationResult(false, "dhikr_history(com.example.data.DhikrHistory).\n Expected:\n" + _infoDhikrHistory + "\n Found:\n" + _existingDhikrHistory);
                 }
@@ -203,7 +199,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 Set _foreignKeysHisnChapter = new LinkedHashSet();
                 Set _indicesHisnChapter = new LinkedHashSet();
                 TableInfo _infoHisnChapter = new TableInfo("hisn_chapter", _columnsHisnChapter, _foreignKeysHisnChapter, _indicesHisnChapter);
-                TableInfo _existingHisnChapter = TableInfo.INSTANCE.read(connection, "hisn_chapter");
+                TableInfo _existingHisnChapter = TableInfo.Companion.read(connection, "hisn_chapter");
                 if (!_infoHisnChapter.equals(_existingHisnChapter)) {
                     return new RoomOpenDelegate.ValidationResult(false, "hisn_chapter(com.example.data.HisnChapter).\n Expected:\n" + _infoHisnChapter + "\n Found:\n" + _existingHisnChapter);
                 }
@@ -220,7 +216,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 Set _indicesHisnItem = new LinkedHashSet();
                 _indicesHisnItem.add(new TableInfo.Index("index_hisn_item_chapterId", false, CollectionsKt.listOf("chapterId"), CollectionsKt.listOf("ASC")));
                 TableInfo _infoHisnItem = new TableInfo("hisn_item", _columnsHisnItem, _foreignKeysHisnItem, _indicesHisnItem);
-                TableInfo _existingHisnItem = TableInfo.INSTANCE.read(connection, "hisn_item");
+                TableInfo _existingHisnItem = TableInfo.Companion.read(connection, "hisn_item");
                 if (!_infoHisnItem.equals(_existingHisnItem)) {
                     return new RoomOpenDelegate.ValidationResult(false, "hisn_item(com.example.data.HisnItem).\n Expected:\n" + _infoHisnItem + "\n Found:\n" + _existingHisnItem);
                 }
@@ -232,7 +228,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 Set _indicesHisnFavorite = new LinkedHashSet();
                 _indicesHisnFavorite.add(new TableInfo.Index("index_hisn_favorite_chapterId_itemId", true, java.util.Arrays.asList(new String[]{"chapterId", "itemId"}), java.util.Arrays.asList(new String[]{"ASC", "ASC"})));
                 TableInfo _infoHisnFavorite = new TableInfo("hisn_favorite", _columnsHisnFavorite, _foreignKeysHisnFavorite, _indicesHisnFavorite);
-                TableInfo _existingHisnFavorite = TableInfo.INSTANCE.read(connection, "hisn_favorite");
+                TableInfo _existingHisnFavorite = TableInfo.Companion.read(connection, "hisn_favorite");
                 if (!_infoHisnFavorite.equals(_existingHisnFavorite)) {
                     return new RoomOpenDelegate.ValidationResult(false, "hisn_favorite(com.example.data.HisnFavorite).\n Expected:\n" + _infoHisnFavorite + "\n Found:\n" + _existingHisnFavorite);
                 }
@@ -244,7 +240,7 @@ public final class AppDatabase_Impl extends AppDatabase {
                 Set _foreignKeysHisnRead = new LinkedHashSet();
                 Set _indicesHisnRead = new LinkedHashSet();
                 TableInfo _infoHisnRead = new TableInfo("hisn_read", _columnsHisnRead, _foreignKeysHisnRead, _indicesHisnRead);
-                TableInfo _existingHisnRead = TableInfo.INSTANCE.read(connection, "hisn_read");
+                TableInfo _existingHisnRead = TableInfo.Companion.read(connection, "hisn_read");
                 if (!_infoHisnRead.equals(_existingHisnRead)) {
                     return new RoomOpenDelegate.ValidationResult(false, "hisn_read(com.example.data.HisnRead).\n Expected:\n" + _infoHisnRead + "\n Found:\n" + _existingHisnRead);
                 }
