@@ -6,7 +6,8 @@ on:
     inputs:
       build_run_id:
         description: Build Android APK run id to take the debug APK from
-        required: true
+        required: false
+        default: '38808565582'
 permissions:
   contents: write
   actions: read
