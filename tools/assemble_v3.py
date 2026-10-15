@@ -526,6 +526,21 @@ if os.path.isdir(KS):
                     print('removed jadx', jf)
             print('kotlin', rel)
 
+dl = os.path.join(KS, 'DELETE.txt')
+if os.path.isfile(dl):
+    for line in open(dl).read().split('\n'):
+        line = line.strip()
+        if not line or line.startswith('#'):
+            continue
+        dd, bn = os.path.split(line)
+        stem = bn[:-5] if bn.endswith('.java') else bn
+        pdir = os.path.join(MAIN, 'java', dd)
+        if os.path.isdir(pdir):
+            for jf in os.listdir(pdir):
+                if jf == stem + '.java' or jf.startswith(stem + '$'):
+                    os.remove(os.path.join(pdir, jf))
+                    print('removed jadx', jf)
+
 # 12. resources referenced by kept files but missing (stale R): recover from apktool values, declare custom attrs/ids
 resdir = os.path.join(MAIN, 'res')
 vals = {}
@@ -597,3 +612,4 @@ for a in sorted(attr_names - declared):
 os.makedirs(os.path.join(resdir, 'values'), exist_ok=True)
 ET.ElementTree(out).write(os.path.join(resdir, 'values', 'recovered.xml'), encoding='utf-8', xml_declaration=True)
 print('recovered resource entries', added, 'attrs', sorted(attr_names - declared))
+
