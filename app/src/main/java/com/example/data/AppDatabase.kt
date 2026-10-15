@@ -8,8 +8,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn
 
 /**
  * Room database. The generated implementation (AppDatabase_Impl and the *Dao_Impl classes)
@@ -68,7 +66,7 @@ abstract class AppDatabase : RoomDatabase() {
                         starter("سؤال الهدى والتقى", "اللهم إني أسألك الهدى والتقى والعفاف والغنى", "08:00"),
                         starter("الإعانة على الذكر", "اللهم أعني على ذكرك وشكرك وحسن عبادتك", "20:00")
                     )
-                    callSuspend<Unit> { dhikrDao.insertAll(starters, it) }
+                    dhikrDao.insertAll(starters)
                 }
                 val tagDao = INSTANCE?.tagDao() ?: return
                 listOf(
@@ -76,15 +74,11 @@ abstract class AppDatabase : RoomDatabase() {
                     Tag(0L, "أذكار المساء", "#800080"),
                     Tag(0L, "أذكار النوم", "#1E3A8A"),
                     Tag(0L, "أدعية عامة", "#059669")
-                ).forEach { tag -> callSuspend<Long> { tagDao.insertTag(tag, it) } }
+                ).forEach { tag -> tagDao.insertTag(tag) }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
-
-        /** The DAOs are Java interfaces, so their Continuation parameter is passed by hand. */
-        private suspend fun <T> callSuspend(block: (Continuation<T>) -> Any?): T =
-            suspendCoroutineUninterceptedOrReturn { block(it) }
 
         private fun starter(title: String, content: String, time: String) =
             Dhikr(0, title, content, false, listOf(time), true, 0, 0L)
