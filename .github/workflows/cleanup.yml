@@ -1,0 +1,18 @@
+name: cleanup-evidence
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Remove CI evidence folders
+        run: |
+          git rm -r -q --ignore-unmatch build-logs emulator-evidence
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git commit -m "Remove CI build logs and emulator evidence" || exit 0
+          git push origin HEAD:main
