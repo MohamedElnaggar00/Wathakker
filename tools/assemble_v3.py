@@ -161,7 +161,7 @@ android {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-  options.compilerArgs.addAll(listOf("-Xmaxerrs", "3000", "-Xmaxwarns", "50", "-Xlint:none"))
+  options.compilerArgs.addAll(listOf("-Xmaxerrs", "200000", "-Xmaxwarns", "50", "-Xlint:none"))
 }
 
 dependencies {
@@ -525,3 +525,75 @@ if os.path.isdir(KS):
                     os.remove(os.path.join(pkgdir, jf))
                     print('removed jadx', jf)
             print('kotlin', rel)
+
+# 12. resources referenced by kept files but missing (stale R): recover from apktool values, declare custom attrs/ids
+resdir = os.path.join(MAIN, 'res')
+vals = {}
+vdir = os.path.join(APK, 'res', 'values')
+for f in os.listdir(vdir):
+    if not f.endswith('.xml') or f == 'public.xml':
+        continue
+    try:
+        r = ET.parse(os.path.join(vdir, f)).getroot()
+    except Exception:
+        continue
+    for el in r:
+        n = el.get('name')
+        t = el.get('type') if el.tag == 'item' else el.tag
+        if n and t:
+            vals.setdefault((t, n.replace('.', '_')), el)
+have = set()
+for dp, _, fs in os.walk(os.path.join(resdir)):
+    rt = os.path.basename(dp).split('-')[0]
+    for f in fs:
+        if rt == 'values':
+            try:
+                for el in ET.parse(os.path.join(dp, f)).getroot():
+                    n = el.get('name')
+                    if n:
+                        have.add(((el.get('type') if el.tag == 'item' else el.tag), n.replace('.', '_')))
+            except Exception:
+                pass
+        else:
+            have.add((rt, f.rsplit('.', 1)[0]))
+refs = set()
+attr_names = set()
+for dp, _, fs in os.walk(resdir):
+    if os.path.basename(dp).split('-')[0] == 'values':
+        continue
+    for f in fs:
+        if not f.endswith('.xml'):
+            continue
+        txt = open(os.path.join(dp, f), encoding='utf-8', errors='ignore').read()
+        for m in re.finditer(r'@\+?(string|id|dimen|color|integer|bool|style|array|plurals)/([A-Za-z0-9_.]+)', txt):
+            refs.add((m.group(1), m.group(2).replace('.', '_')))
+        if os.path.basename(dp).split('-')[0] == 'xml' or True:
+            for m in re.finditer(r'\bapp:([A-Za-z0-9_]+)=', txt):
+                attr_names.add(m.group(1))
+out = ET.Element('resources')
+added = 0
+for k in sorted(refs):
+    if k in have:
+        continue
+    if k in vals:
+        out.append(vals[k]); added += 1
+    elif k[0] == 'id':
+        e = ET.SubElement(out, 'item'); e.set('name', k[1]); e.set('type', 'id'); added += 1
+    else:
+        print('UNRESOLVED ref', k)
+declared = set()
+for dp, _, fs in os.walk(resdir):
+    if os.path.basename(dp).split('-')[0] == 'values':
+        for f in fs:
+            try:
+                for el in ET.parse(os.path.join(dp, f)).getroot():
+                    if el.tag == 'attr':
+                        declared.add(el.get('name'))
+            except Exception:
+                pass
+for a in sorted(attr_names - declared):
+    e = ET.SubElement(out, 'attr'); e.set('name', a)
+    e.set('format', 'reference|string|integer|boolean|dimension|float|color'); added += 1
+os.makedirs(os.path.join(resdir, 'values'), exist_ok=True)
+ET.ElementTree(out).write(os.path.join(resdir, 'values', 'recovered.xml'), encoding='utf-8', xml_declaration=True)
+print('recovered resource entries', added, 'attrs', sorted(attr_names - declared))
