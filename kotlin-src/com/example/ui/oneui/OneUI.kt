@@ -667,6 +667,7 @@ fun OneUIDrawer(
             ) {
                 DrawerHeader()
                 items.forEach { item ->
+                    if (item.route == "settings") OneUIDivider(16.dp)
                     val selected = item.route == currentRoute
                     Row(
                         modifier = Modifier
