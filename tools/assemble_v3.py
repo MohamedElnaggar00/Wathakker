@@ -741,6 +741,61 @@ for p in all_java():
     }
 }
 """
+    if base == 'TagDao.java':
+        i = s.index('        public static /* synthetic */ Object updateDhikrTags$suspendImpl')
+        j = s.index('    /* compiled from: TagDao.kt */\n    /* loaded from: classes7.dex */\n    public static final class DefaultImpls')
+        s = s[:i] + """        public static /* synthetic */ Object updateDhikrTags$suspendImpl(TagDao $this, int dhikrId, List<Long> list, Continuation<? super Unit> continuation) {
+            TagDao$updateDhikrTags$1 c;
+            if (continuation instanceof TagDao$updateDhikrTags$1 && (((TagDao$updateDhikrTags$1) continuation).label & Integer.MIN_VALUE) != 0) {
+                c = (TagDao$updateDhikrTags$1) continuation;
+                c.label -= Integer.MIN_VALUE;
+            } else {
+                c = new TagDao$updateDhikrTags$1($this, (Continuation) continuation);
+            }
+            Object $result = c.result;
+            Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+            switch (c.label) {
+                case 0:
+                    ResultKt.throwOnFailure($result);
+                    c.L$0 = $this;
+                    c.L$1 = list;
+                    c.I$0 = dhikrId;
+                    c.label = 1;
+                    if ($this.deleteTagsForDhikr(dhikrId, c) == coroutine_suspended) {
+                        return coroutine_suspended;
+                    }
+                    break;
+                case 1:
+                    dhikrId = c.I$0;
+                    list = (List) c.L$1;
+                    $this = (TagDao) c.L$0;
+                    ResultKt.throwOnFailure($result);
+                    break;
+                case 2:
+                    ResultKt.throwOnFailure($result);
+                    return Unit.INSTANCE;
+                default:
+                    throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            }
+            List<DhikrTagCrossRef> refs = new java.util.ArrayList<>();
+            for (Long id : list) {
+                refs.add(new DhikrTagCrossRef(dhikrId, id.longValue()));
+            }
+            if (refs.isEmpty()) {
+                return Unit.INSTANCE;
+            }
+            c.L$0 = $this;
+            c.L$1 = list;
+            c.L$2 = refs;
+            c.I$0 = dhikrId;
+            c.label = 2;
+            if ($this.insertDhikrTagCrossRefs(refs, c) == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+            return Unit.INSTANCE;
+        }
+    }
+""" + s[j:]
     # outer-class fields read by the extracted lambda classes
     base = os.path.basename(p)
     if base in ('FajrViewModel.java', 'MainViewModel.java', 'HisnViewModel.java', 'DhikrRepository.java'):
