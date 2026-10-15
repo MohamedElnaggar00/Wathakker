@@ -51,51 +51,33 @@ public final class HisnViewModel$toggle$1 extends SuspendLambda implements Funct
         switch (this.label) {
             case 0:
                 ResultKt.throwOnFailure($result);
-                Iterable value = this.this$0.getFavorites().getValue();
-                int i = this.$chapterId;
-                int i2 = this.$itemId;
-                int i3 = 0;
-                if (!(value instanceof Collection) || !((Collection) value).isEmpty()) {
-                    Iterator it = value.iterator();
-                    while (true) {
-                        if (it.hasNext()) {
-                            HisnFavorite hisnFavorite = (HisnFavorite) it.next();
-                            if (((hisnFavorite.getChapterId() == i && hisnFavorite.getItemId() == i2) ? 1 : null) != null) {
-                                i3 = 1;
-                            }
-                        }
+                boolean isFav = false;
+                for (Object o : (Iterable) this.this$0.getFavorites().getValue()) {
+                    HisnFavorite f = (HisnFavorite) o;
+                    if (f.getChapterId() == this.$chapterId && f.getItemId() == this.$itemId) {
+                        isFav = true;
+                        break;
                     }
                 }
                 HisnDao hisnDao = this.this$0.dao;
-                if (i3 == 0) {
-                    this.I$0 = i3;
+                if (!isFav) {
                     this.label = 2;
-                    if (hisnDao.addFavorite(new HisnFavorite(0L, this.$chapterId, this.$itemId, 1, null), this) != coroutine_suspended) {
-                        break;
-                    } else {
+                    if (hisnDao.addFavorite(new HisnFavorite(0L, this.$chapterId, this.$itemId, 1, null), this) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                 } else {
-                    this.I$0 = i3;
                     this.label = 1;
-                    if (hisnDao.removeFavorite(this.$chapterId, this.$itemId, this) != coroutine_suspended) {
-                        break;
-                    } else {
+                    if (hisnDao.removeFavorite(this.$chapterId, this.$itemId, this) == coroutine_suspended) {
                         return coroutine_suspended;
                     }
                 }
-                break;
+                return Unit.INSTANCE;
             case 1:
-                int i4 = this.I$0;
-                ResultKt.throwOnFailure($result);
-                break;
             case 2:
-                int i5 = this.I$0;
                 ResultKt.throwOnFailure($result);
-                break;
+                return Unit.INSTANCE;
             default:
                 throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
         }
-        return Unit.INSTANCE;
     }
 }
