@@ -41,7 +41,7 @@ jobs:
       - name: Save build log summary
         run: |
           mkdir -p build-logs
-          { echo "outcome: ${{ steps.build.outcome }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; grep -n -E "error:|error\)|warning: \[|FAILED|What went wrong|AAPT|Execution failed|Caused by|BUILD" build.log | head -400; } > build-logs/run-${{ github.run_number }}.txt
+          { echo "outcome: ${{ steps.build.outcome }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; grep -n -A2 -E "error:|What went wrong|Execution failed|BUILD" build.log | head -1500; } > build-logs/run-${{ github.run_number }}.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add build-logs/run-${{ github.run_number }}.txt
@@ -58,3 +58,4 @@ jobs:
         with:
           name: app-debug.apk
           path: app/build/outputs/apk/debug/app-debug.apk
+
