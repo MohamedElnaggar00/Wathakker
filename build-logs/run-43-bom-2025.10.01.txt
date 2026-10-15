@@ -1,0 +1,28 @@
+outcome: failure  bom: 2025.10.01  run: 38787697448  sha: f37eff7b22abb5b9b33eb15e02bdabd508ba193a
+errors: 0
+--- per file
+--- per symbol
+kotlin errors: 7
+--- kotlin per file
+      3 RemindersScreen.kt
+      2 FavoritesScreen.kt
+      1 TagsScreen.kt
+      1 AboutScreen.kt
+--- kotlin details
+e: com/example/ui/screens/AboutScreen.kt:84:34 Unresolved reference 'ChevronIcon'.
+e: com/example/ui/screens/FavoritesScreen.kt:34:5 Unresolved reference 'DhikrDialogsHost'.
+e: com/example/ui/screens/FavoritesScreen.kt:52:13 Unresolved reference 'dhikrCards'.
+e: com/example/ui/screens/RemindersScreen.kt:33:33 Overload resolution ambiguity between candidates:
+e: com/example/ui/screens/RemindersScreen.kt:63:39 Overload resolution ambiguity between candidates:
+e: com/example/ui/screens/RemindersScreen.kt:73:40 Overload resolution ambiguity between candidates:
+e: com/example/ui/screens/TagsScreen.kt:74:40 No value passed for parameter 'onCreated'.
+--- details
+62:* What went wrong:
+63:Execution failed for task ':app:compileDebugKotlin'.
+64-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+65-   > Compilation error. See log for more details
+66-
+67-* Try:
+--
+73:BUILD FAILED in 4m 39s
+74-23 actionable tasks: 23 executed
