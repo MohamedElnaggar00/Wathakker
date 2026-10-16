@@ -1,7 +1,7 @@
 name: Build Android APK
 
 # Build from source and upload the debug APK as a workflow artifact.
-# No releases and no tags are created here - releases are published manually.
+# Each successful build publishes a pre-release tagged v3.0.6-pre.<run number> (user's standing instruction).
 on:
   push:
     branches:
@@ -60,7 +60,20 @@ jobs:
           name: app-debug-bom-${{ matrix.bom }}.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
+      - name: Publish pre-release
+        if: steps.build.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=v3.0.6-pre.${{ github.run_number }}
+          cp app/build/outputs/apk/debug/app-debug.apk Wathakker-$TAG.apk
+          cat > notes.md <<'NOTES'
+Wathakker 3.0.6 pre-release build for testing (debug-signed).
+          NOTES
+          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.0.6 pre-release ${{ github.run_number }}" --notes-file notes.md
+
       - name: Fail if build failed
         if: steps.build.outcome == 'failure'
         run: exit 1
+
 
