@@ -43,19 +43,21 @@ jobs:
           gradle assembleDebug -PcomposeBom=${{ matrix.bom }} --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee build.log
 
       - name: Sign with release key
+        id: sign
+        continue-on-error: true
         if: steps.build.outcome == 'success'
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          set -euo pipefail
+          bash -c 'set -euo pipefail
           umask 077
           work=$(mktemp -d)
           for name in KEYSTORE_BASE64 KEY_PASSWORD KEY_ALIAS; do
             if [ -z "${!name}" ]; then echo "Missing signing secret: $name"; exit 1; fi
           done
-          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$work/source.bks"
+          printf "%s" "$KEYSTORE_BASE64" | base64 --decode > "$work/source.bks"
           curl --fail --silent --show-error --location https://repo.maven.apache.org/maven2/org/bouncycastle/bcprov-jdk18on/1.78.1/bcprov-jdk18on-1.78.1.jar -o "$work/bcprov.jar"
           echo "add5915e6acfc6ab5836e1fd8a5e21c6488536a8c1f21f386eeb3bf280b702d7  $work/bcprov.jar" | sha256sum --check
           cp 1-ConvertBks.java "$work/ConvertBks.java"
@@ -66,14 +68,15 @@ jobs:
           "$BT/zipalign" -f -p 4 "$APK" "$work/aligned.apk"
           "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out "$APK" "$work/aligned.apk"
           "$BT/apksigner" verify --verbose --print-certs "$APK" > "$work/sig.txt"
-          grep -q '0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f' "$work/sig.txt" && echo "signed with original Wathakker certificate"
+          if grep -q 0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f "$work/sig.txt"; then echo signed-with-original-cert; else echo CERT-MISMATCH; exit 1; fi
           rm -rf "$work"
+          ' 2>&1 | tee sign.log; test ${PIPESTATUS[0]} -eq 0
 
       - name: Save build log summary
         run: |
           mkdir -p build-logs
           F=build-logs/run-${{ github.run_number }}-bom-${{ matrix.bom }}.txt
-          { echo "outcome: ${{ steps.build.outcome }}  bom: ${{ matrix.bom }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; echo "errors: $(grep -c 'error:' build.log)"; echo "--- per file"; grep -o '[A-Za-z0-9_$]*\.java:[0-9]*: error' build.log | sed -E 's/:[0-9]+: error//' | sort | uniq -c | sort -rn | head -80; echo "--- per symbol"; grep -A3 "error: cannot find symbol" build.log | grep -o 'symbol: .*' | sed -E 's/\(.*//' | sort | uniq -c | sort -rn | head -60; echo "kotlin errors: $(grep -c '^e: ' build.log)"; echo "--- kotlin per file"; grep '^e: ' build.log | sed -E 's#^e: file://.*/([A-Za-z0-9_$]+\.kt):[0-9]+:[0-9]+.*#\1#' | sort | uniq -c | sort -rn | head -40; echo "--- kotlin details"; grep '^e: ' build.log | sed -E 's#file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/##' | cut -c1-260 | head -400; echo "--- details"; grep -n -A4 -E "error:|What went wrong|Execution failed|BUILD" build.log | head -700; } > $F
+          { echo "outcome: ${{ steps.build.outcome }}  bom: ${{ matrix.bom }}  run: ${{ github.run_id }}  sha: ${{ github.sha }}"; echo "errors: $(grep -c 'error:' build.log)"; echo "--- per file"; grep -o '[A-Za-z0-9_$]*\.java:[0-9]*: error' build.log | sed -E 's/:[0-9]+: error//' | sort | uniq -c | sort -rn | head -80; echo "--- per symbol"; grep -A3 "error: cannot find symbol" build.log | grep -o 'symbol: .*' | sed -E 's/\(.*//' | sort | uniq -c | sort -rn | head -60; echo "sign outcome: ${{ steps.sign.outcome }}"; echo "kotlin errors: $(grep -c '^e: ' build.log)"; echo "--- kotlin per file"; grep '^e: ' build.log | sed -E 's#^e: file://.*/([A-Za-z0-9_$]+\.kt):[0-9]+:[0-9]+.*#\1#' | sort | uniq -c | sort -rn | head -40; echo "--- kotlin details"; grep '^e: ' build.log | sed -E 's#file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/##' | cut -c1-260 | head -400; echo "--- sign log"; cat sign.log 2>/dev/null | head -60; echo "--- details"; grep -n -A4 -E "error:|What went wrong|Execution failed|BUILD" build.log | head -700; } > $F
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add $F
@@ -81,14 +84,14 @@ jobs:
           for i in 1 2 3 4; do git pull --rebase origin main && git push origin HEAD:main && break; sleep $((RANDOM % 8 + 2)); done
 
       - name: Upload APK
-        if: steps.build.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.sign.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-bom-${{ matrix.bom }}.apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Publish pre-release
-        if: steps.build.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.sign.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -100,7 +103,7 @@ jobs:
           gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.0.6 pre-release ${{ github.run_number }}" --notes-file notes.md
 
       - name: Fail if build failed
-        if: steps.build.outcome == 'failure'
+        if: steps.build.outcome == 'failure' || steps.sign.outcome == 'failure'
         run: exit 1
 
 
