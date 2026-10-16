@@ -32,15 +32,39 @@ jobs:
         with:
           gradle-version: '9.3.1'
 
-      - name: Generate Debug Keystore
-        run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
-
       - name: Build APK
         id: build
         continue-on-error: true
         run: |
           set -o pipefail
           gradle assembleDebug -PcomposeBom=${{ matrix.bom }} --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee build.log
+
+      - name: Sign with release key
+        if: steps.build.outcome == 'success'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          umask 077
+          work=$(mktemp -d)
+          for name in KEYSTORE_BASE64 KEY_PASSWORD KEY_ALIAS; do
+            if [ -z "${!name}" ]; then echo "Missing signing secret: $name"; exit 1; fi
+          done
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$work/source.bks"
+          curl --fail --silent --show-error --location https://repo.maven.apache.org/maven2/org/bouncycastle/bcprov-jdk18on/1.78.1/bcprov-jdk18on-1.78.1.jar -o "$work/bcprov.jar"
+          echo "add5915e6acfc6ab5836e1fd8a5e21c6488536a8c1f21f386eeb3bf280b702d7  $work/bcprov.jar" | sha256sum --check
+          cp 1-ConvertBks.java "$work/ConvertBks.java"
+          javac -cp "$work/bcprov.jar" -d "$work" "$work/ConvertBks.java"
+          java -cp "$work:$work/bcprov.jar" ConvertBks "$work/source.bks" "$work/signing.p12"
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          "$BT/zipalign" -f -p 4 "$APK" "$work/aligned.apk"
+          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out "$APK" "$work/aligned.apk"
+          "$BT/apksigner" verify --verbose --print-certs "$APK" > "$work/sig.txt"
+          grep -q '0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f' "$work/sig.txt" && echo "signed with original Wathakker certificate"
+          rm -rf "$work"
 
       - name: Save build log summary
         run: |
