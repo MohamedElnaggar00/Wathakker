@@ -68,7 +68,7 @@ jobs:
           TAG=v3.0.6-pre.${{ github.run_number }}
           cp app/build/outputs/apk/debug/app-debug.apk Wathakker-$TAG.apk
           cat > notes.md <<'NOTES'
-Wathakker 3.0.6 pre-release build for testing (debug-signed).
+          Wathakker 3.0.6 pre-release build for testing (debug-signed).
           NOTES
           gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.0.6 pre-release ${{ github.run_number }}" --notes-file notes.md
 
