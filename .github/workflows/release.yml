@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Stop if tag or release exists
         run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then echo "Tag $TAG already exists"; exit 1; fi
+          echo "tag check: replacing asset if release exists"
       - name: Download latest successful build
         run: |
           RUN=$(gh run list --workflow build-apk.yml --branch main --status success --limit 1 --json databaseId,headSha -q '.[0].databaseId')
@@ -37,4 +37,5 @@ jobs:
           Fixes
           - App source is now fully buildable from this repository
           NOTES
+          if gh release view "$TAG" >/dev/null 2>&1; then gh release upload "$TAG" Wathakker-v3.0.6-rebuilt.apk --clobber; exit 0; fi
           gh release create "$TAG" Wathakker-v3.0.6-rebuilt.apk --target main --prerelease --title "Wathakker 3.0.6 (pre-release)" --notes-file notes.md
