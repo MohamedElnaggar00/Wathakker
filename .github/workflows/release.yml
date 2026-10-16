@@ -1,0 +1,40 @@
+name: publish-prerelease
+on: workflow_dispatch
+permissions:
+  contents: write
+  actions: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: v3.0.6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Stop if tag or release exists
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then echo "Tag $TAG already exists"; exit 1; fi
+      - name: Download latest successful build
+        run: |
+          RUN=$(gh run list --workflow build-apk.yml --branch main --status success --limit 1 --json databaseId,headSha -q '.[0].databaseId')
+          echo "run $RUN"
+          gh run download "$RUN" -n app-debug-bom-2025.10.01.apk -D out
+          cp out/app-debug.apk Wathakker-v3.0.6-rebuilt.apk
+          ls -l Wathakker-v3.0.6-rebuilt.apk
+      - name: Create pre-release
+        run: |
+          cat > notes.md <<'NOTES'
+          Wathakker 3.0.6 (rebuilt from source), pre-release for testing.
+
+          Features
+          - Prayer times with next-prayer countdown
+          - Dhikr lists with reminders, tags and favorites
+          - Hisn al-Muslim
+          - Fajr alarm
+          - Tasbeeh counter
+          - Lock-screen and home widgets
+
+          Fixes
+          - App source is now fully buildable from this repository
+          NOTES
+          gh release create "$TAG" Wathakker-v3.0.6-rebuilt.apk --target main --prerelease --title "Wathakker 3.0.6 (pre-release)" --notes-file notes.md
