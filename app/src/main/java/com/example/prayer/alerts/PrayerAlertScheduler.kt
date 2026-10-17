@@ -25,7 +25,7 @@ object PrayerAlertScheduler {
     fun scheduleAll(context: Context) {
         PrayerAlertStore.migrate(context)
         val prefs = FajrPreferences(context)
-        val method = CalculationMethod.fromId(prefs.calculationMethodId)
+        val method = CalculationMethod.INSTANCE.fromId(prefs.calculationMethodId)
         val now = System.currentTimeMillis()
         val today = PrayerAdjustments.calculateAll(
             context, Calendar.getInstance(), prefs.latitude, prefs.longitude, method
