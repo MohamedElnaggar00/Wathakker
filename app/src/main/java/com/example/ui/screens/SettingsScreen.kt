@@ -39,6 +39,9 @@ import com.example.ui.oneui.OneUISwitch
 import com.example.ThemeSettings
 import com.example.ui.oneui.SectionLabel
 import com.example.ui.viewmodel.MainViewModel
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
+import androidx.compose.material.icons.outlined.Language
 
 @Composable
 fun SettingsScreen(
@@ -52,11 +55,12 @@ fun SettingsScreen(
     var showFontPicker by remember { mutableStateOf(false) }
     var showThemePicker by remember { mutableStateOf(false) }
     var showLockWidgets by remember { mutableStateOf(false) }
+    var showLanguagePicker by remember { mutableStateOf(false) }
     val themeMode by ThemeSettings.mode.collectAsState()
     val themeTitle = when (themeMode) {
-        ThemeSettings.LIGHT -> "فاتح"
-        ThemeSettings.DARK -> "داكن"
-        else -> "تلقائي (النظام)"
+        ThemeSettings.LIGHT -> L10n.t(S.Light)
+        ThemeSettings.DARK -> L10n.t(S.Dark)
+        else -> L10n.t(S.SystemAuto)
     }
     val ringtoneLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == -1) {
@@ -82,7 +86,8 @@ fun SettingsScreen(
         },
         onFajr = onNavigateToFajr,
         onPickTheme = { showThemePicker = true },
-        onLockWidgets = { showLockWidgets = true }
+        onLockWidgets = { showLockWidgets = true },
+        onPickLanguage = { showLanguagePicker = true }
     )
 
     if (showFontPicker) {
@@ -102,6 +107,13 @@ fun SettingsScreen(
     if (showLockWidgets) {
         LockWidgetsDialog { showLockWidgets = false }
     }
+    if (showLanguagePicker) {
+        LanguagePickerDialog(
+            selected = L10n.lang,
+            onSelect = { L10n.set(contextApp, it) },
+            onDismiss = { showLanguagePicker = false }
+        )
+    }
 }
 
 @Composable
@@ -109,7 +121,7 @@ fun LockWidgetsDialog(onDismiss: () -> Unit) {
     val context: Context = LocalContext.current
     val cs = MaterialTheme.colorScheme
     OneUIDialog(
-        title = "ويدجت شاشة القفل",
+        title = L10n.t(S.LockWidgets),
         onDismiss = onDismiss,
         onConfirm = {
             val launch = context.packageManager.getLaunchIntentForPackage("com.samsung.android.app.dressroom")
@@ -117,31 +129,31 @@ fun LockWidgetsDialog(onDismiss: () -> Unit) {
                 try {
                     context.startActivity(launch)
                 } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(context, "اضغط مطولًا على شاشة القفل لإضافة الويدجت", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, L10n.t(S.LockWidgetsToast), Toast.LENGTH_LONG).show()
                 }
             } else {
-                Toast.makeText(context, "اضغط مطولًا على شاشة القفل لإضافة الويدجت", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, L10n.t(S.LockWidgetsToast), Toast.LENGTH_LONG).show()
             }
             onDismiss()
         },
-        confirmText = "فتح المحرر",
-        dismissText = "إغلاق"
+        confirmText = L10n.t(S.OpenEditor),
+        dismissText = L10n.t(S.Close)
     ) {
         Text(
-            "كل ويدجتات وَذكِّر متاحة في المساحة المخصصة تحت الساعة على شاشة القفل (One UI 8 أو أحدث).",
+            L10n.t(S.LockWidgetsDesc),
             color = cs.onSurface,
             fontSize = 16.sp,
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(Modifier.height(12.dp))
         Text(
-            "١. على شاشة القفل اضغط مطولًا على مكان فارغ، ثم أكّد هويتك.\n٢. اضغط «إضافة ويدجت» واختار «وَذكِّر» من القائمة.\n٣. اختار الويدجت الذي يعجبك، مثل «الإقامة (مصغر)» أو «شريط الصلاة».\n٤. رتّبها بالسحب ثم اضغط «تم».",
+            L10n.t(S.LockWidgetsSteps),
             color = cs.onSurface,
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(Modifier.height(12.dp))
         Text(
-            "الضغط على الويدجت من شاشة القفل يفتح التطبيق مباشرة.",
+            L10n.t(S.LockWidgetsHint),
             modifier = Modifier.fillMaxWidth(),
             color = cs.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium
@@ -160,23 +172,24 @@ fun SettingsContent(
     onPickSound: () -> Unit,
     onFajr: (() -> Unit)? = null,
     onPickTheme: () -> Unit = {},
-    onLockWidgets: () -> Unit = {}
+    onLockWidgets: () -> Unit = {},
+    onPickLanguage: () -> Unit = {}
 ) {
-    OneUIScreen(title = "الإعدادات", onBack = onBack) {
+    OneUIScreen(title = L10n.t(S.Settings), onBack = onBack) {
         if (onFajr != null) {
             item(key = "fajr") {
                 OneUICard {
                     OneUIRow(
-                        title = "تغيير الموقع",
-                        summary = "المدينة وطريقة الحساب وإعدادات منبه الفجر",
+                        title = L10n.t(S.ChangeLocation),
+                        summary = L10n.t(S.LocationSubtitle),
                         leading = { OneUIIconBadge(Icons.Outlined.Alarm) },
                         trailing = { ChevronIcon() },
                         onClick = onFajr
                     )
                     OneUIDivider(70.dp)
                     OneUIRow(
-                        title = "منبه صلاة الفجر",
-                        summary = "تفعيل المنبه والنغمة",
+                        title = L10n.t(S.FajrAlarm),
+                        summary = L10n.t(S.FajrAlarmSubtitle),
                         leading = { OneUIIconBadge(Icons.Outlined.Alarm) },
                         trailing = { ChevronIcon() },
                         onClick = onFajr
@@ -184,41 +197,41 @@ fun SettingsContent(
                 }
             }
         }
-        item(key = "lock-l") { SectionLabel("شاشة القفل") }
+        item(key = "lock-l") { SectionLabel(L10n.t(S.LockScreenSection)) }
         item(key = "lock") {
             OneUICard {
                 OneUIRow(
-                    title = "ويدجت شاشة القفل",
-                    summary = "أضف ويدجت وَذكِّر تحت الساعة على شاشة القفل",
+                    title = L10n.t(S.LockWidgets),
+                    summary = L10n.t(S.LockWidgetsRowSub),
                     leading = { OneUIIconBadge(Icons.Outlined.Widgets) },
                     trailing = { ChevronIcon() },
                     onClick = onLockWidgets
                 )
             }
         }
-        item(key = "notif-l") { SectionLabel("الإشعارات") }
+        item(key = "notif-l") { SectionLabel(L10n.t(S.Notifications)) }
         item(key = "notif") {
             OneUICard {
                 OneUIRow(
-                    title = "نغمة الإشعار",
-                    summary = "الافتراضي",
+                    title = L10n.t(S.NotifSound),
+                    summary = L10n.t(S.Default),
                     leading = { OneUIIconBadge(Icons.Outlined.MusicNote) },
                     trailing = { ChevronIcon() },
                     onClick = onPickSound
                 )
                 OneUIRow(
-                    title = "الاهتزاز",
+                    title = L10n.t(S.Vibration),
                     leading = { OneUIIconBadge(Icons.Outlined.Vibration) },
                     trailing = { OneUISwitch(vibration, onVibration) },
                     onClick = { onVibration(!vibration) }
                 )
             }
         }
-        item(key = "look-l") { SectionLabel("المظهر") }
+        item(key = "look-l") { SectionLabel(L10n.t(S.Appearance)) }
         item(key = "look") {
             OneUICard {
                 OneUIRow(
-                    title = "خط التطبيق",
+                    title = L10n.t(S.AppFont),
                     summary = fontTitle,
                     leading = { OneUIIconBadge(Icons.Outlined.TextFields) },
                     trailing = { ChevronIcon() },
@@ -226,11 +239,19 @@ fun SettingsContent(
                 )
                 OneUIDivider(70.dp)
                 OneUIRow(
-                    title = "المظهر",
+                    title = L10n.t(S.Appearance),
                     summary = themeTitle,
                     leading = { OneUIIconBadge(Icons.Outlined.DarkMode) },
                     trailing = { ChevronIcon() },
                     onClick = onPickTheme
+                )
+                OneUIDivider(70.dp)
+                OneUIRow(
+                    title = L10n.t(S.Language),
+                    summary = L10n.lang.nativeName,
+                    leading = { OneUIIconBadge(Icons.Outlined.Language) },
+                    trailing = { ChevronIcon() },
+                    onClick = onPickLanguage
                 )
             }
         }
