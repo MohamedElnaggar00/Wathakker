@@ -34,6 +34,7 @@ fun Modifier.oneUIGlass(
             HazeStyle(base, HazeTint(base.copy(alpha = alpha)), blurRadius.dp, 0.04f)
         )
     } else {
-        this.clip(shape).background(base.copy(alpha = if (isSystemInDarkTheme()) 0.96f else 0.97f))
+        this.clip(shape).background(base.copy(alpha = if (com.example.ThemeSettings.isDark()) 0.96f else 0.97f))
     }
 }
+
