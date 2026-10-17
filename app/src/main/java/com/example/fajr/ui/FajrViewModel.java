@@ -158,11 +158,11 @@ public final class FajrViewModel extends AndroidViewModel {
         CalculationMethod method = this._uiState.getValue().getCalculationMethod();
         PrayerTimesCalculator prayerTimesCalculator = PrayerTimesCalculator.INSTANCE;
         Intrinsics.checkNotNull(calendar);
-        long fajrTime = prayerTimesCalculator.calculateFajrTime(calendar, this._uiState.getValue().getLatitude(), this._uiState.getValue().getLongitude(), method);
+        long fajrTime = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.fajrTime(getApplication(), calendar, this._uiState.getValue().getLatitude(), this._uiState.getValue().getLongitude(), method);
         boolean isTomorrow = false;
         if (fajrTime <= now) {
             calendar.add(6, 1);
-            fajrTime = PrayerTimesCalculator.INSTANCE.calculateFajrTime(calendar, this._uiState.getValue().getLatitude(), this._uiState.getValue().getLongitude(), method);
+            fajrTime = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.fajrTime(getApplication(), calendar, this._uiState.getValue().getLatitude(), this._uiState.getValue().getLongitude(), method);
             isTomorrow = true;
         }
         Calendar fmtCal = Calendar.getInstance();
