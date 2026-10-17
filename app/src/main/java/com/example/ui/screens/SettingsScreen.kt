@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Alarm
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Vibration
@@ -35,6 +36,7 @@ import com.example.ui.oneui.OneUIIconBadge
 import com.example.ui.oneui.OneUIRow
 import com.example.ui.oneui.OneUIScreen
 import com.example.ui.oneui.OneUISwitch
+import com.example.ThemeSettings
 import com.example.ui.oneui.SectionLabel
 import com.example.ui.viewmodel.MainViewModel
 
@@ -44,10 +46,18 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onNavigateToFajr: (() -> Unit)? = null
 ) {
+    val contextApp = LocalContext.current.applicationContext
     val vibration by viewModel.vibrationEnabled.collectAsState()
     val appFont by viewModel.appFont.collectAsState()
     var showFontPicker by remember { mutableStateOf(false) }
+    var showThemePicker by remember { mutableStateOf(false) }
     var showLockWidgets by remember { mutableStateOf(false) }
+    val themeMode by ThemeSettings.mode.collectAsState()
+    val themeTitle = when (themeMode) {
+        ThemeSettings.LIGHT -> "فاتح"
+        ThemeSettings.DARK -> "داكن"
+        else -> "تلقائي (النظام)"
+    }
     val ringtoneLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == -1) {
             @Suppress("DEPRECATION")
@@ -59,6 +69,7 @@ fun SettingsScreen(
     SettingsContent(
         vibration = vibration,
         fontTitle = appFont.titleAr,
+        themeTitle = themeTitle,
         onBack = onBack,
         onVibration = { viewModel.updateVibrationEnabled(it) },
         onPickFont = { showFontPicker = true },
@@ -70,6 +81,7 @@ fun SettingsScreen(
             ringtoneLauncher.launch(intent)
         },
         onFajr = onNavigateToFajr,
+        onPickTheme = { showThemePicker = true },
         onLockWidgets = { showLockWidgets = true }
     )
 
@@ -78,6 +90,13 @@ fun SettingsScreen(
             selected = appFont,
             onSelect = { viewModel.updateAppFont(it) },
             onDismiss = { showFontPicker = false }
+        )
+    }
+    if (showThemePicker) {
+        ThemePickerDialog(
+            selected = themeMode,
+            onSelect = { ThemeSettings.set(contextApp, it) },
+            onDismiss = { showThemePicker = false }
         )
     }
     if (showLockWidgets) {
@@ -134,11 +153,13 @@ fun LockWidgetsDialog(onDismiss: () -> Unit) {
 fun SettingsContent(
     vibration: Boolean,
     fontTitle: String,
+    themeTitle: String,
     onBack: () -> Unit,
     onVibration: (Boolean) -> Unit,
     onPickFont: () -> Unit,
     onPickSound: () -> Unit,
     onFajr: (() -> Unit)? = null,
+    onPickTheme: () -> Unit = {},
     onLockWidgets: () -> Unit = {}
 ) {
     OneUIScreen(title = "الإعدادات", onBack = onBack) {
@@ -203,7 +224,18 @@ fun SettingsContent(
                     trailing = { ChevronIcon() },
                     onClick = onPickFont
                 )
+                OneUIDivider(70.dp)
+                OneUIRow(
+                    title = "المظهر",
+                    summary = themeTitle,
+                    leading = { OneUIIconBadge(Icons.Outlined.DarkMode) },
+                    trailing = { ChevronIcon() },
+                    onClick = onPickTheme
+                )
             }
         }
     }
 }
+
+
+
