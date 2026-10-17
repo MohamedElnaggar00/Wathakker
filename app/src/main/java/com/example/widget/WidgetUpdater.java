@@ -59,7 +59,8 @@ public final class WidgetUpdater {
     private final String formatTime(long millis) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(millis);
-        String ampm = cal.get(9) == 0 ? "ص" : "م";
+        com.example.ui.i18n.L10n lx0 = com.example.ui.i18n.L10n.INSTANCE;
+        String ampm = cal.get(9) == 0 ? lx0.t(com.example.ui.i18n.S.AmMarker) : lx0.t(com.example.ui.i18n.S.PmMarker);
         return new SimpleDateFormat("h:mm", Locale.US).format(cal.getTime()) + " " + ampm;
     }
 
@@ -224,7 +225,10 @@ public final class WidgetUpdater {
         Intrinsics.checkNotNull(cal);
         PrayerTimesCalculator.DayPrayerTimes today = prayerTimesCalculator.calculateAll(cal, prefs2.getLatitude(), prefs2.getLongitude(), method);
         List times = java.util.Arrays.asList(new Long[]{Long.valueOf(today.getFajr()), Long.valueOf(today.getSunrise()), Long.valueOf(today.getDhuhr()), Long.valueOf(today.getAsr()), Long.valueOf(today.getMaghrib()), Long.valueOf(today.getIsha())});
-        List names2 = java.util.Arrays.asList(new String[]{"الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء"});
+        com.example.ui.i18n.L10n lx = com.example.ui.i18n.L10n.INSTANCE;
+        lx.init(context);
+        String code = lx.getLang().getCode();
+        List names2 = java.util.Arrays.asList(new String[]{lx.t(com.example.ui.i18n.S.PrayerFajr), lx.t(com.example.ui.i18n.S.PrayerShuruq), lx.t(com.example.ui.i18n.S.PrayerDhuhr), lx.t(com.example.ui.i18n.S.PrayerAsr), lx.t(com.example.ui.i18n.S.PrayerMaghrib), lx.t(com.example.ui.i18n.S.PrayerIsha)});
         int i3 = 0;
         Iterator it = times.iterator();
         while (true) {
@@ -254,7 +258,7 @@ public final class WidgetUpdater {
             PrayerTimesCalculator.DayPrayerTimes tomorrow = prayerTimesCalculator2.calculateAll(calendar, latitude, longitude, method);
             long nextMillis2 = tomorrow.getFajr();
             nextIndex = 0;
-            nextName = "الفجر";
+            nextName = (String) names2.get(0);
             nextMillis = nextMillis2;
             i = -1;
         } else {
@@ -287,14 +291,14 @@ public final class WidgetUpdater {
             Calendar yesterdayCal = (Calendar) clone2;
             yesterdayCal.add(6, i);
             long prevMillis2 = PrayerTimesCalculator.INSTANCE.calculateAll(yesterdayCal, prefs.getLatitude(), prefs.getLongitude(), method).getIsha();
-            prevName = "العشاء";
+            prevName = (String) names2.get(5);
             prevMillis = prevMillis2;
         } else {
             long prevMillis3 = ((Number) times.get(prevIndex)).longValue();
             prevName = (String) names.get(prevIndex);
             prevMillis = prevMillis3;
         }
-        return new PrayerState(names, times, nextIndex, nextName, nextMillis, prevName, prevMillis, prefs.getCityName());
+        return new PrayerState(names, times, nextIndex, nextName, nextMillis, prevName, prevMillis, prefs.getCityNameLocalized(code));
     }
 
     private final PendingIntent launchIntent(Context context) {
@@ -313,10 +317,38 @@ public final class WidgetUpdater {
     }
 
     private final String compactRemaining(long millis) {
+        return compactRemaining(millis, com.example.ui.i18n.L10n.INSTANCE.getLang().getCode());
+    }
+
+    private static final String compactRemaining(long millis, String code) {
         int totalMinutes = RangesKt.coerceAtLeast((int) (millis / 60000), 0);
         int h = totalMinutes / 60;
         int m = totalMinutes % 60;
-        return (h <= 0 ? new StringBuilder() : new StringBuilder().append(h).append(" س ")).append(m).append(" د").toString();
+        if (code.startsWith("ar")) {
+            return (h <= 0 ? new StringBuilder() : new StringBuilder().append(h).append(" س ")).append(m).append(" د").toString();
+        }
+        String hu, mu;
+        if (code.startsWith("tr")) { hu = "sa"; mu = "dk"; }
+        else if (code.startsWith("id")) { hu = "jam"; mu = "mnt"; }
+        else if (code.startsWith("ru")) { hu = "ч"; mu = "мин"; }
+        else if (code.startsWith("ur")) { hu = "گھنٹے"; mu = "منٹ"; }
+        else if (code.startsWith("en")) { hu = "h"; mu = "m"; }
+        else { hu = "h"; mu = "min"; }
+        return (h <= 0 ? "" : h + " " + hu + " ") + m + " " + mu;
+    }
+
+    private static final String faceRemaining(String name, String dur, String code) {
+        if (code.startsWith("ar")) return "باقي على صلاة " + name + " " + dur;
+        if (code.startsWith("ur")) return "باقی " + name + " " + dur;
+        if (code.startsWith("fr")) return name + " dans " + dur;
+        if (code.startsWith("de")) return name + " in " + dur;
+        if (code.startsWith("es")) return name + " en " + dur;
+        if (code.startsWith("it")) return name + " tra " + dur;
+        if (code.startsWith("tr")) return name + ": " + dur + " kaldı";
+        if (code.startsWith("id")) return name + " dalam " + dur;
+        if (code.startsWith("ru")) return name + " через " + dur;
+        if (code.startsWith("pt")) return name + " em " + dur;
+        return name + " in " + dur;
     }
 
     /* JADX INFO: Access modifiers changed from: private */
@@ -596,7 +628,7 @@ public final class WidgetUpdater {
         full.setTextViewText(R.id.widget_hero_next_name, state.getNextName());
         full.setTextViewText(R.id.widget_hero_prev_time, formatTimeShort(state.getPrevMillis()));
         full.setTextViewText(R.id.widget_hero_next_time, formatTimeShort(state.getNextMillis()));
-        full.setTextViewText(R.id.widget_hero_remaining, "باقي على صلاة " + state.getNextName() + " " + compactRemaining(state.getNextMillis() - now));
+        full.setTextViewText(R.id.widget_hero_remaining, faceRemaining(state.getNextName(), compactRemaining(state.getNextMillis() - now), com.example.ui.i18n.L10n.INSTANCE.getLang().getCode()));
         full.setProgressBar(R.id.widget_hero_progress, 100, pct, false);
         int i = R.id.widget_hero_hijri;
         HijriDate hijriDate = HijriDate.INSTANCE;
@@ -664,7 +696,7 @@ public final class WidgetUpdater {
             long now = System.currentTimeMillis();
             long interval = RangesKt.coerceAtLeast(state.getNextMillis() - state.getPrevMillis(), 1L);
             int pct = RangesKt.coerceIn((int) (((now - state.getPrevMillis()) * 100) / interval), 0, 100);
-            String remaining = "باقي على صلاة " + state.getNextName() + " " + compactRemaining(state.getNextMillis() - now);
+            String remaining = faceRemaining(state.getNextName(), compactRemaining(state.getNextMillis() - now), com.example.ui.i18n.L10n.INSTANCE.getLang().getCode());
             Intent resp = new Intent(FaceWidgetReceiver.ACTION_RESPONSE);
             resp.setPackage("com.android.systemui");
             resp.putExtra("package", context.getPackageName());
