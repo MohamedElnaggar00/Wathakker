@@ -235,4 +235,3 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
         }
     }
 }
-}
