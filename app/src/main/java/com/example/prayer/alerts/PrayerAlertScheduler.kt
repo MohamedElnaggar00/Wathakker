@@ -19,6 +19,7 @@ object PrayerAlertScheduler {
     const val EXTRA_KIND = "alert_kind"
     const val KIND_ADHAN = 0
     const val KIND_IQAMA = 1
+    const val KIND_DND_OFF = 2
 
     private val IQAMA_OFFSETS = intArrayOf(25, 0, 20, 20, 10, 20) // Shuruq has no iqama
 
@@ -56,14 +57,19 @@ object PrayerAlertScheduler {
         // Always replace both pending intents for this prayer.
         am.cancel(pending(context, prayer, KIND_ADHAN))
         am.cancel(pending(context, prayer, KIND_IQAMA))
+        am.cancel(pending(context, prayer, KIND_DND_OFF))
         if (!PrayerAlertStore.isEnabled(context, prayer)) return
         setExact(am, adhanTrigger, pending(context, prayer, KIND_ADHAN))
+        val iqamaAt = adhanTrigger + IQAMA_OFFSETS[prayer] * 60000L +
+            PrayerAlertStore.offsetMinutes(context, prayer) * 60000L
         if (PrayerAlertStore.iqamaReminder(context, prayer) && IQAMA_OFFSETS[prayer] > 0) {
-            val iqamaTrigger = adhanTrigger + IQAMA_OFFSETS[prayer] * 60000L +
-                PrayerAlertStore.offsetMinutes(context, prayer) * 60000L
-            if (iqamaTrigger > now) {
-                setExact(am, iqamaTrigger, pending(context, prayer, KIND_IQAMA))
+            if (iqamaAt > now) {
+                setExact(am, iqamaAt, pending(context, prayer, KIND_IQAMA))
             }
+        }
+        // Auto-DND: receiver enables DND when the adhan fires; this alarm restores it at iqama.
+        if (PrayerAlertStore.autoDnd(context, prayer) && IQAMA_OFFSETS[prayer] > 0 && iqamaAt > now) {
+            setExact(am, iqamaAt, pending(context, prayer, KIND_DND_OFF))
         }
     }
 
@@ -80,7 +86,7 @@ object PrayerAlertScheduler {
             .putExtra(EXTRA_PRAYER, prayer)
             .putExtra(EXTRA_KIND, kind)
         return PendingIntent.getBroadcast(
-            context, if (kind == KIND_ADHAN) 100 + prayer else 200 + prayer,
+            context, if (kind == KIND_ADHAN) 100 + prayer else if (kind == KIND_IQAMA) 200 + prayer else 300 + prayer,
             intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
@@ -90,6 +96,7 @@ object PrayerAlertScheduler {
         for (i in 0..5) {
             am.cancel(pending(context, i, KIND_ADHAN))
             am.cancel(pending(context, i, KIND_IQAMA))
+            am.cancel(pending(context, i, KIND_DND_OFF))
         }
     }
 }
