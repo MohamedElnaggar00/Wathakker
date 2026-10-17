@@ -25,11 +25,13 @@ class MainActivity : ComponentActivity() {
         // A widget tap that targets a specific tab starts the activity fresh, without saved state.
         val state = if (HomeWidgets.handleIntent(intent)) null else savedInstanceState
         super.onCreate(state)
+        ThemeSettings.init(this)
         WidgetUpdater.INSTANCE.updateAll(this)
         handleIntent(intent)
         enableEdgeToEdge()
         setContent {
             val appFont by mainViewModel.appFont.collectAsState()
+            val dark = ThemeSettings.isDark()
             val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
             LaunchedEffect(Unit) {
                 if (Build.VERSION.SDK_INT >= 33) {
@@ -40,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-            MyApplicationTheme(fontChoice = appFont, darkTheme = false, dynamicColor = false) {
+            MyApplicationTheme(fontChoice = appFont, darkTheme = dark, dynamicColor = false) {
                 MainScreen(mainViewModel)
             }
         }
@@ -61,3 +63,4 @@ class MainActivity : ComponentActivity() {
         if (dhikrId != -1) mainViewModel.onDhikrSelectedFromNotification(dhikrId)
     }
 }
+
