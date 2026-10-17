@@ -118,7 +118,7 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
     val progress = ((now - prev.second).toFloat() / interval.toFloat()).coerceIn(0f, 1f)
     val remaining = (next.second - now).coerceAtLeast(0L)
     val gregorian = remember(dayKey, L10n.lang) { if (L10n.lang == Lang.AR) SimpleDateFormat("EEEE، d MMMM yyyy", Locale("ar", "EG")).format(cal.time) else SimpleDateFormat("EEEE, d MMMM yyyy", Locale.forLanguageTag(L10n.lang.code)).format(cal.time) }
-    val hijri = remember(dayKey) { HijriDate.INSTANCE.format(cal) }
+    val hijri = remember(dayKey, L10n.lang) { HijriDate.INSTANCE.format(cal, L10n.lang.code) }
 
     PrayerTimesContent(
         city = city,
