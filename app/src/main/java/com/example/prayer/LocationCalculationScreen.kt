@@ -89,6 +89,7 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
     fun recalc() {
         prefsTick++
         viewModel.refreshFajrTimeManually()
+        try { com.example.prayer.alerts.PrayerAlertScheduler.scheduleAll(context) } catch (_: Throwable) {}
         try { WidgetUpdater.INSTANCE.updateAll(context) } catch (_: Throwable) {}
         try { LockWidgets.updateAll(context) } catch (_: Throwable) {}
     }
