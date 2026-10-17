@@ -53,6 +53,23 @@ PY
     adb shell input tap $C; sleep 3
   done
 }
+back_to_prayer() { # press BACK until the prayer screen (bell_0) is visible; never backs past it
+  for i in 1 2 3; do
+    dump
+    [ -n "$(find_center desc bell_0)" ] && return 0
+    adb shell input keyevent KEYCODE_BACK; sleep 2
+  done
+  dump
+}
+scroll_until() { # <text> - swipe up until exact text node is composed (LazyColumn renders visible rows only)
+  local i
+  for i in 1 2 3 4; do
+    dump
+    [ -n "$(find_center text "$1")" ] && return 0
+    adb shell input swipe 540 1800 540 700 400; sleep 2
+  done
+  dump
+}
 tap_node() { # <text|desc> <value> <label> - returns nonzero if not found
   local C=$(find_center "$1" "$2")
   if [ -z "$C" ]; then say "FAIL: node not found ($1=$2) [$3]"; return 1; fi
@@ -70,7 +87,7 @@ rows=[n for n in nodes if n[0]==name]
 if not rows: sys.exit(1)
 _,a,b,c,d=rows[0]
 for t,a2,b2,c2,d2 in nodes:
-    if re.match(r'^\d{1,2}:\d{2}',t) and abs(((b+d)//2)-((b2+d2)//2))<40:
+    if re.match(r'^[0-9\u0660-\u0669]{1,2}:[0-9\u0660-\u0669]{2}',t) and abs(((b+d)//2)-((b2+d2)//2))<40:
         print(t); sys.exit(0)
 sys.exit(1)
 PY
@@ -96,6 +113,7 @@ tap_node desc "القبلة" "Qibla header icon" && {
   shot 02b-qibla
   adb shell input keyevent KEYCODE_BACK; sleep 2
 }
+  dump
 
 # CHECK 3: tap Fajr bell -> exact alarm scheduled
 FAJR_BEFORE=$(prayer_time "الفجر")
@@ -122,6 +140,7 @@ fi
 goto_settings() {
   dump; tap_node desc "القائمة" "Menu button" || true; sleep 2
   dump; tap_node text "الإعدادات" "Settings drawer row" || true; sleep 3
+  dump
 }
 goto_location() {
   goto_settings
@@ -136,30 +155,28 @@ dismiss_anr; sleep 2
 dump
 has_text "الموقع والحساب" && say "PASS: Location & calculation screen opened" || say "FAIL: Location & calculation screen missing"
 shot 04-location-screen
-# adjustments are below the fold: scroll, redump, then find the Fajr row (LazyColumn composes visible items only)
-adb shell input swipe 540 1800 540 700 400; sleep 2
-dump
+# adjustments are below the fold: scroll until the Fajr row is composed (LazyColumn renders visible rows only)
+scroll_until "الفجر"
 LC_FAJR=$(find_center text "الفجر")
 EDGE=""
 if [ -n "$LC_FAJR" ]; then
   set -- $LC_FAJR
   adb shell input tap 1020 $2; sleep 2
-  adb shell input keyevent KEYCODE_BACK; sleep 2
-  adb shell input keyevent KEYCODE_BACK; sleep 2
-  dismiss_anr; dump
+  back_to_prayer
   FAJR_AFTER=$(prayer_time "الفجر")
   say "INFO: Fajr time before=$FAJR_BEFORE after=$FAJR_AFTER (right-edge tap)"
   if [ -z "$FAJR_AFTER" ] || [ "$FAJR_AFTER" = "$FAJR_BEFORE" ]; then
     goto_location
-    adb shell input swipe 540 1800 540 700 400; sleep 2
-    dump; LC2=$(find_center text "الفجر"); set -- $LC2
-    adb shell input tap 60 $2; sleep 2
-    adb shell input keyevent KEYCODE_BACK; sleep 2
-    adb shell input keyevent KEYCODE_BACK; sleep 2
-    dismiss_anr; dump
+    scroll_until "الفجر"
+    LC2=$(find_center text "الفجر")
+    if [ -n "$LC2" ]; then
+      set -- $LC2
+      adb shell input tap 60 $2; sleep 2
+    fi
+    back_to_prayer
     FAJR_AFTER=$(prayer_time "الفجر")
     say "INFO: left-edge try: Fajr after=$FAJR_AFTER"
-    [ "$FAJR_AFTER" != "$FAJR_BEFORE" ] && EDGE=60
+    [ -n "$FAJR_AFTER" ] && [ "$FAJR_AFTER" != "$FAJR_BEFORE" ] && EDGE=60
   else
     EDGE=1020
   fi
@@ -167,34 +184,35 @@ if [ -n "$LC_FAJR" ]; then
     say "PASS: per-prayer offset changed Fajr time ($FAJR_BEFORE -> $FAJR_AFTER)"
     REST=1020; [ "$EDGE" = 1020 ] && REST=60
     goto_location
-    adb shell input swipe 540 1800 540 700 400; sleep 2
-    dump; LC3=$(find_center text "الفجر"); set -- $LC3
-    adb shell input tap $REST $2; sleep 2
-    adb shell input keyevent KEYCODE_BACK; sleep 2
-    adb shell input keyevent KEYCODE_BACK; sleep 2
-    dismiss_anr; dump
+    scroll_until "الفجر"
+    LC3=$(find_center text "الفجر")
+    if [ -n "$LC3" ]; then
+      set -- $LC3
+      adb shell input tap $REST $2; sleep 2
+    fi
+    back_to_prayer
     FAJR_REST=$(prayer_time "الفجر")
     [ "$FAJR_REST" = "$FAJR_BEFORE" ] && say "PASS: offset restored ($FAJR_REST)" || say "WARN: restore landed on $FAJR_REST (expected $FAJR_BEFORE)"
   else
     say "FAIL: Fajr time unchanged after stepper taps"
-    adb shell input keyevent KEYCODE_BACK; sleep 2
+    back_to_prayer
   fi
 else
   say "FAIL: no Fajr row on Location screen"
-  adb shell input keyevent KEYCODE_BACK; sleep 2
+  back_to_prayer
 fi
 
 # CHECK 6: live language switch AR -> EN -> AR
 dismiss_anr
 goto_settings
-adb shell input swipe 540 1800 540 700 400; sleep 2
-dump
+scroll_until "اللغة"
 if tap_node text "اللغة" "Language row"; then
   sleep 2; dump
   if tap_node text "English" "English option"; then
     sleep 3; dump
     has_text "Settings" && say "PASS: live switch to English" || say "FAIL: UI not English after switch"
     shot 05-english
+    scroll_until "Language"
     tap_node text "Language" "Language row EN" || true; sleep 2
     dump
     tap_node text "العربية" "Arabic option" || true; sleep 3
@@ -205,7 +223,7 @@ if tap_node text "اللغة" "Language row"; then
 else
   say "FAIL: language row not found"
 fi
-adb shell input keyevent KEYCODE_BACK; sleep 2
+back_to_prayer
 
 # CHECK 7: rotation
 dismiss_anr
