@@ -162,9 +162,10 @@ fun MainScreen(viewModel: MainViewModel) {
                     SettingsScreen(
                         viewModel,
                         { navController.popBackStack() },
-                        { navController.navigate("location_calc") },
-                        { navController.navigate("optional_times") },
-                        { navController.navigate("hijri_converter") }
+                        onNavigateToLocation = { navController.navigate("location_calc") },
+                        onNavigateToOptionalTimes = { navController.navigate("optional_times") },
+                        onNavigateToHijriConverter = { navController.navigate("hijri_converter") },
+                        onNavigateToAbout = { navController.navigate("about") }
                     )
                 }
                 composable("optional_times") {
