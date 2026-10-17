@@ -163,7 +163,8 @@ fun MainScreen(viewModel: MainViewModel) {
                         { navController.popBackStack() },
                         { navController.navigate("fajr_settings") },
                         { navController.navigate("location_calc") },
-                        { navController.navigate("optional_times") }
+                        { navController.navigate("optional_times") },
+                        { navController.navigate("hijri_converter") }
                     )
                 }
                 composable("fajr_settings") {
@@ -175,6 +176,9 @@ fun MainScreen(viewModel: MainViewModel) {
                 }
                 composable("qibla") {
                     com.example.prayer.QiblaScreen { navController.popBackStack() }
+                }
+                composable("hijri_converter") {
+                    com.example.prayer.HijriConverterScreen { navController.popBackStack() }
                 }
                 composable("location_calc") {
                     val fajrViewModel: FajrViewModel = viewModel()
