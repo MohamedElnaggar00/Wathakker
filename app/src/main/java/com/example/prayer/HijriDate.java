@@ -16,6 +16,7 @@ import kotlin.ranges.RangesKt;
 public final class HijriDate {
     public static final HijriDate INSTANCE = new HijriDate();
     private static final List<String> monthNames = java.util.Arrays.asList(new String[]{"محرم", "صفر", "ربيع الأول", "ربيع الثاني", "جمادى الأولى", "جمادى الثانية", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"});
+    private static final List<String> monthNamesEn = java.util.Arrays.asList(new String[]{"Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani", "Jumada al-Ula", "Jumada al-Akhirah", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhul-Qa'dah", "Dhul-Hijjah"});
     public static final int $stable = 8;
 
     private HijriDate() {
@@ -33,6 +34,19 @@ public final class HijriDate {
         return monthNames.get(RangesKt.coerceIn(month - 1, 0, 11));
     }
 
+    public final String monthName(int month, String lang) {
+        return "ar".equals(lang) ? monthNames.get(RangesKt.coerceIn(month - 1, 0, 11)) : monthNamesEn.get(RangesKt.coerceIn(month - 1, 0, 11));
+    }
+
+    public final String format(Calendar cal, String lang) {
+        Intrinsics.checkNotNullParameter(cal, "cal");
+        Triple<Integer, Integer, Integer> hijriYmd = hijriYmd(cal);
+        int y = hijriYmd.component1().intValue();
+        int m = hijriYmd.component2().intValue();
+        int d = hijriYmd.component3().intValue();
+        return d + " " + ((Object) monthName(m, lang)) + " " + y + ("ar".equals(lang) ? " هـ" : " AH");
+    }
+
     public final String format(Calendar cal) {
         Intrinsics.checkNotNullParameter(cal, "cal");
         Triple<Integer, Integer, Integer> hijriYmd = hijriYmd(cal);
@@ -42,3 +56,4 @@ public final class HijriDate {
         return d + " " + ((Object) monthNames.get(RangesKt.coerceIn(m - 1, 0, 11))) + " " + y + " هـ";
     }
 }
+
