@@ -109,8 +109,18 @@ if [ -n "$BL" ]; then
 fi
 
 # CHECK 5: Location & calculation screen renders + per-prayer offset changes the time
+# settings entry: menu (hamburger, desc القائمة) -> drawer -> الإعدادات. The gear has no content-desc and the
+# Qibla compass sits at the old fixed coordinate, so never use fixed coordinates for the header.
+goto_settings() {
+  dump; tap_node desc "القائمة" "Menu button" || true; sleep 2
+  dump; tap_node text "الإعدادات" "Settings drawer row" || true; sleep 3
+}
+goto_location() {
+  goto_settings
+  tap_node text "تغيير الموقع" "Location & calculation row" || true; sleep 2
+}
 dismiss_anr
-adb shell input tap 122 222; sleep 3
+goto_settings
 dismiss_anr; sleep 1
 shot 03-settings
 tap_node text "تغيير الموقع" "Location & calculation row" || true
@@ -118,30 +128,47 @@ dismiss_anr; sleep 2
 dump
 has_text "الموقع والحساب" && say "PASS: Location & calculation screen opened" || say "FAIL: Location & calculation screen missing"
 shot 04-location-screen
-# scroll to adjustments and tap the Fajr row stepper edge; accept +/-1 minute either way
+# adjustments are below the fold: scroll, redump, then find the Fajr row (LazyColumn composes visible items only)
+adb shell input swipe 540 1800 540 700 400; sleep 2
 dump
 LC_FAJR=$(find_center text "الفجر")
+EDGE=""
 if [ -n "$LC_FAJR" ]; then
   set -- $LC_FAJR
-  # steppers sit at the row edges; try the physical right edge minus 60px (RTL: minus button), then left edge if no change
   adb shell input tap 1020 $2; sleep 2
   adb shell input keyevent KEYCODE_BACK; sleep 2
   adb shell input keyevent KEYCODE_BACK; sleep 2
   dismiss_anr; dump
   FAJR_AFTER=$(prayer_time "الفجر")
-  say "INFO: Fajr time before=$FAJR_BEFORE after=$FAJR_AFTER"
-  if [ -n "$FAJR_BEFORE" ] && [ -n "$FAJR_AFTER" ] && [ "$FAJR_BEFORE" != "$FAJR_AFTER" ]; then
-    say "PASS: per-prayer offset changed Fajr time ($FAJR_BEFORE -> $FAJR_AFTER)"
-    # restore: go back and tap the opposite edge
-    adb shell input tap 122 222; sleep 3; tap_node text "تغيير الموقع" "Location row" || true; sleep 2
+  say "INFO: Fajr time before=$FAJR_BEFORE after=$FAJR_AFTER (right-edge tap)"
+  if [ -z "$FAJR_AFTER" ] || [ "$FAJR_AFTER" = "$FAJR_BEFORE" ]; then
+    goto_location
+    adb shell input swipe 540 1800 540 700 400; sleep 2
     dump; LC2=$(find_center text "الفجر"); set -- $LC2
     adb shell input tap 60 $2; sleep 2
     adb shell input keyevent KEYCODE_BACK; sleep 2
     adb shell input keyevent KEYCODE_BACK; sleep 2
-    dump; FAJR_REST=$(prayer_time "الفجر")
+    dismiss_anr; dump
+    FAJR_AFTER=$(prayer_time "الفجر")
+    say "INFO: left-edge try: Fajr after=$FAJR_AFTER"
+    [ "$FAJR_AFTER" != "$FAJR_BEFORE" ] && EDGE=60
+  else
+    EDGE=1020
+  fi
+  if [ -n "$FAJR_BEFORE" ] && [ -n "$FAJR_AFTER" ] && [ "$FAJR_BEFORE" != "$FAJR_AFTER" ]; then
+    say "PASS: per-prayer offset changed Fajr time ($FAJR_BEFORE -> $FAJR_AFTER)"
+    REST=1020; [ "$EDGE" = 1020 ] && REST=60
+    goto_location
+    adb shell input swipe 540 1800 540 700 400; sleep 2
+    dump; LC3=$(find_center text "الفجر"); set -- $LC3
+    adb shell input tap $REST $2; sleep 2
+    adb shell input keyevent KEYCODE_BACK; sleep 2
+    adb shell input keyevent KEYCODE_BACK; sleep 2
+    dismiss_anr; dump
+    FAJR_REST=$(prayer_time "الفجر")
     [ "$FAJR_REST" = "$FAJR_BEFORE" ] && say "PASS: offset restored ($FAJR_REST)" || say "WARN: restore landed on $FAJR_REST (expected $FAJR_BEFORE)"
   else
-    say "FAIL: Fajr time unchanged after stepper tap"
+    say "FAIL: Fajr time unchanged after stepper taps"
     adb shell input keyevent KEYCODE_BACK; sleep 2
   fi
 else
@@ -151,8 +178,9 @@ fi
 
 # CHECK 6: live language switch AR -> EN -> AR
 dismiss_anr
-adb shell input tap 122 222; sleep 3
+goto_settings
 adb shell input swipe 540 1800 540 700 400; sleep 2
+dump
 if tap_node text "اللغة" "Language row"; then
   sleep 2; dump
   if tap_node text "English" "English option"; then
@@ -160,6 +188,7 @@ if tap_node text "اللغة" "Language row"; then
     has_text "Settings" && say "PASS: live switch to English" || say "FAIL: UI not English after switch"
     shot 05-english
     tap_node text "Language" "Language row EN" || true; sleep 2
+    dump
     tap_node text "العربية" "Arabic option" || true; sleep 3
     dump; has_text "الإعدادات" && say "PASS: switched back to Arabic" || say "FAIL: Arabic restore failed"
   else
