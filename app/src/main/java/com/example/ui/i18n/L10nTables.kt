@@ -49,7 +49,7 @@ internal val AR = mapOf(
     S.DevName to "محمد النجار", S.HisnCredit to "المحتوى من مشروع HisnElmoslem (مرخّص بـ GPL v3)",
     S.InstinctCredit to "بُني بالتعاون مع Instinct", S.Dua to "لا تنسونا من صالح دعائكم",
     S.Font to "الخط", S.FontLight to "خط التطبيق الخفيف", S.FontBold to "خط التطبيق العريض", S.FontSystem to "خط النظام",
-    S.FontCairo to "خط القاهرة", S.FontNaskh to "خط النسخ", S.FontAmiri to "خط أميري", S.FontRuqaa to "خط الرقعة (للمناسبات)"
+    S.FontCairo to "خط القاهرة", S.FontNaskh to "خط النسخ", S.FontAmiri to "خط أميري", S.FontRuqaa to "خط الرقعة (للمناسبات)",
     S.PrayerFajr to "الفجر",
     S.PrayerShuruq to "الشروق",
     S.PrayerDhuhr to "الظهر",
@@ -162,7 +162,7 @@ internal val EN = mapOf(
     S.DevName to "Mohamed Elnaggar", S.HisnCredit to "Content from the HisnElmoslem project (GPL v3 licensed)",
     S.InstinctCredit to "Built in collaboration with Instinct", S.Dua to "Keep us in your prayers",
     S.Font to "Font", S.FontLight to "App font light", S.FontBold to "App font bold", S.FontSystem to "System font",
-    S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri", S.FontRuqaa to "Ruqaa (occasions)"
+    S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri", S.FontRuqaa to "Ruqaa (occasions)",
     S.PrayerFajr to "Fajr",
     S.PrayerShuruq to "Sunrise",
     S.PrayerDhuhr to "Dhuhr",
@@ -281,7 +281,7 @@ internal val FR = mapOf(
     S.InstinctCredit to "Réalisé en collaboration avec Instinct", S.Dua to "Gardez-nous dans vos invocations",
     S.Font to "Police", S.FontLight to "Police de l'application légère", S.FontBold to "Police de l'application grasse",
     S.FontSystem to "Police système", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (occasions)"
+    S.FontRuqaa to "Ruqaa (occasions)",
     S.PrayerFajr to "Fajr",
     S.PrayerShuruq to "Lever du soleil",
     S.PrayerDhuhr to "Dhuhr",
@@ -401,7 +401,7 @@ internal val DE = mapOf(
     S.InstinctCredit to "Erstellt in Zusammenarbeit mit Instinct", S.Dua to "Behalt uns in deinen Gebeten",
     S.Font to "Schriftart", S.FontLight to "App-Schrift light", S.FontBold to "App-Schrift fett",
     S.FontSystem to "Systemschrift", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (Anlässe)"
+    S.FontRuqaa to "Ruqaa (Anlässe)",
     S.PrayerFajr to "Fajr",
     S.PrayerShuruq to "Sonnenaufgang",
     S.PrayerDhuhr to "Dhuhr",
@@ -522,7 +522,7 @@ internal val ES = mapOf(
     S.InstinctCredit to "Creado en colaboración con Instinct", S.Dua to "Ténnos en tus súplicas",
     S.Font to "Fuente", S.FontLight to "Fuente de la app ligera", S.FontBold to "Fuente de la app gruesa",
     S.FontSystem to "Fuente del sistema", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (ocasiones)"
+    S.FontRuqaa to "Ruqaa (ocasiones)",
     S.PrayerFajr to "Fajr",
     S.PrayerShuruq to "Amanecer",
     S.PrayerDhuhr to "Dhuhr",
@@ -643,7 +643,7 @@ internal val IT = mapOf(
     S.InstinctCredit to "Realizzato in collaborazione con Instinct", S.Dua to "Ricordaci nelle tue invocazioni",
     S.Font to "Carattere", S.FontLight to "Carattere dell'app leggero", S.FontBold to "Carattere dell'app grassetto",
     S.FontSystem to "Carattere di sistema", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (occasioni)"
+    S.FontRuqaa to "Ruqaa (occasioni)",
     S.PrayerFajr to "Fajr",
     S.PrayerShuruq to "Alba",
     S.PrayerDhuhr to "Dhuhr",
@@ -763,7 +763,7 @@ internal val TR = mapOf(
     S.InstinctCredit to "Instinct iş birliğiyle geliştirildi", S.Dua to "Bizi dualarınızda unutmayın",
     S.Font to "Yazı tipi", S.FontLight to "Uygulama yazı tipi ince", S.FontBold to "Uygulama yazı tipi kalın",
     S.FontSystem to "Sistem yazı tipi", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (özel günler)"
+    S.FontRuqaa to "Ruqaa (özel günler)",
     S.PrayerFajr to "Sabah",
     S.PrayerShuruq to "Güneş",
     S.PrayerDhuhr to "Öğle",
@@ -883,7 +883,7 @@ internal val UR = mapOf(
     S.InstinctCredit to "Instinct کے تعاون سے تیار", S.Dua to "ہمیں اپنی دعاؤں میں یاد رکھیں",
     S.Font to "فونٹ", S.FontLight to "ایپ فونٹ ہلکا", S.FontBold to "ایپ فونٹ موٹا",
     S.FontSystem to "سسٹم فونٹ", S.FontCairo to "قاہرہ", S.FontNaskh to "نسخ", S.FontAmiri to "امیری",
-    S.FontRuqaa to "رقعہ (تقریبات)"
+    S.FontRuqaa to "رقعہ (تقریبات)",
     S.PrayerFajr to "فجر",
     S.PrayerShuruq to "طلوع آفتاب",
     S.PrayerDhuhr to "ظہر",
@@ -1004,7 +1004,7 @@ internal val ID = mapOf(
     S.InstinctCredit to "Dibangun dengan kolaborasi Instinct", S.Dua to "Ingat kami dalam doa Anda",
     S.Font to "Font", S.FontLight to "Font aplikasi tipis", S.FontBold to "Font aplikasi tebal",
     S.FontSystem to "Font sistem", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (acara khusus)"
+    S.FontRuqaa to "Ruqaa (acara khusus)",
     S.PrayerFajr to "Subuh",
     S.PrayerShuruq to "Terbit matahari",
     S.PrayerDhuhr to "Dzuhur",
@@ -1125,7 +1125,7 @@ internal val RU = mapOf(
     S.InstinctCredit to "Создано в сотрудничестве с Instinct", S.Dua to "Не забудьте нас в своих мольбах",
     S.Font to "Шрифт", S.FontLight to "Шрифт приложения light", S.FontBold to "Шрифт приложения bold",
     S.FontSystem to "Системный шрифт", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (особые случаи)"
+    S.FontRuqaa to "Ruqaa (особые случаи)",
     S.PrayerFajr to "Фаджр",
     S.PrayerShuruq to "Восход",
     S.PrayerDhuhr to "Зухр",
@@ -1246,7 +1246,7 @@ internal val PT = mapOf(
     S.InstinctCredit to "Criado em colaboração com a Instinct", S.Dua to "Lembre-se de nós em suas súplicas",
     S.Font to "Fonte", S.FontLight to "Fonte do app leve", S.FontBold to "Fonte do app em negrito",
     S.FontSystem to "Fonte do sistema", S.FontCairo to "Cairo", S.FontNaskh to "Naskh", S.FontAmiri to "Amiri",
-    S.FontRuqaa to "Ruqaa (ocasiões)"
+    S.FontRuqaa to "Ruqaa (ocasiões)",
     S.PrayerFajr to "Fajr",
     S.PrayerShuruq to "Nascer do sol",
     S.PrayerDhuhr to "Dhuhr",
