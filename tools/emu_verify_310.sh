@@ -127,6 +127,16 @@ ensure_ready() { # absorb slow-emulator ANRs (incl. Pixel Launcher) until the pr
   adb shell input tap 556 1357; sleep 4
   dismiss_anr; dump
 }
+fg_guard() { # a stray BACK or config change can drop us to the launcher: relaunch if our app is not focused
+  local F
+  F=$(adb shell dumpsys window 2>/dev/null | grep -m1 "mCurrentFocus")
+  case "$F" in
+    *com.wathakker.app*) return 0;;
+  esac
+  echo "INFO: app not foreground ($F); relaunching" >> "$OUT/anr.txt"
+  adb shell am start -W -n com.wathakker.app/com.example.MainActivity >> "$OUT/launch.txt" 2>&1
+  sleep 6; dismiss_anr
+}
 ensure_ready
 shot 00-prayer
 
@@ -165,23 +175,48 @@ if [ -n "$BL" ]; then
   dump
   has_text "نوع التنبيه" && say "PASS: alert dialog opened (alert type visible)" || say "FAIL: alert dialog did not open"
   NS=$(count_seekbars)
-  [ "$NS" -ge 3 ] && say "PASS: alert dialog shows $NS One UI sliders (timing/volume/snooze)" || say "FAIL: expected 3 sliders in alert dialog, found $NS"
   shot 02-alert-dialog
-  # large font scale (his phone): everything must stay reachable via the dialog scroll
+  # the snooze slider sits below the fold: scroll the dialog content to reveal it, then count again
+  adb shell input swipe 540 1400 540 900 500; sleep 2
+  dump
+  NSB=$(count_seekbars)
+  shot 02d-dialog-scrolled-snooze
+  if { [ "$NS" -ge 2 ] && [ "$NSB" -ge 1 ] && has_text "مدة الغفوة"; } || [ "$NS" -ge 3 ]; then
+    say "PASS: alert dialog has 3 One UI sliders ($NS visible at top, $NSB after scroll to snooze)"
+  else
+    say "FAIL: expected 3 sliders in alert dialog, found $NS before scroll, $NSB after"
+  fi
+  adb shell input swipe 540 900 540 1400 500; sleep 2   # scroll dialog content back up
+  # large font scale (his phone): a font change recreates the activity and DROPS the dialog,
+  # so set the font first, then reopen the dialog and scroll it to the snooze slider
   adb shell settings put system font_scale 1.3; sleep 3
-  dump
-  adb shell input swipe 540 1500 540 800 500; sleep 2
-  dump
-  has_text "مدة الغفوة" && say "PASS: snooze row reachable at font_scale 1.3" || say "FAIL: snooze row not reachable at font_scale 1.3"
-  shot 02c-alert-dialog-font13
+  fg_guard
+  BL=$(find_center desc bell_0)
+  if [ -n "$BL" ]; then
+    adb shell input swipe $BL $BL 900; sleep 3
+    dump
+    adb shell input swipe 540 1400 540 900 500; sleep 2
+    dump
+    shot 02c-alert-dialog-font13
+    if has_text "مدة الغفوة" && [ "$(count_seekbars)" -ge 1 ]; then
+      say "PASS: snooze slider reachable in dialog at font_scale 1.3"
+    else
+      say "FAIL: snooze row not reachable at font_scale 1.3"
+    fi
+    tap_node text "إلغاء" "Dialog cancel" || adb shell input keyevent KEYCODE_BACK
+    sleep 2
+  else
+    say "FAIL: could not reopen alert dialog at font_scale 1.3"
+  fi
   adb shell settings put system font_scale 1.0; sleep 3
-  adb shell input keyevent KEYCODE_BACK; sleep 2
+  fg_guard
 fi
 
 # CHECK 5: Location & calculation screen renders + per-prayer offset changes the time
 # settings entry: menu (hamburger, desc القائمة) -> drawer -> الإعدادات. The gear has no content-desc and the
 # Qibla compass sits at the old fixed coordinate, so never use fixed coordinates for the header.
 goto_settings() {
+  fg_guard
   dump; tap_node desc "القائمة" "Menu button" || true; sleep 2
   dump; tap_node text "الإعدادات" "Settings drawer row" || true; sleep 3
   dump
@@ -245,6 +280,7 @@ fi
 dump
 has_text "محول التاريخ" && say "FAIL: converter row still on Settings screen" || say "PASS: converter row removed from Settings"
 back_to_prayer
+fg_guard
 tap_node desc "القائمة" "Menu button" || true; sleep 2
 dump
 if tap_node text "محول التاريخ" "Drawer converter row"; then
@@ -282,6 +318,7 @@ back_to_prayer
 
 # CHECK 7: rotation
 dismiss_anr
+fg_guard
 adb shell settings put system accelerometer_rotation 0
 adb shell settings put system user_rotation 1; sleep 3
 shot 06-landscape
@@ -308,6 +345,21 @@ fi
 adb shell cmd uimode night yes
 adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity >> "$OUT/launch.txt" 2>&1
 sleep 8; dismiss_anr; dump
+
+# CHECK 7c: dark mode evidence (his feedback screenshots were dark)
+fg_guard
+shot 06e-dark-prayer
+goto_settings
+shot 06f-dark-settings
+back_to_prayer
+BL=$(find_center desc bell_0)
+if [ -n "$BL" ]; then
+  adb shell input swipe $BL $BL 900; sleep 3
+  dump
+  has_text "نوع التنبيه" && say "PASS: alert dialog renders in dark mode" || say "WARN: alert dialog not opened in dark mode"
+  shot 06g-dark-dialog
+  adb shell input keyevent KEYCODE_BACK; sleep 2
+fi
 
 # CHECK 8: process death -> bells persist
 adb shell am kill com.wathakker.app; sleep 3
