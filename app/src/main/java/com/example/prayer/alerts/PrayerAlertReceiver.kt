@@ -10,13 +10,14 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.example.MainActivity
 import com.example.R
-import com.example.fajr.ui.FajrAlarmActivity
+import com.example.fajr.data.FajrPreferences
 import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
 
 /**
- * Fires a per-prayer bell: notification mode posts a high-priority notification,
- * alarm mode launches the full-screen alarm activity (shared sound/vibration profile).
+ * Fires a per-prayer bell. Bells are always ordinary notifications (no alarm UX):
+ * the adhan bell posts a high-priority notification and the iqama bell a normal one
+ * on its own channel; both follow the shared sound/vibration settings.
  * Always reschedules the next occurrence afterwards.
  */
 class PrayerAlertReceiver : BroadcastReceiver() {
@@ -40,54 +41,32 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         val prayerName = L10n.t(nameKey)
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (kind == PrayerAlertScheduler.KIND_ADHAN &&
-            PrayerAlertStore.mode(context, prayer) == PrayerAlertStore.MODE_ALARM
-        ) {
-            ensureAlarmChannel(nm)
-            val alarmIntent = Intent(context, FajrAlarmActivity::class.java)
-                .putExtra(PrayerAlertScheduler.EXTRA_PRAYER, prayer)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            val fullScreen = PendingIntent.getActivity(
-                context, 300 + prayer, alarmIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            val notification = NotificationCompat.Builder(context, ALARM_CHANNEL)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(prayerName)
-                .setContentText(L10n.t(S.PrayerNowFmt).format(prayerName))
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setFullScreenIntent(fullScreen, true)
-                .setAutoCancel(true)
-                .build()
-            nm.notify(300 + prayer, notification)
-            try { context.startActivity(alarmIntent) } catch (_: Exception) {}
+        val isIqama = kind == PrayerAlertScheduler.KIND_IQAMA
+        val channelId = if (isIqama) IQAMA_CHANNEL else ALERT_CHANNEL
+        ensureChannel(context, nm, channelId)
+        val openIntent = PendingIntent.getActivity(
+            context, 400 + prayer + kind * 10,
+            Intent(context, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val text = if (isIqama) {
+            L10n.t(S.IqamaNowFmt).format(prayerName)
         } else {
-            ensureAlertChannel(nm)
-            val openIntent = PendingIntent.getActivity(
-                context, 400 + prayer + kind * 10,
-                Intent(context, MainActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            val text = if (kind == PrayerAlertScheduler.KIND_IQAMA) {
-                L10n.t(S.IqamaNowFmt).format(prayerName)
-            } else {
-                val offset = PrayerAlertStore.offsetMinutes(context, prayer)
-                if (offset > 0) L10n.t(S.PrayerApproachingFmt).format(prayerName, offset)
-                else L10n.t(S.PrayerNowFmt).format(prayerName)
-            }
-            val notification = NotificationCompat.Builder(context, ALERT_CHANNEL)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(prayerName)
-                .setContentText(text)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_REMINDER)
-                .setContentIntent(openIntent)
-                .setAutoCancel(true)
-                .build()
-            nm.notify(400 + prayer + kind * 10, notification)
+            val offset = PrayerAlertStore.offsetMinutes(context, prayer)
+            if (offset > 0) L10n.t(S.PrayerApproachingFmt).format(prayerName, offset)
+            else L10n.t(S.PrayerNowFmt).format(prayerName)
         }
+        val notification = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(prayerName)
+            .setContentText(text)
+            .setPriority(if (isIqama) NotificationCompat.PRIORITY_DEFAULT else NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setContentIntent(openIntent)
+            .setAutoCancel(true)
+            .build()
+        nm.notify(400 + prayer + kind * 10, notification)
 
         if (kind == PrayerAlertScheduler.KIND_ADHAN && PrayerAlertStore.autoDnd(context, prayer)) {
             enableDnd(context)
@@ -97,22 +76,39 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         PrayerAlertScheduler.scheduleAll(context)
     }
 
-    private fun ensureAlertChannel(nm: NotificationManager) {
-        if (Build.VERSION.SDK_INT >= 26) {
-            val channel = NotificationChannel(ALERT_CHANNEL, L10n.t(S.PrayerTimes), NotificationManager.IMPORTANCE_HIGH)
-            channel.setShowBadge(true)
-            nm.createNotificationChannel(channel)
+    /**
+     * Creates the bell channels, applying the shared tone/vibration settings. Channel
+     * sound/vibration is sticky after creation, so when those settings change the channel
+     * is deleted and recreated (tracked by a stored signature).
+     */
+    private fun ensureChannel(context: Context, nm: NotificationManager, channelId: String) {
+        if (Build.VERSION.SDK_INT < 26) return
+        val shared = FajrPreferences(context)
+        val tone = shared.ringtoneUri ?: ""
+        val vibrate = shared.isVibrationEnabled
+        val signature = tone + "|" + vibrate
+        val sp = context.getSharedPreferences(CHANNEL_PREFS, Context.MODE_PRIVATE)
+        if (nm.getNotificationChannel(channelId) != null && sp.getString(channelId, null) != signature) {
+            nm.deleteNotificationChannel(channelId)
         }
-    }
-
-    private fun ensureAlarmChannel(nm: NotificationManager) {
-        if (Build.VERSION.SDK_INT >= 26) {
-            val channel = NotificationChannel(ALARM_CHANNEL, L10n.t(S.FajrAlarm), NotificationManager.IMPORTANCE_HIGH)
-            channel.setBypassDnd(true)
-            channel.enableVibration(true)
-            channel.setShowBadge(true)
-            nm.createNotificationChannel(channel)
+        val isIqama = channelId == IQAMA_CHANNEL
+        val name = L10n.t(if (isIqama) S.IqamaReminder else S.AdhanReminder)
+        val channel = NotificationChannel(
+            channelId, name,
+            if (isIqama) NotificationManager.IMPORTANCE_DEFAULT else NotificationManager.IMPORTANCE_HIGH
+        )
+        if (tone.isNotEmpty()) {
+            channel.setSound(
+                android.net.Uri.parse(tone),
+                android.media.AudioAttributes.Builder()
+                    .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
+                    .build()
+            )
         }
+        channel.enableVibration(vibrate)
+        channel.setShowBadge(true)
+        nm.createNotificationChannel(channel)
+        sp.edit().putString(channelId, signature).apply()
     }
 
     private fun enableDnd(context: Context) {
@@ -135,6 +131,7 @@ class PrayerAlertReceiver : BroadcastReceiver() {
 
     companion object {
         const val ALERT_CHANNEL = "prayer_alerts_channel"
-        const val ALARM_CHANNEL = "prayer_alarm_channel"
+        const val IQAMA_CHANNEL = "iqama_reminders_channel"
+        private const val CHANNEL_PREFS = "bell_channels"
     }
 }
