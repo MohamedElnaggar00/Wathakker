@@ -1,0 +1,41 @@
+outcome: failure  bom: 2025.10.01  run: 39072033122  sha: f72445a2c18bd7b91eebe903ffea0c41ee92a79b
+errors: 4
+--- per file
+      4 LockWidgets.java
+--- per symbol
+      2 symbol:   variable SOFT
+      2 symbol:   variable INK
+sign outcome: skipped
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+--- details
+61:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/lockwidgets/LockWidgets.java:83: error: cannot find symbol
+62-        for(int i=0;i<text.length;i++){TextPaint lp=paint(fonts[i],sizes[i],d,i==0?INK:SOFT);float measured=lp.measureText(text[i]);if(measured>w-4*d)lp.setTextSize(lp.getTextSize()*(w-4*d)/measured);ls[i]=StaticLayout.Builder.obtain(text[i],0,text[i].length(),lp,w).setAlignment(Layout.Alignment.ALIGN_CENTER).setIncludePad(false).build();total+=ls[i].getHeight();}
+63-                                                                                   ^
+64-  symbol:   variable INK
+65-  location: class LockWidgets
+66:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/lockwidgets/LockWidgets.java:83: error: cannot find symbol
+67-        for(int i=0;i<text.length;i++){TextPaint lp=paint(fonts[i],sizes[i],d,i==0?INK:SOFT);float measured=lp.measureText(text[i]);if(measured>w-4*d)lp.setTextSize(lp.getTextSize()*(w-4*d)/measured);ls[i]=StaticLayout.Builder.obtain(text[i],0,text[i].length(),lp,w).setAlignment(Layout.Alignment.ALIGN_CENTER).setIncludePad(false).build();total+=ls[i].getHeight();}
+68-                                                                                       ^
+69-  symbol:   variable SOFT
+70-  location: class LockWidgets
+--
+83:* What went wrong:
+84:Execution failed for task ':app:compileReleaseJavaWithJavac'.
+85-> Compilation failed; see the compiler output below.
+86-  Note: Recompile with -Xlint:deprecation for details.
+87:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/lockwidgets/LockWidgets.java:83: error: cannot find symbol
+88-          for(int i=0;i<text.length;i++){TextPaint lp=paint(fonts[i],sizes[i],d,i==0?INK:SOFT);float measured=lp.measureText(text[i]);if(measured>w-4*d)lp.setTextSize(lp.getTextSize()*(w-4*d)/measured);ls[i]=StaticLayout.Builder.obtain(text[i],0,text[i].length(),lp,w).setAlignment(Layout.Alignment.ALIGN_CENTER).setIncludePad(false).build();total+=ls[i].getHeight();}
+89-                                                                                     ^
+90-    symbol:   variable INK
+91-    location: class LockWidgets
+92:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/lockwidgets/LockWidgets.java:83: error: cannot find symbol
+93-          for(int i=0;i<text.length;i++){TextPaint lp=paint(fonts[i],sizes[i],d,i==0?INK:SOFT);float measured=lp.measureText(text[i]);if(measured>w-4*d)lp.setTextSize(lp.getTextSize()*(w-4*d)/measured);ls[i]=StaticLayout.Builder.obtain(text[i],0,text[i].length(),lp,w).setAlignment(Layout.Alignment.ALIGN_CENTER).setIncludePad(false).build();total+=ls[i].getHeight();}
+94-                                                                                         ^
+95-    symbol:   variable SOFT
+96-    location: class LockWidgets
+--
+106:BUILD FAILED in 2m 8s
+107-27 actionable tasks: 27 executed
