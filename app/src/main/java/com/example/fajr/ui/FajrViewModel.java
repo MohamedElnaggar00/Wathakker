@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.FlowKt;
 import kotlinx.coroutines.flow.MutableStateFlow;
 import kotlinx.coroutines.flow.StateFlow;
 import kotlinx.coroutines.flow.StateFlowKt;
+import com.example.ui.i18n.L10n;
+import com.example.ui.i18n.S;
 
 /* compiled from: FajrViewModel.kt */
 @Metadata(d1 = {"\u0000r\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0005\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0010\b\n\u0002\b\u0007\b\u0007\u0018\u00002\u00020\u0001B\u000f\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0004\b\u0004\u0010\u0005J\u0006\u0010\u0015\u001a\u00020\u0016J\u000e\u0010\u0017\u001a\u00020\u00162\u0006\u0010\u0018\u001a\u00020\u0019J\u000e\u0010\u001a\u001a\u00020\u00162\u0006\u0010\u001b\u001a\u00020\u0019J\u0006\u0010\u001c\u001a\u00020\u0016J\u000e\u0010\u001d\u001a\u00020\u00162\u0006\u0010\u001e\u001a\u00020\u001fJ\u000e\u0010 \u001a\u00020\u00162\u0006\u0010!\u001a\u00020\"J\u0016\u0010#\u001a\u00020\u00162\u0006\u0010$\u001a\u00020%2\u0006\u0010&\u001a\u00020'J\u000e\u0010(\u001a\u00020\u00162\u0006\u0010\u0018\u001a\u00020\u0019J\u000e\u0010)\u001a\u00020\u00162\u0006\u0010*\u001a\u00020+J\u000e\u0010,\u001a\u00020\u00162\u0006\u0010-\u001a\u00020+J\u0006\u0010.\u001a\u00020\u0016J\b\u0010/\u001a\u00020\u0016H\u0002J\u000e\u00100\u001a\u00020\u00162\u0006\u0010$\u001a\u00020%J\u0006\u00101\u001a\u00020\u0016R\u000e\u0010\u0006\u001a\u00020\u0007X\u0082\u0004¢\u0006\u0002\n\u0000R\u000e\u0010\b\u001a\u00020\tX\u0082\u0004¢\u0006\u0002\n\u0000R\u000e\u0010\n\u001a\u00020\u000bX\u0082\u0004¢\u0006\u0002\n\u0000R\u000e\u0010\f\u001a\u00020\rX\u0082\u0004¢\u0006\u0002\n\u0000R\u0014\u0010\u000e\u001a\b\u0012\u0004\u0012\u00020\u00100\u000fX\u0082\u0004¢\u0006\u0002\n\u0000R\u0017\u0010\u0011\u001a\b\u0012\u0004\u0012\u00020\u00100\u0012¢\u0006\b\n\u0000\u001a\u0004\b\u0013\u0010\u0014¨\u00062"}, d2 = {"Lcom/example/fajr/ui/FajrViewModel;", "Landroidx/lifecycle/AndroidViewModel;", "application", "Landroid/app/Application;", "<init>", "(Landroid/app/Application;)V", "prefs", "Lcom/example/fajr/data/FajrPreferences;", "scheduler", "Lcom/example/fajr/alarm/FajrAlarmScheduler;", "locationHelper", "Lcom/example/fajr/location/LocationManagerHelper;", "ringtoneHelper", "Lcom/example/fajr/sound/RingtoneHelper;", "_uiState", "Lkotlinx/coroutines/flow/MutableStateFlow;", "Lcom/example/fajr/ui/FajrSettingsState;", "uiState", "Lkotlinx/coroutines/flow/StateFlow;", "getUiState", "()Lkotlinx/coroutines/flow/StateFlow;", "loadSettings", "", "toggleAlarm", "enabled", "", "setUseCurrentLocation", "useGps", "updateLocationFromGps", "setCity", "city", "Lcom/example/fajr/data/CityItem;", "setCalculationMethod", "method", "Lcom/example/fajr/calculation/CalculationMethod;", "setRingtone", "uri", "Landroid/net/Uri;", "title", "", "toggleVibration", "setMaxDuration", "minutes", "", "setAlarmVolume", "volume", "refreshFajrTimeManually", "refreshFajrTimeInternal", "playRingtonePreview", "stopRingtonePreview", "app"}, k = 1, mv = {2, 2, 0}, xi = 48)
@@ -158,7 +160,7 @@ public final class FajrViewModel extends AndroidViewModel {
         }
         SimpleDateFormat timeSdf = new SimpleDateFormat("hh:mm a", new Locale("ar"));
         String formattedTime = timeSdf.format(new Date(fajrTime));
-        String prefix = isTomorrow ? "غداً في" : "اليوم في";
+        String prefix = isTomorrow ? L10n.INSTANCE.t(S.TomorrowAt) : L10n.INSTANCE.t(S.TodayAt);
         String fullFormatted = prefix + " " + formattedTime;
         this._uiState.setValue(FajrSettingsState.copy$default(this._uiState.getValue(), false, false, null, 0.0d, 0.0d, fullFormatted, fajrTime, null, null, false, 0, 0, false, false, false, 32671, null));
     }
@@ -172,3 +174,4 @@ public final class FajrViewModel extends AndroidViewModel {
         this.ringtoneHelper.stopPreview();
     }
 }
+
