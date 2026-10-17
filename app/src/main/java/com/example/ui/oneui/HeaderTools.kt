@@ -9,6 +9,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.runtime.getValue
 import java.lang.ref.WeakReference
 
 /** Small helpers shared by the screen headers: tile backgrounds and the settings shortcut. */
@@ -23,11 +25,17 @@ object HeaderTools {
 
     @JvmStatic
     fun settings() {
-        (nav?.get() as? NavController)?.navigate("settings")
+        val nc = nav?.get() as? NavController ?: return
+        if (nc.currentBackStackEntry?.destination?.route != "settings") nc.navigate("settings")
     }
 
     @androidx.compose.runtime.Composable
     fun SettingsButton() {
+        val nc = nav?.get() as? NavController
+        if (nc != null) {
+            val entry by nc.currentBackStackEntryAsState()
+            if (entry?.destination?.route == "settings") return
+        }
         androidx.compose.material3.IconButton(onClick = { settings() }) {
             androidx.compose.material3.Icon(
                 Icons.Outlined.Settings,
@@ -47,3 +55,4 @@ object HeaderTools {
     fun scrollTile(modifier: Modifier, alpha: Float): Modifier =
         modifier.clip(RoundedCornerShape(26.dp)).background(tileColor.copy(alpha = alpha))
 }
+
