@@ -6,7 +6,6 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,11 +20,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,8 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -98,7 +93,6 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
 
     val prefs = remember(tick) { FajrPreferences(context) }
     val enabled = remember(tick) { PrayerAlertStore.isEnabled(context, prayer) }
-    val mode = remember(tick) { PrayerAlertStore.mode(context, prayer) }
     val offset = remember(tick) { PrayerAlertStore.offsetMinutes(context, prayer) }
     val iqama = remember(tick) { PrayerAlertStore.iqamaReminder(context, prayer) }
 
@@ -119,21 +113,6 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
             }
             if (enabled) {
                 Spacer(Modifier.height(10.dp))
-                // Alert type
-                Text(L10n.t(S.AlertMode), color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                AlertModeRow(
-                    selected = mode == PrayerAlertStore.MODE_NOTIFICATION,
-                    icon = Icons.Outlined.Notifications,
-                    title = L10n.t(S.AlertModeNotif),
-                    onClick = { PrayerAlertStore.setMode(context, prayer, PrayerAlertStore.MODE_NOTIFICATION); changed() }
-                )
-                AlertModeRow(
-                    selected = mode == PrayerAlertStore.MODE_ALARM,
-                    icon = Icons.Outlined.Alarm,
-                    title = L10n.t(S.AlertModeAlarm),
-                    onClick = { PrayerAlertStore.setMode(context, prayer, PrayerAlertStore.MODE_ALARM); changed() }
-                )
-                Spacer(Modifier.height(8.dp))
                 // Timing: One UI slider. 0 = at the adhan, up to 60 minutes before in 5-minute
                 // steps; value applies when the drag ends.
                 var dragOffset by remember(tick) { mutableIntStateOf(offset) }
@@ -252,58 +231,8 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     }
                     OneUISwitch(prefs.isVibrationEnabled, { prefs.isVibrationEnabled = it; tick++ })
                 }
-                Spacer(Modifier.height(4.dp))
-                Text(L10n.t(S.AlarmVolume), color = cs.onSurfaceVariant, fontSize = 12.sp)
-                Slider(
-                    value = prefs.alarmVolume / 100f,
-                    onValueChange = { prefs.alarmVolume = (it * 100).toInt(); tick++ },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                var dragDuration by remember(tick) { mutableIntStateOf(prefs.maxDurationMinutes) }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(L10n.t(S.SnoozeDuration), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                    Text(
-                        L10n.minutesCount(dragDuration),
-                        color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold
-                    )
-                }
-                Slider(
-                    value = dragDuration.toFloat(),
-                    onValueChange = { dragDuration = it.roundToInt().coerceIn(1, 30) },
-                    onValueChangeFinished = {
-                        if (dragDuration != prefs.maxDurationMinutes) {
-                            prefs.maxDurationMinutes = dragDuration
-                            tick++
-                        }
-                    },
-                    valueRange = 1f..30f,
-                    steps = 28,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
     }
 }
-
-@Composable
-private fun AlertModeRow(selected: Boolean, icon: ImageVector, title: String, onClick: () -> Unit) {
-    val cs = MaterialTheme.colorScheme
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick)
-            .background(if (selected) cs.primary.copy(alpha = 0.12f) else Color.Transparent)
-            .padding(horizontal = 8.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        RadioButton(selected = selected, onClick = onClick)
-        Icon(icon, null, tint = cs.primary)
-        Spacer(Modifier.width(8.dp))
-        Text(title, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-    }
 }
