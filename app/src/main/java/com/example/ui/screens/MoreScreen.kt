@@ -2,7 +2,6 @@ package com.example.ui.screens
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Label
-import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Notifications
@@ -35,8 +34,6 @@ fun MoreScreen(onNavigate: (String) -> Unit) {
         }
         item(key = "g2") {
             OneUICard {
-                MoreRow(L10n.t(S.FajrAlarm), L10n.t(S.ByLocation), Icons.Outlined.Alarm) { onNavigate("fajr_settings") }
-                OneUIDivider(70.dp)
                 MoreRow(L10n.t(S.Settings), L10n.t(S.SettingsSubtitle), Icons.Outlined.Settings) { onNavigate("settings") }
                 OneUIDivider(70.dp)
                 MoreRow(L10n.t(S.About), L10n.t(S.AboutSubtitle), Icons.Outlined.Info) { onNavigate("about") }
