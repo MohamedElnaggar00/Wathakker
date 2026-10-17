@@ -87,6 +87,8 @@ fun FajrSettingsScreen(
     var showMethodDialog by remember { mutableStateOf(false) }
     var isPlayingPreview by remember { mutableStateOf(false) }
 
+    LaunchedEffect(L10n.lang) { viewModel.refreshCityDisplay() }
+
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -298,7 +300,7 @@ fun FajrSettingsContent(
                         Column {
                             Text(L10n.t(S.SelectedCalcMethod), color = cs.onSurfaceVariant, fontSize = 11.sp)
                             Text(
-                                state.calculationMethod.titleAr,
+                                state.calculationMethod.title(L10n.lang.code),
                                 color = cs.onSurface,
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold
@@ -522,7 +524,7 @@ fun CalculationMethodDialog(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(method.titleAr, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(method.title(L10n.lang.code), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 if (method == currentMethod) {
                     Icon(Icons.Outlined.Check, null, tint = cs.primary)
                 }
