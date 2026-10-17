@@ -1,39 +1,40 @@
 package com.example.prayer
 
 import android.icu.util.IslamicCalendar
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.RestartAlt
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
 import com.example.ui.oneui.OneUICard
-import com.example.ui.oneui.OneUIDialog
-import com.example.ui.oneui.OneUIDivider
 import com.example.ui.oneui.OneUIIconBadge
 import com.example.ui.oneui.OneUIRow
 import com.example.ui.oneui.OneUIScreen
@@ -83,37 +84,89 @@ private fun weekdayOf(cal: Calendar, locale: Locale): String =
 private fun gregorianText(cal: Calendar, locale: Locale): String =
     SimpleDateFormat("d MMMM yyyy", locale).format(cal.time)
 
-/** Hijri <-> Gregorian date converter (gap item 7). */
+/** One UI filled rounded field for one date part. */
+@Composable
+private fun DateField(
+    value: String,
+    onChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+    numeric: Boolean = true
+) {
+    val cs = MaterialTheme.colorScheme
+    Column(modifier = modifier) {
+        Text(label, color = cs.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+        Spacer(Modifier.height(4.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(cs.surfaceVariant.copy(alpha = 0.6f))
+                .padding(horizontal = 12.dp, vertical = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            BasicTextField(
+                value = value,
+                onValueChange = onChange,
+                singleLine = true,
+                textStyle = TextStyle(
+                    color = cs.onSurface, fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium, textAlign = TextAlign.Center
+                ),
+                cursorBrush = SolidColor(cs.primary),
+                keyboardOptions = if (numeric) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions.Default,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+/** Parses a month entry: a 1-12 number or a localized month name (case-insensitive). */
+private fun parseMonth(raw: String, names: List<String>): Int? {
+    val t = raw.trim()
+    if (t.isEmpty()) return null
+    t.toIntOrNull()?.let { if (it in 1..12) return it }
+    val idx = names.indexOfFirst { it.equals(t, ignoreCase = true) }
+    return if (idx >= 0) idx + 1 else null
+}
+
+/** Hijri <-> Gregorian date converter: D/M/Y filled fields per direction,
+ *  empty by default, result card appears when the input is a valid date,
+ *  Today row fills the fields. */
 @Composable
 fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
     val cs = MaterialTheme.colorScheme
     val langCode = L10n.lang.code
     val locale = remember(langCode) { Locale(langCode) }
 
-    val today = remember { Calendar.getInstance() }
-    val todayHijri = remember { HijriDate.INSTANCE.hijriYmd(today) }
+    var gDay by remember { mutableStateOf("") }
+    var gMonth by remember { mutableStateOf("") }
+    var gYear by remember { mutableStateOf("") }
 
-    var gDay by remember { mutableIntStateOf(today.get(Calendar.DAY_OF_MONTH)) }
-    var gMonth by remember { mutableIntStateOf(today.get(Calendar.MONTH) + 1) }
-    var gYear by remember { mutableIntStateOf(today.get(Calendar.YEAR)) }
-
-    var hDay by remember { mutableIntStateOf(todayHijri.third!!) }
-    var hMonth by remember { mutableIntStateOf(todayHijri.second!!) }
-    var hYear by remember { mutableIntStateOf(todayHijri.first!!) }
-
-    var picker by remember { mutableStateOf("") }
+    var hDay by remember { mutableStateOf("") }
+    var hMonth by remember { mutableStateOf("") }
+    var hYear by remember { mutableStateOf("") }
 
     val gMonths = gregorianMonths(locale)
     val hMonths = (1..12).map { HijriDate.INSTANCE.monthName(it, langCode) }
 
-    val resultHijriCal = Calendar.getInstance()
-    resultHijriCal.set(gYear, gMonth - 1, gDay)
-    val resultHijriText = HijriDate.INSTANCE.format(resultHijriCal, langCode)
-    val resultHijriWeekday = weekdayOf(resultHijriCal, locale)
+    // G -> H result (null until fields form a valid Gregorian date)
+    val gY = gYear.trim().toIntOrNull()
+    val gM = parseMonth(gMonth, gMonths)
+    val gD = gDay.trim().toIntOrNull()
+    val gValid = gY != null && gY in G_YEAR_MIN..G_YEAR_MAX && gM != null &&
+        gD != null && gD in 1..gregorianMaxDay(gY, gM)
+    val resultHijriCal: Calendar? = if (gValid) {
+        Calendar.getInstance().apply { set(gY!!, gM!! - 1, gD!!) }
+    } else null
 
-    val resultGregCal = hijriToGregorian(hYear, hMonth, hDay)
-    val resultGregText = gregorianText(resultGregCal, locale)
-    val resultGregWeekday = weekdayOf(resultGregCal, locale)
+    // H -> G result
+    val hY = hYear.trim().toIntOrNull()
+    val hM = parseMonth(hMonth, hMonths)
+    val hD = hDay.trim().toIntOrNull()
+    val hValid = hY != null && hY in H_YEAR_MIN..H_YEAR_MAX && hM != null &&
+        hD != null && hD in 1..hijriMaxDay(hY, hM)
+    val resultGregCal: Calendar? = if (hValid) hijriToGregorian(hY!!, hM!!, hD!!) else null
 
     OneUIScreen(title = L10n.t(S.HijriConvTitle), onBack = onBack) {
         item(key = "explainer") {
@@ -126,49 +179,38 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
         item(key = "g2h-label") { SectionLabel(L10n.t(S.GregToHijri)) }
         item(key = "g2h") {
             OneUICard {
-                OneUIRow(
-                    title = L10n.t(S.DayLabel),
-                    summary = "$gDay",
-                    onClick = { picker = "gday" }
-                )
-                OneUIDivider(20.dp)
-                OneUIRow(
-                    title = L10n.t(S.MonthLabel),
-                    summary = gMonths.getOrElse(gMonth - 1) { "$gMonth" },
-                    onClick = { picker = "gmonth" }
-                )
-                OneUIDivider(20.dp)
-                OneUIRow(
-                    title = L10n.t(S.YearLabel),
-                    summary = "$gYear",
-                    onClick = { picker = "gyear" }
-                )
-                OneUIDivider(20.dp)
-                ConverterResult(resultHijriWeekday, resultHijriText)
+                Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                    Row(Modifier.fillMaxWidth()) {
+                        DateField(gDay, { gDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
+                        Spacer(Modifier.width(10.dp))
+                        DateField(gMonth, { gMonth = it.take(20) }, L10n.t(S.MonthLabel), Modifier.weight(1.4f), numeric = false)
+                        Spacer(Modifier.width(10.dp))
+                        DateField(gYear, { gYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
+                    }
+                    if (resultHijriCal != null) {
+                        ConverterResult(
+                            weekdayOf(resultHijriCal, locale),
+                            HijriDate.INSTANCE.format(resultHijriCal, langCode)
+                        )
+                    }
+                }
             }
         }
         item(key = "h2g-label") { SectionLabel(L10n.t(S.HijriToGreg)) }
         item(key = "h2g") {
             OneUICard {
-                OneUIRow(
-                    title = L10n.t(S.DayLabel),
-                    summary = "$hDay",
-                    onClick = { picker = "hday" }
-                )
-                OneUIDivider(20.dp)
-                OneUIRow(
-                    title = L10n.t(S.MonthLabel),
-                    summary = hMonths.getOrElse(hMonth - 1) { "$hMonth" },
-                    onClick = { picker = "hmonth" }
-                )
-                OneUIDivider(20.dp)
-                OneUIRow(
-                    title = L10n.t(S.YearLabel),
-                    summary = "$hYear",
-                    onClick = { picker = "hyear" }
-                )
-                OneUIDivider(20.dp)
-                ConverterResult(resultGregWeekday, resultGregText)
+                Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                    Row(Modifier.fillMaxWidth()) {
+                        DateField(hDay, { hDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
+                        Spacer(Modifier.width(10.dp))
+                        DateField(hMonth, { hMonth = it.take(20) }, L10n.t(S.MonthLabel), Modifier.weight(1.4f), numeric = false)
+                        Spacer(Modifier.width(10.dp))
+                        DateField(hYear, { hYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
+                    }
+                    if (resultGregCal != null) {
+                        ConverterResult(weekdayOf(resultGregCal, locale), gregorianText(resultGregCal, locale))
+                    }
+                }
             }
         }
         item(key = "reset") {
@@ -178,83 +220,18 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
                     leading = { OneUIIconBadge(Icons.Outlined.RestartAlt) },
                     onClick = {
                         val now = Calendar.getInstance()
-                        gDay = now.get(Calendar.DAY_OF_MONTH)
-                        gMonth = now.get(Calendar.MONTH) + 1
-                        gYear = now.get(Calendar.YEAR)
+                        gDay = now.get(Calendar.DAY_OF_MONTH).toString()
+                        gMonth = (now.get(Calendar.MONTH) + 1).toString()
+                        gYear = now.get(Calendar.YEAR).toString()
                         val hy = HijriDate.INSTANCE.hijriYmd(now)
-                        hDay = hy.third!!
-                        hMonth = hy.second!!
-                        hYear = hy.first!!
+                        hDay = hy.third!!.toString()
+                        hMonth = hy.second!!.toString()
+                        hYear = hy.first!!.toString()
                     }
                 )
             }
         }
         item(key = "pad") { Spacer(Modifier.height(24.dp)) }
-    }
-
-    when (picker) {
-        "gday" -> ConvPickerDialog(
-            title = L10n.t(S.DayLabel),
-            options = (1..gregorianMaxDay(gYear, gMonth)).map { "$it" },
-            selected = gDay - 1,
-            onDismiss = { picker = "" },
-            onPick = { gDay = it + 1; picker = "" }
-        )
-        "gmonth" -> ConvPickerDialog(
-            title = L10n.t(S.MonthLabel),
-            options = gMonths,
-            selected = gMonth - 1,
-            onDismiss = { picker = "" },
-            onPick = {
-                gMonth = it + 1
-                val max = gregorianMaxDay(gYear, gMonth)
-                if (gDay > max) gDay = max
-                picker = ""
-            }
-        )
-        "gyear" -> ConvPickerDialog(
-            title = L10n.t(S.YearLabel),
-            options = (G_YEAR_MIN..G_YEAR_MAX).map { "$it" },
-            selected = gYear - G_YEAR_MIN,
-            onDismiss = { picker = "" },
-            onPick = {
-                gYear = G_YEAR_MIN + it
-                val max = gregorianMaxDay(gYear, gMonth)
-                if (gDay > max) gDay = max
-                picker = ""
-            }
-        )
-        "hday" -> ConvPickerDialog(
-            title = L10n.t(S.DayLabel),
-            options = (1..hijriMaxDay(hYear, hMonth)).map { "$it" },
-            selected = hDay - 1,
-            onDismiss = { picker = "" },
-            onPick = { hDay = it + 1; picker = "" }
-        )
-        "hmonth" -> ConvPickerDialog(
-            title = L10n.t(S.MonthLabel),
-            options = hMonths,
-            selected = hMonth - 1,
-            onDismiss = { picker = "" },
-            onPick = {
-                hMonth = it + 1
-                val max = hijriMaxDay(hYear, hMonth)
-                if (hDay > max) hDay = max
-                picker = ""
-            }
-        )
-        "hyear" -> ConvPickerDialog(
-            title = L10n.t(S.YearLabel),
-            options = (H_YEAR_MIN..H_YEAR_MAX).map { "$it" },
-            selected = hYear - H_YEAR_MIN,
-            onDismiss = { picker = "" },
-            onPick = {
-                hYear = H_YEAR_MIN + it
-                val max = hijriMaxDay(hYear, hMonth)
-                if (hDay > max) hDay = max
-                picker = ""
-            }
-        )
     }
 }
 
@@ -262,7 +239,7 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
 private fun ConverterResult(weekday: String, dateText: String) {
     val cs = MaterialTheme.colorScheme
     Column(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 18.dp, bottom = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(weekday, color = cs.onSurfaceVariant, fontSize = 14.sp, textAlign = TextAlign.Center)
@@ -274,28 +251,5 @@ private fun ConverterResult(weekday: String, dateText: String) {
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
-    }
-}
-
-@Composable
-private fun ConvPickerDialog(title: String, options: List<String>, selected: Int, onDismiss: () -> Unit, onPick: (Int) -> Unit) {
-    val cs = MaterialTheme.colorScheme
-    OneUIDialog(title = title, onDismiss = onDismiss) {
-        options.forEachIndexed { index, label ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable { onPick(index) }
-                    .padding(12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(label, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                if (index == selected) {
-                    Icon(Icons.Outlined.Check, null, tint = cs.primary)
-                }
-            }
-        }
     }
 }
