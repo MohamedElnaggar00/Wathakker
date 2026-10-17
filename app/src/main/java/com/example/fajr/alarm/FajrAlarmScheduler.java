@@ -45,10 +45,10 @@ public final class FajrAlarmScheduler {
         CalculationMethod method = CalculationMethod.INSTANCE.fromId(this.prefs.getCalculationMethodId());
         PrayerTimesCalculator prayerTimesCalculator = PrayerTimesCalculator.INSTANCE;
         Intrinsics.checkNotNull(calendar);
-        long fajrTime = prayerTimesCalculator.calculateFajrTime(calendar, this.prefs.getLatitude(), this.prefs.getLongitude(), method);
+        long fajrTime = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.fajrTime(this.context, calendar, this.prefs.getLatitude(), this.prefs.getLongitude(), method);
         if (fajrTime <= now) {
             calendar.add(6, 1);
-            fajrTime = PrayerTimesCalculator.INSTANCE.calculateFajrTime(calendar, this.prefs.getLatitude(), this.prefs.getLongitude(), method);
+            fajrTime = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.fajrTime(this.context, calendar, this.prefs.getLatitude(), this.prefs.getLongitude(), method);
         }
         this.prefs.setLastCalculatedFajrTimeMillis(fajrTime);
         setExactAlarm(fajrTime, ALARM_REQUEST_CODE);
@@ -96,3 +96,4 @@ public final class FajrAlarmScheduler {
         }
     }
 }
+
