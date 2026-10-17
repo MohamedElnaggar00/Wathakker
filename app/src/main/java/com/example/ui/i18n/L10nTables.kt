@@ -127,10 +127,10 @@ internal val AR = mapOf(
     S.AdjNote to "دقائق تُضاف أو تُخصم من كل وقت محسوب. تُطبَّق فورًا على المواقيت والويدجتس والتنبيهات.",
     S.AdjHijri to "تعديل التاريخ الهجري", S.AdjMinShort to "د", S.AdjDayShort to "يوم",
     S.AlertMode to "نوع التنبيه", S.AlertModeNotif to "إشعار", S.AlertModeAlarm to "منبه كامل",
-    S.AlertTiming to "وقت التنبيه", S.AtAdhanTime to "وقت الأذان", S.MinBeforeFmt to "قبل الأذان بـ %1$d دقيقة",
+    S.AlertTiming to "وقت التنبيه", S.AtAdhanTime to "وقت الأذان", S.MinBeforeFmt to "قبل الأذان بـ %1\$d دقيقة",
     S.IqamaReminder to "تنبيه الإقامة", S.IqamaReminderSub to "يرن عند وقت الإقامة",
-    S.PrayerNowFmt to "حان الآن وقت %1$s", S.PrayerApproachingFmt to "تقترب %1$s (بعد %2$d دقيقة)",
-    S.IqamaNowFmt to "إقامة %1$s الآن", S.SharedAlertSettings to "إعدادات مشتركة لكل التنبيهات",
+    S.PrayerNowFmt to "حان الآن وقت %1\$s", S.PrayerApproachingFmt to "تقترب %1\$s (بعد %2\$d دقيقة)",
+    S.IqamaNowFmt to "إقامة %1\$s الآن", S.SharedAlertSettings to "إعدادات مشتركة لكل التنبيهات",
 
 )
 
@@ -254,10 +254,10 @@ internal val EN = mapOf(
     S.AdjNote to "Minutes added to or subtracted from each calculated time. Applies instantly to prayer times, widgets and alerts.",
     S.AdjHijri to "Hijri date adjustment", S.AdjMinShort to "min", S.AdjDayShort to "days",
     S.AlertMode to "Alert type", S.AlertModeNotif to "Notification", S.AlertModeAlarm to "Full alarm",
-    S.AlertTiming to "Alert timing", S.AtAdhanTime to "At adhan", S.MinBeforeFmt to "%1$d min before adhan",
+    S.AlertTiming to "Alert timing", S.AtAdhanTime to "At adhan", S.MinBeforeFmt to "%1\$d min before adhan",
     S.IqamaReminder to "Iqama reminder", S.IqamaReminderSub to "Rings at iqama time",
-    S.PrayerNowFmt to "It's now time for %1$s", S.PrayerApproachingFmt to "%1$s in %2$d min",
-    S.IqamaNowFmt to "%1$s iqama now", S.SharedAlertSettings to "Shared settings for all alerts",
+    S.PrayerNowFmt to "It's now time for %1\$s", S.PrayerApproachingFmt to "%1\$s in %2\$d min",
+    S.IqamaNowFmt to "%1\$s iqama now", S.SharedAlertSettings to "Shared settings for all alerts",
 
 )
 
@@ -387,10 +387,10 @@ internal val FR = mapOf(
     S.AdjNote to "Minutes ajoutées ou retirées de chaque horaire calculé. Application immédiate aux horaires, aux widgets et aux alertes.",
     S.AdjHijri to "Ajustement de la date hégirienne", S.AdjMinShort to "min", S.AdjDayShort to "j",
     S.AlertMode to "Type d'alerte", S.AlertModeNotif to "Notification", S.AlertModeAlarm to "Alarme complète",
-    S.AlertTiming to "Moment de l'alerte", S.AtAdhanTime to "À l'adhan", S.MinBeforeFmt to "%1$d min avant l'adhan",
+    S.AlertTiming to "Moment de l'alerte", S.AtAdhanTime to "À l'adhan", S.MinBeforeFmt to "%1\$d min avant l'adhan",
     S.IqamaReminder to "Rappel de l'iqama", S.IqamaReminderSub to "Sonner à l'heure de l'iqama",
-    S.PrayerNowFmt to "C'est l'heure de %1$s", S.PrayerApproachingFmt to "%1$s dans %2$d min",
-    S.IqamaNowFmt to "Iqama de %1$s maintenant", S.SharedAlertSettings to "Réglages partagés pour toutes les alertes",
+    S.PrayerNowFmt to "C'est l'heure de %1\$s", S.PrayerApproachingFmt to "%1\$s dans %2\$d min",
+    S.IqamaNowFmt to "Iqama de %1\$s maintenant", S.SharedAlertSettings to "Réglages partagés pour toutes les alertes",
 
 )
 
@@ -521,10 +521,10 @@ internal val DE = mapOf(
     S.AdjNote to "Minuten, die zu jeder berechneten Zeit addiert oder von ihr subtrahiert werden. Wirkt sofort auf Zeiten, Widgets und Benachrichtigungen.",
     S.AdjHijri to "Hijri-Datumsanpassung", S.AdjMinShort to "Min.", S.AdjDayShort to "Tage",
     S.AlertMode to "Benachrichtigungsart", S.AlertModeNotif to "Benachrichtigung", S.AlertModeAlarm to "Voller Alarm",
-    S.AlertTiming to "Benachrichtigungszeit", S.AtAdhanTime to "Zum Gebetsruf", S.MinBeforeFmt to "%1$d Min. vor dem Gebetsruf",
+    S.AlertTiming to "Benachrichtigungszeit", S.AtAdhanTime to "Zum Gebetsruf", S.MinBeforeFmt to "%1\$d Min. vor dem Gebetsruf",
     S.IqamaReminder to "Iqama-Erinnerung", S.IqamaReminderSub to "Zur Iqama-Zeit klingeln",
-    S.PrayerNowFmt to "Es ist jetzt Zeit für %1$s", S.PrayerApproachingFmt to "%1$s in %2$d Min.",
-    S.IqamaNowFmt to "Iqama von %1$s jetzt", S.SharedAlertSettings to "Gemeinsame Einstellungen für alle Benachrichtigungen",
+    S.PrayerNowFmt to "Es ist jetzt Zeit für %1\$s", S.PrayerApproachingFmt to "%1\$s in %2\$d Min.",
+    S.IqamaNowFmt to "Iqama von %1\$s jetzt", S.SharedAlertSettings to "Gemeinsame Einstellungen für alle Benachrichtigungen",
 
 )
 
@@ -656,10 +656,10 @@ internal val ES = mapOf(
     S.AdjNote to "Minutos que se suman o restan a cada horario calculado. Se aplica al instante a horarios, widgets y alertas.",
     S.AdjHijri to "Ajuste de la fecha hiyri", S.AdjMinShort to "min", S.AdjDayShort to "días",
     S.AlertMode to "Tipo de alerta", S.AlertModeNotif to "Notificación", S.AlertModeAlarm to "Alarma completa",
-    S.AlertTiming to "Momento de la alerta", S.AtAdhanTime to "A la llamada", S.MinBeforeFmt to "%1$d min antes",
+    S.AlertTiming to "Momento de la alerta", S.AtAdhanTime to "A la llamada", S.MinBeforeFmt to "%1\$d min antes",
     S.IqamaReminder to "Recordatorio de iqama", S.IqamaReminderSub to "Sonar a la hora del iqama",
-    S.PrayerNowFmt to "Ya es hora de %1$s", S.PrayerApproachingFmt to "%1$s en %2$d min",
-    S.IqamaNowFmt to "Iqama de %1$s ahora", S.SharedAlertSettings to "Ajustes compartidos para todas las alertas",
+    S.PrayerNowFmt to "Ya es hora de %1\$s", S.PrayerApproachingFmt to "%1\$s en %2\$d min",
+    S.IqamaNowFmt to "Iqama de %1\$s ahora", S.SharedAlertSettings to "Ajustes compartidos para todas las alertas",
 
 )
 
@@ -791,10 +791,10 @@ internal val IT = mapOf(
     S.AdjNote to "Minuti aggiunti o sottratti da ogni orario calcolato. Si applica subito a orari, widget e avvisi.",
     S.AdjHijri to "Regolazione della data Hijri", S.AdjMinShort to "min", S.AdjDayShort to "g",
     S.AlertMode to "Tipo di avviso", S.AlertModeNotif to "Notifica", S.AlertModeAlarm to "Sveglia completa",
-    S.AlertTiming to "Momento dell'avviso", S.AtAdhanTime to "All'adhan", S.MinBeforeFmt to "%1$d min prima",
+    S.AlertTiming to "Momento dell'avviso", S.AtAdhanTime to "All'adhan", S.MinBeforeFmt to "%1\$d min prima",
     S.IqamaReminder to "Promemoria iqama", S.IqamaReminderSub to "Suona all'ora dell'iqama",
-    S.PrayerNowFmt to "È ora di %1$s", S.PrayerApproachingFmt to "%1$s tra %2$d min",
-    S.IqamaNowFmt to "Iqama di %1$s ora", S.SharedAlertSettings to "Impostazioni condivise per tutti gli avvisi",
+    S.PrayerNowFmt to "È ora di %1\$s", S.PrayerApproachingFmt to "%1\$s tra %2\$d min",
+    S.IqamaNowFmt to "Iqama di %1\$s ora", S.SharedAlertSettings to "Impostazioni condivise per tutti gli avvisi",
 
 )
 
@@ -925,10 +925,10 @@ internal val TR = mapOf(
     S.AdjNote to "Hesaplanan her vakte eklenen veya çıkarılan dakikalar. Vakitlere, widget'lara ve uyarılara anında uygulanır.",
     S.AdjHijri to "Hicri tarih ayarı", S.AdjMinShort to "dk", S.AdjDayShort to "gün",
     S.AlertMode to "Uyarı türü", S.AlertModeNotif to "Bildirim", S.AlertModeAlarm to "Tam alarm",
-    S.AlertTiming to "Uyarı zamanı", S.AtAdhanTime to "Ezan vaktinde", S.MinBeforeFmt to "Ezandan %1$d dk önce",
+    S.AlertTiming to "Uyarı zamanı", S.AtAdhanTime to "Ezan vaktinde", S.MinBeforeFmt to "Ezandan %1\$d dk önce",
     S.IqamaReminder to "Kamet hatırlatıcı", S.IqamaReminderSub to "Kamet vaktinde çal",
-    S.PrayerNowFmt to "%1$s vakti geldi", S.PrayerApproachingFmt to "%1$s %2$d dk sonra",
-    S.IqamaNowFmt to "%1$s kameti şimdi", S.SharedAlertSettings to "Tüm uyarılar için ortak ayarlar",
+    S.PrayerNowFmt to "%1\$s vakti geldi", S.PrayerApproachingFmt to "%1\$s %2\$d dk sonra",
+    S.IqamaNowFmt to "%1\$s kameti şimdi", S.SharedAlertSettings to "Tüm uyarılar için ortak ayarlar",
 
 )
 
@@ -1059,10 +1059,10 @@ internal val UR = mapOf(
     S.AdjNote to "ہر حساب شدہ وقت میں شامل یا کم کیے گئے منٹ۔ اوقات، ویجٹس اور الرٹس پر فوری لاگو ہوتے ہیں۔",
     S.AdjHijri to "ہجری تاریخ کی ترمیم", S.AdjMinShort to "منٹ", S.AdjDayShort to "دن",
     S.AlertMode to "الرٹ کی قسم", S.AlertModeNotif to "اطلاع", S.AlertModeAlarm to "مکمل الارم",
-    S.AlertTiming to "الرٹ کا وقت", S.AtAdhanTime to "اذان کے وقت", S.MinBeforeFmt to "اذان سے %1$d منٹ پہلے",
+    S.AlertTiming to "الرٹ کا وقت", S.AtAdhanTime to "اذان کے وقت", S.MinBeforeFmt to "اذان سے %1\$d منٹ پہلے",
     S.IqamaReminder to "اقامت کی یاد دہانی", S.IqamaReminderSub to "اقامت کے وقت بجائیں",
-    S.PrayerNowFmt to "اب %1$s کا وقت ہے", S.PrayerApproachingFmt to "%1$s میں %2$d منٹ",
-    S.IqamaNowFmt to "%1$s کی اقامت ابھی", S.SharedAlertSettings to "تمام الرٹس کی مشترکہ ترتیبات",
+    S.PrayerNowFmt to "اب %1\$s کا وقت ہے", S.PrayerApproachingFmt to "%1\$s میں %2\$d منٹ",
+    S.IqamaNowFmt to "%1\$s کی اقامت ابھی", S.SharedAlertSettings to "تمام الرٹس کی مشترکہ ترتیبات",
 
 )
 
@@ -1194,10 +1194,10 @@ internal val ID = mapOf(
     S.AdjNote to "Menit yang ditambahkan atau dikurangi dari setiap waktu terhitung. Langsung berlaku untuk waktu, widget, dan pengingat.",
     S.AdjHijri to "Penyesuaian tanggal Hijriah", S.AdjMinShort to "mnt", S.AdjDayShort to "hari",
     S.AlertMode to "Jenis peringatan", S.AlertModeNotif to "Notifikasi", S.AlertModeAlarm to "Alarm penuh",
-    S.AlertTiming to "Waktu peringatan", S.AtAdhanTime to "Saat azan", S.MinBeforeFmt to "%1$d mnt sebelum azan",
+    S.AlertTiming to "Waktu peringatan", S.AtAdhanTime to "Saat azan", S.MinBeforeFmt to "%1\$d mnt sebelum azan",
     S.IqamaReminder to "Pengingat iqamah", S.IqamaReminderSub to "Berbunyi saat iqamah",
-    S.PrayerNowFmt to "Sekarang waktu %1$s", S.PrayerApproachingFmt to "%1$s dalam %2$d mnt",
-    S.IqamaNowFmt to "Iqamah %1$s sekarang", S.SharedAlertSettings to "Pengaturan bersama untuk semua peringatan",
+    S.PrayerNowFmt to "Sekarang waktu %1\$s", S.PrayerApproachingFmt to "%1\$s dalam %2\$d mnt",
+    S.IqamaNowFmt to "Iqamah %1\$s sekarang", S.SharedAlertSettings to "Pengaturan bersama untuk semua peringatan",
 
 )
 
@@ -1329,10 +1329,10 @@ internal val RU = mapOf(
     S.AdjNote to "Минуты, добавляемые или вычитаемые из каждого рассчитанного времени. Применяется мгновенно к временам, виджетам и оповещениям.",
     S.AdjHijri to "Поправка даты хиджры", S.AdjMinShort to "мин", S.AdjDayShort to "дн.",
     S.AlertMode to "Тип оповещения", S.AlertModeNotif to "Уведомление", S.AlertModeAlarm to "Полный будильник",
-    S.AlertTiming to "Время оповещения", S.AtAdhanTime to "Во время азана", S.MinBeforeFmt to "За %1$d мин до азана",
+    S.AlertTiming to "Время оповещения", S.AtAdhanTime to "Во время азана", S.MinBeforeFmt to "За %1\$d мин до азана",
     S.IqamaReminder to "Напоминание об икаме", S.IqamaReminderSub to "Звонить во время икама",
-    S.PrayerNowFmt to "Сейчас время: %1$s", S.PrayerApproachingFmt to "%1$s через %2$d мин",
-    S.IqamaNowFmt to "Икам %1$s сейчас", S.SharedAlertSettings to "Общие настройки для всех оповещений",
+    S.PrayerNowFmt to "Сейчас время: %1\$s", S.PrayerApproachingFmt to "%1\$s через %2\$d мин",
+    S.IqamaNowFmt to "Икам %1\$s сейчас", S.SharedAlertSettings to "Общие настройки для всех оповещений",
 
 )
 
@@ -1464,9 +1464,9 @@ internal val PT = mapOf(
     S.AdjNote to "Minutos adicionados ou subtraídos de cada horário calculado. Aplica-se de imediato a horários, widgets e alertas.",
     S.AdjHijri to "Ajuste da data hégira", S.AdjMinShort to "min", S.AdjDayShort to "dias",
     S.AlertMode to "Tipo de alerta", S.AlertModeNotif to "Notificação", S.AlertModeAlarm to "Alarme completo",
-    S.AlertTiming to "Momento do alerta", S.AtAdhanTime to "No adhan", S.MinBeforeFmt to "%1$d min antes",
+    S.AlertTiming to "Momento do alerta", S.AtAdhanTime to "No adhan", S.MinBeforeFmt to "%1\$d min antes",
     S.IqamaReminder to "Lembrete de iqama", S.IqamaReminderSub to "Tocar na hora do iqama",
-    S.PrayerNowFmt to "Agora é hora de %1$s", S.PrayerApproachingFmt to "%1$s em %2$d min",
-    S.IqamaNowFmt to "Iqama de %1$s agora", S.SharedAlertSettings to "Configurações partilhadas para todos os alertas",
+    S.PrayerNowFmt to "Agora é hora de %1\$s", S.PrayerApproachingFmt to "%1\$s em %2\$d min",
+    S.IqamaNowFmt to "Iqama de %1\$s agora", S.SharedAlertSettings to "Configurações partilhadas para todos os alertas",
 
 )
