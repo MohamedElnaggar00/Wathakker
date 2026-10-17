@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,8 +37,6 @@ import androidx.compose.ui.unit.sp
 import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
 
-private val muted = Color(0xFFA6A6A6)
-private val accent = Color(0xFF3E91FF)
 
 /** Progress-bar colour choices: key stored in preferences, Arabic label, swatch colour. */
 private val options: List<Pair<String, Pair<String, Color>>> = listOf(
@@ -59,7 +58,8 @@ private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
 
 @Composable
 fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>, current: String, onPick: (String) -> Unit) {
-    Text(title, color = muted, fontSize = 13.sp)
+    val cs = MaterialTheme.colorScheme
+    Text(title, color = cs.onSurfaceVariant, fontSize = 13.sp)
     Spacer(Modifier.height(8.dp))
     options.forEach { (key, labelAndColor) ->
         val (label, swatch) = labelAndColor
@@ -68,7 +68,7 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(14.dp))
-                .background(if (selected) Color(0xFF2C2C2E) else Color.Transparent)
+                .background(if (selected) cs.surfaceVariant else Color.Transparent)
                 .clickable { onPick(key) }
                 .padding(horizontal = 12.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -79,11 +79,11 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
                     .size(22.dp)
                     .clip(CircleShape)
                     .background(swatch)
-                    .then(if (selected) Modifier.border(2.dp, accent, CircleShape) else Modifier)
+                    .then(if (selected) Modifier.border(2.dp, cs.primary, CircleShape) else Modifier)
             )
             Text(
                 label,
-                color = if (selected) Color.White else muted,
+                color = if (selected) cs.onSurface else cs.onSurfaceVariant,
                 fontSize = 15.sp,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
             )
@@ -93,19 +93,20 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
 
 @Composable
 fun ConfigScreen(current: String, currentBg: String, onPick: (String) -> Unit, onPickBg: (String) -> Unit) {
+    val cs = MaterialTheme.colorScheme
     Box(
-        modifier = Modifier.fillMaxSize().background(Color(0xFF101012)).padding(24.dp),
+        modifier = Modifier.fillMaxSize().background(cs.background).padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(24.dp))
-                .background(Color(0xFF1C1C1E))
+                .background(cs.surface)
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp)
         ) {
-            Text(L10n.t(S.WidgetSettings), color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(L10n.t(S.WidgetSettings), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(12.dp))
             ColorSection(L10n.t(S.BarColor), options, current, onPick)
             Spacer(Modifier.height(16.dp))
@@ -131,7 +132,7 @@ class WidgetConfigActivity : ComponentActivity() {
         val curBg = sp.getString(keyFor("widget_bg_color"), null)
             ?: sp.getString("widget_bg_color", "default") ?: "default"
         setContent {
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            com.example.ui.theme.MyApplicationTheme {
                 ConfigScreen(
                     current = curBar,
                     currentBg = curBg,
