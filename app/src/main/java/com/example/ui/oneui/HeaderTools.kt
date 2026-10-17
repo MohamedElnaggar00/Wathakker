@@ -29,6 +29,13 @@ object HeaderTools {
     }
 
     @androidx.compose.runtime.Composable
+    fun isOnSettings(): Boolean {
+        val nc = nav?.get() as? NavController ?: return false
+        val entry by nc.currentBackStackEntryAsState()
+        return entry?.destination?.route == "settings"
+    }
+
+    @androidx.compose.runtime.Composable
     fun SettingsButton() {
         val nc = nav?.get() as? NavController
         if (nc != null) {
