@@ -101,7 +101,7 @@ fun OneUIDialogSurface(
                         modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onDismiss),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(dismissText, color = cs.onSurface, style = MaterialTheme.typography.labelLarge)
+                        Text(dismissText, color = cs.primary, style = MaterialTheme.typography.labelLarge)
                     }
                     if (onConfirm != null) {
                         Box(modifier = Modifier.width(0.5.dp).fillMaxHeight().background(cs.outline))
@@ -111,7 +111,7 @@ fun OneUIDialogSurface(
                         ) {
                             Text(
                                 confirmText,
-                                color = if (confirmEnabled) cs.onSurface else cs.onSurfaceVariant,
+                                color = if (confirmEnabled) cs.primary else cs.onSurfaceVariant,
                                 style = MaterialTheme.typography.labelLarge
                             )
                         }
@@ -147,3 +147,4 @@ fun OneUIDialog(
         )
     }
 }
+
