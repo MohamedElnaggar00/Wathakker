@@ -225,7 +225,12 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
         item(key = "adj-label") { SectionLabel(L10n.t(S.AdjSection)) }
         item(key = "adj") {
             OneUICard {
-                Text(L10n.t(S.AdjNote), color = cs.onSurfaceVariant, fontSize = 12.sp)
+                Text(
+                    L10n.t(S.AdjNote),
+                    color = cs.onSurfaceVariant,
+                    fontSize = 12.sp,
+                    modifier = Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 12.dp)
+                )
                 Spacer(Modifier.height(10.dp))
                 val offsets = remember(prefsTick) { PrayerAdjustments.offsetMinutes(context) }
                 val names = listOf(S.PrayerFajr, S.PrayerShuruq, S.PrayerDhuhr, S.PrayerAsr, S.PrayerMaghrib, S.PrayerIsha)
@@ -282,7 +287,7 @@ private fun CalcRow(icon: ImageVector, title: String, value: String, onClick: ()
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
             .clickable(onClick = onClick)
-            .padding(vertical = 10.dp, horizontal = 4.dp),
+            .padding(vertical = 10.dp, horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -304,7 +309,7 @@ private fun StepperRow(title: String, value: Int, unit: String, onChange: (Int) 
     // Center-zero One UI slider: 0 sits in the middle, dragging toward the language's
     // "forward" side adds and the other side subtracts (Slider mirrors automatically in RTL).
     var drag by remember(value) { mutableIntStateOf(value) }
-    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 6.dp)) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
