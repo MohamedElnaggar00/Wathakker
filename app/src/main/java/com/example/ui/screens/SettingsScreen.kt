@@ -190,14 +190,6 @@ fun SettingsContent(
                         trailing = { ChevronIcon() },
                         onClick = onLocation ?: onFajr
                     )
-                    OneUIDivider(70.dp)
-                    OneUIRow(
-                        title = L10n.t(S.FajrAlarm),
-                        summary = L10n.t(S.FajrAlarmSubtitle),
-                        leading = { OneUIIconBadge(Icons.Outlined.Alarm) },
-                        trailing = { ChevronIcon() },
-                        onClick = onFajr
-                    )
                 }
             }
         }
