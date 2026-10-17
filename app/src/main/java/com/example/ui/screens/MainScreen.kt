@@ -2,10 +2,7 @@ package com.example.ui.screens
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -92,11 +89,6 @@ val oneUIDrawerItems: List<OneUIDrawerItem> = listOf(
     OneUIDrawerItem("about", "حول التطبيق", Icons.Outlined.Info, Color(4287532691L))
 )
 
-private val tabEnter: EnterTransition =
-    slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
-private val tabPopExit: ExitTransition =
-    slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
-
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
     val navController = rememberNavController()
@@ -120,10 +112,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 navController = navController,
                 startDestination = "tabs",
                 modifier = Modifier.fillMaxSize(),
-                enterTransition = { tabEnter },
-                exitTransition = { ExitTransition.None },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { tabPopExit }
+                enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(300, 0, FastOutSlowInEasing)) },
+                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(300, 0, FastOutSlowInEasing)) },
+                popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(300, 0, FastOutSlowInEasing)) },
+                popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(300, 0, FastOutSlowInEasing)) }
             ) {
                 composable("tabs") {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
@@ -180,7 +172,13 @@ fun MainScreen(viewModel: MainViewModel) {
                     selectedRoute = currentTabRoute,
                     onSelect = { tab ->
                         val i = oneUITabs.indexOf(tab)
-                        if (i >= 0) scope.launch { pagerState.animateScrollToPage(i) }
+                        if (i >= 0) scope.launch {
+                            val current = pagerState.currentPage
+                            if (kotlin.math.abs(i - current) > 1) {
+                                pagerState.scrollToPage(if (i > current) i - 1 else i + 1)
+                            }
+                            pagerState.animateScrollToPage(i)
+                        }
                     },
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
@@ -232,3 +230,4 @@ private fun FajrTabScreen(onMenu: () -> Unit) {
     val fajrViewModel: FajrViewModel = viewModel()
     FajrSettingsScreen(fajrViewModel, onMenu = onMenu)
 }
+
