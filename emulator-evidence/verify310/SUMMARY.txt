@@ -3,14 +3,24 @@ PASS: 4 main tabs present
 PASS: Qibla screen opened
 PASS: exact alarm scheduled after bell toggle
 PASS: alert dialog opened (alert type visible)
-PASS: Location & calculation screen opened
-INFO: Fajr time before=02:31 ص after=02:31 ص (right-edge tap)
-INFO: left-edge try: Fajr after=02:32 ص
-PASS: per-prayer offset changed Fajr time (02:31 ص -> 02:32 ص)
-WARN: restore landed on 02:32 ص (expected 02:31 ص)
-PASS: live switch to English
-PASS: switched back to Arabic
-PASS: rotation to landscape keeps prayer screen
+FAIL: expected 3 sliders in alert dialog, found 2
+FAIL: snooze row not reachable at font_scale 1.3
+FAIL: node not found (desc=القائمة) [Menu button]
+FAIL: node not found (text=الإعدادات) [Settings drawer row]
+FAIL: node not found (text=تغيير الموقع) [Location & calculation row]
+FAIL: Location & calculation screen missing
+FAIL: no Fajr row on Location screen
+PASS: converter row removed from Settings
+FAIL: node not found (desc=القائمة) [Menu button]
+FAIL: node not found (text=محول التاريخ) [Drawer converter row]
+FAIL: converter row missing from drawer
+FAIL: node not found (desc=القائمة) [Menu button]
+FAIL: node not found (text=الإعدادات) [Settings drawer row]
+FAIL: node not found (text=اللغة) [Language row]
+FAIL: language row not found
+FAIL: rotation broke UI
+PASS: prayer screen renders in light mode
+PASS: alert dialog renders in light mode
 PASS: bells persist after process death
 INFO: boot broadcast sent (see alarms_after_boot.txt)
 PASS: no fatal exceptions in logcat
