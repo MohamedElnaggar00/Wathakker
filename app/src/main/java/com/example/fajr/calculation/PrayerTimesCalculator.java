@@ -253,6 +253,68 @@ public final class PrayerTimesCalculator {
         return new DayPrayerTimes(hoursToMillis(calendar, transit - (fajrH / 15.0d)), hoursToMillis(calendar, transit - (sunH / 15.0d)), hoursToMillis(calendar, transit), hoursToMillis(calendar, (asrH / 15.0d) + transit), maghrib, isha);
     }
 
+    public final DayPrayerTimes calculateAll(Calendar calendar, double latitude, double longitude, CalculationMethod method, int asrFactor, int highLatRule, int[] adjustments) {
+        Intrinsics.checkNotNullParameter(calendar, "calendar");
+        Intrinsics.checkNotNullParameter(method, "method");
+        SolarParams solarParams = solarParams(calendar, longitude);
+        double transit = solarParams.getTransit();
+        double declination = solarParams.getDeclination();
+        double sunH = hourAngleBelowHorizon(0.833d, latitude, declination);
+        double sunriseUtc = transit - (sunH / 15.0d);
+        double maghribUtc = transit + (sunH / 15.0d);
+        double nightHours = 24.0d - (maghribUtc - sunriseUtc);
+        double asrAltitude = Math.toDegrees(Math.atan(1.0d / (Math.tan(Math.toRadians(Math.abs(latitude - declination))) + (double) asrFactor)));
+        double asrH = hourAngleAboveHorizon(asrAltitude, latitude, declination);
+        long maghrib = hoursToMillis(calendar, maghribUtc);
+        Double ishaAngleObj = method.getIshaAngle();
+        double ishaAngle = ishaAngleObj != null ? ishaAngleObj.doubleValue() : 17.0d;
+        long isha;
+        if (method.getIshaMinutesAfterMaghrib() != null) {
+            isha = maghrib + (method.getIshaMinutesAfterMaghrib().intValue() * 60000);
+        } else if (invalidBelowHorizon(ishaAngle, latitude, declination) && highLatRule > 0) {
+            isha = hoursToMillis(calendar, highLatNightTime(maghribUtc, nightHours, ishaAngle, highLatRule, true));
+        } else {
+            double ishaH = hourAngleBelowHorizon(ishaAngle, latitude, declination);
+            isha = hoursToMillis(calendar, (ishaH / 15.0d) + transit);
+        }
+        long fajr;
+        if (invalidBelowHorizon(method.getFajrAngle(), latitude, declination) && highLatRule > 0) {
+            fajr = hoursToMillis(calendar, highLatNightTime(sunriseUtc, nightHours, method.getFajrAngle(), highLatRule, false));
+        } else {
+            double fajrH = hourAngleBelowHorizon(method.getFajrAngle(), latitude, declination);
+            fajr = hoursToMillis(calendar, transit - (fajrH / 15.0d));
+        }
+        long sunrise = hoursToMillis(calendar, sunriseUtc);
+        long dhuhr = hoursToMillis(calendar, transit);
+        long asr = hoursToMillis(calendar, (asrH / 15.0d) + transit);
+        if (adjustments != null && adjustments.length >= 6) {
+            fajr += adjustments[0] * 60000L;
+            sunrise += adjustments[1] * 60000L;
+            dhuhr += adjustments[2] * 60000L;
+            asr += adjustments[3] * 60000L;
+            maghrib += adjustments[4] * 60000L;
+            isha += adjustments[5] * 60000L;
+        }
+        return new DayPrayerTimes(fajr, sunrise, dhuhr, asr, maghrib, isha);
+    }
+
+    private final boolean invalidBelowHorizon(double angle, double latitude, double declination) {
+        double cosH = ((-Math.sin(Math.toRadians(angle))) - (Math.sin(Math.toRadians(latitude)) * Math.sin(Math.toRadians(declination)))) / (Math.cos(Math.toRadians(latitude)) * Math.cos(Math.toRadians(declination)));
+        return cosH < -1.0d || cosH > 1.0d;
+    }
+
+    private final double highLatNightTime(double anchorUtc, double nightHours, double angle, int rule, boolean isEnd) {
+        double portion;
+        if (rule == 1) {
+            portion = 0.5d;
+        } else if (rule == 2) {
+            portion = 1.0d / 7.0d;
+        } else {
+            portion = angle / 60.0d;
+        }
+        return isEnd ? anchorUtc + (nightHours * portion) : anchorUtc - (nightHours * portion);
+    }
+
     private final double fixAngle(double angle) {
         double a = angle % 360.0d;
         if (a < 0.0d) {
@@ -261,3 +323,4 @@ public final class PrayerTimesCalculator {
         return a;
     }
 }
+
