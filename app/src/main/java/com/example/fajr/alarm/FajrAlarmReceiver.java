@@ -32,7 +32,7 @@ public final class FajrAlarmReceiver extends BroadcastReceiver {
         Intrinsics.checkNotNullParameter(context, "context");
         Intrinsics.checkNotNullParameter(intent, "intent");
         FajrPreferences prefs = new FajrPreferences(context);
-        if (prefs.isAlarmEnabled()) {
+        if (com.example.prayer.alerts.PrayerAlertStore.INSTANCE.isFajrAlarmActive(context)) {
             String todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new Date());
             if (Intrinsics.areEqual(prefs.getLastAlarmTriggeredDate(), todayDate) && !Intrinsics.areEqual(intent.getAction(), "ACTION_SNOOZE_TRIGGER")) {
                 new FajrAlarmScheduler(context).scheduleNextFajrAlarm();
