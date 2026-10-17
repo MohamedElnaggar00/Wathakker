@@ -1,6 +1,9 @@
 package com.example.prayer
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -166,6 +169,37 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                             Text(L10n.t(S.IqamaReminderSub), color = cs.onSurfaceVariant, fontSize = 11.sp)
                         }
                         OneUISwitch(iqama, { PrayerAlertStore.setIqamaReminder(context, prayer, it); changed() })
+                    }
+                }
+                if (prayer != 1) {
+                    Spacer(Modifier.height(8.dp))
+                    val dndGranted = remember(tick) {
+                        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        nm.isNotificationPolicyAccessGranted
+                    }
+                    val dndOn = remember(tick) { PrayerAlertStore.autoDnd(context, prayer) }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(Modifier.weight(1f)) {
+                            Text(L10n.t(S.AutoDnd), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text(L10n.t(S.AutoDndSub), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                        }
+                        OneUISwitch(dndOn && dndGranted, { want ->
+                            if (want && !dndGranted) {
+                                try {
+                                    context.startActivity(
+                                        Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    )
+                                } catch (_: Throwable) {}
+                            } else {
+                                PrayerAlertStore.setAutoDnd(context, prayer, want)
+                                changed()
+                            }
+                        })
                     }
                 }
                 Spacer(Modifier.height(12.dp))
