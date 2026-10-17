@@ -1,0 +1,128 @@
+<div align="center">
+  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="120" height="120" alt="App icon">
+  <h1>Wathakker (وذكر)</h1>
+  <p><b>An app that reminds you of prayer times and dhikr through your day and your night.</b></p>
+  <p>Accurate prayer times for your location, per-prayer adhan and iqama alerts, a Qibla compass, a Hijri date converter, and an azkar library with statistics that track your daily commitment — in a modern One UI-inspired design.</p>
+
+  <p>
+    <a href="https://github.com/MohamedElnaggar00/Wathakker/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathakker/actions/workflows/build-apk.yml/badge.svg" alt="Build status"></a>
+    <img src="https://img.shields.io/badge/version-3.1.0-blue" alt="Version 3.1.0">
+    <img src="https://img.shields.io/badge/platform-Android-green?logo=android" alt="Android">
+    <img src="https://img.shields.io/badge/language-Kotlin-purple?logo=kotlin" alt="Kotlin">
+    <img src="https://img.shields.io/badge/UI%20languages-11-orange" alt="11 languages">
+  </p>
+
+  <p><b><a href="README.md">🇪🇬 النسخة العربية</a></b></p>
+</div>
+
+---
+
+## 📑 Contents
+
+- [Overview](#-overview)
+- [Key features](#-key-features)
+- [What's new in 3.1.0](#-whats-new-in-310)
+- [Screenshots](#-screenshots)
+- [Supported languages](#-supported-languages)
+- [Tech stack](#-tech-stack)
+- [Build from source](#-build-from-source)
+- [Download](#-download)
+
+---
+
+## 🌙 Overview
+
+Wathakker is an open-source Android app that brings the everyday tools a Muslim needs into one place: astronomically accurate prayer times, fully customizable per-prayer alerts, morning and evening azkar with Hisn al-Muslim, a digital tasbeeh counter, and a Qibla compass — all with full right-to-left support and an interface translated into eleven languages.
+
+## ✨ Key features
+
+| Area | Features |
+|---|---|
+| 🕌 **Prayer times** | Automatic location via GPS or manual country/city selection, eight certified calculation methods (Egyptian General Authority, Umm al-Qura, Muslim World League, ISNA, University of Karachi, Kuwait, Qatar, Dubai), Asr juristic choice (Shafi'i or Hanafi), high-latitude rules, and manual per-prayer minute adjustments plus a Hijri date offset. |
+| 🔔 **Prayer alerts** | An independent bell for each of the six prayer rows (including Shuruq), two alert modes (full adhan or notification), flexible timing (at adhan time or minutes before), **iqama reminders** with per-prayer delays (Fajr 25 min, Dhuhr/Asr/Isha 20 min, Maghrib 10 min), **automatic Do-Not-Disturb** between adhan and iqama, and shared settings for alert sound, vibration, volume, and duration. |
+| 🧭 **Qibla compass** | A dark, elegant dial: a tick ring that rotates with the phone, a live numeric degree readout, a blue qibla arc that turns green within 3 degrees with a haptic tick, magnetic-declination correction to true north based on your location, and a calibration prompt when sensor accuracy drops. |
+| 🕰️ **Optional times** | Optional prayer-screen rows: Imsak (10 minutes before Fajr), Duha, Midnight, and Qiyam (start of the last third of the night) — enabled from Settings as needed. |
+| 📅 **Date converter** | Instant two-way conversion between Hijri and Gregorian dates on the Umm al-Qura calendar, with the weekday shown. |
+| 📿 **Azkar & Hisn al-Muslim** | The complete Hisn al-Muslim library in chapters, custom azkar organized with colored tags, favorites, timed reminders, and preloaded prophetic duas. |
+| 📊 **Statistics** | Daily commitment tracking: azkar read today, this week, and this month, plus a day-streak counter. |
+| 🔢 **Tasbeeh** | A digital counter that keeps your progress even after the app is closed. |
+| 📱 **Lock-screen widgets** | Fully customizable widgets (colors, background, text) showing prayer times on the lock screen. |
+| 🎨 **Personalization** | Eleven UI languages with full RTL and LTR support, light/dark/system themes, and multiple Arabic fonts (Cairo, Naskh, Amiri, Ruqaa). |
+
+<details>
+<summary><b>🔔 More about the alert system</b></summary>
+
+- Alerts are scheduled as exact alarms and automatically rescheduled after the device reboots.
+- Each prayer has its own settings sheet via a long-press on its bell: alert mode, timing, iqama reminder, and automatic DND.
+- If the Do-Not-Disturb policy permission is missing, the app routes you to the system permission screen instead of silently pretending the feature works.
+
+</details>
+
+## 🆕 What's new in 3.1.0
+
+- A fully merged alert system: bells on all six prayer rows with iqama reminders and automatic DND.
+- A new "Location & calculation" screen: location, calculation method, juristic school, and minute adjustments in one place with instant recalculation.
+- A completely redesigned Qibla compass.
+- Optional times: Imsak, Duha, Midnight, and Qiyam.
+- A Hijri ↔ Gregorian date converter.
+- A full English UI audit and localized widgets.
+
+## 📸 Screenshots
+
+<p align="center"><i>Real captures from the latest automated 3.1.0 emulator verification run.</i></p>
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="emulator-evidence/verify310/00-prayer.png" width="220" alt="Prayer screen"><br><sub>Prayer screen with bells</sub></td>
+      <td align="center"><img src="emulator-evidence/verify310/02-alert-dialog.png" width="220" alt="Prayer alert sheet"><br><sub>Per-prayer alert settings</sub></td>
+      <td align="center"><img src="emulator-evidence/verify310/02b-qibla.png" width="220" alt="Qibla compass"><br><sub>Qibla compass</sub></td>
+    </tr>
+    <tr>
+      <td align="center"><img src="emulator-evidence/verify310/04-location-screen.png" width="220" alt="Location and calculation"><br><sub>Location & calculation</sub></td>
+      <td align="center"><img src="emulator-evidence/verify310/03-settings.png" width="220" alt="Settings"><br><sub>Settings</sub></td>
+      <td align="center"><img src="emulator-evidence/verify310/06-landscape.png" width="220" alt="Landscape"><br><sub>Landscape</sub></td>
+    </tr>
+    <tr>
+      <td align="center"><img src="emulator-evidence/verify310/05-english.png" width="220" alt="English UI"><br><sub>English UI</sub></td>
+      <td align="center"><img src="emulator-evidence/verify310/01-bell-toggled.png" width="220" alt="Bell toggled"><br><sub>Enabling a prayer alert</sub></td>
+      <td align="center"></td>
+    </tr>
+  </table>
+</div>
+
+## 🌍 Supported languages
+
+العربية · English · Français · Deutsch · Español · Italiano · Türkçe · اردو · Indonesia · Русский · Português
+
+## 🛠️ Tech stack
+
+- **Language**: Kotlin
+- **UI**: Jetpack Compose with Material 3 and a custom One UI-inspired design system
+- **Database**: Room for local azkar, tags, and statistics
+- **Prayer calculations**: astronomical calculation library with the Umm al-Qura Hijri calendar
+- **Architecture**: MVVM
+- **Alerts**: exact alarms with broadcast receivers for post-boot rescheduling
+
+## 🔨 Build from source
+
+```bash
+git clone https://github.com/MohamedElnaggar00/Wathakker.git
+cd Wathakker
+./gradlew assembleDebug
+```
+
+The APK is produced in `app/build/outputs/apk/debug/`. Building requires JDK 17 and the Android SDK.
+
+## 📥 Download
+
+The latest stable and preview builds are available on the [Releases](https://github.com/MohamedElnaggar00/Wathakker/releases) page.
+
+---
+
+<div align="center">
+  <br>
+  <b><a href="https://instinct.com">brought to you by Instinct</a></b>
+  <p>Mohamed Elnaggar</p>
+  <p><i>Please keep us in your prayers.</i></p>
+</div>
