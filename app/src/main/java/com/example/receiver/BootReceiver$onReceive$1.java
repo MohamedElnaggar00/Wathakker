@@ -7,7 +7,6 @@ import com.example.alarm.AlarmScheduler;
 import com.example.data.AppDatabase;
 import com.example.data.Dhikr;
 import com.example.data.DhikrDao;
-import com.example.fajr.alarm.FajrAlarmScheduler;
 import java.util.Iterator;
 import java.util.List;
 import kotlin.Metadata;
@@ -83,8 +82,6 @@ final class BootReceiver$onReceive$1 extends SuspendLambda implements Function2<
                 while (it.hasNext()) {
                     scheduler.schedule((Dhikr) it.next());
                 }
-                FajrAlarmScheduler fajrScheduler = new FajrAlarmScheduler(this.$context);
-                fajrScheduler.scheduleNextFajrAlarm();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -96,3 +93,4 @@ final class BootReceiver$onReceive$1 extends SuspendLambda implements Function2<
         }
     }
 }
+
