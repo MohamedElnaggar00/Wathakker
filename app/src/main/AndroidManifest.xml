@@ -186,6 +186,6 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_hero_large_info" />
         </receiver>
-        <activity android:exported="false" android:name="com.example.WidgetRenderCheck" />
+        <activity android:exported="true" android:name="com.example.WidgetRenderCheck" />
     </application>
 </manifest>
