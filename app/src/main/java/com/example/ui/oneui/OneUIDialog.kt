@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -26,6 +27,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
@@ -86,9 +88,11 @@ fun OneUIDialogSurface(
                     modifier = Modifier
                         .weight(1f, fill = false)
                         .then(if (scrollable) Modifier.verticalScroll(rememberScrollState()) else Modifier)
-                        .padding(horizontal = 24.dp),
-                    content = content
-                )
+                        .padding(horizontal = 24.dp)
+                ) {
+                    content()
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
                 Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     modifier = Modifier
@@ -137,11 +141,15 @@ fun OneUIDialog(
 ) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         BlurBehindDialogWindow()
+        // Bound the surface so the scroll area engages on small screens / large font scale;
+        // without a max height the content column outgrows the window and the bottom rows
+        // render under the dismiss button.
+        val maxDialogHeight = (LocalConfiguration.current.screenHeightDp * 0.88f).dp
         OneUIDialogSurface(
             title = title,
             onDismiss = onDismiss,
             onConfirm = onConfirm,
-            modifier = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier.padding(horizontal = 24.dp).heightIn(max = maxDialogHeight),
             confirmText = confirmText,
             dismissText = dismissText,
             confirmEnabled = confirmEnabled,
