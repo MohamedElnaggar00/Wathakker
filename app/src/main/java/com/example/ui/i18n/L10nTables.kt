@@ -121,7 +121,7 @@ internal val AR = mapOf(
 )
 
 internal val EN = mapOf(
-    S.PrayerTab to "Prayer", S.AzkarTab to "Azkar", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Fajr",
+    S.PrayerTab to "Prayer", S.AzkarTab to "Azkar", S.HisnTab to "Hisn", S.FajrTab to "Fajr",
     S.TasbeehTab to "Tasbeeh", S.Favorites to "Favorites", S.Reminders to "Reminders", S.Stats to "Statistics",
     S.Tags to "Tags", S.Settings to "Settings", S.About to "About", S.More to "More", S.Menu to "Menu",
     S.AddDhikr to "Add dhikr", S.SearchAzkar to "Search azkar or tags", S.All to "All", S.NoAzkar to "No azkar",
@@ -234,7 +234,7 @@ internal val EN = mapOf(
 )
 
 internal val FR = mapOf(
-    S.PrayerTab to "Prière", S.AzkarTab to "Azkar", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Fajr",
+    S.PrayerTab to "Prière", S.AzkarTab to "Azkar", S.HisnTab to "Hisn", S.FajrTab to "Fajr",
     S.TasbeehTab to "Tasbeeh", S.Favorites to "Favoris", S.Reminders to "Rappels", S.Stats to "Statistiques",
     S.Tags to "Catégories", S.Settings to "Paramètres", S.About to "À propos", S.More to "Plus", S.Menu to "Menu",
     S.AddDhikr to "Ajouter un dhikr", S.SearchAzkar to "Rechercher un dhikr ou une catégorie", S.All to "Tous",
@@ -353,7 +353,7 @@ internal val FR = mapOf(
 )
 
 internal val DE = mapOf(
-    S.PrayerTab to "Gebet", S.AzkarTab to "Azkar", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Fajr",
+    S.PrayerTab to "Gebet", S.AzkarTab to "Azkar", S.HisnTab to "Hisn", S.FajrTab to "Fajr",
     S.TasbeehTab to "Tasbeeh", S.Favorites to "Favoriten", S.Reminders to "Erinnerungen", S.Stats to "Statistiken",
     S.Tags to "Kategorien", S.Settings to "Einstellungen", S.About to "Über die App", S.More to "Mehr", S.Menu to "Menü",
     S.AddDhikr to "Dhikr hinzufügen", S.SearchAzkar to "Azkar oder Kategorie suchen", S.All to "Alle",
@@ -473,7 +473,7 @@ internal val DE = mapOf(
 )
 
 internal val ES = mapOf(
-    S.PrayerTab to "Oración", S.AzkarTab to "Azkar", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Fajr",
+    S.PrayerTab to "Oración", S.AzkarTab to "Azkar", S.HisnTab to "Hisn", S.FajrTab to "Fajr",
     S.TasbeehTab to "Tasbeeh", S.Favorites to "Favoritos", S.Reminders to "Recordatorios", S.Stats to "Estadísticas",
     S.Tags to "Categorías", S.Settings to "Ajustes", S.About to "Acerca de", S.More to "Más", S.Menu to "Menú",
     S.AddDhikr to "Añadir dhikr", S.SearchAzkar to "Buscar azkar o categoría", S.All to "Todos",
@@ -594,7 +594,7 @@ internal val ES = mapOf(
 )
 
 internal val IT = mapOf(
-    S.PrayerTab to "Preghiera", S.AzkarTab to "Azkar", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Fajr",
+    S.PrayerTab to "Preghiera", S.AzkarTab to "Azkar", S.HisnTab to "Hisn", S.FajrTab to "Fajr",
     S.TasbeehTab to "Tasbeeh", S.Favorites to "Preferiti", S.Reminders to "Promemoria", S.Stats to "Statistiche",
     S.Tags to "Categorie", S.Settings to "Impostazioni", S.About to "Informazioni", S.More to "Altro", S.Menu to "Menu",
     S.AddDhikr to "Aggiungi dhikr", S.SearchAzkar to "Cerca azkar o categoria", S.All to "Tutti",
@@ -715,7 +715,7 @@ internal val IT = mapOf(
 )
 
 internal val TR = mapOf(
-    S.PrayerTab to "Namaz", S.AzkarTab to "Zikirler", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Sabah",
+    S.PrayerTab to "Namaz", S.AzkarTab to "Zikirler", S.HisnTab to "Hisn", S.FajrTab to "Sabah",
     S.TasbeehTab to "Tesbih", S.Favorites to "Favoriler", S.Reminders to "Hatırlatıcılar", S.Stats to "İstatistikler",
     S.Tags to "Kategoriler", S.Settings to "Ayarlar", S.About to "Hakkında", S.More to "Daha fazla", S.Menu to "Menü",
     S.AddDhikr to "Zikir ekle", S.SearchAzkar to "Zikir veya kategori ara", S.All to "Tümü",
@@ -955,7 +955,7 @@ internal val UR = mapOf(
 )
 
 internal val ID = mapOf(
-    S.PrayerTab to "Salat", S.AzkarTab to "Dzikir", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Subuh",
+    S.PrayerTab to "Salat", S.AzkarTab to "Dzikir", S.HisnTab to "Hisn", S.FajrTab to "Subuh",
     S.TasbeehTab to "Tasbih", S.Favorites to "Favorit", S.Reminders to "Pengingat", S.Stats to "Statistik",
     S.Tags to "Kategori", S.Settings to "Pengaturan", S.About to "Tentang", S.More to "Lainnya", S.Menu to "Menu",
     S.AddDhikr to "Tambah dzikir", S.SearchAzkar to "Cari dzikir atau kategori", S.All to "Semua",
@@ -1076,7 +1076,7 @@ internal val ID = mapOf(
 )
 
 internal val RU = mapOf(
-    S.PrayerTab to "Намаз", S.AzkarTab to "Зикры", S.HisnTab to "Хисн аль-Муслим", S.FajrTab to "Фаджр",
+    S.PrayerTab to "Намаз", S.AzkarTab to "Зикры", S.HisnTab to "Хисн", S.FajrTab to "Фаджр",
     S.TasbeehTab to "Тасбих", S.Favorites to "Избранное", S.Reminders to "Напоминания", S.Stats to "Статистика",
     S.Tags to "Категории", S.Settings to "Настройки", S.About to "О приложении", S.More to "Ещё", S.Menu to "Меню",
     S.AddDhikr to "Добавить зикр", S.SearchAzkar to "Поиск зикра или категории", S.All to "Все",
@@ -1197,7 +1197,7 @@ internal val RU = mapOf(
 )
 
 internal val PT = mapOf(
-    S.PrayerTab to "Oração", S.AzkarTab to "Azkar", S.HisnTab to "Hisn Al-Muslim", S.FajrTab to "Fajr",
+    S.PrayerTab to "Oração", S.AzkarTab to "Azkar", S.HisnTab to "Hisn", S.FajrTab to "Fajr",
     S.TasbeehTab to "Tasbeeh", S.Favorites to "Favoritos", S.Reminders to "Lembretes", S.Stats to "Estatísticas",
     S.Tags to "Categorias", S.Settings to "Configurações", S.About to "Sobre", S.More to "Mais", S.Menu to "Menu",
     S.AddDhikr to "Adicionar dhikr", S.SearchAzkar to "Pesquisar azkar ou categoria", S.All to "Todos",
