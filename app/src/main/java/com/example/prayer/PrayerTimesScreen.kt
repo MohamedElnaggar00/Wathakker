@@ -314,8 +314,11 @@ fun PrayerTimesContent(
                     Spacer(Modifier.width(6.dp))
                     Text(SavedCity(), color = cs.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
                 }
-                OneUIDivider(12.dp)
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                // Divider spans the full content width so its ends line up with the icon
+                // circles above/below; the row gets real vertical padding (the circle must not
+                // touch the divider) and the label is centered with the circle, no offset hack.
+                OneUIDivider(0.dp)
+                Row(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier.size(40.dp).clip(CircleShape).background(cs.surfaceVariant),
                         contentAlignment = Alignment.Center
@@ -325,7 +328,6 @@ fun PrayerTimesContent(
                     Spacer(Modifier.width(12.dp))
                     Text(
                         L10n.t(S.NextPrayer),
-                        modifier = Modifier.offset(0.dp, 6.dp),
                         color = cs.onSurfaceVariant,
                         style = MaterialTheme.typography.titleSmall
                     )
