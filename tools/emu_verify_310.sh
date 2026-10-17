@@ -391,8 +391,8 @@ grep -q "Status: ok" "$OUT/rendercheck.txt" && say "PASS: widget render harness 
 mkdir -p "$OUT/widget-renders"
 adb shell ls /sdcard/Android/data/com.wathakker.app/files/ > "$OUT/widget-files.txt" 2>&1 || true
 adb pull /sdcard/Android/data/com.wathakker.app/files/ "$OUT/widget-renders" >> "$OUT/widget-files.txt" 2>&1 || true
-NPNG=$(ls "$OUT"/widget-renders/widget_*.png 2>/dev/null | wc -l)
-NERR=$(ls "$OUT"/widget-renders/widget_*.err 2>/dev/null | wc -l)
+NPNG=$(find "$OUT/widget-renders" -name 'widget_*.png' | wc -l)
+NERR=$(find "$OUT/widget-renders" -name 'widget_*.err' | wc -l)
 [ "$NERR" = 0 ] && [ "$NPNG" -ge 27 ] && say "PASS: $NPNG widget renders, no errors" || say "FAIL: widget renders png=$NPNG err=$NERR"
 shot 09-widget-render
 
