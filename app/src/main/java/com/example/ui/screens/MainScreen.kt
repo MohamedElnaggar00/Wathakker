@@ -162,12 +162,16 @@ fun MainScreen(viewModel: MainViewModel) {
                         viewModel,
                         { navController.popBackStack() },
                         { navController.navigate("fajr_settings") },
-                        { navController.navigate("location_calc") }
+                        { navController.navigate("location_calc") },
+                        { navController.navigate("optional_times") }
                     )
                 }
                 composable("fajr_settings") {
                     val fajrViewModel: FajrViewModel = viewModel()
                     FajrSettingsScreen(fajrViewModel) { navController.popBackStack() }
+                }
+                composable("optional_times") {
+                    com.example.prayer.OptionalTimesScreen { navController.popBackStack() }
                 }
                 composable("qibla") {
                     com.example.prayer.QiblaScreen { navController.popBackStack() }
