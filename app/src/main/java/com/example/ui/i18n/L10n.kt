@@ -45,7 +45,7 @@ enum class S {
     HighLatRule, HighLatNone, HighLatMiddle, HighLatSeventh, HighLatAngle,
     AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort,
     AlertMode, AlertModeNotif, AlertModeAlarm, AlertTiming, AtAdhanTime, MinBeforeFmt,
-    IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, IqamaNowFmt, SharedAlertSettings
+    IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, IqamaNowFmt, SharedAlertSettings,
     HijriConvTitle, HijriConvSub, GregToHijri, HijriToGreg, DayLabel, MonthLabel, YearLabel
 }
 
