@@ -126,9 +126,9 @@ class WidgetConfigActivity : ComponentActivity() {
         appWidgetId = intent?.getIntExtra("appWidgetId", 0) ?: 0
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)
         val curBar = (sp.getString(keyFor("widget_bar_color"), null)
-            ?: sp.getString("widget_bar_color", "auto") ?: "auto").let { if (it in options) it else "auto" }
+            ?: sp.getString("widget_bar_color", "auto") ?: "auto").let { v -> if (options.any { o -> o.first == v }) v else "auto" }
         val curBg = (sp.getString(keyFor("widget_bg_color"), null)
-            ?: sp.getString("widget_bg_color", "auto") ?: "auto").let { if (it in bgOptions) it else "auto" }
+            ?: sp.getString("widget_bg_color", "auto") ?: "auto").let { v -> if (bgOptions.any { o -> o.first == v }) v else "auto" }
         setContent {
             com.example.ui.theme.MyApplicationTheme {
                 ConfigScreen(
