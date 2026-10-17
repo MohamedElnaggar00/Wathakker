@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
         L10n.init(this)
         ThemeSettings.init(this)
         WidgetUpdater.INSTANCE.updateAll(this)
+        com.example.prayer.alerts.PrayerAlertScheduler.scheduleAll(this)
         handleIntent(intent)
         enableEdgeToEdge()
         setContent {
