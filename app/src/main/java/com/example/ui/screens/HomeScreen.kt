@@ -54,6 +54,8 @@ import com.example.ui.oneui.azkarCount
 import com.example.ui.oneui.parseColorSafe
 import com.example.ui.viewmodel.MainViewModel
 import com.example.utils.DateTimeUtilsKt
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun DhikrDialogsHost(
@@ -165,13 +167,13 @@ fun AzkarListContent(
     onMenu: (() -> Unit)? = null
 ) {
     OneUIScreen(
-        title = "الأذكار",
+        title = L10n.t(S.AzkarTab),
         subtitle = azkarCount(totalCount),
         onMenu = onMenu,
-        actions = { OneUIIconAction(Icons.Outlined.Add, "إضافة ذكر", onAdd) }
+        actions = { OneUIIconAction(Icons.Outlined.Add, L10n.t(S.AddDhikr), onAdd) }
     ) {
         item(key = "search") {
-            OneUISearchField(query, onQuery, "ابحث عن ذكر أو تصنيف")
+            OneUISearchField(query, onQuery, L10n.t(S.SearchAzkar))
         }
         if (allTags.isNotEmpty()) {
             item(key = "chips") {
@@ -180,7 +182,7 @@ fun AzkarListContent(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     item {
-                        OneUIChip("الكل", selectedTag == null, { onSelectTag(null) })
+                        OneUIChip(L10n.t(S.All), selectedTag == null, { onSelectTag(null) })
                     }
                     items(allTags, key = { it.tagId }) { tag ->
                         val selected = selectedTag?.tagId == tag.tagId
@@ -196,9 +198,9 @@ fun AzkarListContent(
         if (dhikrs.isEmpty()) {
             item {
                 val text = when {
-                    query.isBlank() && selectedTag == null -> "لا توجد أذكار"
-                    query.isBlank() -> "لا توجد أذكار تحت تصنيف \"${selectedTag?.name}\""
-                    else -> "لا توجد نتائج تطابق \"$query\""
+                    query.isBlank() && selectedTag == null -> L10n.t(S.NoAzkar)
+                    query.isBlank() -> L10n.t(S.NoAzkarUnderTag).format(selectedTag?.name ?: "")
+                    else -> L10n.t(S.NoResultsQuery).format(query)
                 }
                 OneUIEmptyState(text, Icons.Outlined.Search)
             }
@@ -317,7 +319,7 @@ fun DhikrItemCard(
             }
             Icon(
                 if (favorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                "المفضلة",
+                L10n.t(S.Favorites),
                 modifier = Modifier
                     .clip(CircleShape)
                     .clickable(onClick = onToggleFavorite)
@@ -327,7 +329,7 @@ fun DhikrItemCard(
             Box {
                 Icon(
                     Icons.Outlined.MoreVert,
-                    "خيارات",
+                    L10n.t(S.Options),
                     modifier = Modifier
                         .clip(CircleShape)
                         .clickable { menu = true }
@@ -335,11 +337,12 @@ fun DhikrItemCard(
                     tint = cs.onSurfaceVariant
                 )
                 OneUIMenu(menu, { menu = false }) {
-                    OneUIMenuItem("تعديل الذكر والتصنيفات", { menu = false; onEditClick() }, Icons.Outlined.Edit)
-                    OneUIMenuItem("أوقات التنبيه", { menu = false; onClickTimes() }, Icons.Outlined.Schedule)
-                    OneUIMenuItem("حذف", { menu = false; onDeleteClick() }, Icons.Outlined.Delete, true)
+                    OneUIMenuItem(L10n.t(S.EditDhikrTags), { menu = false; onEditClick() }, Icons.Outlined.Edit)
+                    OneUIMenuItem(L10n.t(S.ReminderTimes), { menu = false; onClickTimes() }, Icons.Outlined.Schedule)
+                    OneUIMenuItem(L10n.t(S.Delete), { menu = false; onDeleteClick() }, Icons.Outlined.Delete, true)
                 }
             }
         }
     }
 }
+
