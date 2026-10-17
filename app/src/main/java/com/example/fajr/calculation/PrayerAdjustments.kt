@@ -48,4 +48,30 @@ object PrayerAdjustments {
             calendar, latitude, longitude, method, asrFactor, highLatRule(context), offsetMinutes(context)
         )
     }
+
+    fun hijriOffsetDays(context: Context): Int =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getInt("hijri_offset", 0)
+
+    fun setAsrHanafi(context: Context, hanafi: Boolean) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putInt("asr_juristic", if (hanafi) 1 else 0).apply()
+    }
+
+    fun setHighLatRule(context: Context, rule: Int) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putInt("high_lat_rule", rule.coerceIn(0, 3)).apply()
+    }
+
+    private val OFFSET_KEYS = arrayOf("adj_fajr", "adj_shuruq", "adj_dhuhr", "adj_asr", "adj_maghrib", "adj_isha")
+
+    fun setOffsetMinutes(context: Context, prayerIndex: Int, minutes: Int) {
+        if (prayerIndex !in 0..5) return
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putInt(OFFSET_KEYS[prayerIndex], minutes.coerceIn(-30, 30)).apply()
+    }
+
+    fun setHijriOffsetDays(context: Context, days: Int) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putInt("hijri_offset", days.coerceIn(-2, 2)).apply()
+    }
 }
