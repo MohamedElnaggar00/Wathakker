@@ -2,7 +2,7 @@ name: Build Android APK
 
 # Build from source and upload the debug APK as a workflow artifact.
 # Pushes build + sign + upload the APK artifact. The pre-release is published only on manual
-# workflow_dispatch (tagged v3.0.7-pre.<run number>) after the user's screenshot review.
+# workflow_dispatch (tagged v3.1.0-pre.<run number>) after the user's screenshot review.
 on:
   push:
     branches:
@@ -101,12 +101,27 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v3.0.7-pre.${{ github.run_number }}
+          TAG=v3.1.0-pre.${{ github.run_number }}
           cp app/build/outputs/apk/debug/app-debug.apk Wathakker-$TAG.apk
           cat > notes.md <<'NOTES'
-          Wathakker 3.0.7 pre-release build for testing.
+          Wathakker 3.1.0 pre-release ${{ github.run_number }} for testing.
+
+          **The app is relaunched and redesigned in the One UI design language.**
+
+          وذكر - تطبيق يذكرك بمواقيت الصلاة والذكر في يومك وليلتك
+
+          ## What's new in 3.1.0
+          - Prayer alerts merged into one system: a bell on every prayer row (all six, including Shuruq) - tap to toggle, long-press for per-prayer settings.
+          - Per-prayer alert mode (full adhan or notification) and timing (at adhan time or minutes before), with shared sound, vibration, volume, and duration settings.
+          - Iqama reminders with per-prayer delays (Fajr 25, Dhuhr/Asr/Isha 20, Maghrib 10 minutes).
+          - Automatic Do-Not-Disturb between adhan and iqama.
+          - New Location & calculation screen: location, calculation method, juristic school, high-latitude rules, and per-prayer minute adjustments with instant recalculation.
+          - Qibla compass: dark dial with live degree readout, true-north correction, calibration prompt, and haptic alignment feedback.
+          - Optional prayer times: Imsak, Duha, Midnight, and Qiyam rows (off by default, enabled from Settings).
+          - Hijri <-> Gregorian date converter (Umm al-Qura).
+          - Full English UI audit and localized lock-screen widgets.
           NOTES
-          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.0.7 pre-release ${{ github.run_number }}" --notes-file notes.md
+          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.1.0 pre-release ${{ github.run_number }}" --notes-file notes.md
 
       - name: Fail if build failed
         if: steps.build.outcome == 'failure' || steps.sign.outcome == 'failure'
