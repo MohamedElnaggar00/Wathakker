@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fajr.calculation.CalculationMethod
 import com.example.fajr.data.FajrPreferences
+import com.example.fajr.calculation.PrayerAdjustments
 import com.example.fajr.calculation.PrayerTimesCalculator
 import com.example.fajr.ui.CitySearchDialog
 import com.example.ui.oneui.OneUICard
@@ -92,13 +93,13 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
     val dayKey = cal.get(Calendar.YEAR) * 1000 + cal.get(Calendar.DAY_OF_YEAR)
     val days = remember(dayKey, latitude, longitude, method) {
         val todayCal = Calendar.getInstance()
-        val t = PrayerTimesCalculator.INSTANCE.calculateAll(todayCal, latitude, longitude, method)
+        val t = PrayerAdjustments.calculateAll(context, todayCal, latitude, longitude, method)
         val tomorrowCal = todayCal.clone() as Calendar
         tomorrowCal.add(Calendar.DAY_OF_YEAR, 1)
-        val tm = PrayerTimesCalculator.INSTANCE.calculateAll(tomorrowCal, latitude, longitude, method)
+        val tm = PrayerAdjustments.calculateAll(context, tomorrowCal, latitude, longitude, method)
         val yesterdayCal = todayCal.clone() as Calendar
         yesterdayCal.add(Calendar.DAY_OF_YEAR, -1)
-        val y = PrayerTimesCalculator.INSTANCE.calculateAll(yesterdayCal, latitude, longitude, method)
+        val y = PrayerAdjustments.calculateAll(context, yesterdayCal, latitude, longitude, method)
         Triple(t, tm, y)
     }
     val today = days.first
