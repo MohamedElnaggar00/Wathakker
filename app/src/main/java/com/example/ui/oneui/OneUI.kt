@@ -46,6 +46,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -651,14 +654,16 @@ fun OneUIDrawer(
                     )
             )
         }
-        AnimatedVisibility(
-            visible = open,
-            modifier = Modifier.align(Alignment.CenterStart),
-            enter = slideInHorizontally(tween(280)) { -it } + fadeIn(tween(220)),
-            exit = slideOutHorizontally(tween(280)) { -it } + fadeOut(tween(220))
-        ) {
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        val drawerProgress by animateFloatAsState(if (open) 1f else 0f, tween(280), label = "drawerSlide")
+        if (open || drawerProgress > 0f) {
+            val drawerSlidePx = with(LocalDensity.current) { 324.dp.toPx() }
+            val slideSign = if (isRtl) 1f else -1f
             Column(
                 modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .offset { IntOffset((slideSign * (1f - drawerProgress) * drawerSlidePx).toInt(), 0) }
+                    .alpha(drawerProgress)
                     .padding(start = 12.dp, top = 28.dp, bottom = 28.dp)
                     .width(300.dp)
                     .fillMaxHeight()
@@ -695,3 +700,4 @@ fun OneUIDrawer(
         }
     }
 }
+
