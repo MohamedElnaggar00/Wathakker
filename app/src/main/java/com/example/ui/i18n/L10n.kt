@@ -40,7 +40,10 @@ enum class S {
     Tagline, Version, Developer, DevName, HisnCredit, InstinctCredit, Dua,
     Font, FontLight, FontBold, FontSystem, FontCairo, FontNaskh, FontAmiri, FontRuqaa,
     PrayerFajr, PrayerShuruq, PrayerDhuhr, PrayerAsr, PrayerMaghrib, PrayerIsha, PrayerTimes, NextPrayer, AmMarker, PmMarker, PickCountryCity, SearchCityHint, NoSearchResults, FajrPrayer, FajrNow, Snooze, StopAlarm, ChooseSnooze, MinutesShortFmt, ColorWhite, ColorBlack, ColorGray, ColorBlue, ColorGreen, ColorAmber, ColorBlueDark, ColorGreenDark, WidgetSettings, BarColor, BgColor, PickRingtone, FajrAlarmOn, AlarmEnabledSub, AlarmDisabledSub, LocationMethod, CurrentLocation, AutoUpdateFajr, PickCitySub, CurrentCity, ChangeCity, NoLocPermission, GpsOff, CalcMethod, SelectedCalcMethod, Change, UpdatingTime, UpdateFajrNow, AlarmToneSection, SelectedTone, SystemTones, AudioFile, ExtraSettings, VibrateDuringAlarm, AlarmVolume, SnoozeDuration, NextFajrAt, AlarmOnDesc, AlarmOffDesc, PickCalcMethod,
-    NotifReminder, NotifReadDone, NotifRemindLater, NotifOpenApp, NotifChannelAzkar, NotifChannelFajr, TodayAt, TomorrowAt, DefaultAlarmTone
+    NotifReminder, NotifReadDone, NotifRemindLater, NotifOpenApp, NotifChannelAzkar, NotifChannelFajr, TodayAt, TomorrowAt, DefaultAlarmTone,
+    LocCalcTitle, LocCalcSubtitle, LocSection, CalcSection, AsrJuristic, AsrShafii, AsrHanafi,
+    HighLatRule, HighLatNone, HighLatMiddle, HighLatSeventh, HighLatAngle,
+    AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort
 }
 
 object L10n {
