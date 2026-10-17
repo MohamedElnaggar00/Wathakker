@@ -200,12 +200,17 @@ fun OneUIScreen(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            Row(
-                modifier = HeaderTools.scrollTile(Modifier, barAlpha).height(52.dp).padding(horizontal = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HeaderTools.SettingsButton()
-                actions?.invoke(this)
+            // On the Settings screen the gear is suppressed, so the trailing group would be an
+            // empty tile (the faint ghost pill). Skip the group entirely in that case.
+            val showSettingsButton = !HeaderTools.isOnSettings()
+            if (showSettingsButton || actions != null) {
+                Row(
+                    modifier = HeaderTools.scrollTile(Modifier, barAlpha).height(52.dp).padding(horizontal = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (showSettingsButton) HeaderTools.SettingsButton()
+                    actions?.invoke(this)
+                }
             }
         }
     }
