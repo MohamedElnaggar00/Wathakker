@@ -223,7 +223,7 @@ public final class WidgetUpdater {
         cal.setTimeInMillis(now);
         PrayerTimesCalculator prayerTimesCalculator = PrayerTimesCalculator.INSTANCE;
         Intrinsics.checkNotNull(cal);
-        PrayerTimesCalculator.DayPrayerTimes today = prayerTimesCalculator.calculateAll(cal, prefs2.getLatitude(), prefs2.getLongitude(), method);
+        PrayerTimesCalculator.DayPrayerTimes today = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.calculateAll(context, cal, prefs2.getLatitude(), prefs2.getLongitude(), method);
         List times = java.util.Arrays.asList(new Long[]{Long.valueOf(today.getFajr()), Long.valueOf(today.getSunrise()), Long.valueOf(today.getDhuhr()), Long.valueOf(today.getAsr()), Long.valueOf(today.getMaghrib()), Long.valueOf(today.getIsha())});
         com.example.ui.i18n.L10n lx = com.example.ui.i18n.L10n.INSTANCE;
         lx.init(context);
@@ -255,7 +255,7 @@ public final class WidgetUpdater {
             prefs = prefs2;
             names = names2;
             str = "null cannot be cast to non-null type java.util.Calendar";
-            PrayerTimesCalculator.DayPrayerTimes tomorrow = prayerTimesCalculator2.calculateAll(calendar, latitude, longitude, method);
+            PrayerTimesCalculator.DayPrayerTimes tomorrow = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.calculateAll(context, calendar, latitude, longitude, method);
             long nextMillis2 = tomorrow.getFajr();
             nextIndex = 0;
             nextName = (String) names2.get(0);
@@ -290,7 +290,7 @@ public final class WidgetUpdater {
             Intrinsics.checkNotNull(clone2, str);
             Calendar yesterdayCal = (Calendar) clone2;
             yesterdayCal.add(6, i);
-            long prevMillis2 = PrayerTimesCalculator.INSTANCE.calculateAll(yesterdayCal, prefs.getLatitude(), prefs.getLongitude(), method).getIsha();
+            long prevMillis2 = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.calculateAll(context, yesterdayCal, prefs.getLatitude(), prefs.getLongitude(), method).getIsha();
             prevName = (String) names2.get(5);
             prevMillis = prevMillis2;
         } else {
@@ -462,14 +462,14 @@ public final class WidgetUpdater {
         Intrinsics.checkNotNull(clone, "null cannot be cast to non-null type java.util.Calendar");
         Calendar calendar = (Calendar) clone;
         calendar.add(6, -1);
-        PrayerTimesCalculator.DayPrayerTimes yesterday = prayerTimesCalculator.calculateAll(calendar, prefs.getLatitude(), prefs.getLongitude(), method);
+        PrayerTimesCalculator.DayPrayerTimes yesterday = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.calculateAll(context, calendar, prefs.getLatitude(), prefs.getLongitude(), method);
         W yIsha = new W("العشاء", yesterday.getIsha(), computeIqamaState$iqamaOf("العشاء", yesterday.getIsha()));
         PrayerTimesCalculator prayerTimesCalculator2 = PrayerTimesCalculator.INSTANCE;
         Object clone2 = cal.clone();
         Intrinsics.checkNotNull(clone2, "null cannot be cast to non-null type java.util.Calendar");
         Calendar calendar2 = (Calendar) clone2;
         calendar2.add(6, 1);
-        PrayerTimesCalculator.DayPrayerTimes tomorrow = prayerTimesCalculator2.calculateAll(calendar2, prefs.getLatitude(), prefs.getLongitude(), method);
+        PrayerTimesCalculator.DayPrayerTimes tomorrow = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.calculateAll(context, calendar2, prefs.getLatitude(), prefs.getLongitude(), method);
         W tFajr = new W("الفجر", tomorrow.getFajr(), computeIqamaState$iqamaOf("الفجر", tomorrow.getFajr()));
         List all = CollectionsKt.sortedWith(CollectionsKt.plus((Collection) CollectionsKt.plus((Collection) CollectionsKt.listOf(yIsha), (Iterable) windows), (Iterable) CollectionsKt.listOf(tFajr)), new Comparator() { // from class: com.example.widget.WidgetUpdater$computeIqamaState$$inlined$sortedBy$1
             /* JADX WARN: Multi-variable type inference failed */
