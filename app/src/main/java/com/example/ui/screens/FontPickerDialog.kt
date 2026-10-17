@@ -21,10 +21,12 @@ import com.example.ui.oneui.OneUIDivider
 import com.example.ThemeSettings
 import com.example.ui.theme.FontChoice
 import com.example.ui.theme.fontFamilyFor
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun FontPickerDialog(selected: FontChoice, onSelect: (FontChoice) -> Unit, onDismiss: () -> Unit) {
-    OneUIDialog(title = "الخط", onDismiss = onDismiss, dismissText = "إغلاق") {
+    OneUIDialog(title = L10n.t(S.Font), onDismiss = onDismiss, dismissText = L10n.t(S.Close)) {
         FontChoice.entries.forEachIndexed { index, choice ->
             if (index > 0) OneUIDivider(4.dp)
             Row(
@@ -57,11 +59,11 @@ fun FontPickerDialog(selected: FontChoice, onSelect: (FontChoice) -> Unit, onDis
 @Composable
 fun ThemePickerDialog(selected: String, onSelect: (String) -> Unit, onDismiss: () -> Unit) {
     val options = listOf(
-        ThemeSettings.AUTO to "تلقائي (النظام)",
-        ThemeSettings.LIGHT to "فاتح",
-        ThemeSettings.DARK to "داكن"
+        ThemeSettings.AUTO to L10n.t(S.SystemAuto),
+        ThemeSettings.LIGHT to L10n.t(S.Light),
+        ThemeSettings.DARK to L10n.t(S.Dark)
     )
-    OneUIDialog(title = "المظهر", onDismiss = onDismiss, dismissText = "إغلاق") {
+    OneUIDialog(title = L10n.t(S.Appearance), onDismiss = onDismiss, dismissText = L10n.t(S.Close)) {
         options.forEachIndexed { index, (key, label) ->
             if (index > 0) OneUIDivider(4.dp)
             Row(
