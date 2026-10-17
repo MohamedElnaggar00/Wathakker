@@ -47,6 +47,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.animation.AnimatedVisibility
@@ -641,11 +643,12 @@ fun OneUIDrawer(
                     )
             )
         }
+        val drawerRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         AnimatedVisibility(
             visible = open,
             modifier = Modifier.align(Alignment.CenterStart),
-            enter = slideInHorizontally(tween(280)) { -it } + fadeIn(tween(220)),
-            exit = slideOutHorizontally(tween(280)) { -it } + fadeOut(tween(220))
+            enter = slideInHorizontally(tween(280)) { if (drawerRtl) it else -it } + fadeIn(tween(220)),
+            exit = slideOutHorizontally(tween(280)) { if (drawerRtl) it else -it } + fadeOut(tween(220))
         ) {
             Column(
                 modifier = Modifier
