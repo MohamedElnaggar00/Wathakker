@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import com.example.fajr.calculation.CalculationMethod
 import com.example.fajr.data.FajrPreferences
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.NotificationsOff
 import com.example.prayer.alerts.PrayerAlertScheduler
@@ -62,6 +63,7 @@ import com.example.fajr.ui.CitySearchDialog
 import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIDivider
 import com.example.ui.oneui.OneUIProgressBar
+import com.example.ui.oneui.OneUIIconAction
 import com.example.ui.oneui.OneUIScreen
 import com.example.ui.theme.OneUIActiveGreen
 import com.example.ui.theme.OneUITimeCyan
@@ -77,7 +79,7 @@ import com.example.ui.i18n.Lang
 fun SavedCity(): String = FajrPreferences(LocalContext.current).cityName
 
 @Composable
-fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
+fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = null) {
     val context: Context = LocalContext.current
     val prefs = remember { FajrPreferences(context) }
     var latitude by remember { mutableDoubleStateOf(prefs.latitude) }
@@ -147,6 +149,7 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
         },
         onChangeCity = { showCitySearch = true },
         onMenu = onMenu,
+        onQibla = onQibla,
         bellStates = remember(bellTick, L10n.lang) { (0..5).map { PrayerAlertStore.isEnabled(context, it) } },
         onBellClick = { idx ->
             PrayerAlertStore.setEnabled(context, idx, !PrayerAlertStore.isEnabled(context, idx))
@@ -214,12 +217,19 @@ fun PrayerTimesContent(
     rows: List<PrayerRowDisplay>,
     onChangeCity: () -> Unit,
     onMenu: (() -> Unit)? = null,
+    onQibla: (() -> Unit)? = null,
     bellStates: List<Boolean> = List(6) { false },
     onBellClick: (Int) -> Unit = {},
     onBellLongClick: (Int) -> Unit = {}
 ) {
     val cs = MaterialTheme.colorScheme
-    OneUIScreen(title = L10n.t(S.PrayerTimes), onMenu = onMenu) {
+    OneUIScreen(
+        title = L10n.t(S.PrayerTimes),
+        onMenu = onMenu,
+        actions = if (onQibla != null) {
+            { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
+        } else null
+    ) {
         item(key = "prayer-overview") {
             // One card: date and location, a divider, then the next-prayer block.
             OneUICard(padding = PaddingValues(20.dp)) {
