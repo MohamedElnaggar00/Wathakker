@@ -165,12 +165,17 @@ fun MainScreen(viewModel: MainViewModel) {
                     SettingsScreen(
                         viewModel,
                         { navController.popBackStack() },
-                        { navController.navigate("fajr_settings") }
+                        { navController.navigate("fajr_settings") },
+                        { navController.navigate("location_calc") }
                     )
                 }
                 composable("fajr_settings") {
                     val fajrViewModel: FajrViewModel = viewModel()
                     FajrSettingsScreen(fajrViewModel) { navController.popBackStack() }
+                }
+                composable("location_calc") {
+                    val fajrViewModel: FajrViewModel = viewModel()
+                    com.example.prayer.LocationCalculationScreen(fajrViewModel) { navController.popBackStack() }
                 }
                 composable("about") { AboutScreen { navController.popBackStack() } }
             }
