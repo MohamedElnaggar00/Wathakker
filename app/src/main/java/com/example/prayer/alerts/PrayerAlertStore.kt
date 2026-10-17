@@ -48,6 +48,17 @@ object PrayerAlertStore {
         p(context).edit().putInt("offset_$prayer", minutes.coerceIn(0, 60)).apply()
     }
 
+    /** Auto-DND during adhan -> iqama window (gap item 3). */
+    fun autoDnd(context: Context, prayer: Int): Boolean {
+        migrate(context)
+        return p(context).getBoolean("dnd_" + prayer, false)
+    }
+
+    fun setAutoDnd(context: Context, prayer: Int, enabled: Boolean) {
+        migrate(context)
+        p(context).edit().putBoolean("dnd_" + prayer, enabled).apply()
+    }
+
     fun iqamaReminder(context: Context, prayer: Int): Boolean {
         migrate(context)
         return p(context).getBoolean("iqama_$prayer", false)
