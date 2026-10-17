@@ -6,6 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -49,6 +51,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.animation.AnimatedVisibility
@@ -147,6 +150,21 @@ fun OneUIScreen(
             }
             content()
         }
+        // Scroll-aware scrim behind the floating header: keeps scrolled content from
+        // colliding with the status bar / showing raw between the glass pills.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(statusTop + 72.dp)
+                .graphicsLayer { alpha = barAlpha }
+                .background(
+                    Brush.verticalGradient(
+                        0f to MaterialTheme.colorScheme.background,
+                        0.55f to MaterialTheme.colorScheme.background.copy(alpha = 0.92f),
+                        1f to MaterialTheme.colorScheme.background.copy(alpha = 0f)
+                    )
+                )
+        )
         // Top bar: menu or back on one side, settings and extra actions on the other.
         // The row itself is always visible; only the tile behind each group and the small title fade in on scroll.
         Row(
@@ -553,7 +571,16 @@ fun OneUIBottomBar(
                 ) {
                     tab.icon(tint)
                 }
-                Text(tab.label, color = tint, fontSize = 11.sp, maxLines = 1, style = MaterialTheme.typography.labelSmall)
+                Text(
+                    text = tab.label,
+                    color = tint,
+                    fontSize = 11.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp),
+                    style = MaterialTheme.typography.labelSmall
+                )
             }
         }
     }
@@ -643,12 +670,12 @@ fun OneUIDrawer(
                     )
             )
         }
-        val drawerRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        val drawerRtlState = rememberUpdatedState(LocalLayoutDirection.current == LayoutDirection.Rtl)
         AnimatedVisibility(
             visible = open,
             modifier = Modifier.align(Alignment.CenterStart),
-            enter = slideInHorizontally(tween(280)) { if (drawerRtl) it else -it } + fadeIn(tween(220)),
-            exit = slideOutHorizontally(tween(280)) { if (drawerRtl) it else -it } + fadeOut(tween(220))
+            enter = slideInHorizontally(tween(280)) { if (drawerRtlState.value) it else -it } + fadeIn(tween(220)),
+            exit = slideOutHorizontally(tween(280)) { if (drawerRtlState.value) it else -it } + fadeOut(tween(220))
         ) {
             Column(
                 modifier = Modifier
