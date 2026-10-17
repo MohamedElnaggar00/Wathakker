@@ -1,0 +1,442 @@
+outcome: failure  bom: 2025.10.01  run: 39050574988  sha: 5af8d9fb5bd91a7459a08d64dbfd9de33d10fb9e
+errors: 14
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 2838
+--- kotlin per file
+   2806 L10nTables.kt
+     16 HijriConverterScreen.kt
+     14 L10n.kt
+      2 SettingsScreen.kt
+--- kotlin details
+e: com/example/prayer/HijriConverterScreen.kt:118:34 Unresolved reference 'HijriConvTitle'.
+e: com/example/prayer/HijriConverterScreen.kt:121:26 Unresolved reference 'HijriConvSub'.
+e: com/example/prayer/HijriConverterScreen.kt:126:57 Unresolved reference 'GregToHijri'.
+e: com/example/prayer/HijriConverterScreen.kt:130:38 Unresolved reference 'DayLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:136:38 Unresolved reference 'MonthLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:142:38 Unresolved reference 'YearLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:150:57 Unresolved reference 'HijriToGreg'.
+e: com/example/prayer/HijriConverterScreen.kt:154:38 Unresolved reference 'DayLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:160:38 Unresolved reference 'MonthLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:166:38 Unresolved reference 'YearLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:197:30 Unresolved reference 'DayLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:204:30 Unresolved reference 'MonthLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:216:30 Unresolved reference 'YearLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:228:30 Unresolved reference 'DayLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:235:30 Unresolved reference 'MonthLabel'.
+e: com/example/prayer/HijriConverterScreen.kt:247:30 Unresolved reference 'YearLabel'.
+e: com/example/ui/i18n/L10n.kt:48:106 Syntax error: Expecting ';' after the last enum entry or '}' to close enum class body.
+e: com/example/ui/i18n/L10n.kt:49:5 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:19 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:21 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:33 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:35 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:46 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:48 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:59 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:61 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:69 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:71 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:81 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10n.kt:49:83 Syntax error: Expecting member declaration.
+e: com/example/ui/i18n/L10nTables.kt:3:47 Not enough information to infer type argument for 'K'.
+e: com/example/ui/i18n/L10nTables.kt:8:19 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:9:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:9:30 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:9:55 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:9:82 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:10:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:10:31 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:10:57 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:10:85 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:11:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:11:28 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:11:55 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:11:81 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:11:101 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:12:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:12:32 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:12:73 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:12:90 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:13:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:13:63 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:14:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:14:28 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:14:73 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:14:109 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:15:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:15:53 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:15:73 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:16:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:16:36 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:16:75 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:17:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:17:73 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:18:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:18:41 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:18:92 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:19:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:19:34 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:19:63 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:19:101 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:20:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:20:37 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:20:58 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:21:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:21:60 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:22:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:22:44 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:23:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:23:50 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:24:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:24:49 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:24:83 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:25:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:25:53 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:26:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:26:35 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:27:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:27:32 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:27:70 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:27:89 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:28:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:28:35 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:28:63 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:29:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:29:38 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:29:70 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:30:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:30:52 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:30:88 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:31:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:31:24 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:31:42 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:32:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:32:42 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:33:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:33:35 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:34:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:35:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:36:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:37:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:37:41 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:38:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:38:52 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:39:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:39:75 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:40:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:40:37 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:40:63 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:40:90 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:41:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:41:32 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:42:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:42:31 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:42:61 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:42:88 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:43:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:43:26 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:43:44 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:43:84 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:44:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:44:38 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:45:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:45:57 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:46:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:46:47 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:46:79 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:47:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:47:41 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:48:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:48:73 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:48:97 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:49:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:49:33 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:50:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:50:54 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:51:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:51:23 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:51:59 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:51:94 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:52:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:52:34 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:52:61 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:52:88 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:53:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:54:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:55:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:56:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:57:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:58:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:59:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:60:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:61:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:62:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:63:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:64:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:65:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:66:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:67:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:68:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:69:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:70:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:71:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:72:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:73:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:74:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:75:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:76:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:77:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:78:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:79:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:80:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:81:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:82:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:83:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:84:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:85:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:86:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:87:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:88:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:89:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:90:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:91:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:92:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:93:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:94:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:95:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:96:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:97:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:98:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:99:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:100:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:101:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:102:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:103:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:104:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:105:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:106:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:107:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:108:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:109:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:110:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:111:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:112:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:113:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:114:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:115:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:116:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:117:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:118:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:119:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:120:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:121:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:121:41 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:122:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:122:31 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:122:77 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:123:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:123:63 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:123:124 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:123:168 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:124:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:124:46 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:125:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:125:41 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:125:131 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:125:153 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:125:172 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:125:201 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:5 Argument type mismatch: actual type is 'Pair<uninferred A (of fun <A, B> A.to), uninferred B (of fun <A, B> A.to)>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:7 Unresolved reference 'HijriConvTitle'.
+e: com/example/ui/i18n/L10nTables.kt:126:22 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:126:41 Argument type mismatch: actual type is 'Pair<uninferred A (of fun <A, B> A.to), uninferred B (of fun <A, B> A.to)>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:43 Unresolved reference 'HijriConvSub'.
+e: com/example/ui/i18n/L10nTables.kt:126:56 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:126:97 Argument type mismatch: actual type is 'Pair<uninferred A (of fun <A, B> A.to), uninferred B (of fun <A, B> A.to)>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:99 Unresolved reference 'GregToHijri'.
+e: com/example/ui/i18n/L10nTables.kt:126:111 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:126:136 Argument type mismatch: actual type is 'Pair<uninferred A (of fun <A, B> A.to), uninferred B (of fun <A, B> A.to)>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:138 Unresolved reference 'HijriToGreg'.
+e: com/example/ui/i18n/L10nTables.kt:126:150 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:126:175 Argument type mismatch: actual type is 'Pair<uninferred A (of fun <A, B> A.to), uninferred B (of fun <A, B> A.to)>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:177 Unresolved reference 'DayLabel'.
+e: com/example/ui/i18n/L10nTables.kt:126:186 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:126:198 Argument type mismatch: actual type is 'Pair<uninferred A (of fun <A, B> A.to), uninferred B (of fun <A, B> A.to)>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:200 Unresolved reference 'MonthLabel'.
+e: com/example/ui/i18n/L10nTables.kt:126:211 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:126:223 Argument type mismatch: actual type is 'Pair<uninferred A (of fun <A, B> A.to), uninferred B (of fun <A, B> A.to)>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:126:225 Unresolved reference 'YearLabel'.
+e: com/example/ui/i18n/L10nTables.kt:126:235 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:127:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:127:31 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:128:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:128:40 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:128:78 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:129:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:129:50 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:129:74 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:130:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:130:38 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:131:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:132:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:133:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:133:43 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:133:65 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:134:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:134:35 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:134:64 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:135:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:135:37 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:135:68 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:136:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:136:41 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:137:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:137:45 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:138:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:138:42 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:142:19 Cannot infer type for this parameter. Specify it explicitly.
+e: com/example/ui/i18n/L10nTables.kt:143:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:143:30 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:143:53 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:143:74 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:144:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:144:32 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:144:60 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:144:88 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:145:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:145:23 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:145:49 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:145:69 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:145:87 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:146:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:146:32 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:146:73 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:146:89 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:147:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:147:54 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:148:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:148:29 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:148:71 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:148:108 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:149:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:149:51 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:149:71 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:150:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:150:34 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:150:75 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:151:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:151:77 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:152:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:152:44 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:153:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:153:44 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:153:66 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:153:93 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:154:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:154:37 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:154:66 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:154:84 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:155:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:155:48 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:155:79 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:156:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:156:38 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:156:83 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:157:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:157:50 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:157:79 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:158:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:158:56 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:159:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:159:34 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:160:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:160:28 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:160:55 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:160:73 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:160:96 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:161:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:161:30 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:161:50 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:161:84 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:162:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:162:40 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:162:87 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:163:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:163:43 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:163:63 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:163:81 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:164:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:164:45 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:165:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:165:36 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:166:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:167:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:168:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:169:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:169:44 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:170:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:170:54 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:171:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:171:82 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:172:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:172:43 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:172:67 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:172:95 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:173:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:173:30 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:174:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:174:32 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:174:61 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:174:86 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:175:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:175:27 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:175:43 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:175:85 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:176:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:176:40 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:177:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:177:58 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:178:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:178:48 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:178:77 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:179:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:179:42 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:180:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:180:76 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:180:100 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:181:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:181:38 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:182:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+e: com/example/ui/i18n/L10nTables.kt:182:65 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+--- sign log
+--- details
+63:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:48:106 Syntax error: Expecting ';' after the last enum entry or '}' to close enum class body.
+64:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:5 Syntax error: Expecting member declaration.
+65:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:19 Syntax error: Expecting member declaration.
+66:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:21 Syntax error: Expecting member declaration.
+67:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:33 Syntax error: Expecting member declaration.
+68:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:35 Syntax error: Expecting member declaration.
+69:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:46 Syntax error: Expecting member declaration.
+70:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:48 Syntax error: Expecting member declaration.
+71:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:59 Syntax error: Expecting member declaration.
+72:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:61 Syntax error: Expecting member declaration.
+73:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:69 Syntax error: Expecting member declaration.
+74:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:71 Syntax error: Expecting member declaration.
+75:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:81 Syntax error: Expecting member declaration.
+76:e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10n.kt:49:83 Syntax error: Expecting member declaration.
+77-e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10nTables.kt:3:47 Not enough information to infer type argument for 'K'.
+78-e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10nTables.kt:8:19 Cannot infer type for this parameter. Specify it explicitly.
+79-e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10nTables.kt:9:5 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+80-e: file:///home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/ui/i18n/L10nTables.kt:9:30 Argument type mismatch: actual type is 'Pair<S, String>', but 'Pair<uninferred K (of fun <K, V> mapOf), uninferred V (of fun <K, V> mapOf)>' was expected.
+--
+2890:* What went wrong:
+2891:Execution failed for task ':app:compileDebugKotlin'.
+2892-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2893-   > Compilation error. See log for more details
+2894-
+2895-* Try:
+--
+2901:BUILD FAILED in 3m 20s
+2902-24 actionable tasks: 24 executed
