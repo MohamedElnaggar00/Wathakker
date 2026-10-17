@@ -409,11 +409,27 @@ if [ -n "$LC_FAJR" ]; then
   SL=$(seekbar_below $2)
   if [ -n "$SL" ]; then
     set -- $SL
-    # RTL slider: increasing is toward the LEFT; drag left ~120px for a few minutes
-    adb shell input swipe $1 $2 $(($1-120)) $2 700; sleep 2
+    # RTL slider: increasing is toward the LEFT; drag decisively, retry opposite direction if the
+    # first drag is absorbed as a tap (slow emulators occasionally drop the move events)
+    adb shell input swipe $1 $2 $(($1-200)) $2 1200; sleep 2
     shot 04c-offset-slider-dragged
     back_to_prayer
     FAJR_AFTER=$(prayer_time "الفجر")
+    if [ "$FAJR_AFTER" = "$FAJR_BEFORE" ]; then
+      say "INFO: first drag absorbed; retrying drag to the right"
+      goto_location
+      scroll_until "الفجر"
+      LC2=$(find_center text "الفجر")
+      SL2=""
+      [ -n "$LC2" ] && { set -- $LC2; SL2=$(seekbar_below $2); }
+      if [ -n "$SL2" ]; then
+        set -- $SL2
+        adb shell input swipe $1 $2 $(($1+200)) $2 1200; sleep 2
+        shot 04c2-offset-slider-dragged-retry
+        back_to_prayer
+        FAJR_AFTER=$(prayer_time "الفجر")
+      fi
+    fi
     say "INFO: Fajr time before=$FAJR_BEFORE after=$FAJR_AFTER (slider drag left)"
     if [ -n "$FAJR_BEFORE" ] && [ -n "$FAJR_AFTER" ] && [ "$FAJR_BEFORE" != "$FAJR_AFTER" ]; then
       say "PASS: per-prayer offset slider changed Fajr time ($FAJR_BEFORE -> $FAJR_AFTER)"
