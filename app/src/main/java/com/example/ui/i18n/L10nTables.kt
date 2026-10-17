@@ -118,6 +118,15 @@ internal val AR = mapOf(
     S.TodayAt to "اليوم في",
     S.TomorrowAt to "غداً في",
     S.DefaultAlarmTone to "نغمة المنبه الافتراضية",
+    S.LocCalcTitle to "الموقع والحساب", S.LocCalcSubtitle to "المدينة وطريقة الحساب والتعديلات",
+    S.LocSection to "الموقع", S.CalcSection to "الحساب",
+    S.AsrJuristic to "حساب وقت العصر", S.AsrShafii to "شافعي ومالكي وحنبلي", S.AsrHanafi to "حنفي",
+    S.HighLatRule to "قاعدة خطوط العرض العالية", S.HighLatNone to "بلا", S.HighLatMiddle to "منتصف الليل",
+    S.HighLatSeventh to "سبع الليل", S.HighLatAngle to "نسبة الزاوية",
+    S.AdjSection to "تعديلات المواقيت",
+    S.AdjNote to "دقائق تُضاف أو تُخصم من كل وقت محسوب. تُطبَّق فورًا على المواقيت والويدجتس والتنبيهات.",
+    S.AdjHijri to "تعديل التاريخ الهجري", S.AdjMinShort to "د", S.AdjDayShort to "يوم",
+
 )
 
 internal val EN = mapOf(
@@ -231,6 +240,15 @@ internal val EN = mapOf(
     S.TodayAt to "Today at",
     S.TomorrowAt to "Tomorrow at",
     S.DefaultAlarmTone to "Default alarm tone",
+    S.LocCalcTitle to "Location & calculation", S.LocCalcSubtitle to "City, method and time adjustments",
+    S.LocSection to "Location", S.CalcSection to "Calculation",
+    S.AsrJuristic to "Asr calculation", S.AsrShafii to "Shafi'i, Maliki, Hanbali", S.AsrHanafi to "Hanafi",
+    S.HighLatRule to "High-latitude rule", S.HighLatNone to "None", S.HighLatMiddle to "Middle of the night",
+    S.HighLatSeventh to "One-seventh of the night", S.HighLatAngle to "Angle-based",
+    S.AdjSection to "Time adjustments",
+    S.AdjNote to "Minutes added to or subtracted from each calculated time. Applies instantly to prayer times, widgets and alerts.",
+    S.AdjHijri to "Hijri date adjustment", S.AdjMinShort to "min", S.AdjDayShort to "days",
+
 )
 
 internal val FR = mapOf(
@@ -350,6 +368,15 @@ internal val FR = mapOf(
     S.TodayAt to "Aujourd'hui à",
     S.TomorrowAt to "Demain à",
     S.DefaultAlarmTone to "Sonnerie par défaut",
+    S.LocCalcTitle to "Lieu et calcul", S.LocCalcSubtitle to "Ville, méthode et ajustements",
+    S.LocSection to "Lieu", S.CalcSection to "Calcul",
+    S.AsrJuristic to "Calcul de l'Asr", S.AsrShafii to "Chaféite, malikite, hanbalite", S.AsrHanafi to "Hanéfite",
+    S.HighLatRule to "Règle des hautes latitudes", S.HighLatNone to "Aucune", S.HighLatMiddle to "Milieu de la nuit",
+    S.HighLatSeventh to "Un septième de la nuit", S.HighLatAngle to "Basée sur l'angle",
+    S.AdjSection to "Ajustements des horaires",
+    S.AdjNote to "Minutes ajoutées ou retirées de chaque horaire calculé. Application immédiate aux horaires, aux widgets et aux alertes.",
+    S.AdjHijri to "Ajustement de la date hégirienne", S.AdjMinShort to "min", S.AdjDayShort to "j",
+
 )
 
 internal val DE = mapOf(
@@ -470,6 +497,15 @@ internal val DE = mapOf(
     S.TodayAt to "Heute um",
     S.TomorrowAt to "Morgen um",
     S.DefaultAlarmTone to "Standard-Alarmton",
+    S.LocCalcTitle to "Standort & Berechnung", S.LocCalcSubtitle to "Stadt, Methode und Anpassungen",
+    S.LocSection to "Standort", S.CalcSection to "Berechnung",
+    S.AsrJuristic to "Asr-Berechnung", S.AsrShafii to "Schafiitisch, malikitisch, hanbalitisch", S.AsrHanafi to "Hanafitisch",
+    S.HighLatRule to "Regel für hohe Breitengrade", S.HighLatNone to "Keine", S.HighLatMiddle to "Mitte der Nacht",
+    S.HighLatSeventh to "Ein Siebtel der Nacht", S.HighLatAngle to "Winkelbasiert",
+    S.AdjSection to "Zeitanpassungen",
+    S.AdjNote to "Minuten, die zu jeder berechneten Zeit addiert oder von ihr subtrahiert werden. Wirkt sofort auf Zeiten, Widgets und Benachrichtigungen.",
+    S.AdjHijri to "Hijri-Datumsanpassung", S.AdjMinShort to "Min.", S.AdjDayShort to "Tage",
+
 )
 
 internal val ES = mapOf(
@@ -591,6 +627,15 @@ internal val ES = mapOf(
     S.TodayAt to "Hoy a las",
     S.TomorrowAt to "Mañana a las",
     S.DefaultAlarmTone to "Tono de alarma predeterminado",
+    S.LocCalcTitle to "Ubicación y cálculo", S.LocCalcSubtitle to "Ciudad, método y ajustes",
+    S.LocSection to "Ubicación", S.CalcSection to "Cálculo",
+    S.AsrJuristic to "Cálculo del Asr", S.AsrShafii to "Shafi'i, malikí, hanbalí", S.AsrHanafi to "Hanafí",
+    S.HighLatRule to "Regla de latitudes altas", S.HighLatNone to "Ninguna", S.HighLatMiddle to "Mitad de la noche",
+    S.HighLatSeventh to "Un séptimo de la noche", S.HighLatAngle to "Basada en el ángulo",
+    S.AdjSection to "Ajustes de horarios",
+    S.AdjNote to "Minutos que se suman o restan a cada horario calculado. Se aplica al instante a horarios, widgets y alertas.",
+    S.AdjHijri to "Ajuste de la fecha hiyri", S.AdjMinShort to "min", S.AdjDayShort to "días",
+
 )
 
 internal val IT = mapOf(
@@ -712,6 +757,15 @@ internal val IT = mapOf(
     S.TodayAt to "Oggi alle",
     S.TomorrowAt to "Domani alle",
     S.DefaultAlarmTone to "Suoneria predefinita",
+    S.LocCalcTitle to "Posizione e calcolo", S.LocCalcSubtitle to "Città, metodo e regolazioni",
+    S.LocSection to "Posizione", S.CalcSection to "Calcolo",
+    S.AsrJuristic to "Calcolo dell'Asr", S.AsrShafii to "Shafi'ita, malikita, hanbalita", S.AsrHanafi to "Hanafita",
+    S.HighLatRule to "Regola per latitudini elevate", S.HighLatNone to "Nessuna", S.HighLatMiddle to "Metà della notte",
+    S.HighLatSeventh to "Un settimo della notte", S.HighLatAngle to "Basata sull'angolo",
+    S.AdjSection to "Regolazioni degli orari",
+    S.AdjNote to "Minuti aggiunti o sottratti da ogni orario calcolato. Si applica subito a orari, widget e avvisi.",
+    S.AdjHijri to "Regolazione della data Hijri", S.AdjMinShort to "min", S.AdjDayShort to "g",
+
 )
 
 internal val TR = mapOf(
@@ -832,6 +886,15 @@ internal val TR = mapOf(
     S.TodayAt to "Bugün",
     S.TomorrowAt to "Yarın",
     S.DefaultAlarmTone to "Varsayılan alarm sesi",
+    S.LocCalcTitle to "Konum ve hesaplama", S.LocCalcSubtitle to "Şehir, yöntem ve ayarlamalar",
+    S.LocSection to "Konum", S.CalcSection to "Hesaplama",
+    S.AsrJuristic to "İkindi hesabı", S.AsrShafii to "Şafii, Maliki, Hanbeli", S.AsrHanafi to "Hanefi",
+    S.HighLatRule to "Yüksek enlem kuralı", S.HighLatNone to "Yok", S.HighLatMiddle to "Gecenin ortası",
+    S.HighLatSeventh to "Gecenin yedide biri", S.HighLatAngle to "Açıya dayalı",
+    S.AdjSection to "Vakit ayarlamaları",
+    S.AdjNote to "Hesaplanan her vakte eklenen veya çıkarılan dakikalar. Vakitlere, widget'lara ve uyarılara anında uygulanır.",
+    S.AdjHijri to "Hicri tarih ayarı", S.AdjMinShort to "dk", S.AdjDayShort to "gün",
+
 )
 
 internal val UR = mapOf(
@@ -952,6 +1015,15 @@ internal val UR = mapOf(
     S.TodayAt to "آج",
     S.TomorrowAt to "کل",
     S.DefaultAlarmTone to "الارم کی ڈیفالٹ آواز",
+    S.LocCalcTitle to "مقام اور حساب", S.LocCalcSubtitle to "شہر، طریقہ اور ترامیم",
+    S.LocSection to "مقام", S.CalcSection to "حساب",
+    S.AsrJuristic to "عصر کا حساب", S.AsrShafii to "شافعی، مالکی، حنبلی", S.AsrHanafi to "حنفی",
+    S.HighLatRule to "بلند عرض البلد کا اصول", S.HighLatNone to "کوئی نہیں", S.HighLatMiddle to "آدھی رات",
+    S.HighLatSeventh to "رات کا ساتواں حصہ", S.HighLatAngle to "زاویے کی بنیاد پر",
+    S.AdjSection to "اوقات کی ترامیم",
+    S.AdjNote to "ہر حساب شدہ وقت میں شامل یا کم کیے گئے منٹ۔ اوقات، ویجٹس اور الرٹس پر فوری لاگو ہوتے ہیں۔",
+    S.AdjHijri to "ہجری تاریخ کی ترمیم", S.AdjMinShort to "منٹ", S.AdjDayShort to "دن",
+
 )
 
 internal val ID = mapOf(
@@ -1073,6 +1145,15 @@ internal val ID = mapOf(
     S.TodayAt to "Hari ini pukul",
     S.TomorrowAt to "Besok pukul",
     S.DefaultAlarmTone to "Nada alarm bawaan",
+    S.LocCalcTitle to "Lokasi & perhitungan", S.LocCalcSubtitle to "Kota, metode, dan penyesuaian",
+    S.LocSection to "Lokasi", S.CalcSection to "Perhitungan",
+    S.AsrJuristic to "Perhitungan Ashar", S.AsrShafii to "Syafi'i, Maliki, Hanbali", S.AsrHanafi to "Hanafi",
+    S.HighLatRule to "Aturan lintang tinggi", S.HighLatNone to "Tidak ada", S.HighLatMiddle to "Pertengahan malam",
+    S.HighLatSeventh to "Seper tujuh malam", S.HighLatAngle to "Berdasarkan sudut",
+    S.AdjSection to "Penyesuaian waktu",
+    S.AdjNote to "Menit yang ditambahkan atau dikurangi dari setiap waktu terhitung. Langsung berlaku untuk waktu, widget, dan pengingat.",
+    S.AdjHijri to "Penyesuaian tanggal Hijriah", S.AdjMinShort to "mnt", S.AdjDayShort to "hari",
+
 )
 
 internal val RU = mapOf(
@@ -1194,6 +1275,15 @@ internal val RU = mapOf(
     S.TodayAt to "Сегодня в",
     S.TomorrowAt to "Завтра в",
     S.DefaultAlarmTone to "Мелодия будильника по умолчанию",
+    S.LocCalcTitle to "Местоположение и расчёт", S.LocCalcSubtitle to "Город, метод и поправки",
+    S.LocSection to "Местоположение", S.CalcSection to "Расчёт",
+    S.AsrJuristic to "Расчёт Асра", S.AsrShafii to "Шафиитский, маликитский, ханбалитский", S.AsrHanafi to "Ханафитский",
+    S.HighLatRule to "Правило высоких широт", S.HighLatNone to "Нет", S.HighLatMiddle to "Середина ночи",
+    S.HighLatSeventh to "Седьмая часть ночи", S.HighLatAngle to "По углу",
+    S.AdjSection to "Поправки времени",
+    S.AdjNote to "Минуты, добавляемые или вычитаемые из каждого рассчитанного времени. Применяется мгновенно к временам, виджетам и оповещениям.",
+    S.AdjHijri to "Поправка даты хиджры", S.AdjMinShort to "мин", S.AdjDayShort to "дн.",
+
 )
 
 internal val PT = mapOf(
@@ -1315,4 +1405,13 @@ internal val PT = mapOf(
     S.TodayAt to "Hoje às",
     S.TomorrowAt to "Amanhã às",
     S.DefaultAlarmTone to "Toque de alarme padrão",
+    S.LocCalcTitle to "Local e cálculo", S.LocCalcSubtitle to "Cidade, método e ajustes",
+    S.LocSection to "Local", S.CalcSection to "Cálculo",
+    S.AsrJuristic to "Cálculo do Asr", S.AsrShafii to "Shafi'i, maliqui, hanbali", S.AsrHanafi to "Hanafi",
+    S.HighLatRule to "Regra de altas latitudes", S.HighLatNone to "Nenhuma", S.HighLatMiddle to "Meio da noite",
+    S.HighLatSeventh to "Um sétimo da noite", S.HighLatAngle to "Baseada no ângulo",
+    S.AdjSection to "Ajustes de horários",
+    S.AdjNote to "Minutos adicionados ou subtraídos de cada horário calculado. Aplica-se de imediato a horários, widgets e alertas.",
+    S.AdjHijri to "Ajuste da data hégira", S.AdjMinShort to "min", S.AdjDayShort to "dias",
+
 )
