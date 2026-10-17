@@ -45,6 +45,8 @@ import com.example.ui.viewmodel.DhikrStats
 import com.example.ui.viewmodel.MainViewModel
 import com.example.utils.DateTimeUtilsKt
 import java.util.Calendar
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 fun computeInstances(
     enabledDhikr: List<Dhikr>,
@@ -113,9 +115,9 @@ fun HomeContent(
 ) {
     val cs = MaterialTheme.colorScheme
     val subtitle = if (activeCount == 0) {
-        "لا توجد تنبيهات مفعلة"
+        L10n.t(S.NoActiveReminders)
     } else {
-        "$activeCount " + (if (activeCount in 3..10) "تنبيهات" else "تنبيهًا") + " مفعلة"
+        L10n.remindersCount(activeCount)
     }
     OneUIScreen(title = "وَذكِّر", subtitle = subtitle, onMenu = onMenu) {
         item(key = "summary") {
@@ -125,53 +127,53 @@ fun HomeContent(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.Top
                 ) {
-                    SummaryCell("اليوم", stats.todayCount.toString(), Modifier.weight(1f))
+                    SummaryCell(L10n.t(S.Today), stats.todayCount.toString(), Modifier.weight(1f))
                     Box(Modifier.width(0.5.dp).height(44.dp).background(cs.outline).align(Alignment.CenterVertically))
-                    SummaryCell("هذا الأسبوع", stats.weekCount.toString(), Modifier.weight(1f))
+                    SummaryCell(L10n.t(S.ThisWeek), stats.weekCount.toString(), Modifier.weight(1f))
                     Box(Modifier.width(0.5.dp).height(44.dp).background(cs.outline).align(Alignment.CenterVertically))
-                    SummaryCell("أيام متتالية", stats.streakDays.toString(), Modifier.weight(1f))
+                    SummaryCell(L10n.t(S.DayStreak), stats.streakDays.toString(), Modifier.weight(1f))
                 }
             }
         }
         if (current != null) {
-            item(key = "cur-l") { SectionLabel("التذكير الحالي", accent = true) }
+            item(key = "cur-l") { SectionLabel(L10n.t(S.CurrentReminder), accent = true) }
             item(key = "cur") {
                 OneUICard { DhikrHighlightCard(current) { onMarkRead(current.dhikr) } }
             }
         }
         if (next != null) {
-            item(key = "next-l") { SectionLabel("التذكير القادم") }
+            item(key = "next-l") { SectionLabel(L10n.t(S.NextReminder)) }
             item(key = "next") {
                 OneUICard { DhikrHighlightCard(next) { onMarkRead(next.dhikr) } }
             }
         }
         if (current == null && next == null) {
             item {
-                OneUIEmptyState("لا توجد أذكار مفعلة. فعّلها من قائمة الأذكار.", Icons.Outlined.NotificationsOff)
+                OneUIEmptyState(L10n.t(S.NoActiveAzkar), Icons.Outlined.NotificationsOff)
             }
         }
-        item(key = "short-l") { SectionLabel("اختصارات") }
+        item(key = "short-l") { SectionLabel(L10n.t(S.Shortcuts)) }
         item(key = "short") {
             OneUICard {
                 OneUIRow(
-                    title = "السبحة",
-                    summary = "عداد التسبيح",
+                    title = L10n.t(S.TasbeehTab),
+                    summary = L10n.t(S.TasbeehCounter),
                     leading = { OneUIIconBadge(Icons.Outlined.TouchApp, Color(4283289796L)) },
                     trailing = { ChevronIcon() },
                     onClick = { onNavigate?.invoke("tasbeeh") }
                 )
                 OneUIDivider(70.dp)
                 OneUIRow(
-                    title = "حصن المسلم",
-                    summary = "أذكار وأدعية من الكتاب والسنة",
+                    title = L10n.t(S.HisnTab),
+                    summary = L10n.t(S.HisnSubtitle),
                     leading = { OneUIIconBadge(Icons.AutoMirrored.Outlined.MenuBook, Color(4285507839L)) },
                     trailing = { ChevronIcon() },
                     onClick = { onNavigate?.invoke("hisn") }
                 )
                 OneUIDivider(70.dp)
                 OneUIRow(
-                    title = "المفضلة",
-                    summary = "الأذكار التي تحبها",
+                    title = L10n.t(S.Favorites),
+                    summary = L10n.t(S.FavSubtitle),
                     leading = { OneUIIconBadge(Icons.Outlined.Star, Color(4294956367L)) },
                     trailing = { ChevronIcon() },
                     onClick = { onNavigate?.invoke("favorites") }
@@ -228,7 +230,7 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
             )
             Spacer(Modifier.height(14.dp))
             OneUIButton(
-                text = "تمت القراءة",
+                text = L10n.t(S.ReadDone),
                 onClick = onMarkAsRead,
                 modifier = Modifier.align(Alignment.End),
                 filled = false,
@@ -237,3 +239,4 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
         }
     }
 }
+
