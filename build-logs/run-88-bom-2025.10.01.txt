@@ -1,0 +1,18 @@
+outcome: success  bom: 2025.10.01  run: 39028882194  sha: 4f63956ccfda03b844601807cb1200c297b13807
+errors: 0
+--- per file
+--- per symbol
+sign outcome: failure
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+/tmp/tmp.t9NbB0mPss/bcprov.jar: OK
+Exception in thread "main" java.security.UnrecoverableKeyException: no match
+	at org.bouncycastle.jcajce.provider.keystore.bc.BcKeyStoreSpi$StoreEntry.getObject(Unknown Source)
+	at org.bouncycastle.jcajce.provider.keystore.bc.BcKeyStoreSpi.engineGetKey(Unknown Source)
+	at java.base/java.security.KeyStore.getKey(KeyStore.java:1070)
+	at ConvertBks.main(ConvertBks.java:8)
+--- details
+93:BUILD SUCCESSFUL in 2m 22s
+94-38 actionable tasks: 38 executed
