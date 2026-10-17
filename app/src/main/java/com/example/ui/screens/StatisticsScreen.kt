@@ -48,6 +48,8 @@ import com.example.ui.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun StatisticsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
@@ -67,8 +69,8 @@ fun StatsContent(
 ) {
     val cs = MaterialTheme.colorScheme
     OneUIScreen(
-        title = "الإحصائيات",
-        subtitle = readsCount(stats.totalCount) + " إجمالًا",
+        title = L10n.t(S.Stats),
+        subtitle = readsCount(stats.totalCount) + L10n.t(S.TotalSuffix),
         onBack = onBack
     ) {
         item(key = "donut") {
@@ -82,14 +84,14 @@ fun StatsContent(
                                 color = cs.onSurface,
                                 style = MaterialTheme.typography.headlineMedium
                             )
-                            Text("اليوم", color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+                            Text(L10n.t(S.Today), color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
                         }
                     }
                     Spacer(Modifier.width(20.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         if (stats.topReadDhikr.isEmpty()) {
                             Text(
-                                "لا توجد قراءات بعد",
+                                L10n.t(S.NoReadsYet),
                                 color = cs.onSurfaceVariant,
                                 style = MaterialTheme.typography.bodyMedium
                             )
@@ -99,7 +101,7 @@ fun StatsContent(
                                 Box(Modifier.size(9.dp).clip(CircleShape).background(donutColor(i)))
                                 Spacer(Modifier.width(8.dp))
                                 Text(
-                                    titles[id] ?: "ذكر #$id",
+                                    titles[id] ?: L10n.t(S.DhikrIdFmt).format(id),
                                     modifier = Modifier.weight(1f),
                                     color = cs.onSurface,
                                     maxLines = 1,
@@ -117,26 +119,26 @@ fun StatsContent(
                 }
             }
         }
-        item(key = "periods-l") { SectionLabel("الفترات الزمنية") }
+        item(key = "periods-l") { SectionLabel(L10n.t(S.Periods)) }
         item(key = "periods") {
             OneUICard {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    PeriodCell("اليوم", stats.todayCount, Modifier.weight(1f))
+                    PeriodCell(L10n.t(S.Today), stats.todayCount, Modifier.weight(1f))
                     Box(Modifier.width(0.5.dp).height(44.dp).background(cs.outline).align(Alignment.CenterVertically))
-                    PeriodCell("الأسبوع", stats.weekCount, Modifier.weight(1f))
+                    PeriodCell(L10n.t(S.Week), stats.weekCount, Modifier.weight(1f))
                     Box(Modifier.width(0.5.dp).height(44.dp).background(cs.outline).align(Alignment.CenterVertically))
-                    PeriodCell("الشهر", stats.monthCount, Modifier.weight(1f))
+                    PeriodCell(L10n.t(S.Month), stats.monthCount, Modifier.weight(1f))
                 }
             }
         }
         item(key = "streak") {
             OneUICard {
                 OneUIRow(
-                    title = "الأيام المتتالية",
-                    summary = "استمر في المحافظة على أذكارك اليومية",
+                    title = L10n.t(S.DayStreak),
+                    summary = L10n.t(S.KeepGoing),
                     leading = { OneUIIconBadge(Icons.Outlined.LocalFireDepartment) },
                     trailing = {
                         Text(
@@ -148,8 +150,8 @@ fun StatsContent(
                 )
                 OneUIDivider(70.dp)
                 OneUIRow(
-                    title = "إجمالي القراءات",
-                    summary = "منذ بداية الاستخدام",
+                    title = L10n.t(S.TotalReads),
+                    summary = L10n.t(S.SinceStart),
                     leading = { OneUIIconBadge(Icons.Outlined.EmojiEvents) },
                     trailing = {
                         Text(
@@ -162,14 +164,14 @@ fun StatsContent(
             }
         }
         if (history.isNotEmpty()) {
-            item(key = "hist-l") { SectionLabel("آخر القراءات") }
+            item(key = "hist-l") { SectionLabel(L10n.t(S.RecentReads)) }
             item(key = "hist") {
                 OneUICard {
                     history.take(10).forEachIndexed { i, h ->
                         if (i > 0) OneUIDivider(70.dp)
                         val date = SimpleDateFormat("d MMM yyyy  hh:mm a", Locale("ar")).format(Date(h.timestamp))
                         OneUIRow(
-                            title = titles[h.dhikrId] ?: "ذكر #${h.dhikrId}",
+                            title = titles[h.dhikrId] ?: L10n.t(S.DhikrIdFmt).format(h.dhikrId),
                             summary = date,
                             leading = { OneUIIconBadge(Icons.Outlined.History) }
                         )
@@ -180,13 +182,7 @@ fun StatsContent(
     }
 }
 
-private fun dayCount(n: Int): String = when {
-    n == 0 -> "لا أيام"
-    n == 1 -> "يوم واحد"
-    n == 2 -> "يومان"
-    n in 3..10 -> "$n أيام"
-    else -> "$n يومًا"
-}
+private fun dayCount(n: Int): String = L10n.daysCount(n)
 
 @Composable
 private fun PeriodCell(label: String, value: Int, modifier: Modifier = Modifier) {
@@ -229,3 +225,4 @@ private fun Donut(values: List<Int>) {
         }
     }
 }
+
