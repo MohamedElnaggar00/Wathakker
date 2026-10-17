@@ -23,6 +23,9 @@ import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -116,6 +119,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                 // Timing: One UI slider. 0 = at the adhan, up to 60 minutes before in 5-minute
                 // steps; value applies when the drag ends.
                 var dragOffset by remember(tick) { mutableIntStateOf(offset) }
+                var showMinuteInput by remember { mutableStateOf(false) }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -124,12 +128,49 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     Text(L10n.t(S.AlertTiming), color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     Text(
                         if (dragOffset == 0) L10n.t(S.AtAdhanTime) else L10n.t(S.MinBeforeFmt).format(dragOffset),
-                        color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold
+                        color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold,
+                        modifier = Modifier.clickable { showMinuteInput = true }
                     )
+                }
+                if (showMinuteInput) {
+                    var text by remember { mutableStateOf(dragOffset.toString()) }
+                    OneUIDialog(title = L10n.t(S.AlertTiming), onDismiss = { showMinuteInput = false }) {
+                        OutlinedTextField(
+                            value = text,
+                            onValueChange = { v -> text = v.filter { ch -> ch.isDigit() }.take(3) },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                            Text(
+                                L10n.t(S.Cancel),
+                                color = cs.onSurfaceVariant, fontSize = 14.sp, fontWeight = FontWeight.Medium,
+                                modifier = Modifier.clickable { showMinuteInput = false }.padding(10.dp)
+                            )
+                            Spacer(Modifier.width(14.dp))
+                            Text(
+                                L10n.t(S.Save),
+                                color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold,
+                                modifier = Modifier.clickable {
+                                    val v = text.toIntOrNull()
+                                    if (v != null && v in 0..60) {
+                                        dragOffset = v
+                                        if (v != offset) {
+                                            PrayerAlertStore.setOffsetMinutes(context, prayer, v)
+                                            changed()
+                                        }
+                                        showMinuteInput = false
+                                    }
+                                }.padding(10.dp)
+                            )
+                        }
+                    }
                 }
                 Slider(
                     value = dragOffset.toFloat(),
-                    onValueChange = { dragOffset = (it / 5f).roundToInt() * 5 },
+                    onValueChange = { dragOffset = it.roundToInt().coerceIn(0, 60) },
                     onValueChangeFinished = {
                         if (dragOffset != offset) {
                             PrayerAlertStore.setOffsetMinutes(context, prayer, dragOffset)
@@ -137,7 +178,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         }
                     },
                     valueRange = 0f..60f,
-                    steps = 11,
+                    steps = 59,
                     modifier = Modifier.fillMaxWidth()
                 )
                 // Iqama reminder (no iqama for Shuruq)
