@@ -39,13 +39,12 @@ enum class S {
     ChaptersFmt, SearchHisn, NoFavChapters, NoResults, ReadTodaySuffix, AddToMyAzkar, Done,
     Tagline, Version, Developer, DevName, HisnCredit, InstinctCredit, Dua,
     Font, FontLight, FontBold, FontSystem, FontCairo, FontNaskh, FontAmiri, FontRuqaa,
-    PrayerFajr, PrayerShuruq, PrayerDhuhr, PrayerAsr, PrayerMaghrib, PrayerIsha, PrayerTimes, NextPrayer, AmMarker, PmMarker, PickCountryCity, SearchCityHint, NoSearchResults, FajrPrayer, FajrNow, Snooze, StopAlarm, ChooseSnooze, MinutesShortFmt, ColorWhite, ColorBlack, ColorGray, ColorBlue, ColorGreen, ColorAmber, ColorBlueDark, ColorGreenDark, WidgetSettings, BarColor, BgColor, PickRingtone, FajrAlarmOn, AlarmEnabledSub, AlarmDisabledSub, LocationMethod, CurrentLocation, AutoUpdateFajr, PickCitySub, CurrentCity, ChangeCity, NoLocPermission, GpsOff, CalcMethod, SelectedCalcMethod, Change, UpdatingTime, UpdateFajrNow, AlarmToneSection, SelectedTone, SystemTones, AudioFile, ExtraSettings, VibrateDuringAlarm, AlarmVolume, SnoozeDuration, NextFajrAt, AlarmOnDesc, AlarmOffDesc, PickCalcMethod,
+    PrayerFajr, PrayerShuruq, PrayerDhuhr, PrayerAsr, PrayerMaghrib, PrayerIsha, PrayerTimes, NextPrayer, AmMarker, PmMarker, PickCountryCity, SearchCityHint, NoSearchResults, FajrPrayer, FajrNow, Snooze, StopAlarm, ChooseSnooze, MinutesShortFmt, ColorWhite, ColorBlack, ColorGray, ColorBlue, ColorGreen, ColorAmber, ColorBlueDark, ColorGreenDark, WidgetSettings, BarColor, BgColor, PickRingtone, LocationMethod, CurrentLocation, AutoUpdateFajr, PickCitySub, CurrentCity, ChangeCity, NoLocPermission, GpsOff, CalcMethod, SelectedCalcMethod, Change, UpdatingTime, UpdateFajrNow, AlarmToneSection, SelectedTone, SystemTones, AudioFile, ExtraSettings, VibrateDuringAlarm, NextFajrAt, AlarmOnDesc, AlarmOffDesc, PickCalcMethod,
     NotifReminder, NotifReadDone, NotifRemindLater, NotifOpenApp, NotifChannelAzkar, NotifChannelFajr, TodayAt, TomorrowAt, DefaultAlarmTone,
     LocCalcTitle, LocCalcSubtitle, QiblaTitle, QiblaNorthFmt, QiblaSetLocation, QiblaNoSensor, QiblaCalibrate, QiblaAligned, QiblaCityFmt, AutoDnd, AutoDndSub, OptTimesTitle, OptTimesSub, Imsak, Duha, Midnight, Qiyam, LocSection, CalcSection, AsrJuristic, AsrShafii, AsrHanafi,
     HighLatRule, HighLatNone, HighLatMiddle, HighLatSeventh, HighLatAngle,
-    AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort,
-    AlertMode, AlertModeNotif, AlertModeAlarm, AlertTiming, AtAdhanTime, MinBeforeFmt,
-    IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, IqamaNowFmt, SharedAlertSettings,
+    AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort, AlertTiming, AtAdhanTime, MinBeforeFmt,
+    AdhanReminder, IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, IqamaNowFmt, SharedAlertSettings,
     HijriConvTitle, HijriConvSub, GregToHijri, HijriToGreg, DayLabel, MonthLabel, YearLabel
 }
 
