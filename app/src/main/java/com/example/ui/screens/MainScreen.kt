@@ -126,7 +126,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                         when (oneUITabs[page].route) {
                             "tasbeeh" -> TasbeehScreen(viewModel) { drawerOpen = true }
-                            "prayer" -> PrayerTimesScreen { drawerOpen = true }
+                            "prayer" -> PrayerTimesScreen({ navController.navigate("qibla") }) { drawerOpen = true }
                             "hisn" -> HisnListScreen(
                                 hisnViewModel,
                                 { chapter -> navController.navigate("hisn/" + chapter.id) },
@@ -168,6 +168,9 @@ fun MainScreen(viewModel: MainViewModel) {
                 composable("fajr_settings") {
                     val fajrViewModel: FajrViewModel = viewModel()
                     FajrSettingsScreen(fajrViewModel) { navController.popBackStack() }
+                }
+                composable("qibla") {
+                    com.example.prayer.QiblaScreen { navController.popBackStack() }
                 }
                 composable("location_calc") {
                     val fajrViewModel: FajrViewModel = viewModel()
