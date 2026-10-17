@@ -1,6 +1,8 @@
 package com.example.fajr.ui;
 
 import android.location.Location;
+import com.example.ui.i18n.L10n;
+import java.util.Locale;
 import com.example.fajr.data.FajrPreferences;
 import com.example.fajr.location.LocationManagerHelper;
 import kotlin.Metadata;
@@ -81,9 +83,10 @@ public final class FajrViewModel$updateLocationFromGps$1 extends SuspendLambda i
                         fajrPreferences2 = this.this$0.prefs;
                         fajrPreferences2.setLongitude(location.getLongitude());
                         locationManagerHelper4 = this.this$0.locationHelper;
-                        String name = locationManagerHelper4.getCityNameFromCoordinates(location.getLatitude(), location.getLongitude());
-                        fajrPreferences3 = this.this$0.prefs;
-                        fajrPreferences3.setCityName(name);
+                        String nameAr = locationManagerHelper4.getCityNameFromCoordinates(location.getLatitude(), location.getLongitude(), new Locale("ar"));
+                        String nameEn = locationManagerHelper4.getCityNameFromCoordinates(location.getLatitude(), location.getLongitude(), Locale.ENGLISH);
+                        this.this$0.prefs.setCityNames(nameAr, nameEn);
+                        String name = "ar".equals(L10n.INSTANCE.getLang().getCode()) ? nameAr : nameEn;
                         mutableStateFlow7 = this.this$0._uiState;
                         mutableStateFlow8 = this.this$0._uiState;
                         mutableStateFlow7.setValue(FajrSettingsState.copy$default((FajrSettingsState) mutableStateFlow8.getValue(), false, false, name, location.getLatitude(), location.getLongitude(), null, 0L, null, null, false, 0, 0, false, true, true, 8163, null));
@@ -99,3 +102,4 @@ public final class FajrViewModel$updateLocationFromGps$1 extends SuspendLambda i
         }
     }
 }
+
