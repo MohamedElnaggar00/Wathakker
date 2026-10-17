@@ -43,6 +43,8 @@ import com.example.ui.oneui.OneUITextField
 import com.example.ui.oneui.azkarCount
 import com.example.ui.oneui.parseColorSafe
 import com.example.ui.viewmodel.MainViewModel
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun TagsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
@@ -88,16 +90,16 @@ fun TagsScreen(viewModel: MainViewModel, onBack: () -> Unit) {
     }
     toDelete?.let { tag ->
         OneUIDialog(
-            title = "حذف التصنيف",
+            title = L10n.t(S.DeleteTag),
             onDismiss = { toDelete = null },
             onConfirm = {
                 viewModel.deleteTag(tag)
                 toDelete = null
             },
-            confirmText = "حذف"
+            confirmText = L10n.t(S.Delete)
         ) {
             Text(
-                "سيتم حذف التصنيف \"${tag.name}\" من جميع الأذكار. لن تُحذف الأذكار نفسها.",
+                L10n.t(S.DeleteTagMsg).format(tag.name),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyLarge
             )
@@ -116,13 +118,13 @@ fun TagsContent(
 ) {
     val size = tags.size
     OneUIScreen(
-        title = "التصنيفات",
-        subtitle = "$size " + (if (size in 3..10) "تصنيفات" else "تصنيف"),
+        title = L10n.t(S.Tags),
+        subtitle = L10n.tagsCount(size),
         onBack = onBack,
-        actions = { OneUIIconAction(Icons.Outlined.Add, "إضافة تصنيف", onAdd) }
+        actions = { OneUIIconAction(Icons.Outlined.Add, L10n.t(S.AddTag), onAdd) }
     ) {
         if (tags.isEmpty()) {
-            item { OneUIEmptyState("لا توجد تصنيفات حاليًا", Icons.Outlined.Label) }
+            item { OneUIEmptyState(L10n.t(S.NoTags), Icons.Outlined.Label) }
         } else {
             item(key = "group") {
                 OneUICard {
@@ -154,12 +156,12 @@ fun TagRow(tag: Tag, count: Int, onEdit: () -> Unit, onDelete: () -> Unit) {
         trailing = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    Icons.Outlined.Edit, "تعديل",
+                    Icons.Outlined.Edit, L10n.t(S.Edit),
                     modifier = Modifier.size(40.dp).clip(CircleShape).clickable(onClick = onEdit).padding(9.dp),
                     tint = cs.onSurfaceVariant
                 )
                 Icon(
-                    Icons.Outlined.Delete, "حذف",
+                    Icons.Outlined.Delete, L10n.t(S.Delete),
                     modifier = Modifier.size(40.dp).clip(CircleShape).clickable(onClick = onDelete).padding(9.dp),
                     tint = cs.onSurfaceVariant
                 )
@@ -177,13 +179,13 @@ fun TagAddEditDialog(tag: Tag?, onDismiss: () -> Unit, onConfirm: (String, Strin
         "#4F46E5", "#2563EB", "#0284C7", "#0D9488", "#16A34A", "#CA8A04"
     )
     OneUIDialog(
-        title = if (tag == null) "تصنيف جديد" else "تعديل التصنيف",
+        title = if (tag == null) L10n.t(S.NewTag) else L10n.t(S.EditTag),
         onDismiss = onDismiss,
         onConfirm = { if (name.isNotBlank()) onConfirm(name.trim(), color) }
     ) {
-        OneUITextField(name, { name = it }, "اسم التصنيف")
+        OneUITextField(name, { name = it }, L10n.t(S.TagName))
         Spacer(modifier = Modifier.height(16.dp))
-        Text("اللون", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleSmall)
+        Text(L10n.t(S.Color), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleSmall)
         Spacer(modifier = Modifier.height(10.dp))
         colors.chunked(6).forEach { rowColors ->
             Row(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -205,3 +207,4 @@ fun TagAddEditDialog(tag: Tag?, onDismiss: () -> Unit, onConfirm: (String, Strin
         }
     }
 }
+
