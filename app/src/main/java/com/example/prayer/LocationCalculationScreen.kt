@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -302,7 +304,7 @@ private fun StepperRow(title: String, value: Int, unit: String, onChange: (Int) 
     // Center-zero One UI slider: 0 sits in the middle, dragging toward the language's
     // "forward" side adds and the other side subtracts (Slider mirrors automatically in RTL).
     var drag by remember(value) { mutableIntStateOf(value) }
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 6.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -316,10 +318,14 @@ private fun StepperRow(title: String, value: Int, unit: String, onChange: (Int) 
                 Text(title, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
             Text(
-                text = (if (drag > 0) "+$drag" else "$drag") + " " + unit,
+                // LRM pins the sign to the number in RTL ("+3 د", never "3+ د"); the min
+                // width + End alignment keep long values ("+30 د") off the screen edge.
+                text = "\u200E" + (if (drag > 0) "+$drag" else "$drag") + " " + unit,
                 color = if (drag != 0) cs.primary else cs.onSurfaceVariant,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                modifier = Modifier.widthIn(min = 56.dp)
             )
         }
         Slider(
