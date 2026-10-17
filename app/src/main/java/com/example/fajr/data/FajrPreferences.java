@@ -105,6 +105,25 @@ public final class FajrPreferences {
         this.prefs.edit().putString("city_name", value).apply();
     }
 
+    public final String getCityNameLocalized(String lang) {
+        String legacy = getCityName();
+        if ("ar".equals(lang)) {
+            String v = this.prefs.getString("city_name_ar", legacy);
+            return v == null ? legacy : v;
+        }
+        String en = this.prefs.getString("city_name_en", null);
+        if (en == null) {
+            String ar = this.prefs.getString("city_name_ar", legacy);
+            return ar == null ? legacy : ar;
+        }
+        return en;
+    }
+
+    public final void setCityNames(String arTitle, String enTitle) {
+        setCityName(arTitle);
+        this.prefs.edit().putString("city_name_ar", arTitle).putString("city_name_en", enTitle).apply();
+    }
+
     public final long getLastCalculatedFajrTimeMillis() {
         return this.prefs.getLong("last_fajr_time", 0L);
     }
@@ -159,3 +178,4 @@ public final class FajrPreferences {
         this.prefs.edit().putString("widget_bar_color", value).apply();
     }
 }
+
