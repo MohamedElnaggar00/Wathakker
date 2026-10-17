@@ -8,16 +8,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.R
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 enum class FontChoice(val id: String, val titleAr: String) {
-    APP("app", "خط التطبيق"),
-    APP_LIGHT("app_light", "خط التطبيق الخفيف"),
-    APP_BOLD("app_bold", "خط التطبيق العريض"),
-    SYSTEM("system", "خط النظام"),
-    CAIRO("cairo", "خط القاهرة"),
-    NASKH("naskh", "خط النسخ"),
-    AMIRI("amiri", "خط أميري"),
-    RUQAA("ruqaa", "خط الرقعة (للمناسبات)");
+    APP("app", L10n.t(S.AppFont)),
+    APP_LIGHT("app_light", L10n.t(S.FontLight)),
+    APP_BOLD("app_bold", L10n.t(S.FontBold)),
+    SYSTEM("system", L10n.t(S.FontSystem)),
+    CAIRO("cairo", L10n.t(S.FontCairo)),
+    NASKH("naskh", L10n.t(S.FontNaskh)),
+    AMIRI("amiri", L10n.t(S.FontAmiri)),
+    RUQAA("ruqaa", L10n.t(S.FontRuqaa));
 
     companion object {
         fun fromId(id: String?): FontChoice = entries.firstOrNull { it.id == id } ?: APP
@@ -89,3 +91,4 @@ fun getTypography(useDeviceFont: Boolean): Typography =
     oneUiTypography(if (useDeviceFont) null else TajawalFontFamily)
 
 fun getTypography(choice: FontChoice): Typography = oneUiTypography(fontFamilyFor(choice))
+
