@@ -90,6 +90,47 @@ x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') els
 print(len([t for t in re.findall(r'<node[^>]*>',x) if 'SeekBar' in t]))
 PY
 }
+W=$(adb shell wm size | grep -oE '[0-9]+x[0-9]+' | head -1); SW=${W%x*}; SH=${W#*x}
+[ -z "$SW" ] && { SW=1080; SH=2400; }
+CX=$((SW/2)); TABY=$((SH*92/100))
+find_text_bottom() { python3 - "$1" <<'PYB'
+import re,sys,os
+val=sys.argv[1]
+x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
+best=None
+for m in re.finditer(r'text="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
+    if m.group(1)==val:
+        a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+        cy=(b+d)//2
+        if best is None or cy>best[1]: best=((a+c)//2,cy)
+for m in re.finditer(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"[^>]*?text="([^"]*)"',x):
+    if m.group(5)==val:
+        a,b,c,d=int(m.group(1)),int(m.group(2)),int(m.group(3)),int(m.group(4))
+        cy=(b+d)//2
+        if best is None or cy>best[1]: best=((a+c)//2,cy)
+if best: print(best[0],best[1])
+PYB
+}
+find_text_top() { python3 - "$1" <<'PYT'
+import re,sys,os
+val=sys.argv[1]
+x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
+best=None
+for m in re.finditer(r'text="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
+    if m.group(1)==val:
+        a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+        cy=(b+d)//2
+        if best is None or cy<best[1]: best=((a+c)//2,cy)
+if best: print(best[0],best[1])
+PYT
+}
+tap_tab() { # <exact tab label> - taps the bottom-most match (the tab bar), never a screen title
+  local C
+  dump
+  C=$(find_text_bottom "$1")
+  if [ -z "$C" ]; then say "FAIL: tab not found ($1)"; return 1; fi
+  adb shell input tap $C; sleep 3
+}
 dismiss_anr() {
   for k in 1 2 3; do
     dump
@@ -120,7 +161,7 @@ scroll_until() { # <text> - swipe up until exact text node is composed (LazyColu
   for i in 1 2 3 4; do
     dump
     [ -n "$(find_center text "$1")" ] && return 0
-    adb shell input swipe 540 1800 540 700 400; sleep 2
+    adb shell input swipe $CX $((SH*80/100)) $CX $((SH*30/100)) 400; sleep 2
   done
   dump
 }
@@ -140,7 +181,7 @@ for m in re.finditer(r'text="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\
 rows=[n for n in nodes if n[0]==name]
 for _,a,b,c,d in rows:
     for t,a2,b2,c2,d2 in nodes:
-        if re.match(r'^[0-9\u0660-\u0669]{1,2}:[0-9\u0660-\u0669]{2}',t) and abs(((b+d)//2)-((b2+d2)//2))<40:
+        if re.match(r'^(?:ص|م|AM|PM)?\s*[0-9\u0660-\u0669]{1,2}:[0-9\u0660-\u0669]{2}',t) and abs(((b+d)//2)-((b2+d2)//2))<40:
             print(t); sys.exit(0)
 sys.exit(1)
 PY
@@ -172,9 +213,18 @@ ensure_ready
 shot 00-prayer
 
 # CHECK 1: six bells (bell_0..bell_5 content descriptions)
+SEEN=""
+for try in 1 2; do
+  dump
+  for i in 0 1 2 3 4 5; do [ -n "$(find_center desc bell_$i)" ] && SEEN="$SEEN $i"; done
+  adb shell input swipe $CX $((SH*70/100)) $CX $((SH*45/100)) 400; sleep 2
+done
 dump
-NB=0; for i in 0 1 2 3 4 5; do [ -n "$(find_center desc bell_$i)" ] && NB=$((NB+1)); done
+for i in 0 1 2 3 4 5; do [ -n "$(find_center desc bell_$i)" ] && SEEN="$SEEN $i"; done
+NB=$(echo $SEEN | tr ' ' '
+' | sort -u | wc -l)
 [ "$NB" = 6 ] && say "PASS: 6 prayer bells present" || say "FAIL: only $NB/6 bells found"
+adb shell input swipe $CX $((SH*45/100)) $CX $((SH*70/100)) 400; sleep 2   # scroll back to top
 
 # CHECK 2: 4 tabs (Prayer/Azkar/Hisn/More), no Fajr tab
 T=0
@@ -190,8 +240,8 @@ tap_node desc "القبلة" "Qibla header icon" && {
   shot 02b-qibla-dark
   adb shell cmd uimode night no; sleep 3
   fg_guard; dump
-  if [ -z "$(find_center desc القبلة)" ]; then tap_node desc "القبلة" "Qibla header icon light" || true; sleep 3; dump; fi
-  has_text "شمال" && say "PASS: compass dial renders in light theme" || say "WARN: compass dial labels not found in light theme"
+  if ! has_text "شمال"; then tap_node desc "القبلة" "Qibla header icon light" || true; sleep 3; dump; fi
+  has_text "شمال" && say "PASS: compass dial renders in light theme" || say "WARN: compass dial labels not found in light theme (screen may have recreated back to prayer)"
   shot 02b2-qibla-light
   adb shell cmd uimode night yes; sleep 3
   fg_guard
@@ -200,10 +250,14 @@ tap_node desc "القبلة" "Qibla header icon" && {
   dump
 
 # CHECK 2c: Calendar tab (Hijri occasions) - month grid, events view, reminder bell, both themes
-adb shell input tap 945 2221; sleep 3   # 4th tab (calendar)
+tap_tab "التقويم"
 dump
-if has_text "مناسبات الشهر"; then say "PASS: calendar month grid + month events section render (dark)"; else say "FAIL: calendar month view missing"; fi
+has_text "ح ن ث ر خ ج س" || true
 shot 02c-calendar-month-dark
+scroll_until "مناسبات الشهر"
+if has_text "مناسبات الشهر"; then say "PASS: calendar month grid + month events section render (dark)"; else say "FAIL: calendar month view missing"; fi
+shot 02c4-calendar-month-events
+adb shell input swipe $CX $((SH*40/100)) $CX $((SH*75/100)) 400; sleep 2   # back to top for toggle
 tap_node text "المناسبات" "Events view toggle" && {
   sleep 2; dump
   if has_text "رمضان" || has_text "عيد" || has_text "الأيام البيض"; then say "PASS: events view lists upcoming occasions"; else say "FAIL: events view shows no occasions"; fi
@@ -220,15 +274,20 @@ tap_node text "المناسبات" "Events view toggle" && {
     say "FAIL: no reminder bell found in events view"
   fi
 }
+MV=$(find_text_top "التقويم")
+[ -n "$MV" ] && { adb shell input tap $MV; sleep 2; }
 adb shell cmd uimode night no; sleep 3
 fg_guard
-adb shell input tap 945 2221; sleep 3   # calendar tab again after recreate
+tap_tab "التقويم"
 dump
+MV=$(find_text_top "التقويم")
+[ -n "$MV" ] && { adb shell input tap $MV; sleep 2; dump; }
+scroll_until "مناسبات الشهر"
 has_text "مناسبات الشهر" && say "PASS: calendar month view renders in light theme" || say "FAIL: calendar month view missing in light"
 shot 02c3-calendar-month-light
 adb shell cmd uimode night yes; sleep 3
 fg_guard
-adb shell input tap 150 2221; sleep 2   # back to prayer tab
+tap_tab "الصلاة"
 dump
 
 # CHECK 3: tap Fajr bell -> exact alarm scheduled
@@ -407,11 +466,15 @@ if tap_node text "محول التاريخ" "Drawer converter row"; then
   has_text "محول التاريخ" && say "PASS: converter opened from drawer" || say "FAIL: converter screen did not open from drawer"
   # typed conversion: empty by default; Today fills; typing a Gregorian date yields a Hijri result card
   has_text "من ميلادي إلى هجري" && say "PASS: converter shows G->H section" || say "FAIL: converter direction section missing"
-  tap_node text "اليوم" "Today button" && {
-    sleep 2; dump
-    has_text "هـ" && say "PASS: Today fills fields and shows Hijri result" || say "FAIL: no Hijri result after Today"
+  TD=$(find_text_bottom "اليوم")
+  if [ -n "$TD" ]; then
+    adb shell input tap $TD; sleep 2
+    dump
+    if has_text "هـ"; then say "PASS: Today fills fields and shows Hijri result"; else say "FAIL: no Hijri result after Today"; fi
     shot 03c-converter-result
-  }
+  else
+    say "FAIL: Today button not found on converter"
+  fi
   shot 03b-converter-from-drawer
   adb shell input keyevent KEYCODE_BACK; sleep 2
 else
@@ -434,7 +497,7 @@ tap_node desc "القائمة" "Menu button" || true; sleep 2
 dump
 if tap_node text "حول التطبيق" "Drawer about row"; then
   sleep 2; dump
-  has_text "وذكر" && say "PASS: about screen opened from drawer" || say "FAIL: about screen did not open"
+  has_text "الإصدار" && say "PASS: about screen opened from drawer (version row visible)" || say "FAIL: about screen did not open"
   shot 03e-about
   adb shell input keyevent KEYCODE_BACK; sleep 2
 else
@@ -525,9 +588,9 @@ say "INFO: boot broadcast sent (see alarms_after_boot.txt)"
 
 # CHECK 10: jank pass across the 4 tabs
 dismiss_anr
-adb shell input tap 150 2221; sleep 2   # first tab
+tap_tab "الصلاة"
 adb shell dumpsys gfxinfo com.wathakker.app reset
-for x in 150 460 750 930 750 460 150; do dismiss_anr; adb shell input tap $x 2221; sleep 2; done
+for t in "الأذكار" "حصن المسلم" "التقويم" "حصن المسلم" "الأذكار" "الصلاة"; do dismiss_anr; tap_tab "$t"; done
 adb shell dumpsys gfxinfo com.wathakker.app > "$OUT/gfxinfo.txt"
 shot 08-after-tabs
 
