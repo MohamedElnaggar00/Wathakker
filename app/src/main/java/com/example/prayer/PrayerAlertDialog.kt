@@ -17,17 +17,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Alarm
-import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
@@ -55,6 +51,7 @@ import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
 import com.example.ui.oneui.OneUIDialog
 import com.example.ui.oneui.OneUISwitch
+import kotlin.math.roundToInt
 
 /**
  * Per-prayer bell settings (long-press a bell on the Prayer screen): enable, alert type
@@ -137,23 +134,33 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     onClick = { PrayerAlertStore.setMode(context, prayer, PrayerAlertStore.MODE_ALARM); changed() }
                 )
                 Spacer(Modifier.height(8.dp))
-                // Timing
-                Text(L10n.t(S.AlertTiming), color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                // Timing: One UI slider. 0 = at the adhan, up to 60 minutes before in 5-minute
+                // steps; value applies when the drag ends.
+                var dragOffset by remember(tick) { mutableIntStateOf(offset) }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Text(L10n.t(S.AlertTiming), color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     Text(
-                        if (offset == 0) L10n.t(S.AtAdhanTime) else L10n.t(S.MinBeforeFmt).format(offset),
-                        color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium
+                        if (dragOffset == 0) L10n.t(S.AtAdhanTime) else L10n.t(S.MinBeforeFmt).format(dragOffset),
+                        color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold
                     )
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RoundBtn(Icons.Outlined.Remove, offset > 0) { PrayerAlertStore.setOffsetMinutes(context, prayer, offset - 5); changed() }
-                        Spacer(Modifier.width(10.dp))
-                        RoundBtn(Icons.Outlined.Add, offset < 60) { PrayerAlertStore.setOffsetMinutes(context, prayer, offset + 5); changed() }
-                    }
                 }
+                Slider(
+                    value = dragOffset.toFloat(),
+                    onValueChange = { dragOffset = (it / 5f).roundToInt() * 5 },
+                    onValueChangeFinished = {
+                        if (dragOffset != offset) {
+                            PrayerAlertStore.setOffsetMinutes(context, prayer, dragOffset)
+                            changed()
+                        }
+                    },
+                    valueRange = 0f..60f,
+                    steps = 11,
+                    modifier = Modifier.fillMaxWidth()
+                )
                 // Iqama reminder (no iqama for Shuruq)
                 if (prayer != 1) {
                     Spacer(Modifier.height(8.dp))
@@ -252,26 +259,31 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     onValueChange = { prefs.alarmVolume = (it * 100).toInt(); tick++ },
                     modifier = Modifier.fillMaxWidth()
                 )
+                var dragDuration by remember(tick) { mutableIntStateOf(prefs.maxDurationMinutes) }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(L10n.t(S.SnoozeDuration), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        RoundBtn(Icons.Outlined.Remove, prefs.maxDurationMinutes > 1) {
-                            prefs.maxDurationMinutes = prefs.maxDurationMinutes - 1; tick++
-                        }
-                        Text(
-                            L10n.minutesCount(prefs.maxDurationMinutes),
-                            color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                        RoundBtn(Icons.Outlined.Add, prefs.maxDurationMinutes < 30) {
-                            prefs.maxDurationMinutes = prefs.maxDurationMinutes + 1; tick++
-                        }
-                    }
+                    Text(
+                        L10n.minutesCount(dragDuration),
+                        color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold
+                    )
                 }
+                Slider(
+                    value = dragDuration.toFloat(),
+                    onValueChange = { dragDuration = it.roundToInt().coerceIn(1, 30) },
+                    onValueChangeFinished = {
+                        if (dragDuration != prefs.maxDurationMinutes) {
+                            prefs.maxDurationMinutes = dragDuration
+                            tick++
+                        }
+                    },
+                    valueRange = 1f..30f,
+                    steps = 28,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
@@ -293,20 +305,5 @@ private fun AlertModeRow(selected: Boolean, icon: ImageVector, title: String, on
         Icon(icon, null, tint = cs.primary)
         Spacer(Modifier.width(8.dp))
         Text(title, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-    }
-}
-
-@Composable
-private fun RoundBtn(icon: ImageVector, enabled: Boolean, onClick: () -> Unit) {
-    val cs = MaterialTheme.colorScheme
-    IconButton(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier
-            .size(32.dp)
-            .clip(CircleShape)
-            .background(if (enabled) cs.primary.copy(alpha = 0.12f) else cs.onSurface.copy(alpha = 0.05f))
-    ) {
-        Icon(icon, null, tint = if (enabled) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.4f), modifier = Modifier.size(16.dp))
     }
 }
