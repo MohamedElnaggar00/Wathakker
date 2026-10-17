@@ -16,7 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.TouchApp
@@ -194,7 +194,7 @@ fun SummaryCell(label: String, value: String, modifier: Modifier = Modifier) {
 @Composable
 fun ChevronIcon() {
     Icon(
-        Icons.Outlined.KeyboardArrowLeft,
+        Icons.AutoMirrored.Outlined.KeyboardArrowRight,
         contentDescription = null,
         tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
     )
