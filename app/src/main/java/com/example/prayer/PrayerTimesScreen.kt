@@ -52,6 +52,10 @@ import androidx.compose.ui.unit.sp
 import com.example.fajr.calculation.CalculationMethod
 import com.example.fajr.data.FajrPreferences
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.material.icons.outlined.Brightness2
+import androidx.compose.material.icons.outlined.Brightness3
+import androidx.compose.material.icons.outlined.Brightness5
+import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.NotificationsOff
@@ -113,6 +117,7 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         Triple(t, tm, y)
     }
     val today = days.first
+    val nightLen = (days.second.fajr - today.maghrib).coerceAtLeast(1L)
     val ordered: List<Triple<String, Long, ImageVector>> = listOf(
         Triple(L10n.t(S.PrayerFajr), today.fajr, Icons.Outlined.WbTwilight),
         Triple(L10n.t(S.PrayerShuruq), today.sunrise, Icons.Outlined.WbSunny),
@@ -135,6 +140,24 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         HijriDate.INSTANCE.format(hcal, L10n.lang.code)
     }
 
+    val displayRows = mutableListOf<Triple<String, Long, ImageVector>>()
+    val rowBells = mutableListOf<Int?>()
+    if (PrayerAdjustments.optionalRow(context, "imsak")) {
+        displayRows.add(Triple(L10n.t(S.Imsak), today.fajr - 10 * 60000L, Icons.Outlined.Brightness2)); rowBells.add(null)
+    }
+    ordered.forEachIndexed { i, t ->
+        displayRows.add(t); rowBells.add(i)
+        if (i == 1 && PrayerAdjustments.optionalRow(context, "duha")) {
+            displayRows.add(Triple(L10n.t(S.Duha), today.sunrise + 15 * 60000L, Icons.Outlined.Brightness5)); rowBells.add(null)
+        }
+    }
+    if (PrayerAdjustments.optionalRow(context, "midnight")) {
+        displayRows.add(Triple(L10n.t(S.Midnight), today.maghrib + nightLen / 2, Icons.Outlined.Bedtime)); rowBells.add(null)
+    }
+    if (PrayerAdjustments.optionalRow(context, "qiyam")) {
+        displayRows.add(Triple(L10n.t(S.Qiyam), today.maghrib + nightLen * 2 / 3, Icons.Outlined.Brightness3)); rowBells.add(null)
+    }
+
     PrayerTimesContent(
         city = city,
         country = country,
@@ -144,9 +167,10 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         nextPrayerTime = formatPrayerTime(next.second),
         countdownText = formatCountdown(remaining),
         progress = progress,
-        rows = ordered.map { (name, time, icon) ->
+        rows = displayRows.map { (name, time, icon) ->
             PrayerRowDisplay(name, formatPrayerTime(time), name == next.first && time == next.second, icon)
         },
+        rowBells = rowBells,
         onChangeCity = { showCitySearch = true },
         onMenu = onMenu,
         onQibla = onQibla,
@@ -219,6 +243,7 @@ fun PrayerTimesContent(
     onMenu: (() -> Unit)? = null,
     onQibla: (() -> Unit)? = null,
     bellStates: List<Boolean> = List(6) { false },
+    rowBells: List<Int?> = List(rows.size) { it },
     onBellClick: (Int) -> Unit = {},
     onBellLongClick: (Int) -> Unit = {}
 ) {
@@ -333,20 +358,21 @@ fun PrayerTimesContent(
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Spacer(Modifier.weight(1f))
-                        val bellOn = bellStates.getOrElse(index) { false }
-                        Box(
+                        val bellIndex = rowBells.getOrNull(index)
+                        val bellOn = bellIndex != null && bellStates.getOrElse(bellIndex) { false }
+                        if (bellIndex != null) Box(
                             modifier = Modifier
                                 .size(36.dp)
                                 .clip(CircleShape)
                                 .combinedClickable(
-                                    onClick = { onBellClick(index) },
-                                    onLongClick = { onBellLongClick(index) }
+                                    onClick = { onBellClick(bellIndex) },
+                                    onLongClick = { onBellLongClick(bellIndex) }
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
-                                contentDescription = "bell_" + index,
+                                contentDescription = "bell_" + bellIndex,
                                 modifier = Modifier.size(19.dp),
                                 tint = if (bellOn) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.45f)
                             )
