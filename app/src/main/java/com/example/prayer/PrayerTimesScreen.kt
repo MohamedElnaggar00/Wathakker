@@ -35,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fajr.calculation.CalculationMethod
 import com.example.fajr.data.FajrPreferences
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.material.icons.outlined.NotificationsActive
+import androidx.compose.material.icons.outlined.NotificationsOff
+import com.example.prayer.alerts.PrayerAlertScheduler
+import com.example.prayer.alerts.PrayerAlertStore
 import com.example.fajr.calculation.PrayerAdjustments
 import com.example.fajr.calculation.PrayerTimesCalculator
 import com.example.fajr.ui.CitySearchDialog
@@ -79,6 +85,8 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
     var city by remember { mutableStateOf(prefs.cityName) }
     var country by remember { mutableStateOf(prefs.countryName) }
     var showCitySearch by remember { mutableStateOf(false) }
+    var alertDialogPrayer by remember { mutableStateOf<Int?>(null) }
+    var bellTick by remember { mutableIntStateOf(0) }
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) {
         while (true) {
@@ -138,8 +146,25 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
             PrayerRowDisplay(name, formatPrayerTime(time), name == next.first && time == next.second, icon)
         },
         onChangeCity = { showCitySearch = true },
-        onMenu = onMenu
+        onMenu = onMenu,
+        bellStates = remember(bellTick, L10n.lang) { (0..5).map { PrayerAlertStore.isEnabled(context, it) } },
+        onBellClick = { idx ->
+            PrayerAlertStore.setEnabled(context, idx, !PrayerAlertStore.isEnabled(context, idx))
+            PrayerAlertScheduler.scheduleAll(context)
+            bellTick++
+        },
+        onBellLongClick = { idx -> alertDialogPrayer = idx }
     )
+
+
+    alertDialogPrayer?.let { idx ->
+        val names = listOf(S.PrayerFajr, S.PrayerShuruq, S.PrayerDhuhr, S.PrayerAsr, S.PrayerMaghrib, S.PrayerIsha)
+        PrayerAlertDialog(
+            prayer = idx,
+            prayerName = L10n.t(names[idx]),
+            onDismiss = { alertDialogPrayer = null; bellTick++ }
+        )
+    }
 
     if (showCitySearch) {
         CitySearchDialog(
@@ -175,6 +200,7 @@ private fun formatCountdown(millis: Long): String {
     return String.format("%d:%02d:%02d", h, m, s)
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun PrayerTimesContent(
     city: String,
@@ -187,7 +213,10 @@ fun PrayerTimesContent(
     progress: Float,
     rows: List<PrayerRowDisplay>,
     onChangeCity: () -> Unit,
-    onMenu: (() -> Unit)? = null
+    onMenu: (() -> Unit)? = null,
+    bellStates: List<Boolean> = List(6) { false },
+    onBellClick: (Int) -> Unit = {},
+    onBellLongClick: (Int) -> Unit = {}
 ) {
     val cs = MaterialTheme.colorScheme
     OneUIScreen(title = L10n.t(S.PrayerTimes), onMenu = onMenu) {
@@ -294,6 +323,25 @@ fun PrayerTimesContent(
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Spacer(Modifier.weight(1f))
+                        val bellOn = bellStates.getOrElse(index) { false }
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .combinedClickable(
+                                    onClick = { onBellClick(index) },
+                                    onLongClick = { onBellLongClick(index) }
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
+                                contentDescription = null,
+                                modifier = Modifier.size(19.dp),
+                                tint = if (bellOn) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.45f)
+                            )
+                        }
+                        Spacer(Modifier.width(8.dp))
                         Text(
                             row.timeText,
                             color = if (row.isNext) cs.primary else cs.onSurface,
