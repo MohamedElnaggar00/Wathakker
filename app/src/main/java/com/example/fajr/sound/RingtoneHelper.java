@@ -14,6 +14,8 @@ import kotlin.Metadata;
 import kotlin.Unit;
 import kotlin.io.CloseableKt;
 import kotlin.jvm.internal.Intrinsics;
+import com.example.ui.i18n.L10n;
+import com.example.ui.i18n.S;
 
 /* compiled from: RingtoneHelper.kt */
 @Metadata(d1 = {"\u0000@\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0010\u000e\n\u0000\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010\u0007\n\u0002\b\u0002\b\u0007\u0018\u00002\u00020\u0001B\u000f\u0012\u0006\u0010\u0002\u001a\u00020\u0003¢\u0006\u0004\b\u0004\u0010\u0005J\u000e\u0010\b\u001a\u00020\t2\u0006\u0010\n\u001a\u00020\u000bJ\u0010\u0010\f\u001a\u00020\r2\u0006\u0010\u000e\u001a\u00020\tH\u0002J\u000e\u0010\u000f\u001a\u00020\u00102\u0006\u0010\u000e\u001a\u00020\tJ\u0018\u0010\u0011\u001a\u00020\u00122\u0006\u0010\u000e\u001a\u00020\t2\b\b\u0002\u0010\u0013\u001a\u00020\u0014J\u0006\u0010\u0015\u001a\u00020\u0012R\u000e\u0010\u0002\u001a\u00020\u0003X\u0082\u0004¢\u0006\u0002\n\u0000R\u0010\u0010\u0006\u001a\u0004\u0018\u00010\u0007X\u0082\u000e¢\u0006\u0002\n\u0000¨\u0006\u0016"}, d2 = {"Lcom/example/fajr/sound/RingtoneHelper;", "", "context", "Landroid/content/Context;", "<init>", "(Landroid/content/Context;)V", "mediaPlayer", "Landroid/media/MediaPlayer;", "getValidRingtoneUri", "Landroid/net/Uri;", "prefs", "Lcom/example/fajr/data/FajrPreferences;", "isUriAccessible", "", "uri", "getRingtoneTitle", "", "playPreview", "", "volume", "", "stopPreview", "app"}, k = 1, mv = {2, 2, 0}, xi = 48)
@@ -93,11 +95,11 @@ public final class RingtoneHelper {
             Ringtone ringtone = RingtoneManager.getRingtone(this.context, uri);
             String title = ringtone != null ? ringtone.getTitle(this.context) : null;
             String str2 = title;
-            return !(str2 == null || str2.length() == 0) ? title : "نغمة المنبه الافتراضية";
+            return !(str2 == null || str2.length() == 0) ? title : L10n.INSTANCE.t(S.DefaultAlarmTone);
         } catch (Exception e3) {
             e = e3;
             e.printStackTrace();
-            return "نغمة المنبه الافتراضية";
+            return L10n.INSTANCE.t(S.DefaultAlarmTone);
         }
     }
 
@@ -152,3 +154,4 @@ public final class RingtoneHelper {
         }
     }
 }
+
