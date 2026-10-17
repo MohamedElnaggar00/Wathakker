@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
+import com.example.ui.i18n.L10n
 
 private val DarkColorScheme = darkColorScheme(
     primary = OneUIAccentDark,
@@ -107,6 +108,10 @@ fun MyApplicationTheme(
         shapes = OneUIShapes,
         typography = getTypography(fontChoice)
     ) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl, content = content)
+        CompositionLocalProvider(
+            LocalLayoutDirection provides (if (L10n.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr),
+            content = content
+        )
     }
 }
+
