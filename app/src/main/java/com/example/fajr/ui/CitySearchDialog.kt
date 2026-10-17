@@ -40,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.fajr.data.CitiesDatabase
 import com.example.fajr.data.CityItem
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) {
@@ -59,7 +61,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("اختر الدولة والمدينة", color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(L10n.t(S.PickCountryCity), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     IconButton(onClick = onDismiss) { Icon(Icons.Outlined.Close, "Close") }
                 }
                 Spacer(Modifier.height(12.dp))
@@ -67,7 +69,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("بحث عن مدينة أو دولة...") },
+                    placeholder = { Text(L10n.t(S.SearchCityHint)) },
                     leadingIcon = { Icon(Icons.Outlined.Search, null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
@@ -80,7 +82,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                 Spacer(Modifier.height(16.dp))
                 if (filteredCities.isEmpty()) {
                     Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
-                        Text("لم يتم العثور على نتائج للبحث", color = cs.onSurfaceVariant)
+                        Text(L10n.t(S.NoSearchResults), color = cs.onSurfaceVariant)
                     }
                 } else {
                     LazyColumn(
@@ -121,3 +123,4 @@ fun CityRowItem(city: CityItem, onClick: () -> Unit) {
         }
     }
 }
+
