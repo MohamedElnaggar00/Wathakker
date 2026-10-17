@@ -64,18 +64,19 @@ import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
 
 @Composable
-fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
+fun FajrAlarmScreen(prayerName: String, onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
     var currentTimeStr by remember { mutableStateOf("") }
     var currentDateStr by remember { mutableStateOf("") }
     var showSnoozeOptions by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        val timeSdf = SimpleDateFormat("hh:mm", Locale("ar"))
-        val amPmSdf = SimpleDateFormat("a", Locale("ar"))
-        val dateSdf = SimpleDateFormat("EEEE, d MMMM yyyy", Locale("ar"))
+    LaunchedEffect(L10n.lang) {
+        val loc = Locale.forLanguageTag(L10n.lang.code)
+        val timeSdf = SimpleDateFormat("hh:mm", loc)
+        val amPmSdf = if (L10n.lang.code == "ar") SimpleDateFormat("a", loc) else null
+        val dateSdf = SimpleDateFormat("EEEE, d MMMM yyyy", loc)
         while (true) {
             val now = Date()
-            currentTimeStr = timeSdf.format(now) + " " + amPmSdf.format(now)
+            currentTimeStr = timeSdf.format(now) + " " + (amPmSdf?.format(now) ?: if (java.util.Calendar.getInstance().get(java.util.Calendar.AM_PM) == 0) L10n.t(S.AmMarker) else L10n.t(S.PmMarker))
             currentDateStr = dateSdf.format(now)
             delay(1000L)
         }
@@ -105,9 +106,9 @@ fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))
-                    Text(L10n.t(S.FajrPrayer), color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                    Text(prayerName, color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(L10n.t(S.FajrNow), color = Color(0xFF94A3B8), fontSize = 18.sp)
+                    Text(L10n.t(S.PrayerNowFmt).format(prayerName), color = Color(0xFF94A3B8), fontSize = 18.sp)
                     Spacer(modifier = Modifier.height(32.dp))
                     Text(currentTimeStr, color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.ExtraBold)
                     Text(currentDateStr, color = Color(0xFFCBD5E1), fontSize = 16.sp)
@@ -194,10 +195,17 @@ class FajrAlarmActivity : ComponentActivity() {
         }
         val prefs = FajrPreferences(this)
         startAlarmEffects(prefs)
+        val prayerIndex = intent.getIntExtra("prayer_index", 0)
+        val nameKey = when (prayerIndex) {
+            1 -> S.PrayerShuruq; 2 -> S.PrayerDhuhr; 3 -> S.PrayerAsr
+            4 -> S.PrayerMaghrib; 5 -> S.PrayerIsha; else -> S.PrayerFajr
+        }
+        val prayerName = L10n.t(nameKey)
         setContent {
             MyApplicationTheme {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                CompositionLocalProvider(LocalLayoutDirection provides if (L10n.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
                     FajrAlarmScreen(
+                        prayerName = prayerName,
                         onDismiss = { stopAndFinish() },
                         onSnooze = { minutes ->
                             val p = FajrPreferences(this@FajrAlarmActivity)
