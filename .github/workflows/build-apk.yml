@@ -1,7 +1,8 @@
 name: Build Android APK
 
 # Build from source and upload the debug APK as a workflow artifact.
-# Each successful build publishes a pre-release tagged v3.0.6-pre.<run number> (user's standing instruction).
+# Pushes build + sign + upload the APK artifact. The pre-release is published only on manual
+# workflow_dispatch (tagged v3.0.7-pre.<run number>) after the user's screenshot review.
 on:
   push:
     branches:
@@ -92,19 +93,20 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Publish pre-release
-        if: steps.build.outcome == 'success' && steps.sign.outcome == 'success'
+        if: github.event_name == 'workflow_dispatch' && steps.build.outcome == 'success' && steps.sign.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v3.0.6-pre.${{ github.run_number }}
+          TAG=v3.0.7-pre.${{ github.run_number }}
           cp app/build/outputs/apk/debug/app-debug.apk Wathakker-$TAG.apk
           cat > notes.md <<'NOTES'
-          Wathakker 3.0.6 pre-release build for testing (debug-signed).
+          Wathakker 3.0.7 pre-release build for testing.
           NOTES
-          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.0.6 pre-release ${{ github.run_number }}" --notes-file notes.md
+          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.0.7 pre-release ${{ github.run_number }}" --notes-file notes.md
 
       - name: Fail if build failed
         if: steps.build.outcome == 'failure' || steps.sign.outcome == 'failure'
         run: exit 1
+
 
 
