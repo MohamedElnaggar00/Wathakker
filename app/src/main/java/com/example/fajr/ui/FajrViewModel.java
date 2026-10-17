@@ -59,8 +59,13 @@ public final class FajrViewModel extends AndroidViewModel {
         CalculationMethod method = CalculationMethod.INSTANCE.fromId(this.prefs.getCalculationMethodId());
         Uri validUri = this.ringtoneHelper.getValidRingtoneUri(this.prefs);
         String ringtoneTitle = this.ringtoneHelper.getRingtoneTitle(validUri);
-        this._uiState.setValue(new FajrSettingsState(this.prefs.isAlarmEnabled(), this.prefs.getUseCurrentLocation(), this.prefs.getCityName(), this.prefs.getLatitude(), this.prefs.getLongitude(), null, 0L, method, ringtoneTitle, this.prefs.isVibrationEnabled(), this.prefs.getMaxDurationMinutes(), this.prefs.getAlarmVolume(), false, this.locationHelper.isGpsEnabled(), this.locationHelper.hasLocationPermission(), 4192, null));
+        this._uiState.setValue(new FajrSettingsState(this.prefs.isAlarmEnabled(), this.prefs.getUseCurrentLocation(), this.prefs.getCityNameLocalized(L10n.INSTANCE.getLang().getCode()), this.prefs.getLatitude(), this.prefs.getLongitude(), null, 0L, method, ringtoneTitle, this.prefs.isVibrationEnabled(), this.prefs.getMaxDurationMinutes(), this.prefs.getAlarmVolume(), false, this.locationHelper.isGpsEnabled(), this.locationHelper.hasLocationPermission(), 4192, null));
         refreshFajrTimeInternal();
+    }
+
+    public final void refreshCityDisplay() {
+        String display = this.prefs.getCityNameLocalized(L10n.INSTANCE.getLang().getCode());
+        this._uiState.setValue(FajrSettingsState.copy$default(this._uiState.getValue(), false, false, display, 0.0d, 0.0d, null, 0L, null, null, false, 0, 0, false, false, false, 32763, null));
     }
 
     public final void toggleAlarm(boolean enabled) {
@@ -94,8 +99,10 @@ public final class FajrViewModel extends AndroidViewModel {
         this.prefs.setUseCurrentLocation(false);
         this.prefs.setLatitude(city.getLatitude());
         this.prefs.setLongitude(city.getLongitude());
-        String title = city.getCityNameAr() + "، " + city.getCountryNameAr();
-        this.prefs.setCityName(title);
+        String titleAr = city.getCityNameAr() + "، " + city.getCountryNameAr();
+        String titleEn = city.getCityNameEn() + ", " + city.getCountryNameEn();
+        this.prefs.setCityNames(titleAr, titleEn);
+        String title = "ar".equals(L10n.INSTANCE.getLang().getCode()) ? titleAr : titleEn;
         this.prefs.setCountryName(city.getCountryNameAr());
         this._uiState.setValue(FajrSettingsState.copy$default(this._uiState.getValue(), false, false, title, city.getLatitude(), city.getLongitude(), null, 0L, null, null, false, 0, 0, false, false, false, 32737, null));
         refreshFajrTimeInternal();
@@ -158,8 +165,11 @@ public final class FajrViewModel extends AndroidViewModel {
             fajrTime = PrayerTimesCalculator.INSTANCE.calculateFajrTime(calendar, this._uiState.getValue().getLatitude(), this._uiState.getValue().getLongitude(), method);
             isTomorrow = true;
         }
-        SimpleDateFormat timeSdf = new SimpleDateFormat("hh:mm a", new Locale("ar"));
-        String formattedTime = timeSdf.format(new Date(fajrTime));
+        Calendar fmtCal = Calendar.getInstance();
+        fmtCal.setTimeInMillis(fajrTime);
+        String hm = new SimpleDateFormat("hh:mm", Locale.US).format(fmtCal.getTime());
+        String marker = fmtCal.get(Calendar.AM_PM) == 0 ? L10n.INSTANCE.t(S.AmMarker) : L10n.INSTANCE.t(S.PmMarker);
+        String formattedTime = hm + " " + marker;
         String prefix = isTomorrow ? L10n.INSTANCE.t(S.TomorrowAt) : L10n.INSTANCE.t(S.TodayAt);
         String fullFormatted = prefix + " " + formattedTime;
         this._uiState.setValue(FajrSettingsState.copy$default(this._uiState.getValue(), false, false, null, 0.0d, 0.0d, fullFormatted, fajrTime, null, null, false, 0, 0, false, false, false, 32671, null));
