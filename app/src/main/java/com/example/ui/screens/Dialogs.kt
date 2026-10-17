@@ -43,6 +43,8 @@ import com.example.ui.oneui.OneUITextField
 import com.example.ui.oneui.parseColorSafe
 import com.example.utils.DateTimeUtilsKt
 import java.util.Locale
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun DhikrAddDialog(
@@ -57,7 +59,7 @@ fun DhikrAddDialog(
     val selected = remember { mutableStateListOf<Long>() }
     val valid = title.isNotBlank() && content.isNotBlank() && times.isNotEmpty()
     OneUIDialog(
-        title = "ذكر جديد",
+        title = L10n.t(S.NewDhikr),
         onDismiss = onDismiss,
         onConfirm = {
             if (valid) onConfirm(title.trim(), content.trim(), times, selected.toList())
@@ -83,7 +85,7 @@ fun DhikrEditDialog(
     val selected = remember { mutableStateListOf<Long>().also { it.addAll(initialTagIds) } }
     val valid = title.isNotBlank() && content.isNotBlank()
     OneUIDialog(
-        title = "تعديل الذكر",
+        title = L10n.t(S.EditDhikr),
         onDismiss = onDismiss,
         onConfirm = {
             if (valid) onConfirm(title.trim(), content.trim(), selected.toList())
@@ -108,20 +110,20 @@ fun ColumnScope.DhikrAddForm(
     val cs = MaterialTheme.colorScheme
     var showNew by remember { mutableStateOf(false) }
     var newName by remember { mutableStateOf("") }
-    OneUITextField(title, onTitle, "العنوان")
+    OneUITextField(title, onTitle, L10n.t(S.TitleLabel))
     Spacer(modifier = Modifier.height(10.dp))
-    OneUITextField(content, onContent, "نص الذكر أو الدعاء", singleLine = false)
+    OneUITextField(content, onContent, L10n.t(S.DhikrText), singleLine = false)
     Spacer(modifier = Modifier.height(18.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
-            "التصنيفات",
+            L10n.t(S.Tags),
             modifier = Modifier.weight(1f),
             color = cs.onSurfaceVariant,
             style = MaterialTheme.typography.titleSmall
         )
         if (onCreateTag != null) {
             Text(
-                if (showNew) "إلغاء" else "تصنيف جديد",
+                if (showNew) L10n.t(S.Cancel) else L10n.t(S.NewTag),
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large)
                     .clickable { showNew = !showNew }
@@ -133,9 +135,9 @@ fun ColumnScope.DhikrAddForm(
     }
     if (showNew && onCreateTag != null) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            OneUITextField(newName, { newName = it }, "اسم التصنيف", modifier = Modifier.weight(1f))
+            OneUITextField(newName, { newName = it }, L10n.t(S.TagName), modifier = Modifier.weight(1f))
             Spacer(modifier = Modifier.width(8.dp))
-            OneUIButton("إضافة", {
+            OneUIButton(L10n.t(S.Add), {
                 if (newName.isNotBlank()) {
                     onCreateTag(newName.trim())
                     newName = ""
@@ -162,7 +164,7 @@ fun ColumnScope.DhikrAddForm(
 fun ColumnScope.TimesEditor(times: List<String>, onChange: (List<String>) -> Unit) {
     val cs = MaterialTheme.colorScheme
     Spacer(modifier = Modifier.height(18.dp))
-    Text("أوقات التنبيه", color = cs.onSurfaceVariant, style = MaterialTheme.typography.titleSmall)
+    Text(L10n.t(S.ReminderTimes), color = cs.onSurfaceVariant, style = MaterialTheme.typography.titleSmall)
     Spacer(modifier = Modifier.height(6.dp))
     times.forEachIndexed { i, t ->
         if (i > 0) OneUIDivider(56.dp)
@@ -182,7 +184,7 @@ fun ColumnScope.TimesEditor(times: List<String>, onChange: (List<String>) -> Uni
     ) {
         Icon(Icons.Outlined.Add, contentDescription = null, tint = cs.primary, modifier = Modifier.size(22.dp))
         Spacer(modifier = Modifier.width(12.dp))
-        Text("إضافة وقت تنبيه", color = cs.primary, style = MaterialTheme.typography.bodyLarge)
+        Text(L10n.t(S.AddReminderTime), color = cs.primary, style = MaterialTheme.typography.bodyLarge)
     }
 }
 
@@ -190,7 +192,7 @@ fun ColumnScope.TimesEditor(times: List<String>, onChange: (List<String>) -> Uni
 fun DhikrMultipleTimesDialog(dhikr: Dhikr, onDismiss: () -> Unit, onConfirm: (List<String>) -> Unit) {
     var times by remember { mutableStateOf(dhikr.reminderTimes) }
     OneUIDialog(
-        title = "تكرار التنبيه",
+        title = L10n.t(S.RepeatReminder),
         onDismiss = onDismiss,
         onConfirm = { if (times.isNotEmpty()) onConfirm(times) },
         confirmEnabled = times.isNotEmpty()
@@ -224,7 +226,7 @@ fun TimeRow(timeStr: String, onTimeChange: (String) -> Unit, onDelete: () -> Uni
             style = MaterialTheme.typography.bodyLarge
         )
         Icon(
-            Icons.Outlined.Delete, "حذف",
+            Icons.Outlined.Delete, L10n.t(S.Delete),
             modifier = Modifier
                 .size(36.dp)
                 .clip(MaterialTheme.shapes.large)
@@ -235,7 +237,7 @@ fun TimeRow(timeStr: String, onTimeChange: (String) -> Unit, onDelete: () -> Uni
     }
     if (showPicker) {
         OneUIDialog(
-            title = "وقت التنبيه",
+            title = L10n.t(S.ReminderTime),
             onDismiss = { showPicker = false },
             onConfirm = {
                 onTimeChange(String.format(Locale.US, "%02d:%02d", h, m))
@@ -263,8 +265,8 @@ fun DhikrDetailDialog(dhikr: Dhikr, onDismiss: () -> Unit, onMarkAsRead: (() -> 
                 onDismiss()
             }
         },
-        confirmText = "تمت القراءة",
-        dismissText = "إغلاق"
+        confirmText = L10n.t(S.ReadDone),
+        dismissText = L10n.t(S.Close)
     ) {
         Text(dhikr.content, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.bodyLarge)
     }
@@ -279,3 +281,4 @@ fun SimpleFlowRow(spacing: Dp, modifier: Modifier = Modifier, content: @Composab
         verticalArrangement = Arrangement.spacedBy(spacing)
     ) { content() }
 }
+
