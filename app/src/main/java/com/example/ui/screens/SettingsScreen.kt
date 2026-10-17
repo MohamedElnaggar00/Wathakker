@@ -98,7 +98,8 @@ fun SettingsScreen(
         onHijriConverter = onNavigateToHijriConverter,
         onPickTheme = { showThemePicker = true },
         onLockWidgets = { showLockWidgets = true },
-        onPickLanguage = { showLanguagePicker = true }
+        onPickLanguage = { showLanguagePicker = true },
+        onAbout = onNavigateToAbout
     )
 
     if (showFontPicker) {
@@ -187,7 +188,8 @@ fun SettingsContent(
     onHijriConverter: (() -> Unit)? = null,
     onPickTheme: () -> Unit = {},
     onLockWidgets: () -> Unit = {},
-    onPickLanguage: () -> Unit = {}
+    onPickLanguage: () -> Unit = {},
+    onAbout: (() -> Unit)? = null
 ) {
     OneUIScreen(title = L10n.t(S.Settings), onBack = onBack) {
         if (onLocation != null || onFajr != null) {
@@ -271,14 +273,14 @@ fun SettingsContent(
                 )
             }
         }
-        if (onNavigateToAbout != null) {
+        if (onAbout != null) {
             item(key = "about") {
                 OneUICard {
                     OneUIRow(
                         title = L10n.t(S.About),
                         leading = { OneUIIconBadge(Icons.Outlined.Info) },
                         trailing = { ChevronIcon() },
-                        onClick = onNavigateToAbout
+                        onClick = onAbout
                     )
                 }
             }
