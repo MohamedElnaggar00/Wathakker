@@ -54,7 +54,7 @@ jobs:
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ""
-          KEY_PASSWORD: ""
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
           bash -c 'set -euo pipefail
@@ -72,7 +72,7 @@ jobs:
           BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
           APK=app/build/outputs/apk/debug/app-debug.apk
           "$BT/zipalign" -f -p 4 "$APK" "$work/aligned.apk"
-          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass pass: --key-pass pass: --out "$APK" "$work/aligned.apk"
+          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass pass: --key-pass env:KEY_PASSWORD --out "$APK" "$work/aligned.apk"
           "$BT/apksigner" verify --verbose --print-certs "$APK" > "$work/sig.txt"
           if grep -q 0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f "$work/sig.txt"; then echo signed-with-original-cert; else echo CERT-MISMATCH; exit 1; fi
           rm -rf "$work"
