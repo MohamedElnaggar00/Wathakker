@@ -1,0 +1,21 @@
+outcome: failure  bom: 2025.10.01  run: 39040981684  sha: 6ae2dd6aa7e18079a0a5af1adde7329adcd266ad
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 1
+--- kotlin per file
+      1 FajrSettingsScreen.kt
+--- kotlin details
+e: com/example/fajr/ui/FajrSettingsScreen.kt:90:5 Unresolved reference 'LaunchedEffect'.
+--- sign log
+--- details
+54:* What went wrong:
+55:Execution failed for task ':app:compileDebugKotlin'.
+56-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+57-   > Compilation error. See log for more details
+58-
+59-* Try:
+--
+65:BUILD FAILED in 3m 24s
+66-25 actionable tasks: 25 executed
