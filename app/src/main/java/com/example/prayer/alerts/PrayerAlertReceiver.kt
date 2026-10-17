@@ -26,6 +26,11 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         val prayer = intent.getIntExtra(PrayerAlertScheduler.EXTRA_PRAYER, -1)
         val kind = intent.getIntExtra(PrayerAlertScheduler.EXTRA_KIND, PrayerAlertScheduler.KIND_ADHAN)
         if (prayer !in 0..5) return
+
+        if (kind == PrayerAlertScheduler.KIND_DND_OFF) {
+            restoreDnd(context)
+            return
+        }
         if (!PrayerAlertStore.isEnabled(context, prayer)) return
 
         val nameKey = when (prayer) {
@@ -84,6 +89,10 @@ class PrayerAlertReceiver : BroadcastReceiver() {
             nm.notify(400 + prayer + kind * 10, notification)
         }
 
+        if (kind == PrayerAlertScheduler.KIND_ADHAN && PrayerAlertStore.autoDnd(context, prayer)) {
+            enableDnd(context)
+        }
+
         // Schedule the next occurrence (tomorrow or later today).
         PrayerAlertScheduler.scheduleAll(context)
     }
@@ -104,6 +113,24 @@ class PrayerAlertReceiver : BroadcastReceiver() {
             channel.setShowBadge(true)
             nm.createNotificationChannel(channel)
         }
+    }
+
+    private fun enableDnd(context: Context) {
+        try {
+            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (nm.isNotificationPolicyAccessGranted) {
+                nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_PRIORITY)
+            }
+        } catch (_: Throwable) {}
+    }
+
+    private fun restoreDnd(context: Context) {
+        try {
+            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (nm.isNotificationPolicyAccessGranted) {
+                nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+            }
+        } catch (_: Throwable) {}
     }
 
     companion object {
