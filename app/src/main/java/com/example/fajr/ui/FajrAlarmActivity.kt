@@ -60,6 +60,8 @@ import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
@@ -103,9 +105,9 @@ fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
                         )
                     }
                     Spacer(modifier = Modifier.height(20.dp))
-                    Text("صلاة الفجر", color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                    Text(L10n.t(S.FajrPrayer), color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("حان الآن موعد صلاة الفجر", color = Color(0xFF94A3B8), fontSize = 18.sp)
+                    Text(L10n.t(S.FajrNow), color = Color(0xFF94A3B8), fontSize = 18.sp)
                     Spacer(modifier = Modifier.height(32.dp))
                     Text(currentTimeStr, color = Color.White, fontSize = 48.sp, fontWeight = FontWeight.ExtraBold)
                     Text(currentDateStr, color = Color(0xFFCBD5E1), fontSize = 16.sp)
@@ -123,7 +125,7 @@ fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
                             ) {
                                 Icon(Icons.Outlined.Snooze, contentDescription = null, tint = Color.White)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("غفوة", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                Text(L10n.t(S.Snooze), color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                             }
                             Button(
                                 onClick = onDismiss,
@@ -133,7 +135,7 @@ fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
                             ) {
                                 Icon(Icons.Outlined.NotificationsOff, contentDescription = null, tint = Color.White)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text("إيقاف المنبه", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                Text(L10n.t(S.StopAlarm), color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                             }
                         }
                     } else {
@@ -146,13 +148,13 @@ fun FajrAlarmScreen(onDismiss: () -> Unit, onSnooze: (Int) -> Unit) {
                                 modifier = Modifier.padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("اختر مدة الغفوة (Snooze):", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                                Text(L10n.t(S.ChooseSnooze), color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(12.dp))
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceEvenly
                                 ) {
-                                    listOf(5 to "5 دقائق", 10 to "10 دقائق", 15 to "15 دقيقة").forEach { (minutes, label) ->
+                                    listOf(5, 10, 15).map { it to L10n.minutesCount(it) }.forEach { (minutes, label) ->
                                         Button(
                                             onClick = { onSnooze(minutes) },
                                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF334155))
@@ -180,6 +182,7 @@ class FajrAlarmActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        L10n.init(this)
         if (Build.VERSION.SDK_INT >= 27) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
@@ -281,3 +284,4 @@ class FajrAlarmActivity : ComponentActivity() {
         super.onDestroy()
     }
 }
+
