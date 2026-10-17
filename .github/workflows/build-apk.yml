@@ -45,7 +45,7 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          gradle assembleDebug -PcomposeBom=${{ matrix.bom }} --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee build.log
+          gradle assembleRelease -PcomposeBom=${{ matrix.bom }} --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee build.log
 
       - name: Sign with release key
         id: sign
@@ -70,7 +70,7 @@ jobs:
           javac -cp "$work/bcprov.jar" -d "$work" "$work/ConvertBks.java"
           java -cp "$work:$work/bcprov.jar" ConvertBks "$work/source.bks" "$work/signing.p12"
           BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
-          APK=app/build/outputs/apk/debug/app-debug.apk
+          APK=app/build/outputs/apk/release/app-release-unsigned.apk
           "$BT/zipalign" -f -p 4 "$APK" "$work/aligned.apk"
           "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out "$APK" "$work/aligned.apk"
           "$BT/apksigner" verify --verbose --print-certs "$APK" > "$work/sig.txt"
@@ -93,8 +93,8 @@ jobs:
         if: steps.build.outcome == 'success' && steps.sign.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-bom-${{ matrix.bom }}.apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: app-release-bom-${{ matrix.bom }}.apk
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
 
       - name: Publish pre-release
         if: github.event_name == 'workflow_dispatch' && steps.build.outcome == 'success' && steps.sign.outcome == 'success'
@@ -102,7 +102,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG=v3.1.0-pre.${{ github.run_number }}
-          cp app/build/outputs/apk/debug/app-debug.apk Wathakker-$TAG.apk
+          cp app/build/outputs/apk/release/app-release-unsigned.apk Wathakker-$TAG.apk
           cat > notes.md <<'NOTES'
           Wathakker 3.1.0 pre-release ${{ github.run_number }} for testing.
 
