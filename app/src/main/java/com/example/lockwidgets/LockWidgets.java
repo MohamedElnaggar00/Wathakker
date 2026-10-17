@@ -67,7 +67,7 @@ public class LockWidgets extends AppWidgetProvider {
         double lat=(Double)p.getMethod("getLatitude").invoke(prefs),lng=(Double)p.getMethod("getLongitude").invoke(prefs);
         int method=(Integer)p.getMethod("getCalculationMethodId").invoke(prefs);
         Class<?> meth=Class.forName("com.example.fajr.calculation.CalculationMethod");Object companion;try{companion=meth.getField("Companion").get(null);}catch(NoSuchFieldException nf){companion=meth.getField("INSTANCE").get(null);}Object choice=companion.getClass().getMethod("fromId",int.class).invoke(companion,method);
-        Class<?> calc=Class.forName("com.example.fajr.calculation.PrayerTimesCalculator");Object result=calc.getMethod("calculateAll",Calendar.class,double.class,double.class,meth).invoke(calc.getField("INSTANCE").get(null),day,lat,lng,choice);
+        Class<?> calc=Class.forName("com.example.fajr.calculation.PrayerAdjustments");Object result=calc.getMethod("calculateAll",android.content.Context.class,Calendar.class,double.class,double.class,meth).invoke(calc.getField("INSTANCE").get(null),c,day,lat,lng,choice);
         String[] getters={"getFajr","getSunrise","getDhuhr","getAsr","getMaghrib","getIsha"};long[] out=new long[6];for(int i=0;i<6;i++)out[i]=(Long)result.getClass().getMethod(getters[i]).invoke(result);return out;
     }
     private static String time(long value,Locale l){return HomeWidgets.tm(value,l.getLanguage());}
