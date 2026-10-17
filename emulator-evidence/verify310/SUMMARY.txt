@@ -5,21 +5,22 @@ PASS: Qibla screen opened
 PASS: compass dial renders with localized direction labels (dark)
 PASS: compass dial renders in light theme
 PASS: calendar month grid + month events section render (dark)
-FAIL: node not found (text=المناسبات) [Events view toggle]
+PASS: events view lists upcoming occasions
+PASS: event reminder bell toggles on
+PASS: event reminder bell toggles back off
 PASS: calendar month view renders in light theme
 PASS: exact alarm scheduled after bell toggle
 PASS: alert dialog opened (notifications row)
 PASS: lead-time row present
 PASS: lead-time slider present
 PASS: tapping lead-time value opens exact-minute input dialog
-FAIL: 99 accepted - validation missing
-FAIL: node not found (text=حفظ) [save 12]
+PASS: out-of-range 99 rejected (dialog stays open)
 PASS: exact 12-minute lead time applied
+PASS: lead time restored to at-adhan
 PASS: alert dialog renders at font_scale 1.3
 PASS: Location & calculation screen opened
-INFO: Fajr time before=02:31 ص after=02:33 ص (slider drag left)
-PASS: per-prayer offset slider changed Fajr time (02:31 ص -> 02:33 ص)
-PASS: offset restored (02:31 ص)
+INFO: Fajr time before=02:31 ص after=02:31 ص (slider drag left)
+FAIL: Fajr time unchanged after slider drag
 PASS: converter row removed from Settings
 PASS: converter opened from drawer
 PASS: converter shows G->H section
