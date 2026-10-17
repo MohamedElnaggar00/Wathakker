@@ -1,18 +1,17 @@
-FAIL: only 0/6 bells found
-FAIL: 0/4 tab labels found
-FAIL: node not found (desc=القبلة) [Qibla header icon]
-FAIL: node not found (desc=bell_0) [toggle Fajr bell]
-FAIL: node not found (desc=القائمة) [Menu button]
-FAIL: node not found (text=الإعدادات) [Settings drawer row]
-FAIL: node not found (text=تغيير الموقع) [Location & calculation row]
-FAIL: Location & calculation screen missing
-FAIL: no Fajr row on Location screen
-FAIL: node not found (desc=القائمة) [Menu button]
-FAIL: node not found (text=الإعدادات) [Settings drawer row]
-FAIL: node not found (text=اللغة) [Language row]
-FAIL: language row not found
-FAIL: rotation broke UI
-FAIL: bells missing after process death
+PASS: 6 prayer bells present
+PASS: 4 main tabs present
+PASS: Qibla screen opened
+PASS: exact alarm scheduled after bell toggle
+PASS: alert dialog opened (alert type visible)
+PASS: Location & calculation screen opened
+INFO: Fajr time before=02:31 ص after=02:31 ص (right-edge tap)
+INFO: left-edge try: Fajr after=02:32 ص
+PASS: per-prayer offset changed Fajr time (02:31 ص -> 02:32 ص)
+WARN: restore landed on 02:32 ص (expected 02:31 ص)
+PASS: live switch to English
+PASS: switched back to Arabic
+PASS: rotation to landscape keeps prayer screen
+PASS: bells persist after process death
 INFO: boot broadcast sent (see alarms_after_boot.txt)
 PASS: no fatal exceptions in logcat
 DONE 3.1.0 verify
