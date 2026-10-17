@@ -23,7 +23,7 @@ jobs:
           if [ -n "${{ inputs.build_run_id }}" ]; then echo "id=${{ inputs.build_run_id }}" >> "$GITHUB_OUTPUT"; else echo "id=$(gh run list --workflow build-apk.yml --status success --limit 1 --json databaseId -q '.[0].databaseId')" >> "$GITHUB_OUTPUT"; fi
       - uses: actions/download-artifact@v4
         with:
-          name: app-debug-bom-2025.10.01.apk
+          name: app-release-bom-2025.10.01.apk
           run-id: ${{ steps.latest.outputs.id }}
           github-token: ${{ github.token }}
           path: built
@@ -41,7 +41,7 @@ jobs:
           profile: pixel_6
           disable-animations: false
           script: |
-            bash tools/emu_verify_310.sh built/app-debug.apk emulator-evidence/verify310
+            bash tools/emu_verify_310.sh built/app-release-unsigned.apk emulator-evidence/verify310
       - name: Commit evidence
         if: always()
         run: |
