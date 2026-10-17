@@ -2,8 +2,6 @@ package com.example.ui.screens
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
@@ -36,8 +34,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -94,10 +94,6 @@ val oneUIDrawerItems: List<OneUIDrawerItem> = listOf(
     OneUIDrawerItem("about", L10n.t(S.About), Icons.Outlined.Info, Color(4287532691L))
 )
 
-private val tabEnter: EnterTransition =
-    slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
-private val tabPopExit: ExitTransition =
-    slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
@@ -118,14 +114,15 @@ fun MainScreen(viewModel: MainViewModel) {
 
     CompositionLocalProvider(LocalHazeState provides hazeState) {
         Box(Modifier.fillMaxSize()) {
+            val slideDir = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
             NavHost(
                 navController = navController,
                 startDestination = "tabs",
                 modifier = Modifier.fillMaxSize(),
-                enterTransition = { tabEnter },
-                exitTransition = { ExitTransition.None },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { tabPopExit }
+                enterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDir * it } },
+                exitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDir * it } },
+                popEnterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDir * it } },
+                popExitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDir * it } }
             ) {
                 composable("tabs") {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
@@ -182,7 +179,12 @@ fun MainScreen(viewModel: MainViewModel) {
                     selectedRoute = currentTabRoute,
                     onSelect = { tab ->
                         val i = oneUITabs.indexOf(tab)
-                        if (i >= 0) scope.launch { pagerState.animateScrollToPage(i) }
+                        if (i >= 0) scope.launch {
+                            // Animating across several pages composes every heavy screen in between
+                            // mid-animation (the visible stutter). Animate only adjacent hops.
+                            if (kotlin.math.abs(i - pagerState.currentPage) <= 1) pagerState.animateScrollToPage(i)
+                            else pagerState.scrollToPage(i)
+                        }
                     },
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
