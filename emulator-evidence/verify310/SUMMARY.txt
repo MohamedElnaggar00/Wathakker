@@ -1,17 +1,15 @@
 PASS: 6 prayer bells present
 PASS: 4 main tabs present
 PASS: Qibla screen opened
-FAIL: node not found (desc=bell_0) [toggle Fajr bell]
+PASS: exact alarm scheduled after bell toggle
+PASS: alert dialog opened (alert type visible)
 PASS: Location & calculation screen opened
 INFO: Fajr time before= after= (right-edge tap)
-FAIL: node not found (text=تغيير الموقع) [Location & calculation row]
 INFO: left-edge try: Fajr after=
 FAIL: Fajr time unchanged after stepper taps
-FAIL: node not found (desc=القائمة) [Menu button]
-FAIL: node not found (text=الإعدادات) [Settings drawer row]
-FAIL: node not found (text=اللغة) [Language row]
-FAIL: language row not found
-FAIL: rotation broke UI
+PASS: live switch to English
+PASS: switched back to Arabic
+PASS: rotation to landscape keeps prayer screen
 PASS: bells persist after process death
 INFO: boot broadcast sent (see alarms_after_boot.txt)
 PASS: no fatal exceptions in logcat
