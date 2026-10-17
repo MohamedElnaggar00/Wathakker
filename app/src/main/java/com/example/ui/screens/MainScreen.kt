@@ -78,9 +78,6 @@ val oneUITabs: List<BottomTab> = listOf(
     BottomTab("hisn", L10n.t(S.HisnTab)) { c ->
         Icon(Icons.AutoMirrored.Outlined.MenuBook, null, Modifier.size(24.dp), tint = c)
     },
-    BottomTab("fajr_settings", L10n.t(S.FajrTab)) { c ->
-        Icon(Icons.Outlined.Alarm, null, Modifier.size(24.dp), tint = c)
-    },
     BottomTab("tasbeeh", L10n.t(S.TasbeehTab)) { c ->
         Icon(painterResource(R.drawable.ic_tasbeeh), null, Modifier.size(24.dp), tint = c)
     }
@@ -128,7 +125,6 @@ fun MainScreen(viewModel: MainViewModel) {
                 composable("tabs") {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                         when (oneUITabs[page].route) {
-                            "fajr_settings" -> FajrTabScreen { drawerOpen = true }
                             "tasbeeh" -> TasbeehScreen(viewModel) { drawerOpen = true }
                             "prayer" -> PrayerTimesScreen { drawerOpen = true }
                             "hisn" -> HisnListScreen(
@@ -237,9 +233,4 @@ fun MainScreen(viewModel: MainViewModel) {
     }
 }
 
-@Composable
-private fun FajrTabScreen(onMenu: () -> Unit) {
-    val fajrViewModel: FajrViewModel = viewModel()
-    FajrSettingsScreen(fajrViewModel, onMenu = onMenu)
-}
 
