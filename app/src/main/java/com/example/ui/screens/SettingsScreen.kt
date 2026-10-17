@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.outlined.MoreTime
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Vibration
@@ -49,7 +50,8 @@ fun SettingsScreen(
     viewModel: MainViewModel,
     onBack: () -> Unit,
     onNavigateToFajr: (() -> Unit)? = null,
-    onNavigateToLocation: (() -> Unit)? = null
+    onNavigateToLocation: (() -> Unit)? = null,
+    onNavigateToOptionalTimes: (() -> Unit)? = null
 ) {
     val contextApp = LocalContext.current.applicationContext
     val vibration by viewModel.vibrationEnabled.collectAsState()
@@ -88,6 +90,7 @@ fun SettingsScreen(
         },
         onFajr = onNavigateToFajr,
         onLocation = onNavigateToLocation,
+        onOptionalTimes = onNavigateToOptionalTimes,
         onPickTheme = { showThemePicker = true },
         onLockWidgets = { showLockWidgets = true },
         onPickLanguage = { showLanguagePicker = true }
@@ -175,6 +178,7 @@ fun SettingsContent(
     onPickSound: () -> Unit,
     onFajr: (() -> Unit)? = null,
     onLocation: (() -> Unit)? = null,
+    onOptionalTimes: (() -> Unit)? = null,
     onPickTheme: () -> Unit = {},
     onLockWidgets: () -> Unit = {},
     onPickLanguage: () -> Unit = {}
@@ -190,6 +194,16 @@ fun SettingsContent(
                         trailing = { ChevronIcon() },
                         onClick = onLocation ?: onFajr
                     )
+                    if (onOptionalTimes != null) {
+                        OneUIDivider(70.dp)
+                        OneUIRow(
+                            title = L10n.t(S.OptTimesTitle),
+                            summary = L10n.t(S.OptTimesSub),
+                            leading = { OneUIIconBadge(Icons.Outlined.MoreTime) },
+                            trailing = { ChevronIcon() },
+                            onClick = onOptionalTimes
+                        )
+                    }
                 }
             }
         }
