@@ -75,7 +75,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import com.example.ui.theme.OneUIPillDark
 import dev.chrisbanes.haze.hazeSource
 import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
@@ -155,12 +154,12 @@ fun OneUIScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(statusTop + 72.dp)
+                .height(statusTop + 92.dp)
                 .graphicsLayer { alpha = barAlpha }
                 .background(
                     Brush.verticalGradient(
                         0f to MaterialTheme.colorScheme.background,
-                        0.55f to MaterialTheme.colorScheme.background.copy(alpha = 0.92f),
+                        0.78f to MaterialTheme.colorScheme.background,
                         1f to MaterialTheme.colorScheme.background.copy(alpha = 0f)
                     )
                 )
@@ -177,7 +176,7 @@ fun OneUIScreen(
             Row(
                 modifier = HeaderTools.scrollTile(Modifier.weight(1f, fill = false), barAlpha)
                     .height(52.dp)
-                    .padding(horizontal = 6.dp),
+                    .padding(start = 6.dp, end = 18.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 val leading = onBack ?: onMenu
@@ -308,7 +307,13 @@ fun OneUIRow(
         Column(modifier = Modifier.weight(1f)) {
             Text(title, color = resolvedTitleColor, style = MaterialTheme.typography.bodyLarge)
             if (summary != null) {
-                Text(summary, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+                Text(
+                    summary,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    // Natural font leading: tall Arabic fonts (Naskh/Amiri) overflow the tight
+                    // 13/18 metric and paint over the divider below the row.
+                    style = MaterialTheme.typography.bodySmall.copy(lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified)
+                )
             }
         }
         if (trailing != null) {
@@ -540,7 +545,7 @@ fun OneUIBottomBar(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .padding(bottom = navInset + 12.dp)
-            .oneUIGlass(RoundedCornerShape(32.dp), OneUIPillDark, 0.85f, 28)
+            .oneUIGlass(RoundedCornerShape(32.dp), cs.surfaceContainerHigh, 0.85f, 28)
             .height(64.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
