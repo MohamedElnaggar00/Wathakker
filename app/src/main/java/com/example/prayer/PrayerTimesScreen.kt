@@ -336,7 +336,7 @@ fun PrayerTimesContent(
                         ) {
                             Icon(
                                 if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
-                                contentDescription = null,
+                                contentDescription = "bell_" + index,
                                 modifier = Modifier.size(19.dp),
                                 tint = if (bellOn) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.45f)
                             )
