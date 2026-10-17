@@ -208,16 +208,6 @@ fun SettingsContent(
                             onClick = onOptionalTimes
                         )
                     }
-                    if (onHijriConverter != null) {
-                        OneUIDivider(70.dp)
-                        OneUIRow(
-                            title = L10n.t(S.HijriConvTitle),
-                            summary = L10n.t(S.HijriConvSub),
-                            leading = { OneUIIconBadge(Icons.Outlined.DateRange) },
-                            trailing = { ChevronIcon() },
-                            onClick = onHijriConverter
-                        )
-                    }
                 }
             }
         }
