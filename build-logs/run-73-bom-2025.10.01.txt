@@ -1,0 +1,17 @@
+outcome: success  bom: 2025.10.01  run: 39025836635  sha: 7c001f6256cbc866a5886d43e2ea8d01aaeb0329
+errors: 0
+--- per file
+--- per symbol
+sign outcome: failure
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+/tmp/tmp.ufvTDf8nhU/bcprov.jar: OK
+Exception in thread "main" java.io.IOException: KeyStore integrity check failed.
+	at org.bouncycastle.jcajce.provider.keystore.bc.BcKeyStoreSpi.engineLoad(Unknown Source)
+	at java.base/java.security.KeyStore.load(KeyStore.java:1493)
+	at ConvertBks.main(ConvertBks.java:7)
+--- details
+93:BUILD SUCCESSFUL in 2m 29s
+94-38 actionable tasks: 38 executed
