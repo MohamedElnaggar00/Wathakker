@@ -89,6 +89,14 @@ T=0
 for t in "مواعيد الصلاة" "الأذكار" "حصن المسلم" "السبحة"; do has_text "$t" && T=$((T+1)); done
 [ "$T" = 4 ] && say "PASS: 4 main tabs present" || say "FAIL: $T/4 tab labels found"
 
+# CHECK 2b: Qibla screen renders (compass icon in prayer header, desc القبلة)
+tap_node desc "القبلة" "Qibla header icon" && {
+  sleep 3; dump
+  has_text "القبلة" && say "PASS: Qibla screen opened" || say "FAIL: Qibla screen missing"
+  shot 02b-qibla
+  adb shell input keyevent KEYCODE_BACK; sleep 2
+}
+
 # CHECK 3: tap Fajr bell -> exact alarm scheduled
 FAJR_BEFORE=$(prayer_time "الفجر")
 tap_node desc bell_0 "toggle Fajr bell" && {
