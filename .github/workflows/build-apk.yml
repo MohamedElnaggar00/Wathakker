@@ -120,6 +120,16 @@ jobs:
           - Optional prayer times: Imsak, Duha, Midnight, and Qiyam rows (off by default, enabled from Settings).
           - Hijri <-> Gregorian date converter (Umm al-Qura).
           - Full English UI audit and localized lock-screen widgets.
+
+          ## Fixes in this pre-release (from device feedback)
+          - Prayer screen: bells now sit in one fixed straight column, whatever the text length.
+          - Header: the title pill no longer clips, and the Hijri/Gregorian dates no longer collide with the header while scrolling.
+          - Alert dialog: One UI sliders for alert timing (0-60 min), volume, and snooze duration (1-30 min); the dialog is height-bounded and scrolls, so nothing is cut even at large font sizes.
+          - Location & calculation: per-prayer minute offsets and the Hijri day adjustment now use center-zero One UI sliders (0 in the middle) instead of +/- steppers.
+          - Light mode: every screen (prayer, settings, dialogs, widget setup) follows the light color scheme - no leftover dark surfaces.
+          - Hijri date converter moved from Settings to the side drawer.
+          - Settings rows show their full subtitles without clipping.
+          - Performance: this is a true release build (pre.238 was a debug build), and the prayer screen no longer recomposes every second - the countdown tick is scoped to its card.
           NOTES
           gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.1.0 pre-release ${{ github.run_number }}" --notes-file notes.md
 
