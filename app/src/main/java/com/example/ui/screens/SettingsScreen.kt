@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.MusicNote
+import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material.icons.outlined.Widgets
@@ -47,7 +48,8 @@ import androidx.compose.material.icons.outlined.Language
 fun SettingsScreen(
     viewModel: MainViewModel,
     onBack: () -> Unit,
-    onNavigateToFajr: (() -> Unit)? = null
+    onNavigateToFajr: (() -> Unit)? = null,
+    onNavigateToLocation: (() -> Unit)? = null
 ) {
     val contextApp = LocalContext.current.applicationContext
     val vibration by viewModel.vibrationEnabled.collectAsState()
@@ -85,6 +87,7 @@ fun SettingsScreen(
             ringtoneLauncher.launch(intent)
         },
         onFajr = onNavigateToFajr,
+        onLocation = onNavigateToLocation,
         onPickTheme = { showThemePicker = true },
         onLockWidgets = { showLockWidgets = true },
         onPickLanguage = { showLanguagePicker = true }
@@ -171,6 +174,7 @@ fun SettingsContent(
     onPickFont: () -> Unit,
     onPickSound: () -> Unit,
     onFajr: (() -> Unit)? = null,
+    onLocation: (() -> Unit)? = null,
     onPickTheme: () -> Unit = {},
     onLockWidgets: () -> Unit = {},
     onPickLanguage: () -> Unit = {}
@@ -181,10 +185,10 @@ fun SettingsContent(
                 OneUICard {
                     OneUIRow(
                         title = L10n.t(S.ChangeLocation),
-                        summary = L10n.t(S.LocationSubtitle),
-                        leading = { OneUIIconBadge(Icons.Outlined.Alarm) },
+                        summary = L10n.t(S.LocCalcSubtitle),
+                        leading = { OneUIIconBadge(Icons.Outlined.Place) },
                         trailing = { ChevronIcon() },
-                        onClick = onFajr
+                        onClick = onLocation ?: onFajr
                     )
                     OneUIDivider(70.dp)
                     OneUIRow(
