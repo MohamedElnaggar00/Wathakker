@@ -41,6 +41,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.fajr.data.CitiesDatabase
 import com.example.fajr.data.CityItem
 import com.example.ui.i18n.L10n
+import com.example.ui.i18n.Lang
 import com.example.ui.i18n.S
 
 @Composable
@@ -118,8 +119,13 @@ fun CityRowItem(city: CityItem, onClick: () -> Unit) {
         Icon(Icons.Outlined.LocationOn, null, modifier = Modifier.size(22.dp), tint = cs.primary)
         Spacer(Modifier.size(12.dp))
         Column {
-            Text(city.cityNameAr + " - " + city.countryNameAr, color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-            Text(city.cityNameEn + ", " + city.countryNameEn, color = cs.onSurfaceVariant, fontSize = 12.sp)
+            if (L10n.lang == Lang.AR) {
+                Text(city.cityNameAr + " - " + city.countryNameAr, color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(city.cityNameEn + ", " + city.countryNameEn, color = cs.onSurfaceVariant, fontSize = 12.sp)
+            } else {
+                Text(city.cityNameEn + " - " + city.countryNameEn, color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(city.cityNameAr + ", " + city.countryNameAr, color = cs.onSurfaceVariant, fontSize = 12.sp)
+            }
         }
     }
 }
