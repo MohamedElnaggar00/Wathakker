@@ -9,6 +9,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import com.example.fajr.data.FajrPreferences
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,8 +47,51 @@ private val options: List<Pair<String, Pair<String, Color>>> = listOf(
     "green" to ("أخضر" to Color(0xFF34C759))
 )
 
+private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
+    "default" to ("افتراضي" to Color(0xFF171719)),
+    "black" to ("أسود" to Color(0xFF000000)),
+    "gray" to ("رمادي" to Color(0xFF2B2B2B)),
+    "blue" to ("أزرق داكن" to Color(0xFF12263D)),
+    "green" to ("أخضر داكن" to Color(0xFF123626)),
+    "white" to ("فاتح" to Color(0xFFF6F6F6))
+)
+
 @Composable
-fun ConfigScreen(current: String, onPick: (String) -> Unit) {
+fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>, current: String, onPick: (String) -> Unit) {
+    Text(title, color = muted, fontSize = 13.sp)
+    Spacer(Modifier.height(8.dp))
+    options.forEach { (key, labelAndColor) ->
+        val (label, swatch) = labelAndColor
+        val selected = key == current
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(if (selected) Color(0xFF2C2C2E) else Color.Transparent)
+                .clickable { onPick(key) }
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(22.dp)
+                    .clip(CircleShape)
+                    .background(swatch)
+                    .then(if (selected) Modifier.border(2.dp, accent, CircleShape) else Modifier)
+            )
+            Text(
+                label,
+                color = if (selected) Color.White else muted,
+                fontSize = 15.sp,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+            )
+        }
+    }
+}
+
+@Composable
+fun ConfigScreen(current: String, currentBg: String, onPick: (String) -> Unit, onPickBg: (String) -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize().background(Color(0xFF101012)).padding(24.dp),
         contentAlignment = Alignment.Center
@@ -56,40 +101,14 @@ fun ConfigScreen(current: String, onPick: (String) -> Unit) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(24.dp))
                 .background(Color(0xFF1C1C1E))
+                .verticalScroll(rememberScrollState())
                 .padding(20.dp)
         ) {
             Text("إعدادات الويدجت", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(4.dp))
-            Text("لون شريط التقدم", color = muted, fontSize = 13.sp)
+            Spacer(Modifier.height(12.dp))
+            ColorSection("لون شريط التقدم", options, current, onPick)
             Spacer(Modifier.height(16.dp))
-            options.forEach { (key, labelAndColor) ->
-                val (label, swatch) = labelAndColor
-                val selected = key == current
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(if (selected) Color(0xFF2C2C2E) else Color.Transparent)
-                        .clickable { onPick(key) }
-                        .padding(horizontal = 12.dp, vertical = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(22.dp)
-                            .clip(CircleShape)
-                            .background(swatch)
-                            .then(if (selected) Modifier.border(2.dp, accent, CircleShape) else Modifier)
-                    )
-                    Text(
-                        label,
-                        color = if (selected) Color.White else muted,
-                        fontSize = 15.sp,
-                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
-                    )
-                }
-            }
+            ColorSection("لون الخلفية", bgOptions, currentBg, onPickBg)
         }
     }
 }
@@ -105,13 +124,26 @@ class WidgetConfigActivity : ComponentActivity() {
         val prefs = FajrPreferences(this)
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                ConfigScreen(prefs.widgetBarColor) { choice ->
-                    prefs.widgetBarColor = choice
-                    WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
-                    setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
-                    finish()
-                }
+                ConfigScreen(
+                    current = prefs.widgetBarColor,
+                    currentBg = getSharedPreferences("fajr_prefs", MODE_PRIVATE).getString("widget_bg_color", "default") ?: "default",
+                    onPick = { choice ->
+                        prefs.widgetBarColor = choice
+                        WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
+                        com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
+                        setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
+                        finish()
+                    },
+                    onPickBg = { choice ->
+                        getSharedPreferences("fajr_prefs", MODE_PRIVATE).edit().putString("widget_bg_color", choice).apply()
+                        WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
+                        com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
+                        setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
+                        finish()
+                    }
+                )
             }
         }
     }
 }
+
