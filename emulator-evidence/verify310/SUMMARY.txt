@@ -1,18 +1,14 @@
 PASS: 6 prayer bells present
-FAIL: 3/4 tab labels found
+PASS: 4 main tabs present
 PASS: exact alarm scheduled after bell toggle
-FAIL: alert dialog did not open
-FAIL: node not found (text=المزيد) [More tab]
-FAIL: node not found (text=الإعدادات) [Settings row]
+PASS: alert dialog opened (alert type visible)
 FAIL: node not found (text=تغيير الموقع) [Location & calculation row]
 FAIL: Location & calculation screen missing
 FAIL: no Fajr row on Location screen
-FAIL: node not found (text=المزيد) [More tab]
-FAIL: node not found (text=الإعدادات) [Settings row]
 FAIL: node not found (text=اللغة) [Language row]
 FAIL: language row not found
-FAIL: rotation broke UI
+PASS: rotation to landscape keeps prayer screen
 PASS: bells persist after process death
 INFO: boot broadcast sent (see alarms_after_boot.txt)
-FAIL: 1 fatal exceptions (see logcat.txt)
+PASS: no fatal exceptions in logcat
 DONE 3.1.0 verify
