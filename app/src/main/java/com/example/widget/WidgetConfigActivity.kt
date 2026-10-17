@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import com.example.fajr.data.FajrPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -119,26 +118,32 @@ fun ConfigScreen(current: String, currentBg: String, onPick: (String) -> Unit, o
 class WidgetConfigActivity : ComponentActivity() {
     private var appWidgetId = 0
 
+    private fun keyFor(base: String) = if (appWidgetId > 0) base + "_" + appWidgetId else base
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         L10n.init(this)
         setResult(RESULT_CANCELED)
         appWidgetId = intent?.getIntExtra("appWidgetId", 0) ?: 0
-        val prefs = FajrPreferences(this)
+        val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)
+        val curBar = sp.getString(keyFor("widget_bar_color"), null)
+            ?: sp.getString("widget_bar_color", "default") ?: "default"
+        val curBg = sp.getString(keyFor("widget_bg_color"), null)
+            ?: sp.getString("widget_bg_color", "default") ?: "default"
         setContent {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 ConfigScreen(
-                    current = prefs.widgetBarColor,
-                    currentBg = getSharedPreferences("fajr_prefs", MODE_PRIVATE).getString("widget_bg_color", "default") ?: "default",
+                    current = curBar,
+                    currentBg = curBg,
                     onPick = { choice ->
-                        prefs.widgetBarColor = choice
+                        sp.edit().putString(keyFor("widget_bar_color"), choice).apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
                         finish()
                     },
                     onPickBg = { choice ->
-                        getSharedPreferences("fajr_prefs", MODE_PRIVATE).edit().putString("widget_bg_color", choice).apply()
+                        sp.edit().putString(keyFor("widget_bg_color"), choice).apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
