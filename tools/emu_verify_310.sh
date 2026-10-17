@@ -84,11 +84,10 @@ nodes=[]
 for m in re.finditer(r'text="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
     nodes.append((m.group(1),int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))))
 rows=[n for n in nodes if n[0]==name]
-if not rows: sys.exit(1)
-_,a,b,c,d=rows[0]
-for t,a2,b2,c2,d2 in nodes:
-    if re.match(r'^[0-9\u0660-\u0669]{1,2}:[0-9\u0660-\u0669]{2}',t) and abs(((b+d)//2)-((b2+d2)//2))<40:
-        print(t); sys.exit(0)
+for _,a,b,c,d in rows:
+    for t,a2,b2,c2,d2 in nodes:
+        if re.match(r'^[0-9\u0660-\u0669]{1,2}:[0-9\u0660-\u0669]{2}',t) and abs(((b+d)//2)-((b2+d2)//2))<40:
+            print(t); sys.exit(0)
 sys.exit(1)
 PY
 }
