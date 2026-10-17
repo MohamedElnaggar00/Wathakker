@@ -1,0 +1,87 @@
+outcome: failure  bom: 2025.10.01  run: 39044143192  sha: 818c23b502ed0369a8f74c22e878de9375335002
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 65
+--- kotlin per file
+     55 L10nTables.kt
+      9 PrayerAlertDialog.kt
+      1 PrayerAlertScheduler.kt
+--- kotlin details
+e: com/example/prayer/PrayerAlertDialog.kt:120:29 No value passed for parameter 'onCheckedChange'.
+e: com/example/prayer/PrayerAlertDialog.kt:120:38 Argument type mismatch: actual type is 'Function0<Unit>', but 'Modifier' was expected.
+e: com/example/prayer/PrayerAlertDialog.kt:120:85 Unresolved reference 'it'.
+e: com/example/prayer/PrayerAlertDialog.kt:168:37 No value passed for parameter 'onCheckedChange'.
+e: com/example/prayer/PrayerAlertDialog.kt:168:44 Argument type mismatch: actual type is 'Function0<Unit>', but 'Modifier' was expected.
+e: com/example/prayer/PrayerAlertDialog.kt:168:97 Unresolved reference 'it'.
+e: com/example/prayer/PrayerAlertDialog.kt:214:33 No value passed for parameter 'onCheckedChange'.
+e: com/example/prayer/PrayerAlertDialog.kt:214:59 Argument type mismatch: actual type is 'Function0<Int>', but 'Modifier' was expected.
+e: com/example/prayer/PrayerAlertDialog.kt:214:88 Unresolved reference 'it'.
+e: com/example/prayer/alerts/PrayerAlertScheduler.kt:28:40 Unresolved reference 'fromId'.
+e: com/example/ui/i18n/L10nTables.kt:130:104 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:132:40 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:132:80 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:132:90 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:133:32 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:257:89 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:259:45 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:259:79 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:259:87 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:260:26 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:390:96 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:392:44 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:392:78 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:392:88 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:393:35 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:524:103 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:526:49 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:526:83 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:526:91 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:527:36 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:659:101 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:661:41 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:661:75 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:661:83 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:662:35 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:794:97 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:796:36 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:796:70 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:796:79 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:797:35 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:928:102 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:930:27 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:930:73 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:930:78 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:931:26 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1062:99 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1064:30 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1064:74 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1064:83 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1065:26 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1197:94 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1199:42 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1199:76 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1199:87 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1200:33 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1332:102 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1334:41 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1334:75 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1334:86 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1335:31 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1467:94 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1469:43 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1469:77 Unresolved reference 's'.
+e: com/example/ui/i18n/L10nTables.kt:1469:85 Unresolved reference 'd'.
+e: com/example/ui/i18n/L10nTables.kt:1470:35 Unresolved reference 's'.
+--- sign log
+--- details
+114:* What went wrong:
+115:Execution failed for task ':app:compileDebugKotlin'.
+116-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+117-   > Compilation error. See log for more details
+118-
+119-* Try:
+--
+125:BUILD FAILED in 2m 49s
+126-23 actionable tasks: 23 executed
