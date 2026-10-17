@@ -86,7 +86,7 @@ NB=0; for i in 0 1 2 3 4 5; do [ -n "$(find_center desc bell_$i)" ] && NB=$((NB+
 
 # CHECK 2: 4 tabs (Prayer/Azkar/Hisn/More), no Fajr tab
 T=0
-for t in "الصلاة" "الأذكار" "حصن المسلم" "المزيد"; do has_text "$t" && T=$((T+1)); done
+for t in "مواعيد الصلاة" "الأذكار" "حصن المسلم" "السبحة"; do has_text "$t" && T=$((T+1)); done
 [ "$T" = 4 ] && say "PASS: 4 main tabs present" || say "FAIL: $T/4 tab labels found"
 
 # CHECK 3: tap Fajr bell -> exact alarm scheduled
@@ -110,10 +110,8 @@ fi
 
 # CHECK 5: Location & calculation screen renders + per-prayer offset changes the time
 dismiss_anr
-tap_node text "المزيد" "More tab" || true
-dismiss_anr
-tap_node text "الإعدادات" "Settings row" || true
-dismiss_anr; sleep 2
+adb shell input tap 122 222; sleep 3
+dismiss_anr; sleep 1
 shot 03-settings
 tap_node text "تغيير الموقع" "Location & calculation row" || true
 dismiss_anr; sleep 2
@@ -128,15 +126,17 @@ if [ -n "$LC_FAJR" ]; then
   # steppers sit at the row edges; try the physical right edge minus 60px (RTL: minus button), then left edge if no change
   adb shell input tap 1020 $2; sleep 2
   adb shell input keyevent KEYCODE_BACK; sleep 2
+  adb shell input keyevent KEYCODE_BACK; sleep 2
   dismiss_anr; dump
   FAJR_AFTER=$(prayer_time "الفجر")
   say "INFO: Fajr time before=$FAJR_BEFORE after=$FAJR_AFTER"
   if [ -n "$FAJR_BEFORE" ] && [ -n "$FAJR_AFTER" ] && [ "$FAJR_BEFORE" != "$FAJR_AFTER" ]; then
     say "PASS: per-prayer offset changed Fajr time ($FAJR_BEFORE -> $FAJR_AFTER)"
     # restore: go back and tap the opposite edge
-    tap_node text "المزيد" "More tab" || true; tap_node text "الإعدادات" "Settings row" || true; tap_node text "تغيير الموقع" "Location row" || true; sleep 2
+    adb shell input tap 122 222; sleep 3; tap_node text "تغيير الموقع" "Location row" || true; sleep 2
     dump; LC2=$(find_center text "الفجر"); set -- $LC2
     adb shell input tap 60 $2; sleep 2
+    adb shell input keyevent KEYCODE_BACK; sleep 2
     adb shell input keyevent KEYCODE_BACK; sleep 2
     dump; FAJR_REST=$(prayer_time "الفجر")
     [ "$FAJR_REST" = "$FAJR_BEFORE" ] && say "PASS: offset restored ($FAJR_REST)" || say "WARN: restore landed on $FAJR_REST (expected $FAJR_BEFORE)"
@@ -151,9 +151,8 @@ fi
 
 # CHECK 6: live language switch AR -> EN -> AR
 dismiss_anr
-tap_node text "المزيد" "More tab" || true
-tap_node text "الإعدادات" "Settings row" || true
-sleep 2
+adb shell input tap 122 222; sleep 3
+adb shell input swipe 540 1800 540 700 400; sleep 2
 if tap_node text "اللغة" "Language row"; then
   sleep 2; dump
   if tap_node text "English" "English option"; then
