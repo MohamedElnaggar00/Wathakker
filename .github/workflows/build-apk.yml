@@ -53,14 +53,14 @@ jobs:
         if: steps.build.outcome == 'success'
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || secrets.KEY_PASSWORD }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_PASSWORD: ""
+          KEY_PASSWORD: ""
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
           bash -c 'set -euo pipefail
           umask 077
           work=$(mktemp -d)
-          for name in KEYSTORE_BASE64 KEY_PASSWORD KEY_ALIAS; do
+          for name in KEYSTORE_BASE64 KEY_ALIAS; do
             if [ -z "${!name}" ]; then echo "Missing signing secret: $name"; exit 1; fi
           done
           printf "%s" "$KEYSTORE_BASE64" | base64 --decode > "$work/source.bks"
@@ -72,7 +72,7 @@ jobs:
           BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
           APK=app/build/outputs/apk/debug/app-debug.apk
           "$BT/zipalign" -f -p 4 "$APK" "$work/aligned.apk"
-          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out "$APK" "$work/aligned.apk"
+          "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass pass: --key-pass pass: --out "$APK" "$work/aligned.apk"
           "$BT/apksigner" verify --verbose --print-certs "$APK" > "$work/sig.txt"
           if grep -q 0a8b609561f299eaba4518c57e558d506e3991bd0ac551cc167716241adad55f "$work/sig.txt"; then echo signed-with-original-cert; else echo CERT-MISMATCH; exit 1; fi
           rm -rf "$work"
