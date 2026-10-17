@@ -16,7 +16,6 @@ import java.lang.ref.WeakReference
 /** Small helpers shared by the screen headers: tile backgrounds and the settings shortcut. */
 object HeaderTools {
     private var nav: WeakReference<Any>? = null
-    private val tileColor = Color(0xFF242426)
 
     @JvmStatic
     fun setNav(obj: Any?) {
@@ -45,14 +44,15 @@ object HeaderTools {
         }
     }
 
-    @JvmStatic
+    @androidx.compose.runtime.Composable
     fun tile(modifier: Modifier): Modifier {
         val shape = RoundedCornerShape(26.dp)
-        return modifier.clip(shape).background(tileColor, shape)
+        return modifier.clip(shape).background(androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh, shape)
     }
 
-    @JvmStatic
+    @androidx.compose.runtime.Composable
     fun scrollTile(modifier: Modifier, alpha: Float): Modifier =
-        modifier.clip(RoundedCornerShape(26.dp)).background(tileColor.copy(alpha = alpha))
+        modifier.clip(RoundedCornerShape(26.dp))
+            .background(androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = alpha))
 }
 
