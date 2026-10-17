@@ -50,7 +50,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.R
-import com.example.fajr.ui.FajrSettingsScreen
 import com.example.fajr.ui.FajrViewModel
 import com.example.lockwidgets.HomeWidgets
 import com.example.prayer.PrayerTimesScreen
@@ -163,15 +162,10 @@ fun MainScreen(viewModel: MainViewModel) {
                     SettingsScreen(
                         viewModel,
                         { navController.popBackStack() },
-                        { navController.navigate("fajr_settings") },
                         { navController.navigate("location_calc") },
                         { navController.navigate("optional_times") },
                         { navController.navigate("hijri_converter") }
                     )
-                }
-                composable("fajr_settings") {
-                    val fajrViewModel: FajrViewModel = viewModel()
-                    FajrSettingsScreen(fajrViewModel) { navController.popBackStack() }
                 }
                 composable("optional_times") {
                     com.example.prayer.OptionalTimesScreen { navController.popBackStack() }
