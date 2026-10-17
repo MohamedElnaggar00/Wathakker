@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Alarm
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.MoreTime
@@ -51,7 +52,8 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onNavigateToFajr: (() -> Unit)? = null,
     onNavigateToLocation: (() -> Unit)? = null,
-    onNavigateToOptionalTimes: (() -> Unit)? = null
+    onNavigateToOptionalTimes: (() -> Unit)? = null,
+    onNavigateToHijriConverter: (() -> Unit)? = null
 ) {
     val contextApp = LocalContext.current.applicationContext
     val vibration by viewModel.vibrationEnabled.collectAsState()
@@ -91,6 +93,7 @@ fun SettingsScreen(
         onFajr = onNavigateToFajr,
         onLocation = onNavigateToLocation,
         onOptionalTimes = onNavigateToOptionalTimes,
+        onHijriConverter = onNavigateToHijriConverter,
         onPickTheme = { showThemePicker = true },
         onLockWidgets = { showLockWidgets = true },
         onPickLanguage = { showLanguagePicker = true }
@@ -179,6 +182,7 @@ fun SettingsContent(
     onFajr: (() -> Unit)? = null,
     onLocation: (() -> Unit)? = null,
     onOptionalTimes: (() -> Unit)? = null,
+    onHijriConverter: (() -> Unit)? = null,
     onPickTheme: () -> Unit = {},
     onLockWidgets: () -> Unit = {},
     onPickLanguage: () -> Unit = {}
@@ -202,6 +206,16 @@ fun SettingsContent(
                             leading = { OneUIIconBadge(Icons.Outlined.MoreTime) },
                             trailing = { ChevronIcon() },
                             onClick = onOptionalTimes
+                        )
+                    }
+                    if (onHijriConverter != null) {
+                        OneUIDivider(70.dp)
+                        OneUIRow(
+                            title = L10n.t(S.HijriConvTitle),
+                            summary = L10n.t(S.HijriConvSub),
+                            leading = { OneUIIconBadge(Icons.Outlined.DateRange) },
+                            trailing = { ChevronIcon() },
+                            onClick = onHijriConverter
                         )
                     }
                 }
