@@ -49,6 +49,15 @@ object PrayerAdjustments {
         )
     }
 
+    /** Optional prayer-screen rows (gap item 4): imsak/duha/midnight/qiyam, off by default. */
+    fun optionalRow(context: Context, key: String): Boolean =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean("opt_" + key, false)
+
+    fun setOptionalRow(context: Context, key: String, enabled: Boolean) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putBoolean("opt_" + key, enabled).apply()
+    }
+
     fun hijriOffsetDays(context: Context): Int =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getInt("hijri_offset", 0)
 
