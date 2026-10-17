@@ -46,9 +46,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,6 +72,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.ui.theme.OneUIPillDark
 import dev.chrisbanes.haze.hazeSource
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 object OneUIDimens {
     val ScreenPadding: Dp = 16.dp
@@ -165,7 +164,7 @@ fun OneUIScreen(
                 if (leading != null) {
                     IconButton(onClick = leading) {
                         if (onMenu != null) {
-                            Icon(Icons.Outlined.Menu, contentDescription = "القائمة", tint = MaterialTheme.colorScheme.onBackground)
+                            Icon(Icons.Outlined.Menu, contentDescription = L10n.t(S.Menu), tint = MaterialTheme.colorScheme.onBackground)
                         } else {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                         }
@@ -448,21 +447,9 @@ fun parseColorSafe(hex: String, fallback: Color = Color(0xFF008080)): Color =
         fallback
     }
 
-fun azkarCount(n: Int): String = when {
-    n == 0 -> "لا أذكار"
-    n == 1 -> "ذكر واحد"
-    n == 2 -> "ذكران"
-    n in 3..10 -> "$n أذكار"
-    else -> "$n ذكرًا"
-}
+fun azkarCount(n: Int): String = L10n.azkarCount(n)
 
-fun readsCount(n: Int): String = when {
-    n == 0 -> "لا قراءات"
-    n == 1 -> "قراءة واحدة"
-    n == 2 -> "قراءتان"
-    n in 3..10 -> "$n قراءات"
-    else -> "$n قراءة"
-}
+fun readsCount(n: Int): String = L10n.readsCount(n)
 
 @Composable
 fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
@@ -654,16 +641,14 @@ fun OneUIDrawer(
                     )
             )
         }
-        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-        val drawerProgress by animateFloatAsState(if (open) 1f else 0f, tween(280), label = "drawerSlide")
-        if (open || drawerProgress > 0f) {
-            val drawerSlidePx = with(LocalDensity.current) { 324.dp.toPx() }
-            val slideSign = if (isRtl) 1f else -1f
+        AnimatedVisibility(
+            visible = open,
+            modifier = Modifier.align(Alignment.CenterStart),
+            enter = slideInHorizontally(tween(280)) { -it } + fadeIn(tween(220)),
+            exit = slideOutHorizontally(tween(280)) { -it } + fadeOut(tween(220))
+        ) {
             Column(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .offset { IntOffset((slideSign * (1f - drawerProgress) * drawerSlidePx).toInt(), 0) }
-                    .alpha(drawerProgress)
                     .padding(start = 12.dp, top = 28.dp, bottom = 28.dp)
                     .width(300.dp)
                     .fillMaxHeight()
