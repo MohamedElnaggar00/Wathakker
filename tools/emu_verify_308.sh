@@ -43,3 +43,8 @@ adb pull /sdcard/verify.mp4 "$OUT/verify.mp4" >> "$OUT/record.txt" 2>&1 || true
 adb logcat -d -v threadtime > "$OUT/logcat.txt"
 grep -E 'FATAL EXCEPTION|AndroidRuntime|ANR in' "$OUT/logcat.txt" > "$OUT/crashes.txt" || true
 adb shell pidof com.wathakker.app > "$OUT/pid.txt" || true
+
+# 4) widget render harness (debug builds only): light/dark/default backgrounds, per-instance ids
+adb shell am start -S -W -n com.wathakker.app/com.example.WidgetRenderCheck > "$OUT/rendercheck.txt" 2>&1 || true
+sleep 4
+adb pull /sdcard/Android/data/com.wathakker.app/files "$OUT/widgets" > "$OUT/pull_widgets.txt" 2>&1 || true
