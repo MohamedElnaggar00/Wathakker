@@ -72,6 +72,8 @@ import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIDialog
 import com.example.ui.oneui.OneUIScreen
 import com.example.ui.oneui.OneUISwitch
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun FajrSettingsScreen(
@@ -162,7 +164,7 @@ fun FajrSettingsScreen(
         onPickSystemRingtone = {
             val intent = Intent("android.intent.action.RINGTONE_PICKER")
             intent.putExtra("android.intent.extra.ringtone.TYPE", 4)
-            intent.putExtra("android.intent.extra.ringtone.TITLE", "اختر نغمة المنبه")
+            intent.putExtra("android.intent.extra.ringtone.TITLE", L10n.t(S.PickRingtone))
             intent.putExtra("android.intent.extra.ringtone.SHOW_SILENT", false)
             intent.putExtra("android.intent.extra.ringtone.SHOW_DEFAULT", true)
             ringtonePickerLauncher.launch(intent)
@@ -195,7 +197,7 @@ fun FajrSettingsContent(
     onSetMaxDuration: (Int) -> Unit = {}
 ) {
     val cs = MaterialTheme.colorScheme
-    OneUIScreen(title = "منبه صلاة الفجر", onBack = onBack, onMenu = onMenu) {
+    OneUIScreen(title = L10n.t(S.FajrAlarm), onBack = onBack, onMenu = onMenu) {
         item {
             FajrHeader(state.nextFajrTimeFormatted, state.isAlarmEnabled(), state.cityName)
         }
@@ -216,9 +218,9 @@ fun FajrSettingsContent(
                         }
                         Spacer(Modifier.width(14.dp))
                         Column {
-                            Text("تفعيل منبه صلاة الفجر", color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                            Text(L10n.t(S.FajrAlarmOn), color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                             Text(
-                                if (state.isAlarmEnabled()) "المنبه يعطي تنبيهاً وقت الفجر" else "المنبه متوقف حالياً",
+                                if (state.isAlarmEnabled()) L10n.t(S.AlarmEnabledSub) else L10n.t(S.AlarmDisabledSub),
                                 color = cs.onSurfaceVariant,
                                 fontSize = 12.sp
                             )
@@ -230,20 +232,20 @@ fun FajrSettingsContent(
         }
         item {
             OneUICard(padding = PaddingValues(18.dp)) {
-                Text("طريقة تحديد الموقع", color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(L10n.t(S.LocationMethod), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
                 LocationOptionRow(
                     selected = state.useCurrentLocation,
                     icon = Icons.Outlined.GpsFixed,
-                    title = "الموقع الحالي",
-                    subtitle = "تحديث تلقائي لموعد الفجر حسب موقعك",
+                    title = L10n.t(S.CurrentLocation),
+                    subtitle = L10n.t(S.AutoUpdateFajr),
                     onClick = onSelectGps
                 )
                 LocationOptionRow(
                     selected = !state.useCurrentLocation,
                     icon = Icons.Outlined.EditLocation,
-                    title = "اختيار الدولة والمدينة",
-                    subtitle = "اختيار مدينتك يدوياً بدون الحاجة إلى تحديد الموقع",
+                    title = L10n.t(S.PickCountryCity),
+                    subtitle = L10n.t(S.PickCitySub),
                     onClick = onSelectManualCity
                 )
                 Spacer(Modifier.height(10.dp))
@@ -256,13 +258,13 @@ fun FajrSettingsContent(
                         Icon(Icons.Outlined.LocationOn, null, tint = cs.primary)
                         Spacer(Modifier.width(8.dp))
                         Column {
-                            Text("المدينة الحالية", color = cs.onSurfaceVariant, fontSize = 11.sp)
+                            Text(L10n.t(S.CurrentCity), color = cs.onSurfaceVariant, fontSize = 11.sp)
                             Text(state.cityName, color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                     if (!state.useCurrentLocation) {
                         TextButton(onClick = onChangeCity) {
-                            Text("تغيير المدينة", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                            Text(L10n.t(S.ChangeCity), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -272,8 +274,8 @@ fun FajrSettingsContent(
                         Icon(Icons.Outlined.Warning, null, tint = cs.error)
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            if (!state.hasLocationPermission) "صلاحية الموقع غير ممنوحة. يرجى المتابعة لمنح الصلاحية."
-                            else "خدمة الموقع (GPS) غير مفعلة في الهاتف.",
+                            if (!state.hasLocationPermission) L10n.t(S.NoLocPermission)
+                            else L10n.t(S.GpsOff),
                             color = cs.error,
                             fontSize = 12.sp
                         )
@@ -283,7 +285,7 @@ fun FajrSettingsContent(
         }
         item {
             OneUICard(padding = PaddingValues(18.dp)) {
-                Text("طريقة الحساب", color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(L10n.t(S.CalcMethod), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -294,7 +296,7 @@ fun FajrSettingsContent(
                         Icon(Icons.Outlined.Tune, null, tint = cs.primary)
                         Spacer(Modifier.width(8.dp))
                         Column {
-                            Text("طريقة الحساب المختارة", color = cs.onSurfaceVariant, fontSize = 11.sp)
+                            Text(L10n.t(S.SelectedCalcMethod), color = cs.onSurfaceVariant, fontSize = 11.sp)
                             Text(
                                 state.calculationMethod.titleAr,
                                 color = cs.onSurface,
@@ -304,7 +306,7 @@ fun FajrSettingsContent(
                         }
                     }
                     TextButton(onClick = onChangeMethod) {
-                        Text("تغيير", color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        Text(L10n.t(S.Change), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
                 Spacer(Modifier.height(8.dp))
@@ -316,18 +318,18 @@ fun FajrSettingsContent(
                     if (state.isRefreshing()) {
                         CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
                         Spacer(Modifier.width(8.dp))
-                        Text("جاري تحديث الموعد...")
+                        Text(L10n.t(S.UpdatingTime))
                     } else {
                         Icon(Icons.Outlined.Refresh, null)
                         Spacer(Modifier.width(8.dp))
-                        Text("تحديث موعد الفجر الآن", fontWeight = FontWeight.Bold)
+                        Text(L10n.t(S.UpdateFajrNow), fontWeight = FontWeight.Bold)
                     }
                 }
             }
         }
         item {
             OneUICard(padding = PaddingValues(18.dp)) {
-                Text("نغمة المنبه والصوت", color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(L10n.t(S.AlarmToneSection), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -338,7 +340,7 @@ fun FajrSettingsContent(
                         Icon(Icons.Outlined.MusicNote, null, tint = cs.primary)
                         Spacer(Modifier.width(8.dp))
                         Column {
-                            Text("النغمة المختارة", color = cs.onSurfaceVariant, fontSize = 11.sp)
+                            Text(L10n.t(S.SelectedTone), color = cs.onSurfaceVariant, fontSize = 11.sp)
                             Text(
                                 state.ringtoneTitle,
                                 color = cs.onSurface,
@@ -365,7 +367,7 @@ fun FajrSettingsContent(
                     ) {
                         Icon(Icons.Outlined.MusicNote, null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text("نغمات النظام", fontSize = 12.sp)
+                        Text(L10n.t(S.SystemTones), fontSize = 12.sp)
                     }
                     OutlinedButton(
                         onClick = onPickAudioFile,
@@ -374,14 +376,14 @@ fun FajrSettingsContent(
                     ) {
                         Icon(Icons.Outlined.AudioFile, null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(6.dp))
-                        Text("ملف صوتي", fontSize = 12.sp)
+                        Text(L10n.t(S.AudioFile), fontSize = 12.sp)
                     }
                 }
             }
         }
         item {
             OneUICard(padding = PaddingValues(18.dp)) {
-                Text("إعدادات إضافية", color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(L10n.t(S.ExtraSettings), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -391,7 +393,7 @@ fun FajrSettingsContent(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.Vibration, null, tint = cs.primary)
                         Spacer(Modifier.width(8.dp))
-                        Text("الاهتزاز أثناء التنبيه", color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(L10n.t(S.VibrateDuringAlarm), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                     }
                     OneUISwitch(state.isVibrationEnabled(), onToggleVibration)
                 }
@@ -404,7 +406,7 @@ fun FajrSettingsContent(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.VolumeUp, null, tint = cs.primary)
                         Spacer(Modifier.width(8.dp))
-                        Text("مستوى صوت المنبه", color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        Text(L10n.t(S.AlarmVolume), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                     }
                     Text("${state.alarmVolume}%", color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 }
@@ -414,14 +416,14 @@ fun FajrSettingsContent(
                     valueRange = 10f..100f
                 )
                 Spacer(Modifier.height(8.dp))
-                Text("مدة الغفوة", color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                Text(L10n.t(S.SnoozeDuration), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(8.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(1, 3, 5, 10).forEach { mins ->
                         FilterChip(
                             selected = state.maxDurationMinutes == mins,
                             onClick = { onSetMaxDuration(mins) },
-                            label = { Text("$mins (د)", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, maxLines = 1) },
+                            label = { Text(L10n.t(S.MinutesShortFmt).format(mins), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, maxLines = 1) },
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -465,7 +467,7 @@ fun FajrHeader(nextFajrTimeFormatted: String, isAlarmEnabled: Boolean, cityName:
     val cs = MaterialTheme.colorScheme
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
         Text(
-            "موعد صلاة الفجر القادم",
+            L10n.t(S.NextFajrAt),
             color = cs.onSurfaceVariant,
             fontSize = 13.sp,
             fontWeight = FontWeight.Medium
@@ -490,7 +492,7 @@ fun FajrHeader(nextFajrTimeFormatted: String, isAlarmEnabled: Boolean, cityName:
             Surface(shape = RoundedCornerShape(12.dp), color = accent.copy(alpha = 0.15f)) {
                 Icon(
                     if (isAlarmEnabled) Icons.Outlined.AlarmOn else Icons.Outlined.AlarmOff,
-                    if (isAlarmEnabled) "المنبه مفعّل" else "المنبه معطّل",
+                    if (isAlarmEnabled) L10n.t(S.AlarmOnDesc) else L10n.t(S.AlarmOffDesc),
                     modifier = Modifier.padding(11.dp).size(24.dp),
                     tint = accent
                 )
@@ -506,7 +508,7 @@ fun CalculationMethodDialog(
     onMethodSelected: (CalculationMethod) -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
-    OneUIDialog(title = "اختر طريقة الحساب", onDismiss = onDismiss) {
+    OneUIDialog(title = L10n.t(S.PickCalcMethod), onDismiss = onDismiss) {
         CalculationMethod.values().forEach { method ->
             Row(
                 modifier = Modifier
@@ -528,3 +530,4 @@ fun CalculationMethodDialog(
         }
     }
 }
+
