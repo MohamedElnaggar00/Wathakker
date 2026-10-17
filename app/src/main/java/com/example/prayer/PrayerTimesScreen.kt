@@ -88,7 +88,20 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
 
     val method = CalculationMethod.INSTANCE.fromId(prefs.calculationMethodId)
     val cal = Calendar.getInstance().apply { timeInMillis = now }
-    val today = PrayerTimesCalculator.INSTANCE.calculateAll(cal, latitude, longitude, method)
+    // Heavy astronomy math: once per day/location/method, not every second of countdown.
+    val dayKey = cal.get(Calendar.YEAR) * 1000 + cal.get(Calendar.DAY_OF_YEAR)
+    val days = remember(dayKey, latitude, longitude, method) {
+        val todayCal = Calendar.getInstance()
+        val t = PrayerTimesCalculator.INSTANCE.calculateAll(todayCal, latitude, longitude, method)
+        val tomorrowCal = todayCal.clone() as Calendar
+        tomorrowCal.add(Calendar.DAY_OF_YEAR, 1)
+        val tm = PrayerTimesCalculator.INSTANCE.calculateAll(tomorrowCal, latitude, longitude, method)
+        val yesterdayCal = todayCal.clone() as Calendar
+        yesterdayCal.add(Calendar.DAY_OF_YEAR, -1)
+        val y = PrayerTimesCalculator.INSTANCE.calculateAll(yesterdayCal, latitude, longitude, method)
+        Triple(t, tm, y)
+    }
+    val today = days.first
     val ordered: List<Triple<String, Long, ImageVector>> = listOf(
         Triple(L10n.t(S.PrayerFajr), today.fajr, Icons.Outlined.WbTwilight),
         Triple(L10n.t(S.PrayerShuruq), today.sunrise, Icons.Outlined.WbSunny),
@@ -97,23 +110,15 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
         Triple(L10n.t(S.PrayerMaghrib), today.maghrib, Icons.Outlined.NightsStay),
         Triple(L10n.t(S.PrayerIsha), today.isha, Icons.Outlined.DarkMode)
     )
-    val next = ordered.firstOrNull { it.second > now } ?: run {
-        val tomorrowCal = cal.clone() as Calendar
-        tomorrowCal.add(Calendar.DAY_OF_YEAR, 1)
-        val tomorrow = PrayerTimesCalculator.INSTANCE.calculateAll(tomorrowCal, latitude, longitude, method)
-        Triple(L10n.t(S.PrayerFajr), tomorrow.fajr, Icons.Outlined.WbTwilight)
-    }
-    val prev = ordered.lastOrNull { it.second <= now } ?: run {
-        val yesterdayCal = cal.clone() as Calendar
-        yesterdayCal.add(Calendar.DAY_OF_YEAR, -1)
-        val yesterday = PrayerTimesCalculator.INSTANCE.calculateAll(yesterdayCal, latitude, longitude, method)
-        Triple(L10n.t(S.PrayerIsha), yesterday.isha, Icons.Outlined.DarkMode)
-    }
+    val next = ordered.firstOrNull { it.second > now }
+        ?: Triple(L10n.t(S.PrayerFajr), days.second.fajr, Icons.Outlined.WbTwilight)
+    val prev = ordered.lastOrNull { it.second <= now }
+        ?: Triple(L10n.t(S.PrayerIsha), days.third.isha, Icons.Outlined.DarkMode)
     val interval = (next.second - prev.second).coerceAtLeast(1L)
     val progress = ((now - prev.second).toFloat() / interval.toFloat()).coerceIn(0f, 1f)
     val remaining = (next.second - now).coerceAtLeast(0L)
-    val gregorian = if (L10n.lang == Lang.AR) SimpleDateFormat("EEEE، d MMMM yyyy", Locale("ar", "EG")).format(cal.time) else SimpleDateFormat("EEEE, d MMMM yyyy", Locale.forLanguageTag(L10n.lang.code)).format(cal.time)
-    val hijri = HijriDate.INSTANCE.format(cal)
+    val gregorian = remember(dayKey, L10n.lang) { if (L10n.lang == Lang.AR) SimpleDateFormat("EEEE، d MMMM yyyy", Locale("ar", "EG")).format(cal.time) else SimpleDateFormat("EEEE, d MMMM yyyy", Locale.forLanguageTag(L10n.lang.code)).format(cal.time) }
+    val hijri = remember(dayKey) { HijriDate.INSTANCE.format(cal) }
 
     PrayerTimesContent(
         city = city,
