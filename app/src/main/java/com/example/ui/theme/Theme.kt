@@ -44,7 +44,8 @@ private val DarkColorScheme = darkColorScheme(
     onErrorContainer = OneUIErrorDark,
     outline = OneUIDividerDark,
     outlineVariant = OneUIDividerDark,
-    surfaceContainerHigh = OneUIPillDark
+    surfaceContainerHigh = OneUIPillDark,
+    surfaceContainerHighest = OneUISurfaceVariantDark
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -68,7 +69,8 @@ private val LightColorScheme = lightColorScheme(
     onErrorContainer = OneUIErrorLight,
     outline = OneUIDividerLight,
     outlineVariant = OneUIDividerLight,
-    surfaceContainerHigh = OneUIPillLight
+    surfaceContainerHigh = OneUIPillLight,
+    surfaceContainerHighest = OneUISurfaceVariantLight
 )
 
 val OneUIShapes = Shapes(
