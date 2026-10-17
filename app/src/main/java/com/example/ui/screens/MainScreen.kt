@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -114,15 +115,15 @@ fun MainScreen(viewModel: MainViewModel) {
 
     CompositionLocalProvider(LocalHazeState provides hazeState) {
         Box(Modifier.fillMaxSize()) {
-            val slideDir = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
+            val slideDirState = rememberUpdatedState(if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1)
             NavHost(
                 navController = navController,
                 startDestination = "tabs",
                 modifier = Modifier.fillMaxSize(),
-                enterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDir * it } },
-                exitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDir * it } },
-                popEnterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDir * it } },
-                popExitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDir * it } }
+                enterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDirState.value * it } },
+                exitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDirState.value * it } },
+                popEnterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDirState.value * it } },
+                popExitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDirState.value * it } }
             ) {
                 composable("tabs") {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
