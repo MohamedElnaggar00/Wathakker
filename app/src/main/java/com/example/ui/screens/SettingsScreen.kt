@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Alarm
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.MusicNote
@@ -53,7 +54,8 @@ fun SettingsScreen(
     onNavigateToFajr: (() -> Unit)? = null,
     onNavigateToLocation: (() -> Unit)? = null,
     onNavigateToOptionalTimes: (() -> Unit)? = null,
-    onNavigateToHijriConverter: (() -> Unit)? = null
+    onNavigateToHijriConverter: (() -> Unit)? = null,
+    onNavigateToAbout: (() -> Unit)? = null
 ) {
     val contextApp = LocalContext.current.applicationContext
     val vibration by viewModel.vibrationEnabled.collectAsState()
@@ -267,6 +269,18 @@ fun SettingsContent(
                     trailing = { ChevronIcon() },
                     onClick = onPickLanguage
                 )
+            }
+        }
+        if (onNavigateToAbout != null) {
+            item(key = "about") {
+                OneUICard {
+                    OneUIRow(
+                        title = L10n.t(S.About),
+                        leading = { OneUIIconBadge(Icons.Outlined.Info) },
+                        trailing = { ChevronIcon() },
+                        onClick = onNavigateToAbout
+                    )
+                }
             }
         }
     }
