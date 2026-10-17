@@ -37,6 +37,28 @@ x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') els
 sys.exit(0 if sys.argv[1] in x else 1)
 PY
 }
+# seekbar_below <y> -> "cx cy" of the first SeekBar node whose top edge is below y
+seekbar_below() { python3 - "$1" <<'PY'
+import re,sys,os
+ymin=int(sys.argv[1])
+x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
+best=None
+for m in re.finditer(r'<node[^>]*>',x):
+    tag=m.group(0)
+    if 'SeekBar' not in tag: continue
+    b=re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',tag)
+    if not b: continue
+    a,bb,c,d=map(int,b.groups())
+    if bb>ymin and (best is None or bb<best[1]): best=(a,bb,c,d)
+if best: print((best[0]+best[2])//2,(best[1]+best[3])//2)
+PY
+}
+count_seekbars() { python3 - <<'PY'
+import re,os
+x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
+print(len([t for t in re.findall(r'<node[^>]*>',x) if 'SeekBar' in t]))
+PY
+}
 dismiss_anr() {
   for k in 1 2 3; do
     dump
@@ -142,7 +164,17 @@ if [ -n "$BL" ]; then
   adb shell input swipe $BL $BL 900; sleep 3
   dump
   has_text "نوع التنبيه" && say "PASS: alert dialog opened (alert type visible)" || say "FAIL: alert dialog did not open"
+  NS=$(count_seekbars)
+  [ "$NS" -ge 3 ] && say "PASS: alert dialog shows $NS One UI sliders (timing/volume/snooze)" || say "FAIL: expected 3 sliders in alert dialog, found $NS"
   shot 02-alert-dialog
+  # large font scale (his phone): everything must stay reachable via the dialog scroll
+  adb shell settings put system font_scale 1.3; sleep 3
+  dump
+  adb shell input swipe 540 1500 540 800 500; sleep 2
+  dump
+  has_text "مدة الغفوة" && say "PASS: snooze row reachable at font_scale 1.3" || say "FAIL: snooze row not reachable at font_scale 1.3"
+  shot 02c-alert-dialog-font13
+  adb shell settings put system font_scale 1.0; sleep 3
   adb shell input keyevent KEYCODE_BACK; sleep 2
 fi
 
@@ -169,50 +201,61 @@ has_text "الموقع والحساب" && say "PASS: Location & calculation scre
 shot 04-location-screen
 # adjustments are below the fold: scroll until the Fajr row is composed (LazyColumn renders visible rows only)
 scroll_until "الفجر"
+shot 04b-location-adjustments
 LC_FAJR=$(find_center text "الفجر")
-EDGE=""
 if [ -n "$LC_FAJR" ]; then
   set -- $LC_FAJR
-  adb shell input tap 1020 $2; sleep 2
-  back_to_prayer
-  FAJR_AFTER=$(prayer_time "الفجر")
-  say "INFO: Fajr time before=$FAJR_BEFORE after=$FAJR_AFTER (right-edge tap)"
-  if [ -z "$FAJR_AFTER" ] || [ "$FAJR_AFTER" = "$FAJR_BEFORE" ]; then
-    goto_location
-    scroll_until "الفجر"
-    LC2=$(find_center text "الفجر")
-    if [ -n "$LC2" ]; then
-      set -- $LC2
-      adb shell input tap 60 $2; sleep 2
-    fi
+  SL=$(seekbar_below $2)
+  if [ -n "$SL" ]; then
+    set -- $SL
+    # RTL slider: increasing is toward the LEFT; drag left ~120px for a few minutes
+    adb shell input swipe $1 $2 $(($1-120)) $2 700; sleep 2
+    shot 04c-offset-slider-dragged
     back_to_prayer
     FAJR_AFTER=$(prayer_time "الفجر")
-    say "INFO: left-edge try: Fajr after=$FAJR_AFTER"
-    [ -n "$FAJR_AFTER" ] && [ "$FAJR_AFTER" != "$FAJR_BEFORE" ] && EDGE=60
-  else
-    EDGE=1020
-  fi
-  if [ -n "$FAJR_BEFORE" ] && [ -n "$FAJR_AFTER" ] && [ "$FAJR_BEFORE" != "$FAJR_AFTER" ]; then
-    say "PASS: per-prayer offset changed Fajr time ($FAJR_BEFORE -> $FAJR_AFTER)"
-    REST=1020; [ "$EDGE" = 1020 ] && REST=60
-    goto_location
-    scroll_until "الفجر"
-    LC3=$(find_center text "الفجر")
-    if [ -n "$LC3" ]; then
-      set -- $LC3
-      adb shell input tap $REST $2; sleep 2
+    say "INFO: Fajr time before=$FAJR_BEFORE after=$FAJR_AFTER (slider drag left)"
+    if [ -n "$FAJR_BEFORE" ] && [ -n "$FAJR_AFTER" ] && [ "$FAJR_BEFORE" != "$FAJR_AFTER" ]; then
+      say "PASS: per-prayer offset slider changed Fajr time ($FAJR_BEFORE -> $FAJR_AFTER)"
+      goto_location
+      scroll_until "الفجر"
+      LC3=$(find_center text "الفجر")
+      SL3=""
+      [ -n "$LC3" ] && { set -- $LC3; SL3=$(seekbar_below $2); }
+      if [ -n "$SL3" ]; then
+        set -- $SL3
+        adb shell input swipe $(($1-120)) $2 $1 $2 700; sleep 2
+      fi
+      back_to_prayer
+      FAJR_REST=$(prayer_time "الفجر")
+      [ "$FAJR_REST" = "$FAJR_BEFORE" ] && say "PASS: offset restored ($FAJR_REST)" || say "WARN: restore landed on $FAJR_REST (expected $FAJR_BEFORE)"
+    else
+      say "FAIL: Fajr time unchanged after slider drag"
+      back_to_prayer
     fi
-    back_to_prayer
-    FAJR_REST=$(prayer_time "الفجر")
-    [ "$FAJR_REST" = "$FAJR_BEFORE" ] && say "PASS: offset restored ($FAJR_REST)" || say "WARN: restore landed on $FAJR_REST (expected $FAJR_BEFORE)"
   else
-    say "FAIL: Fajr time unchanged after stepper taps"
+    say "FAIL: no offset slider found under Fajr row"
     back_to_prayer
   fi
 else
   say "FAIL: no Fajr row on Location screen"
   back_to_prayer
 fi
+
+# CHECK 5b: Hijri converter entry is in the drawer (and gone from Settings)
+dump
+has_text "محول التاريخ" && say "FAIL: converter row still on Settings screen" || say "PASS: converter row removed from Settings"
+back_to_prayer
+tap_node desc "القائمة" "Menu button" || true; sleep 2
+dump
+if tap_node text "محول التاريخ" "Drawer converter row"; then
+  sleep 2; dump
+  has_text "محول التاريخ" && say "PASS: converter opened from drawer" || say "FAIL: converter screen did not open from drawer"
+  shot 03b-converter-from-drawer
+  adb shell input keyevent KEYCODE_BACK; sleep 2
+else
+  say "FAIL: converter row missing from drawer"
+fi
+back_to_prayer
 
 # CHECK 6: live language switch AR -> EN -> AR
 dismiss_anr
@@ -244,6 +287,27 @@ adb shell settings put system user_rotation 1; sleep 3
 shot 06-landscape
 dump; has_text "الصلاة" && say "PASS: rotation to landscape keeps prayer screen" || say "FAIL: rotation broke UI"
 adb shell settings put system user_rotation 0; sleep 2
+
+# CHECK 7b: light mode renders (header pills, bottom bar, dialog follow the light scheme)
+adb shell cmd uimode night no
+adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity >> "$OUT/launch.txt" 2>&1
+sleep 8; dismiss_anr; dump
+[ -n "$(find_center desc bell_0)" ] && say "PASS: prayer screen renders in light mode" || say "FAIL: prayer screen broken in light mode"
+shot 06b-light-prayer
+goto_settings
+shot 06c-light-settings
+back_to_prayer
+BL=$(find_center desc bell_0)
+if [ -n "$BL" ]; then
+  adb shell input swipe $BL $BL 900; sleep 3
+  dump
+  has_text "نوع التنبيه" && say "PASS: alert dialog renders in light mode" || say "WARN: alert dialog not opened in light mode"
+  shot 06d-light-dialog
+  adb shell input keyevent KEYCODE_BACK; sleep 2
+fi
+adb shell cmd uimode night yes
+adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity >> "$OUT/launch.txt" 2>&1
+sleep 8; dismiss_anr; dump
 
 # CHECK 8: process death -> bells persist
 adb shell am kill com.wathakker.app; sleep 3
