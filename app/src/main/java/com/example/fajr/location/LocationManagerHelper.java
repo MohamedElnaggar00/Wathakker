@@ -77,8 +77,14 @@ public final class LocationManagerHelper {
         Code decompiled incorrectly, please refer to instructions dump.
     */
     public final String getCityNameFromCoordinates(double latitude, double longitude) {
+        return getCityNameFromCoordinates(latitude, longitude, new Locale("ar"));
+    }
+
+    public final String getCityNameFromCoordinates(double latitude, double longitude, Locale locale) {
+        boolean ar = "ar".equals(locale.getLanguage());
+        String unknown = ar ? "\u0645\u0648\u0642\u0639\u0643 \u0627\u0644\u062d\u0627\u0644\u064a" : "Current location";
         try {
-            Geocoder geocoder = new Geocoder(this.context, new Locale("ar"));
+            Geocoder geocoder = new Geocoder(this.context, locale);
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
@@ -91,17 +97,18 @@ public final class LocationManagerHelper {
                 }
                 String country = address.getCountryName();
                 if (city != null && city.length() != 0 && country != null && country.length() != 0) {
-                    return city + "\u060c " + country;
+                    return ar ? city + "\u060c " + country : city + ", " + country;
                 }
                 if (country == null) {
-                    return city == null ? "\u0645\u0648\u0642\u0639\u0643 \u0627\u0644\u062d\u0627\u0644\u064a" : city;
+                    return city == null ? unknown : city;
                 }
                 return country;
             }
-            return "\u0645\u0648\u0642\u0639\u0643 \u0627\u0644\u062d\u0627\u0644\u064a (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
+            return unknown + " (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
         } catch (Exception e) {
             e.printStackTrace();
-            return "\u0645\u0648\u0642\u0639\u0643 \u0627\u0644\u062d\u0627\u0644\u064a (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
+            return unknown + " (" + String.format(Locale.US, "%.2f, %.2f", Double.valueOf(latitude), Double.valueOf(longitude)) + ")";
         }
     }
 }
+
