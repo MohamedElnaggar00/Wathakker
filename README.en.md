@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="120" height="120" alt="App icon">
+  <img src="docs/icon.png" width="120" height="120" alt="App icon">
   <h1>Wathakker (وذكر)</h1>
   <p><b>An app that reminds you of prayer times and dhikr through your day and your night.</b></p>
   <p>Accurate prayer times for your location, per-prayer adhan and iqama alerts, a Qibla compass, a Hijri date converter, and an azkar library with statistics that track your daily commitment — in a modern One UI-inspired design.</p>
@@ -39,20 +39,21 @@ Wathakker is an open-source Android app that brings the everyday tools a Muslim 
 | Area | Features |
 |---|---|
 | 🕌 **Prayer times** | Automatic location via GPS or manual country/city selection, eight certified calculation methods (Egyptian General Authority, Umm al-Qura, Muslim World League, ISNA, University of Karachi, Kuwait, Qatar, Dubai), Asr juristic choice (Shafi'i or Hanafi), high-latitude rules, and manual per-prayer minute adjustments plus a Hijri date offset. |
-| 🔔 **Prayer alerts** | An independent bell for each of the six prayer rows (including Shuruq), two alert modes (full adhan or notification), flexible timing (at adhan time or minutes before), **iqama reminders** with per-prayer delays (Fajr 25 min, Dhuhr/Asr/Isha 20 min, Maghrib 10 min), **automatic Do-Not-Disturb** between adhan and iqama, and shared settings for alert sound, vibration, volume, and duration. |
-| 🧭 **Qibla compass** | A dark, elegant dial: a tick ring that rotates with the phone, a live numeric degree readout, a blue qibla arc that turns green within 3 degrees with a haptic tick, magnetic-declination correction to true north based on your location, and a calibration prompt when sensor accuracy drops. |
+| 🔔 **Prayer alerts** | An independent bell for each of the six prayer rows (including Shuruq), delivered as notifications, one-minute timing resolution (at adhan time or any number of minutes before, typed or dragged), **iqama reminder notifications** with per-prayer delays (Fajr 25 min, Dhuhr/Asr/Isha 20 min, Maghrib 10 min), **automatic Do-Not-Disturb** between adhan and iqama, and shared settings for notification sound and vibration. |
+| 🧭 **Qibla compass** | An elegant dial that follows the system light/dark theme: a smoothly rotating tick ring with degree labels every 30°, a large heading readout with the direction name, a Kaaba marker at the Qibla bearing that turns green with a haptic tick within 3°, magnetic-declination correction to true north based on your location, and a calibration prompt when sensor accuracy drops. |
 | 🕰️ **Optional times** | Optional prayer-screen rows: Imsak (10 minutes before Fajr), Duha, Midnight, and Qiyam (start of the last third of the night) — enabled from Settings as needed. |
 | 📅 **Date converter** | Instant two-way conversion between Hijri and Gregorian dates on the Umm al-Qura calendar, with the weekday shown. |
 | 📿 **Azkar & Hisn al-Muslim** | The complete Hisn al-Muslim library in chapters, custom azkar organized with colored tags, favorites, timed reminders, and preloaded prophetic duas. |
 | 📊 **Statistics** | Daily commitment tracking: azkar read today, this week, and this month, plus a day-streak counter. |
-| 🔢 **Tasbeeh** | A digital counter that keeps your progress even after the app is closed. |
+| 🔢 **Tasbeeh** | A digital counter that keeps your progress even after the app is closed — find it in the side menu. |
+| 🗓️ **Hijri calendar** | A dedicated tab with a One UI-style month grid showing both Hijri and Gregorian dates for every day, colored markers for Islamic occasions (Ramadan, the two Eids, Arafah, Ashura, the White Days, and more), a month events list, and an upcoming-events view with an optional reminder bell for each occasion. Dates use the Umm al-Qura calculation with an adjustable ±2-day offset in Settings. |
 | 📱 **Lock-screen widgets** | Fully customizable widgets (colors, background, text) showing prayer times on the lock screen. |
 | 🎨 **Personalization** | Eleven UI languages with full RTL and LTR support, light/dark/system themes, and multiple Arabic fonts (Cairo, Naskh, Amiri, Ruqaa). |
 
 <details>
 <summary><b>🔔 More about the alert system</b></summary>
 
-- Alerts are scheduled as exact alarms and automatically rescheduled after the device reboots.
+- Alert notifications are scheduled with exact alarms and automatically rescheduled after the device reboots.
 - Each prayer has its own settings sheet via a long-press on its bell: alert mode, timing, iqama reminder, and automatic DND.
 - If the Do-Not-Disturb policy permission is missing, the app routes you to the system permission screen instead of silently pretending the feature works.
 
