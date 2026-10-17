@@ -106,6 +106,7 @@
         </receiver>
         <receiver android:exported="false" android:name="com.example.alarm.AlarmReceiver" />
         <receiver android:exported="false" android:name="com.example.prayer.alerts.PrayerAlertReceiver" />
+        <receiver android:exported="false" android:name="com.example.prayer.EventReminderReceiver" />
         <receiver android:exported="false" android:name="com.example.receiver.NotificationActionReceiver" />
         <receiver android:enabled="true" android:exported="false" android:name="com.example.receiver.BootReceiver">
             <intent-filter>
