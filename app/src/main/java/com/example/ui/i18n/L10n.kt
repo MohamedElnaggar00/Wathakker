@@ -43,7 +43,9 @@ enum class S {
     NotifReminder, NotifReadDone, NotifRemindLater, NotifOpenApp, NotifChannelAzkar, NotifChannelFajr, TodayAt, TomorrowAt, DefaultAlarmTone,
     LocCalcTitle, LocCalcSubtitle, LocSection, CalcSection, AsrJuristic, AsrShafii, AsrHanafi,
     HighLatRule, HighLatNone, HighLatMiddle, HighLatSeventh, HighLatAngle,
-    AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort
+    AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort,
+    AlertMode, AlertModeNotif, AlertModeAlarm, AlertTiming, AtAdhanTime, MinBeforeFmt,
+    IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, IqamaNowFmt, SharedAlertSettings
 }
 
 object L10n {
