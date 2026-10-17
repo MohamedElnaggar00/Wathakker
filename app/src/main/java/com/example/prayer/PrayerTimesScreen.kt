@@ -93,19 +93,43 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
     var showCitySearch by remember { mutableStateOf(false) }
     var alertDialogPrayer by remember { mutableStateOf<Int?>(null) }
     var bellTick by remember { mutableIntStateOf(0) }
-    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    // 1 Hz tick for the countdown only. The state object is passed down and read inside the
+    // overview card, so only that card recomposes every second - not the whole screen.
+    val nowState = remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) {
         while (true) {
-            now = System.currentTimeMillis()
+            nowState.longValue = System.currentTimeMillis()
             delay(1000L)
         }
     }
+    // Real refresh when returning from Settings / Location & calculation (city, method,
+    // offsets, optional rows, bells) instead of relying on the per-second recomposition.
+    var resumeTick by remember { mutableIntStateOf(0) }
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    androidx.compose.runtime.DisposableEffect(lifecycleOwner) {
+        val obs = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) resumeTick++
+        }
+        lifecycleOwner.lifecycle.addObserver(obs)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
+    }
+    LaunchedEffect(resumeTick) {
+        latitude = prefs.latitude
+        longitude = prefs.longitude
+        city = prefs.cityName
+        country = prefs.countryName
+    }
 
-    val method = CalculationMethod.INSTANCE.fromId(prefs.calculationMethodId)
-    val cal = Calendar.getInstance().apply { timeInMillis = now }
+    val method = remember(resumeTick) { CalculationMethod.INSTANCE.fromId(prefs.calculationMethodId) }
     // Heavy astronomy math: once per day/location/method, not every second of countdown.
-    val dayKey = cal.get(Calendar.YEAR) * 1000 + cal.get(Calendar.DAY_OF_YEAR)
-    val days = remember(dayKey, latitude, longitude, method) {
+    val dayKey by remember {
+        androidx.compose.runtime.derivedStateOf {
+            val c = Calendar.getInstance().apply { timeInMillis = nowState.longValue }
+            c.get(Calendar.YEAR) * 1000 + c.get(Calendar.DAY_OF_YEAR)
+        }
+    }
+    val cal = remember(dayKey) { Calendar.getInstance() }
+    val days = remember(dayKey, latitude, longitude, method, resumeTick) {
         val todayCal = Calendar.getInstance()
         val t = PrayerAdjustments.calculateAll(context, todayCal, latitude, longitude, method)
         val tomorrowCal = todayCal.clone() as Calendar
@@ -126,35 +150,43 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         Triple(L10n.t(S.PrayerMaghrib), today.maghrib, Icons.Outlined.NightsStay),
         Triple(L10n.t(S.PrayerIsha), today.isha, Icons.Outlined.DarkMode)
     )
-    val next = ordered.firstOrNull { it.second > now }
-        ?: Triple(L10n.t(S.PrayerFajr), days.second.fajr, Icons.Outlined.WbTwilight)
-    val prev = ordered.lastOrNull { it.second <= now }
-        ?: Triple(L10n.t(S.PrayerIsha), days.third.isha, Icons.Outlined.DarkMode)
-    val interval = (next.second - prev.second).coerceAtLeast(1L)
-    val progress = ((now - prev.second).toFloat() / interval.toFloat()).coerceIn(0f, 1f)
-    val remaining = (next.second - now).coerceAtLeast(0L)
+    val nextPrev by remember(days, L10n.lang) {
+        androidx.compose.runtime.derivedStateOf {
+            val n = nowState.longValue
+            val nx = ordered.firstOrNull { it.second > n }
+                ?: Triple(L10n.t(S.PrayerFajr), days.second.fajr, Icons.Outlined.WbTwilight)
+            val pv = ordered.lastOrNull { it.second <= n }
+                ?: Triple(L10n.t(S.PrayerIsha), days.third.isha, Icons.Outlined.DarkMode)
+            nx to pv
+        }
+    }
+    val next = nextPrev.first
+    val prev = nextPrev.second
     val gregorian = remember(dayKey, L10n.lang) { if (L10n.lang == Lang.AR) SimpleDateFormat("EEEE، d MMMM yyyy", Locale("ar", "EG")).format(cal.time) else SimpleDateFormat("EEEE, d MMMM yyyy", Locale.forLanguageTag(L10n.lang.code)).format(cal.time) }
-    val hijri = remember(dayKey, L10n.lang) {
+    val hijri = remember(dayKey, L10n.lang, resumeTick) {
         val off = PrayerAdjustments.hijriOffsetDays(context)
         val hcal = if (off != 0) (cal.clone() as Calendar).apply { add(Calendar.DATE, off) } else cal
         HijriDate.INSTANCE.format(hcal, L10n.lang.code)
     }
 
+    val optionalOn = remember(resumeTick) {
+        listOf("imsak", "duha", "midnight", "qiyam").map { PrayerAdjustments.optionalRow(context, it) }
+    }
     val displayRows = mutableListOf<Triple<String, Long, ImageVector>>()
     val rowBells = mutableListOf<Int?>()
-    if (PrayerAdjustments.optionalRow(context, "imsak")) {
+    if (optionalOn[0]) {
         displayRows.add(Triple(L10n.t(S.Imsak), today.fajr - 10 * 60000L, Icons.Outlined.Brightness2)); rowBells.add(null)
     }
     ordered.forEachIndexed { i, t ->
         displayRows.add(t); rowBells.add(i)
-        if (i == 1 && PrayerAdjustments.optionalRow(context, "duha")) {
+        if (i == 1 && optionalOn[1]) {
             displayRows.add(Triple(L10n.t(S.Duha), today.sunrise + 15 * 60000L, Icons.Outlined.Brightness5)); rowBells.add(null)
         }
     }
-    if (PrayerAdjustments.optionalRow(context, "midnight")) {
+    if (optionalOn[2]) {
         displayRows.add(Triple(L10n.t(S.Midnight), today.maghrib + nightLen / 2, Icons.Outlined.Bedtime)); rowBells.add(null)
     }
-    if (PrayerAdjustments.optionalRow(context, "qiyam")) {
+    if (optionalOn[3]) {
         displayRows.add(Triple(L10n.t(S.Qiyam), today.maghrib + nightLen * 2 / 3, Icons.Outlined.Brightness3)); rowBells.add(null)
     }
 
@@ -165,8 +197,9 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         gregorianText = gregorian,
         nextPrayerName = next.first,
         nextPrayerTime = formatPrayerTime(next.second),
-        countdownText = formatCountdown(remaining),
-        progress = progress,
+        prevMillis = prev.second,
+        nextMillis = next.second,
+        nowState = nowState,
         rows = displayRows.map { (name, time, icon) ->
             PrayerRowDisplay(name, formatPrayerTime(time), name == next.first && time == next.second, icon)
         },
@@ -174,7 +207,7 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         onChangeCity = { showCitySearch = true },
         onMenu = onMenu,
         onQibla = onQibla,
-        bellStates = remember(bellTick, L10n.lang) { (0..5).map { PrayerAlertStore.isEnabled(context, it) } },
+        bellStates = remember(bellTick, resumeTick, L10n.lang) { (0..5).map { PrayerAlertStore.isEnabled(context, it) } },
         onBellClick = { idx ->
             PrayerAlertStore.setEnabled(context, idx, !PrayerAlertStore.isEnabled(context, idx))
             PrayerAlertScheduler.scheduleAll(context)
@@ -236,8 +269,9 @@ fun PrayerTimesContent(
     gregorianText: String,
     nextPrayerName: String,
     nextPrayerTime: String,
-    countdownText: String,
-    progress: Float,
+    prevMillis: Long,
+    nextMillis: Long,
+    nowState: androidx.compose.runtime.State<Long>,
     rows: List<PrayerRowDisplay>,
     onChangeCity: () -> Unit,
     onMenu: (() -> Unit)? = null,
@@ -297,13 +331,18 @@ fun PrayerTimesContent(
                     )
                 }
                 Spacer(Modifier.height(18.dp))
+                // Reads nowState here, inside this card: the 1 Hz tick recomposes only this block.
+                val now = nowState.value
+                val interval = (nextMillis - prevMillis).coerceAtLeast(1L)
+                val progressNow = ((now - prevMillis).toFloat() / interval.toFloat()).coerceIn(0f, 1f)
+                val countdown = formatCountdown((nextMillis - now).coerceAtLeast(0L))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(
-                        countdownText,
+                        countdown,
                         color = OneUITimeCyan,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
@@ -320,7 +359,7 @@ fun PrayerTimesContent(
                     }
                 }
                 Spacer(Modifier.height(14.dp))
-                OneUIProgressBar(progress, color = OneUIActiveGreen)
+                OneUIProgressBar(progressNow, color = OneUIActiveGreen)
             }
         }
         item(key = "prayer-list") {
@@ -360,30 +399,38 @@ fun PrayerTimesContent(
                         Spacer(Modifier.weight(1f))
                         val bellIndex = rowBells.getOrNull(index)
                         val bellOn = bellIndex != null && bellStates.getOrElse(bellIndex) { false }
-                        if (bellIndex != null) Box(
-                            modifier = Modifier
-                                .size(36.dp)
-                                .clip(CircleShape)
-                                .combinedClickable(
-                                    onClick = { onBellClick(bellIndex) },
-                                    onLongClick = { onBellLongClick(bellIndex) }
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
-                                contentDescription = "bell_" + bellIndex,
-                                modifier = Modifier.size(19.dp),
-                                tint = if (bellOn) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.45f)
-                            )
-                        }
-                        Spacer(Modifier.width(8.dp))
                         Text(
                             row.timeText,
                             color = if (row.isNext) cs.primary else cs.onSurface,
                             fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
+                        Spacer(Modifier.width(8.dp))
+                        // Fixed-size slot at the row's trailing edge: bells form one straight
+                        // column, and bell-less optional rows keep their times aligned.
+                        Box(
+                            modifier = Modifier
+                                .size(36.dp)
+                                .clip(CircleShape)
+                                .then(
+                                    if (bellIndex != null) {
+                                        Modifier.combinedClickable(
+                                            onClick = { onBellClick(bellIndex) },
+                                            onLongClick = { onBellLongClick(bellIndex) }
+                                        )
+                                    } else Modifier
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            if (bellIndex != null) {
+                                Icon(
+                                    if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
+                                    contentDescription = "bell_" + bellIndex,
+                                    modifier = Modifier.size(19.dp),
+                                    tint = if (bellOn) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.45f)
+                                )
+                            }
+                        }
                     }
                 }
             }
