@@ -188,7 +188,7 @@ fun SettingsContent(
     onPickLanguage: () -> Unit = {}
 ) {
     OneUIScreen(title = L10n.t(S.Settings), onBack = onBack) {
-        if (onFajr != null) {
+        if (onLocation != null || onFajr != null) {
             item(key = "fajr") {
                 OneUICard {
                     OneUIRow(
