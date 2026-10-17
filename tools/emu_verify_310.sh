@@ -258,6 +258,8 @@ scroll_until "مناسبات الشهر"
 if has_text "مناسبات الشهر"; then say "PASS: calendar month grid + month events section render (dark)"; else say "FAIL: calendar month view missing"; fi
 shot 02c4-calendar-month-events
 adb shell input swipe $CX $((SH*40/100)) $CX $((SH*75/100)) 400; sleep 2   # back to top for toggle
+adb shell input swipe $CX $((SH*40/100)) $CX $((SH*75/100)) 400; sleep 2
+dump
 tap_node text "المناسبات" "Events view toggle" && {
   sleep 2; dump
   if has_text "رمضان" || has_text "عيد" || has_text "الأيام البيض"; then say "PASS: events view lists upcoming occasions"; else say "FAIL: events view shows no occasions"; fi
@@ -321,21 +323,29 @@ if [ -n "$BL" ]; then
         adb shell input tap $ET; sleep 1
         adb shell input keyevent KEYCODE_MOVE_END KEYCODE_DEL KEYCODE_DEL
         adb shell input text 99; sleep 1
+        dump
+        has_text "حفظ" || { adb shell input keyevent KEYCODE_BACK; sleep 1; dump; }   # hide IME only if it covers Save
         tap_node text "حفظ" "save 99" || true; sleep 2
         dump
         has_text "حفظ" && say "PASS: out-of-range 99 rejected (dialog stays open)" || say "FAIL: 99 accepted - validation missing"
         ET=$(find_class_center "EditText")
         [ -n "$ET" ] && { adb shell input tap $ET; sleep 1; adb shell input keyevent KEYCODE_MOVE_END KEYCODE_DEL KEYCODE_DEL KEYCODE_DEL; adb shell input text 12; sleep 1; }
+        dump
+        has_text "حفظ" || { adb shell input keyevent KEYCODE_BACK; sleep 1; dump; }
         tap_node text "حفظ" "save 12" || true; sleep 2
         dump
-        has_text "12" && say "PASS: exact 12-minute lead time applied" || say "FAIL: 12 minutes not reflected in dialog"
+        has_text "قبل الأذان بـ 12 دقيقة" && say "PASS: exact 12-minute lead time applied" || say "FAIL: 12 minutes not reflected in dialog"
         shot 02e-exact-minute-12
         VL2=$(find_text_prefix "قبل الأذان بـ")
         if [ -n "$VL2" ]; then
           adb shell input tap $VL2; sleep 2; dump
           ET=$(find_class_center "EditText")
           [ -n "$ET" ] && { adb shell input tap $ET; sleep 1; adb shell input keyevent KEYCODE_MOVE_END KEYCODE_DEL KEYCODE_DEL KEYCODE_DEL; adb shell input text 0; sleep 1; }
+          dump
+          has_text "حفظ" || { adb shell input keyevent KEYCODE_BACK; sleep 1; dump; }
           tap_node text "حفظ" "save 0" || true; sleep 2
+          dump
+          has_text "وقت الأذان" && say "PASS: lead time restored to at-adhan" || say "WARN: lead time restore not confirmed"
         fi
       else
         say "FAIL: no EditText in minute input dialog"
