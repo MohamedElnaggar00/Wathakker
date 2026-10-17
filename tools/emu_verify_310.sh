@@ -53,6 +53,37 @@ for m in re.finditer(r'<node[^>]*>',x):
 if best: print((best[0]+best[2])//2,(best[1]+best[3])//2)
 PY
 }
+find_text_prefix() { python3 - "$1" <<'PYP'
+import re,sys,os
+x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
+m=re.search(r'text="('+re.escape(sys.argv[1])+r'[^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x)
+if m: print((int(m.group(2))+int(m.group(4)))//2,(int(m.group(3))+int(m.group(5)))//2)
+PYP
+}
+find_class_center() { python3 - "$1" <<'PYQ'
+import re,sys,os
+cls=sys.argv[1]
+x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
+for m in re.finditer(r'<node[^>]*class="([^"]*'+re.escape(cls)+r'[^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
+    a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+    print((a+c)//2,(b+d)//2); sys.exit(0)
+for m in re.finditer(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"[^>]*?class="([^"]*'+re.escape(cls)+r'[^"]*)"',x):
+    a,b,c,d=int(m.group(1)),int(m.group(2)),int(m.group(3)),int(m.group(4))
+    print((a+c)//2,(b+d)//2); sys.exit(0)
+PYQ
+}
+find_class_center() { python3 - "$1" <<'PYX'
+import re,sys,os
+cls=sys.argv[1]
+x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
+for m in re.finditer(r'<node[^>]*class="([^"]*'+re.escape(cls)+r'[^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
+    a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+    print((a+c)//2,(b+d)//2); sys.exit(0)
+for m in re.finditer(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"[^>]*?class="([^"]*'+re.escape(cls)+r'[^"]*)"',x):
+    a,b,c,d=int(m.group(1)),int(m.group(2)),int(m.group(3)),int(m.group(4))
+    print((a+c)//2,(b+d)//2); sys.exit(0)
+PYX
+}
 count_seekbars() { python3 - <<'PY'
 import re,os
 x=open('/tmp/u.xml',encoding='utf-8').read() if os.path.exists('/tmp/u.xml') else ''
@@ -147,17 +178,58 @@ NB=0; for i in 0 1 2 3 4 5; do [ -n "$(find_center desc bell_$i)" ] && NB=$((NB+
 
 # CHECK 2: 4 tabs (Prayer/Azkar/Hisn/More), no Fajr tab
 T=0
-for t in "مواعيد الصلاة" "الأذكار" "حصن المسلم" "السبحة"; do has_text "$t" && T=$((T+1)); done
-[ "$T" = 4 ] && say "PASS: 4 main tabs present" || say "FAIL: $T/4 tab labels found"
+for t in "مواعيد الصلاة" "الأذكار" "حصن المسلم" "التقويم"; do has_text "$t" && T=$((T+1)); done
+[ "$T" = 4 ] && say "PASS: 4 main tabs present (prayer/azkar/hisn/calendar)" || say "FAIL: $T/4 tab labels found"
+has_text "السبحة" && say "FAIL: tasbeeh still a bottom tab" || say "PASS: tasbeeh removed from bottom tabs"
 
 # CHECK 2b: Qibla screen renders (compass icon in prayer header, desc القبلة)
 tap_node desc "القبلة" "Qibla header icon" && {
   sleep 3; dump
   has_text "القبلة" && say "PASS: Qibla screen opened" || say "FAIL: Qibla screen missing"
-  shot 02b-qibla
+  if has_text "شمال"; then say "PASS: compass dial renders with localized direction labels (dark)"; elif has_text "لا يوجد مستشعر بوصلة"; then say "WARN: emulator reports no compass sensor - dial not machine-verifiable"; else say "FAIL: neither compass dial nor no-sensor hint rendered"; fi
+  shot 02b-qibla-dark
+  adb shell cmd uimode night no; sleep 3
+  fg_guard; dump
+  if [ -z "$(find_center desc القبلة)" ]; then tap_node desc "القبلة" "Qibla header icon light" || true; sleep 3; dump; fi
+  has_text "شمال" && say "PASS: compass dial renders in light theme" || say "WARN: compass dial labels not found in light theme"
+  shot 02b2-qibla-light
+  adb shell cmd uimode night yes; sleep 3
+  fg_guard
   adb shell input keyevent KEYCODE_BACK; sleep 2
 }
   dump
+
+# CHECK 2c: Calendar tab (Hijri occasions) - month grid, events view, reminder bell, both themes
+adb shell input tap 945 2221; sleep 3   # 4th tab (calendar)
+dump
+if has_text "مناسبات الشهر"; then say "PASS: calendar month grid + month events section render (dark)"; else say "FAIL: calendar month view missing"; fi
+shot 02c-calendar-month-dark
+tap_node text "المناسبات" "Events view toggle" && {
+  sleep 2; dump
+  if has_text "رمضان" || has_text "عيد" || has_text "الأيام البيض"; then say "PASS: events view lists upcoming occasions"; else say "FAIL: events view shows no occasions"; fi
+  shot 02c2-calendar-events-dark
+  RB=$(find_center desc "تفعيل التذكير")
+  if [ -n "$RB" ]; then
+    adb shell input tap $RB; sleep 2; dump
+    [ -n "$(find_center desc "التذكير مفعّل")" ] && say "PASS: event reminder bell toggles on" || say "FAIL: reminder bell state did not change"
+    adb shell dumpsys alarm > "$OUT/alarms_event_reminder.txt" 2>&1
+    adb shell input tap $RB; sleep 2   # toggle back off
+    dump
+    [ -n "$(find_center desc "التذكير مفعّل")" ] && say "FAIL: reminder bell did not toggle back off" || say "PASS: event reminder bell toggles back off"
+  else
+    say "FAIL: no reminder bell found in events view"
+  fi
+}
+adb shell cmd uimode night no; sleep 3
+fg_guard
+adb shell input tap 945 2221; sleep 3   # calendar tab again after recreate
+dump
+has_text "مناسبات الشهر" && say "PASS: calendar month view renders in light theme" || say "FAIL: calendar month view missing in light"
+shot 02c3-calendar-month-light
+adb shell cmd uimode night yes; sleep 3
+fg_guard
+adb shell input tap 150 2221; sleep 2   # back to prayer tab
+dump
 
 # CHECK 3: tap Fajr bell -> exact alarm scheduled
 FAJR_BEFORE=$(prayer_time "الفجر")
@@ -168,43 +240,66 @@ tap_node desc bell_0 "toggle Fajr bell" && {
 }
 shot 01-bell-toggled
 
-# CHECK 4: long-press bell -> per-prayer alert dialog
+# CHECK 4: long-press bell -> per-prayer alert dialog (notification-only, exact-minute lead time)
 BL=$(find_center desc bell_0)
 if [ -n "$BL" ]; then
   adb shell input swipe $BL $BL 900; sleep 3
   dump
-  has_text "نوع التنبيه" && say "PASS: alert dialog opened (alert type visible)" || say "FAIL: alert dialog did not open"
-  NS=$(count_seekbars)
+  has_text "الإشعارات" && say "PASS: alert dialog opened (notifications row)" || say "FAIL: alert dialog did not open"
+  has_text "وقت التنبيه" && say "PASS: lead-time row present" || say "FAIL: lead-time row missing"
+  [ "$(count_seekbars)" -ge 1 ] && say "PASS: lead-time slider present" || say "FAIL: no slider in alert dialog"
   shot 02-alert-dialog
-  # the snooze slider sits below the fold: scroll the dialog content to reveal it, then count again
-  adb shell input swipe 540 1400 540 900 500; sleep 2
-  dump
-  NSB=$(count_seekbars)
-  shot 02d-dialog-scrolled-snooze
-  if { [ "$NS" -ge 2 ] && [ "$NSB" -ge 1 ] && has_text "مدة الغفوة"; } || [ "$NS" -ge 3 ]; then
-    say "PASS: alert dialog has 3 One UI sliders ($NS visible at top, $NSB after scroll to snooze)"
+  # exact-minute entry: tap the value label -> numeric input dialog
+  VL=$(find_center text "وقت الأذان")
+  [ -z "$VL" ] && VL=$(find_text_prefix "قبل الأذان بـ")
+  if [ -n "$VL" ]; then
+    adb shell input tap $VL; sleep 2
+    dump
+    if has_text "حفظ"; then
+      say "PASS: tapping lead-time value opens exact-minute input dialog"
+      ET=$(find_class_center "EditText")
+      if [ -n "$ET" ]; then
+        adb shell input tap $ET; sleep 1
+        adb shell input keyevent KEYCODE_MOVE_END KEYCODE_DEL KEYCODE_DEL
+        adb shell input text 99; sleep 1
+        tap_node text "حفظ" "save 99" || true; sleep 2
+        dump
+        has_text "حفظ" && say "PASS: out-of-range 99 rejected (dialog stays open)" || say "FAIL: 99 accepted - validation missing"
+        ET=$(find_class_center "EditText")
+        [ -n "$ET" ] && { adb shell input tap $ET; sleep 1; adb shell input keyevent KEYCODE_MOVE_END KEYCODE_DEL KEYCODE_DEL KEYCODE_DEL; adb shell input text 12; sleep 1; }
+        tap_node text "حفظ" "save 12" || true; sleep 2
+        dump
+        has_text "12" && say "PASS: exact 12-minute lead time applied" || say "FAIL: 12 minutes not reflected in dialog"
+        shot 02e-exact-minute-12
+        VL2=$(find_text_prefix "قبل الأذان بـ")
+        if [ -n "$VL2" ]; then
+          adb shell input tap $VL2; sleep 2; dump
+          ET=$(find_class_center "EditText")
+          [ -n "$ET" ] && { adb shell input tap $ET; sleep 1; adb shell input keyevent KEYCODE_MOVE_END KEYCODE_DEL KEYCODE_DEL KEYCODE_DEL; adb shell input text 0; sleep 1; }
+          tap_node text "حفظ" "save 0" || true; sleep 2
+        fi
+      else
+        say "FAIL: no EditText in minute input dialog"
+      fi
+    else
+      say "FAIL: minute input dialog did not open"
+    fi
+    tap_node text "إلغاء" "Dialog cancel" || adb shell input keyevent KEYCODE_BACK
+    sleep 2
   else
-    say "FAIL: expected 3 sliders in alert dialog, found $NS before scroll, $NSB after"
+    say "FAIL: lead-time value label not found"
+    adb shell input keyevent KEYCODE_BACK; sleep 2
   fi
-  adb shell input swipe 540 900 540 1400 500; sleep 2   # scroll dialog content back up
-  # large font scale (his phone): a font change recreates the activity and DROPS the dialog,
-  # so set the font first, then reopen the dialog and scroll it to the snooze slider
+  # font 1.3: dialog still renders (recreate drops it, so reopen)
   adb shell settings put system font_scale 1.3; sleep 3
-  fg_guard
-  dump
+  fg_guard; dump
   BL=$(find_center desc bell_0)
   if [ -n "$BL" ]; then
     adb shell input swipe $BL $BL 900; sleep 3
     dump
-    adb shell input swipe 540 1400 540 900 500; sleep 2
-    dump
+    has_text "وقت التنبيه" && say "PASS: alert dialog renders at font_scale 1.3" || say "FAIL: alert dialog broken at font 1.3"
     shot 02c-alert-dialog-font13
-    if has_text "مدة الغفوة" && [ "$(count_seekbars)" -ge 1 ]; then
-      say "PASS: snooze slider reachable in dialog at font_scale 1.3"
-    else
-      say "FAIL: snooze row not reachable at font_scale 1.3"
-    fi
-    tap_node text "إلغاء" "Dialog cancel" || adb shell input keyevent KEYCODE_BACK
+    tap_node text "إلغاء" "Dialog cancel 1.3" || adb shell input keyevent KEYCODE_BACK
     sleep 2
   else
     say "FAIL: could not reopen alert dialog at font_scale 1.3"
@@ -310,10 +405,40 @@ dump
 if tap_node text "محول التاريخ" "Drawer converter row"; then
   sleep 2; dump
   has_text "محول التاريخ" && say "PASS: converter opened from drawer" || say "FAIL: converter screen did not open from drawer"
+  # typed conversion: empty by default; Today fills; typing a Gregorian date yields a Hijri result card
+  has_text "من ميلادي إلى هجري" && say "PASS: converter shows G->H section" || say "FAIL: converter direction section missing"
+  tap_node text "اليوم" "Today button" && {
+    sleep 2; dump
+    has_text "هـ" && say "PASS: Today fills fields and shows Hijri result" || say "FAIL: no Hijri result after Today"
+    shot 03c-converter-result
+  }
   shot 03b-converter-from-drawer
   adb shell input keyevent KEYCODE_BACK; sleep 2
 else
   say "FAIL: converter row missing from drawer"
+fi
+back_to_prayer
+
+# CHECK 5d: tasbeeh lives in the drawer now, and About opens from the drawer
+tap_node desc "القائمة" "Menu button" || true; sleep 2
+dump
+if tap_node text "السبحة" "Drawer tasbeeh row"; then
+  sleep 2; dump
+  has_text "تسبيحة" && say "PASS: tasbeeh screen opened from drawer" || say "FAIL: tasbeeh screen did not open from drawer"
+  shot 03d-tasbeeh-from-drawer
+  adb shell input keyevent KEYCODE_BACK; sleep 2
+else
+  say "FAIL: tasbeeh row missing from drawer"
+fi
+tap_node desc "القائمة" "Menu button" || true; sleep 2
+dump
+if tap_node text "حول التطبيق" "Drawer about row"; then
+  sleep 2; dump
+  has_text "وذكر" && say "PASS: about screen opened from drawer" || say "FAIL: about screen did not open"
+  shot 03e-about
+  adb shell input keyevent KEYCODE_BACK; sleep 2
+else
+  say "FAIL: about row missing from drawer"
 fi
 back_to_prayer
 
@@ -362,7 +487,7 @@ BL=$(find_center desc bell_0)
 if [ -n "$BL" ]; then
   adb shell input swipe $BL $BL 900; sleep 3
   dump
-  has_text "نوع التنبيه" && say "PASS: alert dialog renders in light mode" || say "WARN: alert dialog not opened in light mode"
+  has_text "وقت التنبيه" && say "PASS: alert dialog renders in light mode" || say "WARN: alert dialog not opened in light mode"
   shot 06d-light-dialog
   adb shell input keyevent KEYCODE_BACK; sleep 2
 fi
@@ -380,7 +505,7 @@ BL=$(find_center desc bell_0)
 if [ -n "$BL" ]; then
   adb shell input swipe $BL $BL 900; sleep 3
   dump
-  has_text "نوع التنبيه" && say "PASS: alert dialog renders in dark mode" || say "WARN: alert dialog not opened in dark mode"
+  has_text "وقت التنبيه" && say "PASS: alert dialog renders in dark mode" || say "WARN: alert dialog not opened in dark mode"
   shot 06g-dark-dialog
   adb shell input keyevent KEYCODE_BACK; sleep 2
 fi
