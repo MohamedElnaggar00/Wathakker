@@ -2,7 +2,10 @@ package com.example.ui.screens
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,33 +64,40 @@ import com.example.ui.oneui.OneUIDrawerItem
 import com.example.ui.viewmodel.MainViewModel
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.launch
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 val oneUITabs: List<BottomTab> = listOf(
-    BottomTab("prayer", "الصلاة") { c ->
+    BottomTab("prayer", L10n.t(S.PrayerTab)) { c ->
         Icon(Icons.Outlined.Mosque, null, Modifier.size(24.dp), tint = c)
     },
-    BottomTab("azkar", "الأذكار") { c ->
+    BottomTab("azkar", L10n.t(S.AzkarTab)) { c ->
         Icon(Icons.Outlined.FormatListBulleted, null, Modifier.size(24.dp), tint = c)
     },
-    BottomTab("hisn", "حصن المسلم") { c ->
+    BottomTab("hisn", L10n.t(S.HisnTab)) { c ->
         Icon(Icons.AutoMirrored.Outlined.MenuBook, null, Modifier.size(24.dp), tint = c)
     },
-    BottomTab("fajr_settings", "الفجر") { c ->
+    BottomTab("fajr_settings", L10n.t(S.FajrTab)) { c ->
         Icon(Icons.Outlined.Alarm, null, Modifier.size(24.dp), tint = c)
     },
-    BottomTab("tasbeeh", "السبحة") { c ->
+    BottomTab("tasbeeh", L10n.t(S.TasbeehTab)) { c ->
         Icon(painterResource(R.drawable.ic_tasbeeh), null, Modifier.size(24.dp), tint = c)
     }
 )
 
 val oneUIDrawerItems: List<OneUIDrawerItem> = listOf(
-    OneUIDrawerItem("favorites", "المفضلة", Icons.Outlined.Star, Color(4293243989L)),
-    OneUIDrawerItem("reminders", "التنبيهات", Icons.Outlined.Notifications, Color(4293243989L)),
-    OneUIDrawerItem("statistics", "الإحصائيات", Icons.Outlined.BarChart, Color(4283289796L)),
-    OneUIDrawerItem("tags", "التصنيفات", Icons.AutoMirrored.Outlined.Label, Color(4290617322L)),
-    OneUIDrawerItem("settings", "الإعدادات", Icons.Outlined.Settings, Color(4287669422L)),
-    OneUIDrawerItem("about", "حول التطبيق", Icons.Outlined.Info, Color(4287532691L))
+    OneUIDrawerItem("favorites", L10n.t(S.Favorites), Icons.Outlined.Star, Color(4293243989L)),
+    OneUIDrawerItem("reminders", L10n.t(S.Reminders), Icons.Outlined.Notifications, Color(4293243989L)),
+    OneUIDrawerItem("statistics", L10n.t(S.Stats), Icons.Outlined.BarChart, Color(4283289796L)),
+    OneUIDrawerItem("tags", L10n.t(S.Tags), Icons.AutoMirrored.Outlined.Label, Color(4290617322L)),
+    OneUIDrawerItem("settings", L10n.t(S.Settings), Icons.Outlined.Settings, Color(4287669422L)),
+    OneUIDrawerItem("about", L10n.t(S.About), Icons.Outlined.Info, Color(4287532691L))
 )
+
+private val tabEnter: EnterTransition =
+    slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
+private val tabPopExit: ExitTransition =
+    slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -it }
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
@@ -112,10 +122,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 navController = navController,
                 startDestination = "tabs",
                 modifier = Modifier.fillMaxSize(),
-                enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(300, 0, FastOutSlowInEasing)) },
-                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(300, 0, FastOutSlowInEasing)) },
-                popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(300, 0, FastOutSlowInEasing)) },
-                popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(300, 0, FastOutSlowInEasing)) }
+                enterTransition = { tabEnter },
+                exitTransition = { ExitTransition.None },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { tabPopExit }
             ) {
                 composable("tabs") {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
@@ -172,13 +182,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     selectedRoute = currentTabRoute,
                     onSelect = { tab ->
                         val i = oneUITabs.indexOf(tab)
-                        if (i >= 0) scope.launch {
-                            val current = pagerState.currentPage
-                            if (kotlin.math.abs(i - current) > 1) {
-                                pagerState.scrollToPage(if (i > current) i - 1 else i + 1)
-                            }
-                            pagerState.animateScrollToPage(i)
-                        }
+                        if (i >= 0) scope.launch { pagerState.animateScrollToPage(i) }
                     },
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
