@@ -1,0 +1,32 @@
+name: Export release APK to dist
+# One-shot transport helper: copies the published pre-release APK into dist/
+# so it can be fetched through the repo (repo already carries APK files at root).
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to export (e.g. v3.0.7-pre.125)
+        required: true
+permissions:
+  contents: write
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download release APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          mkdir -p dist
+          gh release download "$TAG" -p '*.apk' -D dist --clobber
+          ls -la dist/
+      - name: Commit APK
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/
+          git commit -m "Export ${{ inputs.tag }} APK to dist [skip ci]"
+          git push
