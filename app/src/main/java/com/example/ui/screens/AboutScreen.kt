@@ -1,6 +1,5 @@
 package com.example.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.R
@@ -59,7 +58,7 @@ fun AboutScreen(onBack: () -> Unit) {
                 OneUIRow(
                     title = "الإصدار",
                     leading = { OneUIIconBadge(Icons.Outlined.Info) },
-                    trailing = { Text("2.0", color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium) }
+                    trailing = { Text(com.example.BuildConfig.VERSION_NAME, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium) }
                 )
                 OneUIDivider(70.dp)
                 OneUIRow(
@@ -99,9 +98,9 @@ fun AboutScreen(onBack: () -> Unit) {
 
 @Composable
 fun AppIconBadge() {
-    Image(
-        painter = painterResource(R.drawable.ic_about),
-        contentDescription = null,
+    AndroidView(
+        factory = { ctx -> android.widget.ImageView(ctx).apply { setImageResource(R.mipmap.ic_launcher) } },
         modifier = Modifier.size(84.dp).clip(RoundedCornerShape(22.dp))
     )
 }
+
