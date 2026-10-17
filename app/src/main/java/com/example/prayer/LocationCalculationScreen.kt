@@ -14,22 +14,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.EditLocation
 import androidx.compose.material.icons.outlined.GpsFixed
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -57,6 +54,7 @@ import com.example.fajr.ui.FajrViewModel
 import com.example.lockwidgets.LockWidgets
 import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
+import kotlin.math.roundToInt
 import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIDialog
 import com.example.ui.oneui.OneUIScreen
@@ -301,45 +299,37 @@ private fun CalcRow(icon: ImageVector, title: String, value: String, onClick: ()
 @Composable
 private fun StepperRow(title: String, value: Int, unit: String, onChange: (Int) -> Unit, icon: ImageVector? = null, min: Int = -30, max: Int = 30) {
     val cs = MaterialTheme.colorScheme
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-            if (icon != null) {
-                Icon(icon, null, tint = cs.primary, modifier = Modifier.size(20.dp))
-                Spacer(Modifier.width(8.dp))
+    // Center-zero One UI slider: 0 sits in the middle, dragging toward the language's
+    // "forward" side adds and the other side subtracts (Slider mirrors automatically in RTL).
+    var drag by remember(value) { mutableIntStateOf(value) }
+    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                if (icon != null) {
+                    Icon(icon, null, tint = cs.primary, modifier = Modifier.size(20.dp))
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(title, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             }
-            Text(title, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            StepperButton(Icons.Outlined.Remove, value > min) { onChange(value - 1) }
             Text(
-                text = (if (value > 0) "+$value" else "$value") + " " + unit,
-                color = if (value != 0) cs.primary else cs.onSurfaceVariant,
+                text = (if (drag > 0) "+$drag" else "$drag") + " " + unit,
+                color = if (drag != 0) cs.primary else cs.onSurfaceVariant,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.width(72.dp),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                fontWeight = FontWeight.Bold
             )
-            StepperButton(Icons.Outlined.Add, value < max) { onChange(value + 1) }
         }
-    }
-}
-
-@Composable
-private fun StepperButton(icon: ImageVector, enabled: Boolean, onClick: () -> Unit) {
-    val cs = MaterialTheme.colorScheme
-    IconButton(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier
-            .size(34.dp)
-            .clip(CircleShape)
-            .background(if (enabled) cs.primary.copy(alpha = 0.12f) else cs.onSurface.copy(alpha = 0.05f))
-    ) {
-        Icon(icon, null, tint = if (enabled) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.4f), modifier = Modifier.size(18.dp))
+        Slider(
+            value = drag.toFloat(),
+            onValueChange = { drag = it.roundToInt() },
+            onValueChangeFinished = { if (drag != value) onChange(drag) },
+            valueRange = min.toFloat()..max.toFloat(),
+            steps = (max - min) - 1,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 
