@@ -1,0 +1,26 @@
+outcome: success  bom: 2025.10.01  run: 39029225166  sha: 011e8d371d99eabdc61c6f1e3e964a6695f69b24
+errors: 0
+--- per file
+--- per symbol
+sign outcome: failure
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+/tmp/tmp.9eIX9ViU13/bcprov.jar: OK
+Failed to load signer "signer #1"
+java.io.IOException: keystore password was incorrect
+	at java.base/sun.security.pkcs12.PKCS12KeyStore.engineLoad(PKCS12KeyStore.java:2160)
+	at java.base/sun.security.util.KeyStoreDelegator.engineLoad(KeyStoreDelegator.java:221)
+	at java.base/java.security.KeyStore.load(KeyStore.java:1493)
+	at com.android.apksigner.SignerParams.loadKeyStoreFromFile(SignerParams.java:447)
+	at com.android.apksigner.SignerParams.loadPrivateKeyAndCertsFromKeyStore(SignerParams.java:333)
+	at com.android.apksigner.SignerParams.loadPrivateKeyAndCerts(SignerParams.java:261)
+	at com.android.apksigner.ApkSignerTool.getSignerConfig(ApkSignerTool.java:523)
+	at com.android.apksigner.ApkSignerTool.sign(ApkSignerTool.java:407)
+	at com.android.apksigner.ApkSignerTool.main(ApkSignerTool.java:94)
+Caused by: java.security.UnrecoverableKeyException: failed to decrypt safe contents entry: javax.crypto.BadPaddingException: Given final block not properly padded. Such issues can arise if a bad key is used during decryption.
+	... 9 more
+--- details
+94:BUILD SUCCESSFUL in 3m 44s
+95-38 actionable tasks: 38 executed
