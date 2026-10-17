@@ -34,26 +34,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 private val muted = Color(0xFFA6A6A6)
 private val accent = Color(0xFF3E91FF)
 
 /** Progress-bar colour choices: key stored in preferences, Arabic label, swatch colour. */
 private val options: List<Pair<String, Pair<String, Color>>> = listOf(
-    "default" to ("افتراضي" to Color(0xFFA6A6A6)),
-    "white" to ("أبيض" to Color(0xFFFFFFFF)),
-    "amber" to ("كهرماني" to Color(0xFFE5B455)),
-    "blue" to ("أزرق" to Color(0xFF3E91FF)),
-    "green" to ("أخضر" to Color(0xFF34C759))
+    "default" to (L10n.t(S.Default) to Color(0xFFA6A6A6)),
+    "white" to (L10n.t(S.ColorWhite) to Color(0xFFFFFFFF)),
+    "amber" to (L10n.t(S.ColorAmber) to Color(0xFFE5B455)),
+    "blue" to (L10n.t(S.ColorBlue) to Color(0xFF3E91FF)),
+    "green" to (L10n.t(S.ColorGreen) to Color(0xFF34C759))
 )
 
 private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
-    "default" to ("افتراضي" to Color(0xFF171719)),
-    "black" to ("أسود" to Color(0xFF000000)),
-    "gray" to ("رمادي" to Color(0xFF2B2B2B)),
-    "blue" to ("أزرق داكن" to Color(0xFF12263D)),
-    "green" to ("أخضر داكن" to Color(0xFF123626)),
-    "white" to ("فاتح" to Color(0xFFF6F6F6))
+    "default" to (L10n.t(S.Default) to Color(0xFF171719)),
+    "black" to (L10n.t(S.ColorBlack) to Color(0xFF000000)),
+    "gray" to (L10n.t(S.ColorGray) to Color(0xFF2B2B2B)),
+    "blue" to (L10n.t(S.ColorBlueDark) to Color(0xFF12263D)),
+    "green" to (L10n.t(S.ColorGreenDark) to Color(0xFF123626)),
+    "white" to (L10n.t(S.Light) to Color(0xFFF6F6F6))
 )
 
 @Composable
@@ -104,11 +106,11 @@ fun ConfigScreen(current: String, currentBg: String, onPick: (String) -> Unit, o
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp)
         ) {
-            Text("إعدادات الويدجت", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(L10n.t(S.WidgetSettings), color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(12.dp))
-            ColorSection("لون شريط التقدم", options, current, onPick)
+            ColorSection(L10n.t(S.BarColor), options, current, onPick)
             Spacer(Modifier.height(16.dp))
-            ColorSection("لون الخلفية", bgOptions, currentBg, onPickBg)
+            ColorSection(L10n.t(S.BgColor), bgOptions, currentBg, onPickBg)
         }
     }
 }
@@ -119,6 +121,7 @@ class WidgetConfigActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        L10n.init(this)
         setResult(RESULT_CANCELED)
         appWidgetId = intent?.getIntExtra("appWidgetId", 0) ?: 0
         val prefs = FajrPreferences(this)
