@@ -193,7 +193,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 items = oneUIDrawerItems,
                 onSelect = {
                     drawerOpen = false
-                    navController.navigate(it)
+                    if (route != it) navController.navigate(it) { launchSingleTop = true }
                 },
                 onDismiss = { drawerOpen = false },
                 footer = {
