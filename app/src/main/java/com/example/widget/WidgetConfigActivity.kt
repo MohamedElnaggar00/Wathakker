@@ -40,20 +40,18 @@ import com.example.ui.i18n.S
 
 /** Progress-bar colour choices: key stored in preferences, Arabic label, swatch colour. */
 private val options: List<Pair<String, Pair<String, Color>>> = listOf(
-    "default" to (L10n.t(S.Default) to Color(0xFFA6A6A6)),
-    "white" to (L10n.t(S.ColorWhite) to Color(0xFFFFFFFF)),
+    "auto" to (L10n.t(S.Auto) to Color(0xFFA6A6A6)),
     "amber" to (L10n.t(S.ColorAmber) to Color(0xFFE5B455)),
     "blue" to (L10n.t(S.ColorBlue) to Color(0xFF3E91FF)),
-    "green" to (L10n.t(S.ColorGreen) to Color(0xFF34C759))
+    "green" to (L10n.t(S.ColorGreen) to Color(0xFF34C759)),
+    "purple" to (L10n.t(S.ColorPurple) to Color(0xFF9747FF))
 )
 
 private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
-    "default" to (L10n.t(S.Default) to Color(0xFF171719)),
+    "auto" to (L10n.t(S.Auto) to Color(0xFF171719)),
     "black" to (L10n.t(S.ColorBlack) to Color(0xFF000000)),
     "gray" to (L10n.t(S.ColorGray) to Color(0xFF2B2B2B)),
-    "blue" to (L10n.t(S.ColorBlueDark) to Color(0xFF12263D)),
-    "green" to (L10n.t(S.ColorGreenDark) to Color(0xFF123626)),
-    "white" to (L10n.t(S.Light) to Color(0xFFF6F6F6))
+    "white" to (L10n.t(S.ColorWhite) to Color(0xFFF6F6F6))
 )
 
 @Composable
@@ -127,10 +125,10 @@ class WidgetConfigActivity : ComponentActivity() {
         setResult(RESULT_CANCELED)
         appWidgetId = intent?.getIntExtra("appWidgetId", 0) ?: 0
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)
-        val curBar = sp.getString(keyFor("widget_bar_color"), null)
-            ?: sp.getString("widget_bar_color", "default") ?: "default"
-        val curBg = sp.getString(keyFor("widget_bg_color"), null)
-            ?: sp.getString("widget_bg_color", "default") ?: "default"
+        val curBar = (sp.getString(keyFor("widget_bar_color"), null)
+            ?: sp.getString("widget_bar_color", "auto") ?: "auto").let { if (it in options) it else "auto" }
+        val curBg = (sp.getString(keyFor("widget_bg_color"), null)
+            ?: sp.getString("widget_bg_color", "auto") ?: "auto").let { if (it in bgOptions) it else "auto" }
         setContent {
             com.example.ui.theme.MyApplicationTheme {
                 ConfigScreen(
