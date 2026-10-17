@@ -54,6 +54,8 @@ import com.example.ui.oneui.OneUIIconAction
 import com.example.ui.oneui.OneUIScreen
 import com.example.ui.oneui.OneUISearchField
 import com.example.ui.oneui.azkarCount
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 fun filterChapters(s: HisnListState, items: List<HisnItem>): List<HisnChapter> {
     val q = HisnViewModelKt.normalizeArabic(s.query.trim())
@@ -75,19 +77,19 @@ fun HisnListContent(
     onMenu: (() -> Unit)? = null
 ) {
     val filtered = remember(state, items) { filterChapters(state, items) }
-    val subtitle = if (state.chapters.isEmpty()) null else "${state.chapters.size} بابًا من الأذكار والأدعية"
-    OneUIScreen(title = "حصن المسلم", subtitle = subtitle, onMenu = onMenu) {
-        item { OneUISearchField(state.query, onQuery, "ابحث في حصن المسلم") }
+    val subtitle = if (state.chapters.isEmpty()) null else L10n.t(S.ChaptersFmt).format(state.chapters.size)
+    OneUIScreen(title = L10n.t(S.HisnTab), subtitle = subtitle, onMenu = onMenu) {
+        item { OneUISearchField(state.query, onQuery, L10n.t(S.SearchHisn)) }
         item {
             LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                item { OneUIChip("الكل", !state.onlyFavorites, { onOnlyFavorites(false) }) }
-                item { OneUIChip("المفضلة", state.onlyFavorites, { onOnlyFavorites(true) }) }
+                item { OneUIChip(L10n.t(S.All), !state.onlyFavorites, { onOnlyFavorites(false) }) }
+                item { OneUIChip(L10n.t(S.Favorites), state.onlyFavorites, { onOnlyFavorites(true) }) }
             }
         }
         if (filtered.isEmpty()) {
             item {
                 OneUIEmptyState(
-                    if (state.onlyFavorites) "لا توجد أبواب مفضلة" else "لا توجد نتائج",
+                    if (state.onlyFavorites) L10n.t(S.NoFavChapters) else L10n.t(S.NoResults),
                     Icons.Outlined.Search
                 )
             }
@@ -145,7 +147,7 @@ private fun ChapterRow(
                 style = MaterialTheme.typography.bodyLarge
             )
             var meta = azkarCount(count)
-            if (read) meta += " · تمت قراءته اليوم"
+            if (read) meta += L10n.t(S.ReadTodaySuffix)
             Text(
                 meta,
                 color = if (read) cs.primary else cs.onSurfaceVariant,
@@ -154,7 +156,7 @@ private fun ChapterRow(
         }
         Icon(
             if (favorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
-            "المفضلة",
+            L10n.t(S.Favorites),
             modifier = Modifier.size(26.dp).clip(CircleShape).clickable(onClick = onFavorite),
             tint = if (favorite) Color(0xFFFFC107) else cs.onSurfaceVariant
         )
@@ -180,7 +182,7 @@ fun HisnChapterContent(
         actions = {
             OneUIIconAction(
                 if (favoriteChapter) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                "المفضلة",
+                L10n.t(S.Favorites),
                 onToggleChapterFavorite
             )
         }
@@ -193,8 +195,8 @@ fun HisnChapterContent(
                 modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OneUIButton("تمت القراءة", onMarkRead, Modifier.weight(1f), true, Icons.Outlined.Check)
-                OneUIButton("أضف إلى أذكاري", onAddToMyAzkar, Modifier.weight(1f), false, Icons.Outlined.NotificationAdd)
+                OneUIButton(L10n.t(S.ReadDone), onMarkRead, Modifier.weight(1f), true, Icons.Outlined.Check)
+                OneUIButton(L10n.t(S.AddToMyAzkar), onAddToMyAzkar, Modifier.weight(1f), false, Icons.Outlined.NotificationAdd)
             }
         }
     }
@@ -235,9 +237,9 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
                     Spacer(Modifier.width(8.dp))
                 }
                 val label = when {
-                    done -> "تم"
+                    done -> L10n.t(S.Done)
                     item.count > 1 -> "$remaining / ${item.count}"
-                    else -> "اضغط للعد"
+                    else -> L10n.t(S.TapToCount)
                 }
                 Text(
                     label,
@@ -260,7 +262,7 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
             }
             Icon(
                 if (favorite) Icons.Filled.Star else Icons.Outlined.StarBorder,
-                "المفضلة",
+                L10n.t(S.Favorites),
                 tint = if (favorite) Color(0xFFFFC107) else cs.onSurfaceVariant,
                 modifier = Modifier
                     .size(40.dp)
@@ -339,3 +341,4 @@ fun HisnChapterScreen(
         onAddToMyAzkar = { onAddToMyAzkar(chapter.name, items.joinToString("\n\n") { it.text }) }
     )
 }
+
