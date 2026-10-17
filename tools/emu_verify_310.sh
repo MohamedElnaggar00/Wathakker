@@ -92,7 +92,15 @@ sys.exit(1)
 PY
 }
 
-dismiss_anr
+ensure_ready() { # absorb slow-emulator ANRs (incl. Pixel Launcher) until the prayer screen is interactive
+  for i in 1 2 3 4 5 6; do
+    dismiss_anr
+    dump
+    [ -n "$(find_center desc bell_0)" ] && return 0
+    sleep 5
+  done
+}
+ensure_ready
 shot 00-prayer
 
 # CHECK 1: six bells (bell_0..bell_5 content descriptions)
