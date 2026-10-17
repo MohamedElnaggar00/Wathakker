@@ -29,9 +29,20 @@ public abstract class BaseWathakkerWidgetProvider extends AppWidgetProvider {
     }
 
     @Override // android.appwidget.AppWidgetProvider
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        android.content.SharedPreferences.Editor e = context.getSharedPreferences("fajr_prefs", 0).edit();
+        for (int id : appWidgetIds) {
+            e.remove("widget_bg_color_" + id);
+            e.remove("widget_bar_color_" + id);
+        }
+        e.apply();
+    }
+
+    @Override // android.appwidget.AppWidgetProvider
     public void onEnabled(Context context) {
         Intrinsics.checkNotNullParameter(context, "context");
         WidgetUpdater.INSTANCE.updateAll(context);
         WidgetTickScheduler.INSTANCE.schedule(context);
     }
 }
+
