@@ -41,7 +41,7 @@ import kotlin.text.StringsKt;
 /* loaded from: classes10.dex */
 public final class WidgetUpdater {
     public static final WidgetUpdater INSTANCE = new WidgetUpdater();
-    private static final Map<String, Integer> iqamaOffsets = MapsKt.mapOf(TuplesKt.to("الفجر", 25), TuplesKt.to("الظهر", 20), TuplesKt.to("العصر", 15), TuplesKt.to("المغرب", 10), TuplesKt.to("العشاء", 15));
+    private static final Map<String, Integer> iqamaOffsets = MapsKt.mapOf(TuplesKt.to("الفجر", 25), TuplesKt.to("الظهر", 20), TuplesKt.to("العصر", 20), TuplesKt.to("المغرب", 10), TuplesKt.to("العشاء", 20));
     private static final Map<Integer, Map<String, Integer>> barVariants = MapsKt.mapOf(TuplesKt.to(Integer.valueOf(R.layout.widget_hero), MapsKt.mapOf(TuplesKt.to("amber", Integer.valueOf(R.layout.widget_hero_amber)), TuplesKt.to("blue", Integer.valueOf(R.layout.widget_hero_blue)), TuplesKt.to("green", Integer.valueOf(R.layout.widget_hero_green)))), TuplesKt.to(Integer.valueOf(R.layout.widget_hero_compact), MapsKt.mapOf(TuplesKt.to("amber", Integer.valueOf(R.layout.widget_hero_compact_amber)), TuplesKt.to("blue", Integer.valueOf(R.layout.widget_hero_compact_blue)), TuplesKt.to("green", Integer.valueOf(R.layout.widget_hero_compact_green)))), TuplesKt.to(Integer.valueOf(R.layout.widget_iqama), MapsKt.mapOf(TuplesKt.to("white", Integer.valueOf(R.layout.widget_iqama_white)), TuplesKt.to("blue", Integer.valueOf(R.layout.widget_iqama_blue)), TuplesKt.to("green", Integer.valueOf(R.layout.widget_iqama_green)))), TuplesKt.to(Integer.valueOf(R.layout.widget_iqama_small), MapsKt.mapOf(TuplesKt.to("white", Integer.valueOf(R.layout.widget_iqama_small_white)), TuplesKt.to("blue", Integer.valueOf(R.layout.widget_iqama_small_blue)), TuplesKt.to("green", Integer.valueOf(R.layout.widget_iqama_small_green)))), TuplesKt.to(Integer.valueOf(R.layout.widget_prayer_bar), MapsKt.mapOf(TuplesKt.to("amber", Integer.valueOf(R.layout.widget_prayer_bar_amber)), TuplesKt.to("blue", Integer.valueOf(R.layout.widget_prayer_bar_blue)), TuplesKt.to("green", Integer.valueOf(R.layout.widget_prayer_bar_green)))), TuplesKt.to(Integer.valueOf(R.layout.widget_wide_bar), MapsKt.mapOf(TuplesKt.to("amber", Integer.valueOf(R.layout.widget_wide_bar_amber)), TuplesKt.to("blue", Integer.valueOf(R.layout.widget_wide_bar_blue)), TuplesKt.to("green", Integer.valueOf(R.layout.widget_wide_bar_green)))));
     public static final int $stable = 8;
 
@@ -414,9 +414,10 @@ public final class WidgetUpdater {
         List iqamaPrayers = java.util.Arrays.asList(new String[]{"الفجر", "الظهر", "العصر", "المغرب", "العشاء"});
         List windows = new ArrayList();
         int size = state.getNames().size();
+        boolean friday = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
         for (int i = 0; i < size; i++) {
             String n = state.getNames().get(i);
-            if (iqamaPrayers.contains(n)) {
+            if (iqamaPrayers.contains(n) && !(friday && "الظهر".equals(n))) {
                 windows.add(new W(n, state.getTimes().get(i).longValue(), computeIqamaState$iqamaOf(n, state.getTimes().get(i).longValue())));
             }
         }
@@ -558,7 +559,7 @@ public final class WidgetUpdater {
                 case 2:
                     return "ساعتان";
                 default:
-                    return h + " ساعات";
+                    return h < 11 ? h + " ساعات" : h + " ساعة";
             }
         }
         switch (h) {
@@ -568,7 +569,7 @@ public final class WidgetUpdater {
             case 2:
                 break;
             default:
-                str = h + " ساعات";
+                str = h < 11 ? h + " ساعات" : h + " ساعة";
                 break;
         }
         return str + " و" + formatRemaining$minutesText(m);
@@ -770,3 +771,4 @@ public final class WidgetUpdater {
         applyToAll(context, mgr, DayPrayerWidgetProvider.class, views);
     }
 }
+
