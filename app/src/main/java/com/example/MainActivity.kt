@@ -17,6 +17,7 @@ import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.viewmodel.MainViewModel
 import com.example.widget.WidgetUpdater
 import com.example.lockwidgets.HomeWidgets
+import com.example.ui.i18n.L10n
 
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
         // A widget tap that targets a specific tab starts the activity fresh, without saved state.
         val state = if (HomeWidgets.handleIntent(intent)) null else savedInstanceState
         super.onCreate(state)
+        L10n.init(this)
         ThemeSettings.init(this)
         WidgetUpdater.INSTANCE.updateAll(this)
         handleIntent(intent)
