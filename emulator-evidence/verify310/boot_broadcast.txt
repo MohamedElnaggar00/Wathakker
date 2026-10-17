@@ -1,7 +1,7 @@
 Broadcasting: Intent { act=android.intent.action.BOOT_COMPLETED flg=0x400000 pkg=com.wathakker.app }
 
 Exception occurred while executing 'broadcast':
-java.lang.SecurityException: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED from pid=6785, uid=2000
+java.lang.SecurityException: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED from pid=6871, uid=2000
 	at com.android.server.am.ActivityManagerService.broadcastIntentLockedTraced(ActivityManagerService.java:15544)
 	at com.android.server.am.ActivityManagerService.broadcastIntentLocked(ActivityManagerService.java:15311)
 	at com.android.server.am.ActivityManagerService.broadcastIntentWithFeature(ActivityManagerService.java:16325)
