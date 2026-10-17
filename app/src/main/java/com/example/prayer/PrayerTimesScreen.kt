@@ -62,6 +62,9 @@ import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
+import com.example.ui.i18n.Lang
 
 @Composable
 fun SavedCity(): String = FajrPreferences(LocalContext.current).cityName
@@ -87,29 +90,29 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
     val cal = Calendar.getInstance().apply { timeInMillis = now }
     val today = PrayerTimesCalculator.INSTANCE.calculateAll(cal, latitude, longitude, method)
     val ordered: List<Triple<String, Long, ImageVector>> = listOf(
-        Triple("الفجر", today.fajr, Icons.Outlined.WbTwilight),
-        Triple("الشروق", today.sunrise, Icons.Outlined.WbSunny),
-        Triple("الظهر", today.dhuhr, Icons.Outlined.LightMode),
-        Triple("العصر", today.asr, Icons.Outlined.FilterDrama),
-        Triple("المغرب", today.maghrib, Icons.Outlined.NightsStay),
-        Triple("العشاء", today.isha, Icons.Outlined.DarkMode)
+        Triple(L10n.t(S.PrayerFajr), today.fajr, Icons.Outlined.WbTwilight),
+        Triple(L10n.t(S.PrayerShuruq), today.sunrise, Icons.Outlined.WbSunny),
+        Triple(L10n.t(S.PrayerDhuhr), today.dhuhr, Icons.Outlined.LightMode),
+        Triple(L10n.t(S.PrayerAsr), today.asr, Icons.Outlined.FilterDrama),
+        Triple(L10n.t(S.PrayerMaghrib), today.maghrib, Icons.Outlined.NightsStay),
+        Triple(L10n.t(S.PrayerIsha), today.isha, Icons.Outlined.DarkMode)
     )
     val next = ordered.firstOrNull { it.second > now } ?: run {
         val tomorrowCal = cal.clone() as Calendar
         tomorrowCal.add(Calendar.DAY_OF_YEAR, 1)
         val tomorrow = PrayerTimesCalculator.INSTANCE.calculateAll(tomorrowCal, latitude, longitude, method)
-        Triple("الفجر", tomorrow.fajr, Icons.Outlined.WbTwilight)
+        Triple(L10n.t(S.PrayerFajr), tomorrow.fajr, Icons.Outlined.WbTwilight)
     }
     val prev = ordered.lastOrNull { it.second <= now } ?: run {
         val yesterdayCal = cal.clone() as Calendar
         yesterdayCal.add(Calendar.DAY_OF_YEAR, -1)
         val yesterday = PrayerTimesCalculator.INSTANCE.calculateAll(yesterdayCal, latitude, longitude, method)
-        Triple("العشاء", yesterday.isha, Icons.Outlined.DarkMode)
+        Triple(L10n.t(S.PrayerIsha), yesterday.isha, Icons.Outlined.DarkMode)
     }
     val interval = (next.second - prev.second).coerceAtLeast(1L)
     val progress = ((now - prev.second).toFloat() / interval.toFloat()).coerceIn(0f, 1f)
     val remaining = (next.second - now).coerceAtLeast(0L)
-    val gregorian = SimpleDateFormat("EEEE، d MMMM yyyy", Locale("ar", "EG")).format(cal.time)
+    val gregorian = if (L10n.lang == Lang.AR) SimpleDateFormat("EEEE، d MMMM yyyy", Locale("ar", "EG")).format(cal.time) else SimpleDateFormat("EEEE, d MMMM yyyy", Locale.forLanguageTag(L10n.lang.code)).format(cal.time)
     val hijri = HijriDate.INSTANCE.format(cal)
 
     PrayerTimesContent(
@@ -150,7 +153,7 @@ fun PrayerTimesScreen(onMenu: (() -> Unit)? = null) {
 private fun formatPrayerTime(millis: Long): String {
     val cal = Calendar.getInstance()
     cal.timeInMillis = millis
-    val ampm = if (cal.get(Calendar.AM_PM) == 0) "ص" else "م"
+    val ampm = if (cal.get(Calendar.AM_PM) == 0) L10n.t(S.AmMarker) else L10n.t(S.PmMarker)
     return SimpleDateFormat("hh:mm", Locale.US).format(cal.time) + " " + ampm
 }
 
@@ -177,7 +180,7 @@ fun PrayerTimesContent(
     onMenu: (() -> Unit)? = null
 ) {
     val cs = MaterialTheme.colorScheme
-    OneUIScreen(title = "مواعيد الصلاة", onMenu = onMenu) {
+    OneUIScreen(title = L10n.t(S.PrayerTimes), onMenu = onMenu) {
         item(key = "prayer-overview") {
             // One card: date and location, a divider, then the next-prayer block.
             OneUICard(padding = PaddingValues(20.dp)) {
@@ -213,7 +216,7 @@ fun PrayerTimesContent(
                     }
                     Spacer(Modifier.width(12.dp))
                     Text(
-                        "الصلاة القادمة",
+                        L10n.t(S.NextPrayer),
                         modifier = Modifier.offset(0.dp, 6.dp),
                         color = cs.onSurfaceVariant,
                         style = MaterialTheme.typography.titleSmall
@@ -293,3 +296,4 @@ fun PrayerTimesContent(
         }
     }
 }
+
