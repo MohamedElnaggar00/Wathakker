@@ -191,6 +191,7 @@ if [ -n "$BL" ]; then
   # so set the font first, then reopen the dialog and scroll it to the snooze slider
   adb shell settings put system font_scale 1.3; sleep 3
   fg_guard
+  dump
   BL=$(find_center desc bell_0)
   if [ -n "$BL" ]; then
     adb shell input swipe $BL $BL 900; sleep 3
@@ -210,6 +211,7 @@ if [ -n "$BL" ]; then
   fi
   adb shell settings put system font_scale 1.0; sleep 3
   fg_guard
+  dump
 fi
 
 # CHECK 5: Location & calculation screen renders + per-prayer offset changes the time
@@ -258,7 +260,7 @@ if [ -n "$LC_FAJR" ]; then
       [ -n "$LC3" ] && { set -- $LC3; SL3=$(seekbar_below $2); }
       if [ -n "$SL3" ]; then
         set -- $SL3
-        adb shell input swipe $(($1-120)) $2 $1 $2 700; sleep 2
+        adb shell input tap $1 $2; sleep 2   # center-zero slider: tapping the track center snaps back to 0
       fi
       back_to_prayer
       FAJR_REST=$(prayer_time "الفجر")
@@ -382,9 +384,16 @@ for x in 150 460 750 930 750 460 150; do dismiss_anr; adb shell input tap $x 222
 adb shell dumpsys gfxinfo com.wathakker.app > "$OUT/gfxinfo.txt"
 shot 08-after-tabs
 
-# CHECK 11: widget render harness (debug builds)
+# CHECK 11: widget render harness - renders every widget kind x 3 background modes to PNGs on-device
 adb shell am start -S -W -n com.wathakker.app/com.example.WidgetRenderCheck > "$OUT/rendercheck.txt" 2>&1 || true
 sleep 4
+grep -q "Status: ok" "$OUT/rendercheck.txt" && say "PASS: widget render harness launched" || say "FAIL: widget render harness did not launch"
+mkdir -p "$OUT/widget-renders"
+adb shell ls /sdcard/Android/data/com.wathakker.app/files/ > "$OUT/widget-files.txt" 2>&1 || true
+adb pull /sdcard/Android/data/com.wathakker.app/files/ "$OUT/widget-renders" >> "$OUT/widget-files.txt" 2>&1 || true
+NPNG=$(ls "$OUT"/widget-renders/widget_*.png 2>/dev/null | wc -l)
+NERR=$(ls "$OUT"/widget-renders/widget_*.err 2>/dev/null | wc -l)
+[ "$NERR" = 0 ] && [ "$NPNG" -ge 27 ] && say "PASS: $NPNG widget renders, no errors" || say "FAIL: widget renders png=$NPNG err=$NERR"
 shot 09-widget-render
 
 # logcat + crash scan
