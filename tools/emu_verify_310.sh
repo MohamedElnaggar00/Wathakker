@@ -7,11 +7,12 @@ say() { echo "$1" | tee -a "$SUM"; }
 adb uninstall com.wathakker.app >/dev/null 2>&1 || true
 adb install -g "$APK" > "$OUT/install.txt" 2>&1
 adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS || true
+adb shell settings put global hide_error_dialogs 1 || true
 adb logcat -c
 adb shell am start -S -W -n com.wathakker.app/com.example.MainActivity > "$OUT/launch.txt" 2>&1
 sleep 10
 shot() { adb shell screencap -p /sdcard/s.png && adb pull /sdcard/s.png "$OUT/$1.png" >/dev/null; }
-dump() { adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/u.xml >/dev/null 2>&1; }
+dump() { adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/u.xml >/dev/null 2>&1; [ -s /tmp/u.xml ] && [ $(wc -c < /tmp/u.xml) -gt 500 ] || echo "WARN: uiautomator dump unhealthy at $(date +%T)" >> "$OUT/dump_health.txt"; }
 # find_center <text|desc> <value> -> prints "x y" of first matching node's center
 find_center() {
 python3 - "$1" "$2" <<'PY'
@@ -99,6 +100,10 @@ ensure_ready() { # absorb slow-emulator ANRs (incl. Pixel Launcher) until the pr
     [ -n "$(find_center desc bell_0)" ] && return 0
     sleep 5
   done
+  # dump may be dead because a system ANR dialog blocks idle state: blind-tap its Wait button and retry once
+  echo "WARN: dump unhealthy; blind ANR dismiss attempted" >> "$OUT/dump_health.txt"
+  adb shell input tap 556 1357; sleep 4
+  dismiss_anr; dump
 }
 ensure_ready
 shot 00-prayer
