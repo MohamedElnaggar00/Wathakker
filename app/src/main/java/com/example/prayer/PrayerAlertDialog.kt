@@ -117,7 +117,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     Spacer(Modifier.width(10.dp))
                     Text(L10n.t(S.Notifications), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 }
-                OneUISwitch(enabled) { PrayerAlertStore.setEnabled(context, prayer, it); changed() }
+                OneUISwitch(enabled, { PrayerAlertStore.setEnabled(context, prayer, it); changed() })
             }
             if (enabled) {
                 Spacer(Modifier.height(10.dp))
@@ -165,7 +165,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                             Text(L10n.t(S.IqamaReminder), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                             Text(L10n.t(S.IqamaReminderSub), color = cs.onSurfaceVariant, fontSize = 11.sp)
                         }
-                        OneUISwitch(iqama) { PrayerAlertStore.setIqamaReminder(context, prayer, it); changed() }
+                        OneUISwitch(iqama, { PrayerAlertStore.setIqamaReminder(context, prayer, it); changed() })
                     }
                 }
                 Spacer(Modifier.height(12.dp))
@@ -211,7 +211,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         Spacer(Modifier.width(10.dp))
                         Text(L10n.t(S.VibrateDuringAlarm), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
-                    OneUISwitch(prefs.isVibrationEnabled) { prefs.isVibrationEnabled = it; tick++ }
+                    OneUISwitch(prefs.isVibrationEnabled, { prefs.isVibrationEnabled = it; tick++ })
                 }
                 Spacer(Modifier.height(4.dp))
                 Text(L10n.t(S.AlarmVolume), color = cs.onSurfaceVariant, fontSize = 12.sp)
