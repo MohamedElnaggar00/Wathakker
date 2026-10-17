@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
 @Composable
 fun BlurBehindDialogWindow(radiusDp: Int = 28) {
@@ -58,8 +60,8 @@ fun OneUIDialogSurface(
     onDismiss: () -> Unit,
     onConfirm: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    confirmText: String = "حفظ",
-    dismissText: String = "إلغاء",
+    confirmText: String = L10n.t(S.Save),
+    dismissText: String = L10n.t(S.Cancel),
     confirmEnabled: Boolean = true,
     scrollable: Boolean = true,
     content: @Composable ColumnScope.() -> Unit
@@ -128,8 +130,8 @@ fun OneUIDialog(
     title: String,
     onDismiss: () -> Unit,
     onConfirm: (() -> Unit)? = null,
-    confirmText: String = "حفظ",
-    dismissText: String = "إلغاء",
+    confirmText: String = L10n.t(S.Save),
+    dismissText: String = L10n.t(S.Cancel),
     confirmEnabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit
 ) {
