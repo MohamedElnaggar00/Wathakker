@@ -11,8 +11,8 @@ android {
     applicationId = "com.wathakker.app"
     minSdk = 23
     targetSdk = 36
-    versionCode = 12
-    versionName = "3.0.6"
+    versionCode = 13
+    versionName = "3.0.7"
   }
 
   signingConfigs {
@@ -68,3 +68,4 @@ dependencies {
   implementation("androidx.profileinstaller:profileinstaller:1.4.1")
   implementation("dev.chrisbanes.haze:haze:1.6.0")
 }
+
