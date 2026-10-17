@@ -278,6 +278,28 @@ else
   back_to_prayer
 fi
 
+# CHECK 5c: adjustments rows (value label + explainer note) fully visible at font 1.0/1.3 x light/dark
+shot_adjustments() { # <tag> - navigate to Location & calculation and capture the adjustments section
+  fg_guard
+  goto_location
+  dump
+  has_text "الموقع والحساب" || say "FAIL: adjustments shot $1 - not on Location screen"
+  scroll_until "الفجر"
+  sleep 1
+  shot "$1"
+  back_to_prayer
+}
+adb shell settings put system font_scale 1.3; sleep 3
+shot_adjustments 04d-adjustments-font13
+adb shell settings put system font_scale 1.0; sleep 3
+adb shell cmd uimode night yes; sleep 2
+shot_adjustments 04e-adjustments-dark
+adb shell settings put system font_scale 1.3; sleep 3
+shot_adjustments 04f-adjustments-dark-font13
+adb shell settings put system font_scale 1.0; sleep 3
+adb shell cmd uimode night no; sleep 2
+fg_guard
+
 # CHECK 5b: Hijri converter entry is in the drawer (and gone from Settings)
 dump
 has_text "محول التاريخ" && say "FAIL: converter row still on Settings screen" || say "PASS: converter row removed from Settings"
