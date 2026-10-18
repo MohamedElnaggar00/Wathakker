@@ -1,0 +1,19 @@
+outcome: failure  bom: 2025.10.01  run: 39147891198  sha: c76de86c7c2652f03737913da878e5fe242765ff
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+--- details
+56:* What went wrong:
+57:Execution failed for task ':app:mergeReleaseResources'.
+58-> A failure occurred while executing com.android.build.gradle.internal.res.Aapt2CompileRunnable
+59-   > AAPT2 aapt2-9.1.1-14792394-linux Daemon #2: Unexpected error during compile '/home/runner/work/Wathakker/Wathakker/app/src/main/res/drawable-notnight-nodpi/home_preview_hero_large.png', attempting to stop daemon.
+60-     This should not happen under normal circumstances, please file an issue if it does.
+61-
+--
+68:BUILD FAILED in 2m 8s
+69-22 actionable tasks: 22 executed
