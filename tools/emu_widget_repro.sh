@@ -9,6 +9,8 @@ adb wait-for-device
 adb shell input keyevent 82 || true
 adb install -r "$HOST"
 adb install -r "$APK"
+adb push "$PWD/tools/widgethost/out/grantbind.dex" /data/local/tmp/grantbind.dex
+adb shell 'CLASSPATH=/data/local/tmp/grantbind.dex app_process / GrantBind com.example.widgethost'
 { adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost
   adb shell cmd package set-home-activity com.example.widgethost/.MainActivity
   adb shell cmd role get-role-holders android.app.role.HOME
