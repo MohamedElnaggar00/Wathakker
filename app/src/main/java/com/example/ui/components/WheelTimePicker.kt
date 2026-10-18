@@ -1,6 +1,7 @@
 package com.example.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,10 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -23,13 +26,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 
+/**
+ * One UI-style wheel time picker. Always lays out LTR (hour : minute, then the
+ * ص/م marker last), the way Samsung's clock spinner and the ar-locale "10:59 ص"
+ * format read, regardless of the app's RTL direction. Follows the theme in both
+ * light and dark, uses the localized ص/م markers, and switches to a 24-hour
+ * wheel when the system clock is set to 24h.
+ */
 @Composable
 fun WheelTimePicker(
     initialHour24: Int,
@@ -37,39 +52,48 @@ fun WheelTimePicker(
     onTimeSelected: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val is24 = remember { android.text.format.DateFormat.is24HourFormat(context) }
+    val cs = MaterialTheme.colorScheme
     val initialHour12 = if (initialHour24 == 0) 12 else if (initialHour24 > 12) initialHour24 - 12 else initialHour24
     val initialIsAm = initialHour24 < 12
-    val hours = (1..12).map { it.toString() }
+    val hours = if (is24) (0..23).map { String.format("%02d", it) } else (1..12).map { it.toString() }
     val minutes = (0..59).map { String.format("%02d", it) }
-    val amPmList = listOf("AM", "PM")
+    val amPmList = listOf(L10n.t(S.AmMarker), L10n.t(S.PmMarker))
 
-    var selectedHour12Index by remember { mutableIntStateOf(initialHour12 - 1) }
-    var selectedMinuteIndex by remember { mutableIntStateOf(initialMinute) }
+    var selectedHourIndex by remember { mutableIntStateOf(if (is24) initialHour24.coerceIn(0, 23) else initialHour12 - 1) }
+    var selectedMinuteIndex by remember { mutableIntStateOf(initialMinute.coerceIn(0, 59)) }
     var selectedAmPmIndex by remember { mutableIntStateOf(if (initialIsAm) 0 else 1) }
 
-    LaunchedEffect(selectedHour12Index, selectedMinuteIndex, selectedAmPmIndex) {
-        val h12 = selectedHour12Index + 1
-        val isAm = selectedAmPmIndex == 0
-        val h24 = if (isAm && h12 == 12) 0 else if (isAm) h12 else if (h12 == 12) 12 else h12 + 12
+    LaunchedEffect(selectedHourIndex, selectedMinuteIndex, selectedAmPmIndex, is24) {
+        val h24 = if (is24) selectedHourIndex else {
+            val h12 = selectedHourIndex + 1
+            val isAm = selectedAmPmIndex == 0
+            if (isAm && h12 == 12) 0 else if (isAm) h12 else if (h12 == 12) 12 else h12 + 12
+        }
         onTimeSelected(h24, selectedMinuteIndex)
     }
 
-    Row(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        WheelPickerColumn(hours, selectedHour12Index, { selectedHour12Index = it }, Modifier.width(64.dp))
-        Text(
-            ":",
-            modifier = Modifier.padding(horizontal = 8.dp),
-            color = Color.White,
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold
-        )
-        WheelPickerColumn(minutes, selectedMinuteIndex, { selectedMinuteIndex = it }, Modifier.width(64.dp))
-        Spacer(modifier = Modifier.width(16.dp))
-        WheelPickerColumn(amPmList, selectedAmPmIndex, { selectedAmPmIndex = it }, Modifier.width(64.dp))
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Row(
+            modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            WheelPickerColumn(hours, selectedHourIndex, { selectedHourIndex = it }, Modifier.width(76.dp))
+            Text(
+                ":",
+                modifier = Modifier.padding(horizontal = 4.dp),
+                color = cs.onSurface,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold
+            )
+            WheelPickerColumn(minutes, selectedMinuteIndex, { selectedMinuteIndex = it }, Modifier.width(76.dp))
+            if (!is24) {
+                Spacer(modifier = Modifier.width(12.dp))
+                WheelPickerColumn(amPmList, selectedAmPmIndex, { selectedAmPmIndex = it }, Modifier.width(60.dp))
+            }
+        }
     }
 }
 
@@ -80,9 +104,10 @@ private fun WheelPickerColumn(
     initialIndex: Int,
     onItemSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    visibleItemsCount: Int = 3,
+    visibleItemsCount: Int = 5,
     itemHeight: Dp = 52.dp
 ) {
+    val cs = MaterialTheme.colorScheme
     val count = items.size
     val startIndex = remember(count, initialIndex) {
         val max = (1 shl 30) - 1
@@ -105,6 +130,14 @@ private fun WheelPickerColumn(
         modifier = modifier.height(itemHeight * visibleItemsCount),
         contentAlignment = Alignment.Center
     ) {
+        // One UI selection band behind the center row.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(itemHeight)
+                .clip(RoundedCornerShape(14.dp))
+                .background(cs.surfaceVariant)
+        )
         LazyColumn(
             state = listState,
             flingBehavior = flingBehavior,
@@ -121,10 +154,11 @@ private fun WheelPickerColumn(
                 ) {
                     Text(
                         text = itemText,
-                        fontSize = if (isSelected) 32.sp else 26.sp,
+                        fontSize = if (isSelected) 26.sp else 20.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = if (isSelected) Color.White else Color.White.copy(alpha = 0.35f),
-                        textAlign = TextAlign.Center
+                        color = if (isSelected) cs.onSurface else cs.onSurfaceVariant.copy(alpha = 0.45f),
+                        textAlign = TextAlign.Center,
+                        maxLines = 1
                     )
                 }
             }
