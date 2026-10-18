@@ -97,7 +97,7 @@ run_scenario() { # <key> <HH:MM> <expected next-prayer arabic>
   adb shell input swipe $CX $((SH*30/100)) $CX $((SH*80/100)) 400; sleep 2
   adb shell cmd uimode night no; sleep 2
   dump
-  python3 - "$EXPECT" "$KEY" <<'PY'
+  python3 - "$EXPECT" "$KEY" >> "$SUM" <<'PY'
 import sys,os
 expect,key=sys.argv[1],sys.argv[2]
 x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
@@ -138,17 +138,28 @@ diffs=[sum(abs(v[i]-dark_flat[i]) for i in range(3)) for v in vals.values()]
 print(('PASS' if min(diffs)>12 else 'WARN')+': sky strips differ from flat dark background (min diff %d)'%min(diffs))
 PY
 
-# --- boundary crossfade: sit 3s before Maghrib with the app open, capture across the flip ---
+# --- boundary crossfade: park before Maghrib, poll the countdown, capture the flip ---
 adb shell cmd uimode night yes; sleep 2
-FMT=$(python3 -c "import datetime;d=datetime.date.today();h,m='$MAGHRIB'.split(':');t=int(h)*3600+int(m)*60-3;print(d.strftime('%m%d')+f'{t//3600:02d}{(t%3600)//60:02d}'+d.strftime('%Y')+f'.{t%60:02d}')")
+FMT=$(python3 -c "import datetime;d=datetime.date.today();h,m='$MAGHRIB'.split(':');t=int(h)*3600+int(m)*60-90;print(d.strftime('%m%d')+f'{t//3600:02d}{(t%3600)//60:02d}'+d.strftime('%Y')+f'.{t%60:02d}')")
 adb shell date "$FMT" >/dev/null 2>&1
-sleep 4   # boundary crosses ~1s in; the 1.4s crossfade runs
+relaunch
+adb shell cmd uimode night yes; sleep 2
+for i in $(seq 1 100); do
+  dump
+  LEFT=$(python3 -c "
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+m=re.findall(r'text=.(\d+):(\d{2}):(\d{2}).',x)
+print(min((int(a)*3600+int(b)*60+int(c)) for a,b,c in m) if m else 9999)
+")
+  [ "${LEFT:-9999}" -le 5 ] && break
+  sleep 1
+done
 shot 320_crossfade_t0
-sleep 1
-shot 320_crossfade_t1
-sleep 2
-shot 320_crossfade_t2
-say "INFO: crossfade frames captured (visual gate: t0/t1 mid-blend, t2 settled, no flicker)"
+sleep 1; shot 320_crossfade_t1
+sleep 1; shot 320_crossfade_t2
+sleep 2; shot 320_crossfade_t3
+say "INFO: crossfade frames captured around the maghrib boundary (visual gate: t0/t1 mid-blend, t3 settled maghrib sky, no flicker)"
 
 # --- scroll jank with sky + two haze cards active ---
 adb shell am force-stop $PKG; sleep 1
@@ -159,16 +170,44 @@ for i in 1 2 3 4 5 6; do adb shell input swipe $CX $((SH*25/100)) $CX $((SH*75/1
 adb shell dumpsys gfxinfo $PKG > "$OUT/gfxinfo.txt" 2>&1
 grep -E "Total frames rendered|Janky frames" "$OUT/gfxinfo.txt" | head -4 | tee -a "$SUM"
 
-# --- leave the prayer tab: status bar + normal background restore ---
-adb shell input tap $((SW*12/100)) $((SH*96/100)); sleep 4   # التقويم tab (start edge in RTL = rightmost... tap by coordinates fallback below)
-dump
-if ! grep -q "التقويم" /tmp/u320.xml 2>/dev/null; then :; fi
+# --- leave the prayer tab: sky gone, theme background restored; re-enter: sky back ---
+tab_tap() { # <arabic label>
+  dump
+  python3 -c "
+import re,sys,os
+val='$1'
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+best=None
+for m in re.finditer(r'text=.([^\"]*).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
+    if m.group(1)==val:
+        a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+        cy=(b+d)//2
+        if best is None or cy>best[1]: best=((a+c)//2,cy)
+if best: print(best[0],best[1])
+" > /tmp/tap.xy
+  [ -s /tmp/tap.xy ] && adb shell input tap $(cat /tmp/tap.xy) && sleep 4
+}
+strip_check() { # <png> <expect: flat|sky> <label>
+python3 -c "
+import sys
+from PIL import Image
+im=Image.open('$OUT/$1').convert('RGB'); w,h=im.size
+px=[im.getpixel((x,y)) for x in range(w//10,w-w//10,20) for y in range(int(h*0.30),int(h*0.36),8)]
+avg=tuple(sum(c[i] for c in px)//len(px) for i in range(3))
+spread=max(avg)-min(avg)
+flat = spread < 12
+ok = flat if '$2'=='flat' else (not flat)
+print('$3 strip rgb=%s spread=%s' % (avg, spread))
+print(('PASS' if ok else 'FAIL')+': $3')
+" >> "$SUM"
+}
+tab_tap "التقويم"
 shot 320_after_leave_tab
-alive && say "PASS: app alive after leaving prayer tab" || say "FAIL: app died after leaving prayer tab"
-# re-enter prayer tab
-adb shell input tap $((SW*88/100)) $((SH*96/100)); sleep 4
+strip_check 320_after_leave_tab.png flat "sky gone after leaving prayer tab"
+tab_tap "الصلاة"
 shot 320_reenter_prayer
-alive && say "PASS: app alive after re-entering prayer tab" || say "FAIL: app died on re-enter"
+strip_check 320_reenter_prayer.png sky "sky back after re-entering prayer tab"
+alive && say "PASS: app alive across tab leave/re-enter" || say "FAIL: app died across tab leave/re-enter"
 
 # --- crash check across the whole run ---
 adb logcat -d > "$OUT/logcat.txt" 2>&1
