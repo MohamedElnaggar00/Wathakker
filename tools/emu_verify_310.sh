@@ -426,21 +426,32 @@ shot 01-bell-toggled
 
 # CHECK 4: long-press bell -> per-prayer alert dialog: base adhan notification + optional
 # early reminder as an ADDITION; enabling it must schedule TWO alarms (adhan + early).
-sw_at() {  # prints the center of the Nth Switch in the current UI (N = $1, 1-based)
+sw_for_label() {  # $1 = exact row label text; prints the center of that row's switch (class-agnostic)
   adb shell uiautomator dump /sdcard/w.xml >/dev/null 2>&1
-  adb shell cat /sdcard/w.xml | NTH="$1" python3 -c '
+  adb shell cat /sdcard/w.xml | LABEL="$1" python3 -c '
 import sys, os, re
 import xml.etree.ElementTree as ET
+label = os.environ["LABEL"]
 r = ET.fromstring(sys.stdin.read())
-sw = []
+def b(n):
+    m = re.match(r"\[(\d+),(\d+)\]\[(\d+),(\d+)\]", n.get("bounds"))
+    return tuple(map(int, m.groups()))
+lab = None
 for n in r.iter("node"):
-    if n.get("class") == "android.widget.Switch":
-        m = re.match(r"\[(\d+),(\d+)\]\[(\d+),(\d+)\]", n.get("bounds"))
-        x1, y1, x2, y2 = map(int, m.groups())
-        sw.append((y1, x1, (x1 + x2) // 2, (y1 + y2) // 2))
-sw.sort()
-k = int(os.environ.get("NTH", "2")) - 1
-if len(sw) > k: print(sw[k][2], sw[k][3])'
+    if n.get("text") == label:
+        lab = b(n); break
+if lab is None: sys.exit(0)
+yc = (lab[1] + lab[3]) // 2
+cands = []
+for n in r.iter("node"):
+    if n.get("clickable") == "true":
+        x1, y1, x2, y2 = b(n)
+        if y1 - 40 <= yc <= y2 + 40 and x2 < lab[0] + 30:
+            cands.append((x2 - x1, (x1 + x2) // 2, (y1 + y2) // 2))
+small = [c for c in cands if c[0] < 260]
+pick = small[0] if small else (cands[0] if cands else None)
+if pick: print(pick[1], pick[2])
+'
 }
 BL=$(find_center desc bell_0)
 if [ -n "$BL" ]; then
@@ -450,7 +461,7 @@ if [ -n "$BL" ]; then
   has_text "تنبيه قبل الأذان" && say "PASS: early-reminder row present (additional notification)" || say "FAIL: early-reminder row missing"
   shot 02-alert-dialog
   # enable the early reminder: second switch in the dialog (master, then early)
-  SW=$(sw_at 2)
+  SW=$(sw_for_label "تنبيه قبل الأذان")
   if [ -n "$SW" ]; then
     adb shell input tap $SW; sleep 2
     dump
@@ -486,7 +497,7 @@ if [ -n "$BL" ]; then
           AC=$(grep -cE "Alarm\{[^}]*com\.wathakker\.app" "$OUT/alarms_early.txt")
           [ "$AC" -ge 2 ] && say "PASS: two alarms scheduled (adhan + early reminder), count=$AC" || say "FAIL: expected >=2 pending alarms, got $AC"
           # restore: turn the early reminder back off (second switch again)
-          SW=$(sw_at 2)
+          SW=$(sw_for_label "تنبيه قبل الأذان")
           if [ -n "$SW" ]; then
             adb shell input tap $SW; sleep 2
             dump
