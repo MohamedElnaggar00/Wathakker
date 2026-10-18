@@ -7,8 +7,12 @@ permissions:
   actions: read
 
 jobs:
-  build-nominify:
+  build-variants:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [nominify-vc43, logging-vc42]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -19,6 +23,7 @@ jobs:
         with:
           gradle-version: '9.3.1'
       - name: Flip minify/shrink off (DIAGNOSTIC build, versionCode 43)
+        if: matrix.variant == 'nominify-vc43'
         run: |
           sed -i 's/isMinifyEnabled = true/isMinifyEnabled = false/; s/isShrinkResources = true/isShrinkResources = false/; s/versionCode = 42/versionCode = 43/' app/build.gradle.kts
           grep -nE 'versionCode|isMinify|isShrink' app/build.gradle.kts
@@ -53,15 +58,15 @@ jobs:
           ' 2>&1 | tee sign.log; test ${PIPESTATUS[0]} -eq 0
       - uses: actions/upload-artifact@v4
         with:
-          name: app-nominify-vc43.apk
+          name: app-${{ matrix.variant }}.apk
           path: app/build/outputs/apk/release/app-release-unsigned.apk
 
   repro:
-    needs: build-nominify
+    needs: build-variants
     strategy:
       fail-fast: false
       matrix:
-        variant: [published-vc42, nominify-vc43]
+        variant: [published-vc42, nominify-vc43, logging-vc42]
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
@@ -73,9 +78,9 @@ jobs:
           curl -fL -o built/app.apk https://github.com/MohamedElnaggar00/Wathakker/releases/download/v3.1.0/Wathakker-v3.1.0.apk
           ls -la built/
       - uses: actions/download-artifact@v4
-        if: matrix.variant == 'nominify-vc43'
+        if: matrix.variant != 'published-vc42'
         with:
-          name: app-nominify-vc43.apk
+          name: app-${{ matrix.variant }}.apk
           path: built
           run-id: ${{ github.run_id }}
           github-token: ${{ github.token }}
