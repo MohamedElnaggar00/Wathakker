@@ -6,7 +6,6 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -62,18 +61,15 @@ object HeaderTools {
 
     // Same glass material as the bottom bar (oneUIGlass: haze blur + 85% tint, near-opaque
     // fallback without blur support) so pill labels stay readable over scrolled content.
-    // The tile itself fades in on scroll; the strip between pills stays clear.
+    // Apply on a background layer only (see OneUIScreen) so the fade-in alpha never touches
+    // the pill's icons/labels; the strip between pills stays clear.
     @androidx.compose.runtime.Composable
-    fun scrollTile(modifier: Modifier, alpha: Float): Modifier {
-        val tileAlpha = alpha
-        return modifier
-            .graphicsLayer { this.alpha = tileAlpha }
-            .oneUIGlass(
-                RoundedCornerShape(26.dp),
-                androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh,
-                0.85f,
-                28
-            )
-    }
+    fun glassTile(modifier: Modifier): Modifier =
+        modifier.oneUIGlass(
+            RoundedCornerShape(26.dp),
+            androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh,
+            0.85f,
+            28
+        )
 }
 

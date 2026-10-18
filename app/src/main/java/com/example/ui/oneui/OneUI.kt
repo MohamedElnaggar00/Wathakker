@@ -165,12 +165,15 @@ fun OneUIScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = HeaderTools.scrollTile(Modifier.weight(1f, fill = false), barAlpha)
-                    .height(52.dp)
-                    .padding(start = 6.dp, end = 18.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Box(modifier = Modifier.weight(1f, fill = false)) {
+                // Glass tile fades in on scroll as a background layer; icons/labels stay visible.
+                Box(Modifier.matchParentSize().alpha(barAlpha).then(HeaderTools.glassTile(Modifier)))
+                Row(
+                    modifier = Modifier
+                        .height(52.dp)
+                        .padding(start = 6.dp, end = 18.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                 val leading = onBack ?: onMenu
                 if (leading != null) {
                     IconButton(onClick = leading) {
@@ -191,19 +194,23 @@ fun OneUIScreen(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                }
             }
             // On the Settings screen the gear is suppressed, so the trailing group would be an
             // empty tile (the faint ghost pill). Skip the group entirely in that case.
             val showSettingsButton = !HeaderTools.isOnSettings()
             if (showSettingsButton || actions != null) {
-                Row(
-                    modifier = HeaderTools.scrollTile(Modifier, barAlpha).height(52.dp).padding(horizontal = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Action icons sit nearest the menu (start in RTL), the gear is the
-                    // outermost icon - per user request, matching One UI ordering.
-                    actions?.invoke(this)
-                    if (showSettingsButton) HeaderTools.SettingsButton()
+                Box {
+                    Box(Modifier.matchParentSize().alpha(barAlpha).then(HeaderTools.glassTile(Modifier)))
+                    Row(
+                        modifier = Modifier.height(52.dp).padding(horizontal = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // Action icons sit nearest the menu (start in RTL), the gear is the
+                        // outermost icon - per user request, matching One UI ordering.
+                        actions?.invoke(this)
+                        if (showSettingsButton) HeaderTools.SettingsButton()
+                    }
                 }
             }
         }
