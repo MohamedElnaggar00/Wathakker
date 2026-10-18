@@ -44,7 +44,9 @@ class WidgetRenderCheck : Activity() {
         for (kind in previewDims.keys) {
             try {
                 val (w, h) = previewDims[kind] ?: (110 to 90)
-                val bmp = HomeWidgets.renderKind(this, kind, w, h, 994)
+                // HeroLarge shares the Hero canvas (provider maps HeroLarge -> Hero), just taller.
+                val rk = if (kind == "HeroLarge") "Hero" else kind
+                val bmp = HomeWidgets.renderKind(this, rk, w, h, 994)
                 FileOutputStream(File(out, "preview_light_${kind}.png")).use {
                     bmp.compress(Bitmap.CompressFormat.PNG, 100, it)
                 }
