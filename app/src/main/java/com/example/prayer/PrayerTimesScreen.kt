@@ -69,6 +69,7 @@ import com.example.ui.oneui.OneUIDivider
 import com.example.ui.oneui.OneUIProgressBar
 import com.example.ui.oneui.OneUIIconAction
 import com.example.ui.oneui.OneUIScreen
+import com.example.ThemeSettings
 import com.example.ui.theme.OneUIActiveGreen
 import com.example.ui.theme.OneUITimeCyan
 import kotlinx.coroutines.delay
@@ -361,7 +362,12 @@ fun PrayerTimesContent(
                     }
                 }
                 Spacer(Modifier.height(14.dp))
-                OneUIProgressBar(progressNow, color = OneUIActiveGreen)
+                OneUIProgressBar(
+                    progressNow,
+                    color = OneUIActiveGreen,
+                    trackColor = if (ThemeSettings.isDark()) Color(0xFF38383E) else Color(0xFFC4C4CD),
+                    gradient = listOf(Color(0xFF5BC950), Color(0xFF24C55E))
+                )
             }
         }
         item(key = "prayer-list") {

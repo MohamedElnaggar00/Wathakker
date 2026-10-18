@@ -73,6 +73,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -505,8 +506,12 @@ fun OneUIProgressBar(
     progress: Float,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.primary,
-    trackColor: Color = MaterialTheme.colorScheme.surfaceVariant
+    trackColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    gradient: List<Color>? = null
 ) {
+    // Gradient runs from the fill's anchor edge to its leading edge, mirrored in RTL
+    // (matches the One UI battery/browser bars and the home widgets).
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -520,7 +525,10 @@ fun OneUIProgressBar(
                 .fillMaxHeight()
                 .fillMaxWidth(progress.coerceIn(0f, 1f))
                 .clip(CircleShape)
-                .background(color)
+                .background(
+                    if (gradient != null) Brush.horizontalGradient(if (rtl) gradient.reversed() else gradient)
+                    else SolidColor(color)
+                )
         )
     }
 }
