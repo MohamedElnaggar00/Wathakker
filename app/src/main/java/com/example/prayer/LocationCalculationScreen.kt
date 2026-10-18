@@ -156,24 +156,26 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                     subtitle = L10n.t(S.PickCitySub),
                     onClick = { viewModel.setUseCurrentLocation(false) }
                 )
-                Spacer(Modifier.height(10.dp))
+                // City summary row: identical metrics to LocOptionRow above - 12dp insets,
+                // icon on the same column axis as the radio rows' icons (radio slot 40dp +
+                // 8dp spacer = 48dp), same text styles, trailing change label like CalcRow.
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .clickable(enabled = !state.useCurrentLocation) { showCityDialog = true }
+                        .padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Outlined.LocationOn, null, tint = cs.primary)
-                        Spacer(Modifier.width(8.dp))
-                        Column {
-                            Text(L10n.t(S.CurrentCity), color = cs.onSurfaceVariant, fontSize = 11.sp)
-                            Text(state.cityName, color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                        }
+                    Spacer(Modifier.width(48.dp))
+                    Icon(Icons.Outlined.LocationOn, null, tint = cs.primary)
+                    Spacer(Modifier.width(10.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(L10n.t(S.CurrentCity), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                        Text(state.cityName, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                     }
                     if (!state.useCurrentLocation) {
-                        TextButton(onClick = { showCityDialog = true }) {
-                            Text(L10n.t(S.ChangeCity), fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                        }
+                        Text(L10n.t(S.ChangeCity), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
                 if (state.useCurrentLocation && (!state.hasLocationPermission || !state.isGpsAvailable())) {
