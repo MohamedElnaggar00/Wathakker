@@ -20,7 +20,10 @@ class WidgetRenderCheck : Activity() {
             .remove("widget_bg_color_993")
             .remove("widget_bar_color_993")
             .apply()
-        val out = getExternalFilesDir(null)!!
+        // External app-files dir can be missing when the AVD has no mounted sdcard
+        // (vold: "Failed to find mounted volume"); fall back to internal storage.
+        val out = getExternalFilesDir(null) ?: java.io.File(filesDir, "rendercheck")
+        out.mkdirs()
         val dims = mapOf(
             "Hero" to (330 to 90), "HeroLarge" to (330 to 160), "Schedule" to (330 to 90),
             "Clock" to (250 to 90), "Hijri" to (90 to 90), "Gregorian" to (90 to 90),
