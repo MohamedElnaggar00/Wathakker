@@ -9,6 +9,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.ui.i18n.L10n
+import com.example.ui.i18n.S
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.runtime.getValue
 import java.lang.ref.WeakReference
@@ -45,7 +47,7 @@ object HeaderTools {
         androidx.compose.material3.IconButton(onClick = { settings() }) {
             androidx.compose.material3.Icon(
                 Icons.Outlined.Settings,
-                contentDescription = null,
+                contentDescription = L10n.t(S.Settings),
                 tint = androidx.compose.material3.MaterialTheme.colorScheme.onSurface
             )
         }
