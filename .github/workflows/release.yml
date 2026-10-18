@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      TAG: v3.0.6
+      TAG: v3.1.0
     steps:
       - uses: actions/checkout@v4
       - name: Stop if tag or release exists
@@ -18,9 +18,9 @@ jobs:
         run: |
           RUN=$(gh run list --workflow build-apk.yml --branch main --status success --limit 1 --json databaseId,headSha -q '.[0].databaseId')
           echo "run $RUN"
-          gh run download "$RUN" -n app-debug-bom-2025.10.01.apk -D out
-          cp out/app-debug.apk Wathakker-v3.0.6-rebuilt.apk
-          ls -l Wathakker-v3.0.6-rebuilt.apk
+          gh run download "$RUN" -n app-release-bom-2025.10.01.apk -D out
+          cp out/app-release-unsigned.apk Wathakker-v3.1.0.apk
+          ls -l Wathakker-v3.1.0.apk
       - name: Create pre-release
         run: |
           cat > notes.md <<'NOTES'
@@ -37,5 +37,5 @@ jobs:
           Fixes
           - App source is now fully buildable from this repository
           NOTES
-          if gh release view "$TAG" >/dev/null 2>&1; then gh release upload "$TAG" Wathakker-v3.0.6-rebuilt.apk --clobber; exit 0; fi
-          gh release create "$TAG" Wathakker-v3.0.6-rebuilt.apk --target main --prerelease --title "Wathakker 3.0.6 (pre-release)" --notes-file notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then gh release upload "$TAG" Wathakker-v3.1.0.apk --clobber; exit 0; fi
+          gh release create "$TAG" Wathakker-v3.1.0.apk --target main --latest --title "Wathakker 3.1.0" --notes-file notes.md
