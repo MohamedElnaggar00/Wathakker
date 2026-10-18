@@ -35,9 +35,12 @@ jobs:
             adb install -r built/app-release-unsigned.apk
             adb shell am start -S -W -n com.wathakker.app/com.example.WidgetRenderCheck
             sleep 6
+            adb root || true
+            sleep 3
+            adb wait-for-device
             mkdir -p gen
-            adb pull /sdcard/Android/data/com.wathakker.app/files/ gen/files
-            ls -la gen/files
+            adb pull /sdcard/Android/data/com.wathakker.app/files/ gen/files ||               adb exec-out "run-as com.wathakker.app tar -C /sdcard/Android/data/com.wathakker.app/files -cf - ." | tar -xf - -C gen
+            ls -la gen/files || true
       - name: Gate on render success
         run: |
           NPNG=$(ls gen/files/preview_light_*.png 2>/dev/null | wc -l)
