@@ -35,7 +35,26 @@ done
 adb logcat -d | grep -iE 'rendercheck|AndroidRuntime|FATAL|wathakker' | tail -120 > "$GEN/logcat.txt" 2>&1 || true
 RAW=$RAW_EXT; adb shell "[ -d $RAW_EXT ]" || RAW=$RAW_INT
 echo "pulling from $RAW" > "$GEN/pull.txt"
-adb pull "$RAW/" "$GEN/files" >> "$GEN/pull.txt" 2>&1 || true
+# pull + integrity-verify; re-pull if any PNG was caught mid-write
+for try in 1 2 3 4 5; do
+  sleep 4
+  rm -rf "$GEN/files"
+  adb pull "$RAW/" "$GEN/files" >> "$GEN/pull.txt" 2>&1 || true
+  BAD=$(python3 - "$GEN/files" <<'PYEOF'
+import sys, glob
+from PIL import Image
+bad = 0
+for f in glob.glob(sys.argv[1] + '/preview_light_*.png'):
+    try:
+        im = Image.open(f); im.load()
+    except Exception as e:
+        print('TRUNCATED', f, e); bad += 1
+print('bad=%d' % bad)
+PYEOF
+)
+  echo "pull try $try: $BAD" | tee -a "$GEN/pull.txt"
+  echo "$BAD" | grep -q 'bad=0' && break
+done
 ls -la "$GEN/files" >> "$GEN/pull.txt" 2>&1 || true
 NPNG=$(ls "$GEN"/files/preview_light_*.png 2>/dev/null | wc -l)
 NERR=$(ls "$GEN"/files/preview_light_*.err 2>/dev/null | wc -l)
