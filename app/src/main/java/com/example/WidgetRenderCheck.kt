@@ -28,6 +28,27 @@ class WidgetRenderCheck : Activity() {
             "DayPrayer" to (110 to 90), "Pill" to (110 to 90)
         )
         val kinds = listOf("Hero", "NextPrayer", "PrayerBar", "Schedule", "Clock", "DayPrayer", "Pill", "Hijri", "Gregorian")
+        // Light-theme picker-preview generation: every kind at its preview-PNG aspect
+        // (original previews were authored at density 2.625), light bg, DEFAULT bar.
+        val sp2 = sp.edit().putString("widget_bg_color_994", "white").remove("widget_bar_color_994")
+        sp2.apply()
+        val previewDims = mapOf(
+            "Hero" to (330 to 90), "HeroLarge" to (330 to 160), "Schedule" to (276 to 90),
+            "Clock" to (203 to 90), "Hijri" to (90 to 90), "Gregorian" to (90 to 90),
+            "NextPrayer" to (90 to 90), "PrayerBar" to (130 to 90),
+            "DayPrayer" to (130 to 90), "Pill" to (130 to 90)
+        )
+        for (kind in previewDims.keys) {
+            try {
+                val (w, h) = previewDims[kind] ?: (110 to 90)
+                val bmp = HomeWidgets.renderKind(this, kind, w, h, 994)
+                FileOutputStream(File(out, "preview_light_${kind}.png")).use {
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, it)
+                }
+            } catch (e: Exception) {
+                File(out, "preview_light_${kind}.err").writeText(e.toString())
+            }
+        }
         for ((id, tag) in listOf(991 to "light", 992 to "dark", 993 to "default")) {
             for (kind in kinds) {
                 try {
