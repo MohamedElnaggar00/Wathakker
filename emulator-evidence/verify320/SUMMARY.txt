@@ -1,32 +1,26 @@
-FAIL: parsed 0/6 prayer times
-FAIL[fajr]: app not foreground after relaunch
-FAIL[fajr]: next prayer shows الشروق
-FAIL[shuruq]: app not foreground after relaunch
-FAIL[shuruq]: next prayer shows الظهر
-FAIL[dhuhr]: app not foreground after relaunch
-FAIL[dhuhr]: next prayer shows العصر
-FAIL[asr]: app not foreground after relaunch
-FAIL[asr]: next prayer shows المغرب
-FAIL[maghrib]: app not foreground after relaunch
-FAIL[maghrib]: next prayer shows العشاء
-FAIL[isha]: app not foreground after relaunch
-FAIL[isha]: next prayer shows الفجر
-sky[fajr] rgb=(8, 11, 18)
-sky[shuruq] rgb=(8, 11, 18)
-sky[dhuhr] rgb=(8, 11, 18)
-sky[asr] rgb=(8, 11, 18)
-sky[maghrib] rgb=(8, 11, 18)
-sky[isha] rgb=(8, 11, 18)
-FAIL: 1/6 distinct sky strips
-PASS: sky strips differ from flat dark background (min diff 19)
+PASS: parsed all six prayer times from UI
+PASS[fajr]: next prayer shows الشروق
+PASS[shuruq]: next prayer shows الظهر
+PASS[dhuhr]: next prayer shows العصر
+PASS[asr]: next prayer shows المغرب
+PASS[maghrib]: next prayer shows العشاء
+PASS[isha]: next prayer shows الفجر
+sky[fajr] rgb=(16, 36, 52)
+sky[shuruq] rgb=(228, 220, 207)
+sky[dhuhr] rgb=(179, 216, 248)
+sky[asr] rgb=(233, 204, 164)
+sky[maghrib] rgb=(63, 44, 66)
+sky[isha] rgb=(20, 28, 46)
+PASS: 6/6 distinct sky strips
+PASS: sky strips differ from flat dark background (min diff 38)
 INFO: crossfade frames captured around the maghrib boundary (visual gate: t0/t1 mid-blend, t3 settled maghrib sky, no flicker)
-Total frames rendered: 17
-Janky frames: 17 (100.00%)
-Janky frames (legacy): 17 (100.00%)
-sky gone after leaving prayer tab strip rgb=(7, 11, 18) spread=11
+Total frames rendered: 125
+Janky frames: 125 (100.00%)
+Janky frames (legacy): 125 (100.00%)
+sky gone after leaving prayer tab strip rgb=(18, 18, 18) spread=0
 PASS: sky gone after leaving prayer tab
-sky back after re-entering prayer tab strip rgb=(7, 11, 18) spread=11
-FAIL: sky back after re-entering prayer tab
+sky back after re-entering prayer tab strip rgb=(63, 44, 66) spread=22
+PASS: sky back after re-entering prayer tab
 PASS: app alive across tab leave/re-enter
 fatal_exceptions: 0
 PASS: no fatal exceptions
