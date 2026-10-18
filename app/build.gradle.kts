@@ -11,7 +11,7 @@ android {
     applicationId = "com.wathakker.app"
     minSdk = 23
     targetSdk = 36
-    versionCode = 42
+    versionCode = 44
     versionName = "3.1.0"
   }
 
