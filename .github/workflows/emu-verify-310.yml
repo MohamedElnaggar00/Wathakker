@@ -15,6 +15,7 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
+      - run: pip install pillow
       - name: Latest successful build run
         id: latest
         env:
