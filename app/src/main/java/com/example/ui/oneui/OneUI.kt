@@ -2,6 +2,8 @@ package com.example.ui.oneui
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.ui.semantics.Role
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -447,7 +449,9 @@ fun OneUISwitch(checked: Boolean, onCheckedChange: ((Boolean) -> Unit)?, modifie
             .height(30.dp)
             .clip(CircleShape)
             .background(track)
-            .clickable(
+            .toggleable(
+                value = checked,
+                role = Role.Switch,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = onCheckedChange != null
