@@ -5,7 +5,7 @@ BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
 PJ=$(ls -d "$ANDROID_HOME"/platforms/android-* | sort -V | tail -1)/android.jar
 W=tools/widgethost
 O=$PWD/$W/out
-rm -rf "$O"; mkdir -p "$O/classes" "$O/dex"
+rm -rf "$O"; mkdir -p "$O/classes" "$O/dex" "$O/dexgrant"
 "$BT/aapt2" link -o "$O/host-unsigned.apk" --manifest "$W/AndroidManifest.xml" -I "$PJ" --min-sdk-version 26 --target-sdk-version 35
 javac -source 11 -target 11 -cp "$PJ" -d "$O/classes" "$W/MainActivity.java" "$W/GrantBind.java"
 "$BT/d8" --lib "$PJ" --min-api 26 --output "$O/dex" $(find "$O/classes" -name 'MainActivity*.class')
