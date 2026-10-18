@@ -101,86 +101,108 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
 
     OneUIDialog(title = prayerName, onDismiss = onDismiss) {
         Column {
-            // Enable
+            // Two clearly separate notifications: the base adhan-time notification, and an
+            // optional ADDITIONAL early reminder (its switch reveals the exact-minute control).
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                     Icon(Icons.Outlined.Notifications, null, tint = cs.primary)
                     Spacer(Modifier.width(10.dp))
-                    Text(L10n.t(S.Notifications), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                    Column {
+                        Text(L10n.t(S.AtAdhanRow), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                        Text(L10n.t(S.AtAdhanRowSub), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                    }
                 }
                 OneUISwitch(enabled, { PrayerAlertStore.setEnabled(context, prayer, it); changed() })
             }
             if (enabled) {
                 Spacer(Modifier.height(10.dp))
-                // Timing: One UI slider. 0 = at the adhan, up to 60 minutes before in 5-minute
-                // steps; value applies when the drag ends.
-                var dragOffset by remember(tick) { mutableIntStateOf(offset) }
-                var showMinuteInput by remember { mutableStateOf(false) }
+                // Early reminder: an ADDITION to the adhan-time notification, never a replacement.
+                val earlyOn = offset > 0
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(L10n.t(S.AlertTiming), color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Text(
-                        if (dragOffset == 0) L10n.t(S.AtAdhanTime) else L10n.t(S.MinBeforeFmt).format(dragOffset),
-                        color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable { showMinuteInput = true }
-                    )
+                    Column(Modifier.weight(1f)) {
+                        Text(L10n.t(S.BeforeAdhanRow), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text(L10n.t(S.BeforeAdhanHelper), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                    }
+                    OneUISwitch(earlyOn, { want ->
+                        PrayerAlertStore.setOffsetMinutes(context, prayer, if (want) (if (offset > 0) offset else 10) else 0)
+                        changed()
+                    })
                 }
-                if (showMinuteInput) {
-                    var text by remember { mutableStateOf(dragOffset.toString()) }
-                    OneUIDialog(title = L10n.t(S.AlertTiming), onDismiss = { showMinuteInput = false }) {
-                        OutlinedTextField(
-                            value = text,
-                            onValueChange = { v -> text = v.filter { ch -> ch.isDigit() }.take(3) },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            singleLine = true,
-                            modifier = Modifier.fillMaxWidth()
+                if (earlyOn) {
+                    Spacer(Modifier.height(6.dp))
+                    // Exact lead time: One UI slider, 1..60 minutes; tap the value to type it.
+                    var dragOffset by remember(tick) { mutableIntStateOf(offset) }
+                    var showMinuteInput by remember { mutableStateOf(false) }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(L10n.t(S.AlertTiming), color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            L10n.t(S.MinBeforeFmt).format(dragOffset),
+                            color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold,
+                            modifier = Modifier.clickable { showMinuteInput = true }
                         )
-                        Spacer(Modifier.height(10.dp))
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                            Text(
-                                L10n.t(S.Cancel),
-                                color = cs.onSurfaceVariant, fontSize = 14.sp, fontWeight = FontWeight.Medium,
-                                modifier = Modifier.clickable { showMinuteInput = false }.padding(10.dp)
+                    }
+                    if (showMinuteInput) {
+                        var text by remember { mutableStateOf(dragOffset.toString()) }
+                        OneUIDialog(title = L10n.t(S.AlertTiming), onDismiss = { showMinuteInput = false }) {
+                            OutlinedTextField(
+                                value = text,
+                                onValueChange = { v -> text = v.filter { ch -> ch.isDigit() }.take(3) },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                singleLine = true,
+                                modifier = Modifier.fillMaxWidth()
                             )
-                            Spacer(Modifier.width(14.dp))
-                            Text(
-                                L10n.t(S.Save),
-                                color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold,
-                                modifier = Modifier.clickable {
-                                    val v = text.toIntOrNull()
-                                    if (v != null && v in 0..60) {
-                                        dragOffset = v
-                                        if (v != offset) {
-                                            PrayerAlertStore.setOffsetMinutes(context, prayer, v)
-                                            changed()
+                            Spacer(Modifier.height(10.dp))
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                Text(
+                                    L10n.t(S.Cancel),
+                                    color = cs.onSurfaceVariant, fontSize = 14.sp, fontWeight = FontWeight.Medium,
+                                    modifier = Modifier.clickable { showMinuteInput = false }.padding(10.dp)
+                                )
+                                Spacer(Modifier.width(14.dp))
+                                Text(
+                                    L10n.t(S.Save),
+                                    color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.clickable {
+                                        val v = text.toIntOrNull()
+                                        if (v != null && v in 1..60) {
+                                            dragOffset = v
+                                            if (v != offset) {
+                                                PrayerAlertStore.setOffsetMinutes(context, prayer, v)
+                                                changed()
+                                            }
+                                            showMinuteInput = false
                                         }
-                                        showMinuteInput = false
-                                    }
-                                }.padding(10.dp)
-                            )
+                                    }.padding(10.dp)
+                                )
+                            }
                         }
                     }
+                    Slider(
+                        value = dragOffset.toFloat(),
+                        onValueChange = { dragOffset = it.roundToInt().coerceIn(1, 60) },
+                        onValueChangeFinished = {
+                            if (dragOffset != offset) {
+                                PrayerAlertStore.setOffsetMinutes(context, prayer, dragOffset)
+                                changed()
+                            }
+                        },
+                        valueRange = 1f..60f,
+                        steps = 58,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
-                Slider(
-                    value = dragOffset.toFloat(),
-                    onValueChange = { dragOffset = it.roundToInt().coerceIn(0, 60) },
-                    onValueChangeFinished = {
-                        if (dragOffset != offset) {
-                            PrayerAlertStore.setOffsetMinutes(context, prayer, dragOffset)
-                            changed()
-                        }
-                    },
-                    valueRange = 0f..60f,
-                    steps = 59,
-                    modifier = Modifier.fillMaxWidth()
-                )
                 // Iqama reminder (no iqama for Shuruq)
                 if (prayer != 1) {
                     Spacer(Modifier.height(8.dp))
