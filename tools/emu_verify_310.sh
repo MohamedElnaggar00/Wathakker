@@ -838,6 +838,37 @@ adb pull /sdcard/Android/data/com.wathakker.app/files/ "$OUT/widget-renders" >> 
 NPNG=$(find "$OUT/widget-renders" -name 'widget_*.png' | wc -l)
 NERR=$(find "$OUT/widget-renders" -name 'widget_*.err' | wc -l)
 [ "$NERR" = 0 ] && [ "$NPNG" -ge 27 ] && say "PASS: $NPNG widget renders, no errors" || say "FAIL: widget renders png=$NPNG err=$NERR"
+# CHECK 11b: pixel gate - every render must fully decode and be non-blank (catches the
+# silent-catch blank-widget regression that file counting missed in v3.1.0)
+python3 - "$OUT/widget-renders" <<'PYEOF'
+import sys, os
+from PIL import Image, ImageStat
+bad = []
+n = 0
+for root, _, files in os.walk(sys.argv[1]):
+    for f in files:
+        if not f.startswith('widget_') or not f.endswith('.png'):
+            continue
+        n += 1
+        p = os.path.join(root, f)
+        try:
+            im = Image.open(p).convert('RGB')
+            im.load()
+        except Exception as e:
+            bad.append('%s undecodable: %s' % (f, e))
+            continue
+        st = ImageStat.Stat(im)
+        std = sum(st.stddev) / 3.0
+        if im.width < 10 or im.height < 10:
+            bad.append('%s degenerate size %dx%d' % (f, im.width, im.height))
+        elif std < 4.0:
+            bad.append('%s BLANK (std=%.1f)' % (f, std))
+print('pixelgate: checked', n, 'renders, bad', len(bad))
+for b in bad:
+    print('PIXELGATE:', b)
+sys.exit(1 if bad else 0)
+PYEOF
+[ $? = 0 ] && say "PASS: pixel gate - every widget render decodes and is non-blank" || say "FAIL: pixel gate found blank/corrupt renders"
 shot 09-widget-render
 
 # logcat + crash scan
