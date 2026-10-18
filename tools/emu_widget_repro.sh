@@ -27,5 +27,21 @@ for MODE in no yes; do
 done
 adb logcat -d -v threadtime > "$OUT/${LABEL}_logcat.txt"
 adb shell dumpsys appwidget > "$OUT/${LABEL}_appwidget.txt"
-grep -E 'WidgetHost|WathakkerHome|WathakkerLock|AndroidRuntime|AppWidget' "$OUT/${LABEL}_logcat.txt" | tail -100 > "$OUT/${LABEL}_log_summary.txt" || true
+grep -E 'WidgetHost|WathakkerHome|WathakkerLock|AndroidRuntime|AppWidget|WidgetPix' "$OUT/${LABEL}_logcat.txt" | tail -140 > "$OUT/${LABEL}_log_summary.txt" || true
+
+# Pixel gate: every widget must have drawn real content (std>5, nonbg>5%) and no
+# WathakkerHome failure may appear. This is the check the old verify harness lacked.
+FAIL=0
+for K in Hero HeroLarge Schedule Clock NextPrayer PrayerBar DayPrayer Pill Hijri Gregorian; do
+  L=$(grep "WidgetPix: $K " "$OUT/${LABEL}_logcat.txt" | tail -1)
+  if [ -z "$L" ]; then echo "PIXGATE: $K MISSING"; FAIL=1; continue; fi
+  STD=$(echo "$L" | sed -n 's/.*std=\([0-9.]*\).*/\1/p')
+  NB=$(echo "$L" | sed -n 's/.*nonbg=\([0-9]*\)%.*/\1/p')
+  OK=$(python3 -c "print(1 if float('$STD' or 0)>5 and int('$NB' or 0)>5 else 0)" 2>/dev/null)
+  if [ "$OK" != "1" ]; then echo "PIXGATE: $K BLANK ($L)"; FAIL=1; else echo "PIXGATE: $K ok (std=$STD nonbg=$NB%)"; fi
+done
+grep -q 'WathakkerHome: state() failed' "$OUT/${LABEL}_logcat.txt" && { echo "PIXGATE: state() failure logged"; FAIL=1; }
+grep -c 'WidgetHost: bind .* -> true' "$OUT/${LABEL}_logcat.txt" | { read N; [ "$N" -lt 10 ] && { echo "PIXGATE: only $N binds true"; FAIL=1; }; }
+echo "PIXGATE result: $([ $FAIL = 0 ] && echo PASS || echo FAIL)" | tee "$OUT/${LABEL}_pixgate.txt"
 echo "repro done: $OUT"
+[ $FAIL = 0 ]
