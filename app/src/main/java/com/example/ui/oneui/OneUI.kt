@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -156,21 +155,6 @@ fun OneUIScreen(
             }
             content()
         }
-        // Scroll-aware scrim behind the floating header: keeps scrolled content from
-        // colliding with the status bar / showing raw between the glass pills.
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(statusTop + 92.dp)
-                .graphicsLayer { alpha = barAlpha }
-                .background(
-                    Brush.verticalGradient(
-                        0f to MaterialTheme.colorScheme.background,
-                        0.78f to MaterialTheme.colorScheme.background,
-                        1f to MaterialTheme.colorScheme.background.copy(alpha = 0f)
-                    )
-                )
-        )
         // Top bar: menu or back on one side, settings and extra actions on the other.
         // The row itself is always visible; only the tile behind each group and the small title fade in on scroll.
         Row(

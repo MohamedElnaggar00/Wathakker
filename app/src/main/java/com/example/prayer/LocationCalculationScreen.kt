@@ -181,11 +181,17 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                 }
                 if (state.useCurrentLocation && (!state.hasLocationPermission || !state.isGpsAvailable())) {
                     Spacer(Modifier.height(8.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Outlined.Warning, null, tint = cs.error)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Outlined.Warning, null, tint = cs.error, modifier = Modifier.size(20.dp))
                         Spacer(Modifier.width(8.dp))
                         Text(
                             if (!state.hasLocationPermission) L10n.t(S.NoLocPermission) else L10n.t(S.GpsOff),
+                            modifier = Modifier.weight(1f),
                             color = cs.error,
                             fontSize = 12.sp
                         )
