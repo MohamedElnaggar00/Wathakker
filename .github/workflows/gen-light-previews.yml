@@ -29,6 +29,7 @@ jobs:
         with:
           api-level: 35
           arch: x86_64
+          target: google_apis
           profile: pixel_6
           script: bash tools/emu_gen_light_previews.sh built/app-release-unsigned.apk gen || true
       - name: Save forensics
