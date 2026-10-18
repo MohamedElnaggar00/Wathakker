@@ -45,7 +45,7 @@ enum class S {
     HighLatRule, HighLatNone, HighLatMiddle, HighLatSeventh, HighLatAngle,
     AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort, AlertTiming, AtAdhanTime, MinBeforeFmt,
     AdhanReminder, IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, IqamaNowFmt, SharedAlertSettings,
-    HijriConvTitle, HijriConvSub, GregToHijri, HijriToGreg, DayLabel, MonthLabel, YearLabel
+    HijriConvTitle, HijriConvSub, GregToHijri, HijriToGreg, DayLabel, MonthLabel, YearLabel, Back, AtAdhanRow, AtAdhanRowSub, BeforeAdhanRow, BeforeAdhanHelper
 }
 
 object L10n {
