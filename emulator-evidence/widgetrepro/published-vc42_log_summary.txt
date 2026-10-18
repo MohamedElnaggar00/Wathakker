@@ -1,140 +1,140 @@
-10-18 12:36:20.629   565  1003 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:20.631   565  1003 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:20.631   565  1560 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:20.632   565  1560 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:20.632   565  1560 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{21:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:20.632   565  1560 I AppWidgetServiceImpl: Allocated widget id 21 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:20.632   565  2431 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:20.640   565  2431 I AppWidgetServiceImpl: Bound widget 21 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.GregorianWidgetProvider}}
-10-18 12:36:20.640  2882  2882 I WidgetHost: bind Gregorian id=21 -> true
-10-18 12:36:20.640   565  1003 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:20.640   565  2343 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:20.640   565  1003 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:20.963   565  1270 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
-10-18 12:36:20.991  1204  1244 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
-10-18 12:36:20.991   565  2343 I AppWidgetServiceImpl: getWidgetPreview() 0
-10-18 12:36:20.993   565  1110 I AppWidgetServiceImpl: getWidgetPreview() 0
-10-18 12:36:22.439   565   864 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_RESTARTED on user 0
-10-18 12:36:22.439   565   864 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10209 package com.example.widgethost isStopped true
-10-18 12:36:22.461   565  2342 I AppWidgetServiceImpl: setAppWidgetHidden() 0
-10-18 12:36:22.890   565  1775 I AppWidgetServiceImpl: startListening() 0
-10-18 12:36:22.939   565   657 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
-10-18 12:36:22.948   565  1214 I AppWidgetServiceImpl: notifyProviderInheritance() 0
-10-18 12:36:23.218   565   864 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0
-10-18 12:36:23.218   565   864 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10209 package com.example.widgethost isStopped false
-10-18 12:36:23.260   565   583 I AppWidgetServiceImpl: startListening() 0
-10-18 12:36:23.265   565  1106 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.265   565  1106 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{22:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.265   565  1106 I AppWidgetServiceImpl: Allocated widget id 22 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.280   565  1825 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
-10-18 12:36:23.280   565  1825 I AppWidgetServiceImpl: notifyProviderInheritance() 0
-10-18 12:36:23.284   565  2426 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.325   565  2426 I AppWidgetServiceImpl: Bound widget 22 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.HeroWidgetProvider}}
-10-18 12:36:23.325  3696  3696 I WidgetHost: bind Hero id=22 -> true
-10-18 12:36:23.328   565   657 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.332   565   657 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.335   565  1519 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
-10-18 12:36:23.366   565  1519 I AppWidgetServiceImpl: notifyProviderInheritance() 0
-10-18 12:36:23.378   565   657 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.491   565  1519 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.491   565  1519 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{23:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.491   565  1519 I AppWidgetServiceImpl: Allocated widget id 23 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.494   565  1106 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.494   565  1106 I AppWidgetServiceImpl: Bound widget 23 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.HeroLargeWidgetProvider}}
-10-18 12:36:23.499  3696  3696 I WidgetHost: bind HeroLarge id=23 -> true
-10-18 12:36:23.499   565  2426 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.500   565  1519 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.501   565  2426 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.501   565  1745 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.501   565  1745 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{24:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.501   565  1745 I AppWidgetServiceImpl: Allocated widget id 24 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.501   565  1519 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.502   565  1519 I AppWidgetServiceImpl: Bound widget 24 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.ScheduleWidgetProvider}}
-10-18 12:36:23.502  3696  3696 I WidgetHost: bind Schedule id=24 -> true
-10-18 12:36:23.502   565  1745 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.506   565  2426 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.506   565  1787 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.510   565  1519 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.510   565  1519 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{25:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.510   565  1519 I AppWidgetServiceImpl: Allocated widget id 25 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.510   565  1745 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.511   565  1745 I AppWidgetServiceImpl: Bound widget 25 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.ClockWidgetProvider}}
-10-18 12:36:23.511  3696  3696 I WidgetHost: bind Clock id=25 -> true
-10-18 12:36:23.511   565  1519 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.512   565  1745 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.512   565  1745 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.513   565  1745 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.513   565  1745 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{26:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.514   565  1745 I AppWidgetServiceImpl: Allocated widget id 26 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.515   565  1745 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.515   565  1745 I AppWidgetServiceImpl: Bound widget 26 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.NextPrayerWidgetProvider}}
-10-18 12:36:23.515  3696  3696 I WidgetHost: bind NextPrayer id=26 -> true
-10-18 12:36:23.515   565  1745 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.516   565  1214 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.527   565  1519 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.527   565  1774 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.528   565  1774 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{27:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.528   565  1774 I AppWidgetServiceImpl: Allocated widget id 27 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.529   565  1745 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.570   565  1745 I AppWidgetServiceImpl: Bound widget 27 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.PrayerBarWidgetProvider}}
-10-18 12:36:23.570  3696  3696 I WidgetHost: bind PrayerBar id=27 -> true
-10-18 12:36:23.570   565  1745 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.571   565  1774 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.572   565  1214 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.582   565  1774 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.582   565  1774 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{28:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.582   565  1774 I AppWidgetServiceImpl: Allocated widget id 28 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.585   565   583 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.604   565   583 I AppWidgetServiceImpl: Bound widget 28 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.DayPrayerWidgetProvider}}
-10-18 12:36:23.605  3696  3696 I WidgetHost: bind DayPrayer id=28 -> true
-10-18 12:36:23.605   565  1787 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.608   565   583 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.610   565  2426 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.661   565   582 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.661   565   582 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{29:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.662   565   582 I AppWidgetServiceImpl: Allocated widget id 29 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.664   565   583 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.664   565   583 I AppWidgetServiceImpl: Bound widget 29 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.PillWidgetProvider}}
-10-18 12:36:23.664  3696  3696 I WidgetHost: bind Pill id=29 -> true
-10-18 12:36:23.664   565  1214 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.665   565  1214 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.665   565  1214 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.666   565   583 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.666   565   583 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{30:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.666   565   583 I AppWidgetServiceImpl: Allocated widget id 30 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.666   565  1110 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.667   565  1110 I AppWidgetServiceImpl: Bound widget 30 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.HijriWidgetProvider}}
-10-18 12:36:23.667  3696  3696 I WidgetHost: bind Hijri id=30 -> true
-10-18 12:36:23.667   565  1214 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.668   565  1774 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.669   565  1110 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:23.669   565   583 I AppWidgetServiceImpl: allocateAppWidgetId() 0
-10-18 12:36:23.670   565   583 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{31:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
-10-18 12:36:23.670   565   583 I AppWidgetServiceImpl: Allocated widget id 31 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
-10-18 12:36:23.671   565  1774 I AppWidgetServiceImpl: bindAppWidgetId() 0
-10-18 12:36:23.681   565  1774 I AppWidgetServiceImpl: Bound widget 31 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.GregorianWidgetProvider}}
-10-18 12:36:23.682  3696  3696 I WidgetHost: bind Gregorian id=31 -> true
-10-18 12:36:23.682   565  1214 I AppWidgetServiceImpl: getAppWidgetInfo() 0
-10-18 12:36:23.682   565  2426 I AppWidgetServiceImpl: getAppWidgetViews() 0
-10-18 12:36:23.683   565  2426 I AppWidgetServiceImpl: getAppWidgetOptions() 0
-10-18 12:36:24.542   565  1003 I AppWidgetServiceImpl: setAppWidgetHidden() 0
-10-18 12:36:26.040   565  2426 I AppWidgetServiceImpl: getAppWidgetIds() 0
-10-18 12:36:26.061   565  1774 I AppWidgetServiceImpl: getAppWidgetIds() 0
-10-18 12:36:26.069   565  1774 I AppWidgetServiceImpl: getAppWidgetIds() 0
-10-18 12:36:26.141   565  1774 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
-10-18 12:36:26.142   565  2343 I AppWidgetServiceImpl: getAppWidgetIds() 0
-10-18 12:36:26.142   565  1774 I AppWidgetServiceImpl: notifyProviderInheritance() 0
-10-18 12:36:26.147   565   582 I AppWidgetServiceImpl: getAppWidgetIds() 0
-10-18 12:36:28.147   565   864 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
-10-18 12:36:28.180   565   864 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
-10-18 12:36:28.202   565   864 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
-10-18 12:36:31.710  3696  3696 I WidgetPix: Hero w=866 h=236 std=0.0 nonbg=0%
-10-18 12:36:31.714  3696  3696 I WidgetPix: HeroLarge w=866 h=420 std=0.0 nonbg=0%
-10-18 12:36:31.716  3696  3696 I WidgetPix: Schedule w=866 h=236 std=37.0 nonbg=76%
-10-18 12:36:31.717  3696  3696 I WidgetPix: Clock w=656 h=236 std=42.0 nonbg=74%
-10-18 12:36:31.719  3696  3696 I WidgetPix: NextPrayer w=288 h=236 std=40.4 nonbg=65%
-10-18 12:36:31.721  3696  3696 I WidgetPix: PrayerBar w=288 h=236 std=53.6 nonbg=65%
-10-18 12:36:31.722  3696  3696 I WidgetPix: DayPrayer w=288 h=236 std=29.4 nonbg=65%
-10-18 12:36:31.723  3696  3696 I WidgetPix: Pill w=288 h=236 std=37.7 nonbg=65%
-10-18 12:36:31.724  3696  3696 I WidgetPix: Hijri w=236 h=236 std=44.7 nonbg=61%
-10-18 12:36:31.725  3696  3696 I WidgetPix: Gregorian w=236 h=236 std=40.2 nonbg=61%
+10-18 17:52:35.818   555   962 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:35.819   555   963 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:36.283   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_RESTARTED on user 0
+10-18 17:52:36.283   555   845 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10209 package com.example.widgethost isStopped true
+10-18 17:52:36.574   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0
+10-18 17:52:36.574   555   845 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10129 package com.google.android.apps.safetyhub isStopped false
+10-18 17:52:36.763   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0
+10-18 17:52:36.773   555   845 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10134 package com.google.android.apps.messaging isStopped false
+10-18 17:52:37.425   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0
+10-18 17:52:37.425   555   845 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10209 package com.example.widgethost isStopped false
+10-18 17:52:38.620   555  1756 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.622   555  1513 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.622   555  1513 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.625   555  1513 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.629   555  1513 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.632   555  1513 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.634   555  1750 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.634   555  1513 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.699   555  1513 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.700   555  1735 I AppWidgetServiceImpl: startListening() 0
+10-18 17:52:38.707   555  1750 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+10-18 17:52:38.707   555   959 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.709   555  1756 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.710   555  1513 I AppWidgetServiceImpl: notifyProviderInheritance() 0
+10-18 17:52:38.710   555   573 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.710   555   573 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{22:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.710   555   573 I AppWidgetServiceImpl: Allocated widget id 22 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.710   555   959 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.711   555  1759 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.720   555   959 I AppWidgetServiceImpl: Bound widget 22 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.HeroWidgetProvider}}
+10-18 17:52:38.722  3395  3395 I WidgetHost: bind Hero id=22 -> true
+10-18 17:52:38.723   555  1692 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.723   555  1759 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.723   555   949 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.725   555  1756 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.726   555  1692 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.728   555  1704 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:38.729   555  1759 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.732   555   949 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+10-18 17:52:38.733   555   959 I AppWidgetServiceImpl: notifyProviderInheritance() 0
+10-18 17:52:38.734   555   949 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.734   555   949 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{23:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.734   555   949 I AppWidgetServiceImpl: Allocated widget id 23 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.736   555  1750 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.739   555  1750 I AppWidgetServiceImpl: Bound widget 23 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.HeroLargeWidgetProvider}}
+10-18 17:52:38.739  3395  3395 I WidgetHost: bind HeroLarge id=23 -> true
+10-18 17:52:38.739   555   959 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.740   555   949 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.742   555   949 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.743   555   949 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.744   555   949 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{24:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.744   555   949 I AppWidgetServiceImpl: Allocated widget id 24 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.744   555   959 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.746   555   959 I AppWidgetServiceImpl: Bound widget 24 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.ScheduleWidgetProvider}}
+10-18 17:52:38.747  3395  3395 I WidgetHost: bind Schedule id=24 -> true
+10-18 17:52:38.747   555   949 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.748   555   949 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.748   555   949 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.752   555   949 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.752   555   949 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{25:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.752   555   949 I AppWidgetServiceImpl: Allocated widget id 25 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.754   555   949 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.754   555   949 I AppWidgetServiceImpl: Bound widget 25 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.ClockWidgetProvider}}
+10-18 17:52:38.754  3395  3395 I WidgetHost: bind Clock id=25 -> true
+10-18 17:52:38.756   555  1761 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.756   555  1513 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.758   555  1761 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.762   555  1756 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.762   555  1756 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{26:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.762   555  1756 I AppWidgetServiceImpl: Allocated widget id 26 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.762   555  1759 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.775   555  1759 I AppWidgetServiceImpl: Bound widget 26 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.NextPrayerWidgetProvider}}
+10-18 17:52:38.776  3395  3395 I WidgetHost: bind NextPrayer id=26 -> true
+10-18 17:52:38.776   555   949 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.778   555  1759 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.778   555  1750 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.779   555  1513 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.779   555  1513 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{27:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.779   555  1513 I AppWidgetServiceImpl: Allocated widget id 27 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.781   555   949 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.781   555   949 I AppWidgetServiceImpl: Bound widget 27 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.PrayerBarWidgetProvider}}
+10-18 17:52:38.782  3395  3395 I WidgetHost: bind PrayerBar id=27 -> true
+10-18 17:52:38.783   555  1513 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.784   555  1756 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.785   555  1513 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.787   555  1513 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.787   555  1513 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{28:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.787   555  1513 I AppWidgetServiceImpl: Allocated widget id 28 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.788   555  1756 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.796   555  1756 I AppWidgetServiceImpl: Bound widget 28 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.DayPrayerWidgetProvider}}
+10-18 17:52:38.796  3395  3395 I WidgetHost: bind DayPrayer id=28 -> true
+10-18 17:52:38.796   555  1750 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.797   555  1756 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.797   555  1750 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.798   555  1756 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.798   555  1756 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{29:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.798   555  1756 I AppWidgetServiceImpl: Allocated widget id 29 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.798   555  1759 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.799   555  1759 I AppWidgetServiceImpl: Bound widget 29 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.PillWidgetProvider}}
+10-18 17:52:38.799  3395  3395 I WidgetHost: bind Pill id=29 -> true
+10-18 17:52:38.799   555  1759 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.799   555  1750 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.799   555  1756 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.799   555  1750 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.799   555  1750 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{30:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.800   555  1750 I AppWidgetServiceImpl: Allocated widget id 30 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.800   555  1759 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.800   555  1759 I AppWidgetServiceImpl: Bound widget 30 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.HijriWidgetProvider}}
+10-18 17:52:38.800  3395  3395 I WidgetHost: bind Hijri id=30 -> true
+10-18 17:52:38.800   555  1750 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.800   555  1759 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.802   555  1750 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:38.802   555  1756 I AppWidgetServiceImpl: allocateAppWidgetId() 0
+10-18 17:52:38.802   555  1756 I AppWidgetServiceImpl: addWidgetLocked() AppWidgetId{31:Host{HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}}:null}
+10-18 17:52:38.802   555  1756 I AppWidgetServiceImpl: Allocated widget id 31 for host HostId{user:0, app:10209, hostId:1024, pkg:com.example.widgethost}
+10-18 17:52:38.802   555  1756 I AppWidgetServiceImpl: bindAppWidgetId() 0
+10-18 17:52:38.803   555  1756 I AppWidgetServiceImpl: Bound widget 31 to provider ProviderId{user:0, app:10210, cmp:ComponentInfo{com.wathakker.app/com.example.widget.GregorianWidgetProvider}}
+10-18 17:52:38.803  3395  3395 I WidgetHost: bind Gregorian id=31 -> true
+10-18 17:52:38.804   555  1750 I AppWidgetServiceImpl: getAppWidgetInfo() 0
+10-18 17:52:38.804   555  1750 I AppWidgetServiceImpl: getAppWidgetViews() 0
+10-18 17:52:38.805   555  1750 I AppWidgetServiceImpl: getAppWidgetOptions() 0
+10-18 17:52:39.816   555  1692 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:45.787   555   573 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:45.787   555   962 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+10-18 17:52:45.787   555   962 I AppWidgetServiceImpl: notifyProviderInheritance() 0
+10-18 17:52:45.788   555   573 I AppWidgetServiceImpl: getAppWidgetIds() 0
+10-18 17:52:46.045   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-18 17:52:46.117   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-18 17:52:46.143   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-18 17:52:46.160   555   845 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-18 17:52:46.832  3395  3395 I WidgetPix: Hero w=866 h=236 std=0.0 nonbg=0%
+10-18 17:52:46.856  3395  3395 I WidgetPix: HeroLarge w=866 h=420 std=0.0 nonbg=0%
+10-18 17:52:46.864  3395  3395 I WidgetPix: Schedule w=866 h=236 std=37.0 nonbg=76%
+10-18 17:52:46.866  3395  3395 I WidgetPix: Clock w=656 h=236 std=42.0 nonbg=74%
+10-18 17:52:46.867  3395  3395 I WidgetPix: NextPrayer w=288 h=236 std=40.4 nonbg=65%
+10-18 17:52:46.868  3395  3395 I WidgetPix: PrayerBar w=288 h=236 std=53.6 nonbg=65%
+10-18 17:52:46.869  3395  3395 I WidgetPix: DayPrayer w=288 h=236 std=29.4 nonbg=65%
+10-18 17:52:46.871  3395  3395 I WidgetPix: Pill w=288 h=236 std=37.7 nonbg=65%
+10-18 17:52:46.872  3395  3395 I WidgetPix: Hijri w=236 h=236 std=44.7 nonbg=61%
+10-18 17:52:46.873  3395  3395 I WidgetPix: Gregorian w=236 h=236 std=40.2 nonbg=61%
