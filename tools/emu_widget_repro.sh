@@ -9,7 +9,11 @@ adb wait-for-device
 adb shell input keyevent 82 || true
 adb install -r "$HOST"
 adb install -r "$APK"
-adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost
+{ adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost
+  adb shell cmd package set-home-activity com.example.widgethost/.MainActivity
+  adb shell cmd role get-role-holders android.app.role.HOME
+  adb shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME
+} > "$OUT/${LABEL}_home_setup.txt" 2>&1
 adb logcat -c
 for MODE in no yes; do
   adb shell cmd uimode night $MODE
