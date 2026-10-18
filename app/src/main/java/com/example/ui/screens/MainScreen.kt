@@ -118,15 +118,12 @@ fun MainScreen(viewModel: MainViewModel) {
 
     CompositionLocalProvider(LocalHazeState provides hazeState) {
         Box(Modifier.fillMaxSize()) {
-            val slideDirState = rememberUpdatedState(if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1)
             NavHost(
                 navController = navController,
                 startDestination = "tabs",
-                modifier = Modifier.fillMaxSize(),
-                enterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDirState.value * it } },
-                exitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDirState.value * it } },
-                popEnterTransition = { slideInHorizontally(tween(300, 0, FastOutSlowInEasing)) { -slideDirState.value * it } },
-                popExitTransition = { slideOutHorizontally(tween(300, 0, FastOutSlowInEasing)) { slideDirState.value * it } }
+                // Platform defaults: no custom transition specs - Navigation Compose 2.8
+                // supplies the library-standard transitions and in-app predictive back.
+                modifier = Modifier.fillMaxSize()
             ) {
                 composable("tabs") {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
