@@ -96,46 +96,39 @@ jobs:
           name: app-release-bom-${{ matrix.bom }}.apk
           path: app/build/outputs/apk/release/app-release-unsigned.apk
 
-      - name: Publish pre-release
+      - name: Publish stable release
         if: github.event_name == 'workflow_dispatch' && steps.build.outcome == 'success' && steps.sign.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=v3.1.0-pre.${{ github.run_number }}
+          TAG=v3.1.0
           cp app/build/outputs/apk/release/app-release-unsigned.apk Wathakker-$TAG.apk
           cat > notes.md <<'NOTES'
-          Wathakker 3.1.0 pre-release ${{ github.run_number }} for testing.
+          Wathakker 3.1.0
 
           **The app is relaunched and redesigned in the One UI design language.**
 
           وذكر - تطبيق يذكرك بمواقيت الصلاة والذكر في يومك وليلتك
 
           ## What's new in 3.1.0
-          - Prayer alerts merged into one system: a bell on every prayer row (all six, including Shuruq) - tap to toggle, long-press for per-prayer settings.
-          - Exact-minute lead time: the alert-timing slider now moves in 1-minute steps (0-60), and tapping the value opens a keypad dialog so you can type the exact number with validation.
+          - Prayer alerts in one place: a bell on every prayer row (all six, including Shuruq) - tap to toggle, long-press for settings. The adhan-time notification always fires; you can add an optional early reminder before the adhan with an exact-minute picker (1-60 min).
           - Iqama reminders (Fajr 25, Dhuhr/Asr/Isha 20, Maghrib 10 minutes after adhan) and automatic Do-Not-Disturb between adhan and iqama.
-          - New Calendar tab: a One UI-style Hijri calendar showing Islamic occasions (Umm al-Qura, honoring your Hijri day adjustment), month grid with both Gregorian and Hijri numbers, colored event markers, an Events view of upcoming occasions, and an optional reminder bell per occasion (ordinary notification, off by default).
-          - Qibla compass redesigned: a One UI compass dial with fine ticks and degree labels, cardinal directions inside the dial, a Kaaba-styled Qibla marker, haptic feedback when aligned, true-north correction, calibration hint, and a smooth frame-synced needle.
-          - Tasbeeh moved from the bottom tabs to the side drawer.
-          - Hijri converter rewritten: type day/month/year directly (month as number or name), with a Today shortcut and an instant result card.
+          - New Calendar tab: a One UI-style Hijri calendar with Islamic occasions (Umm al-Qura, honoring your Hijri day adjustment), a month grid with Gregorian + Hijri numbers, colored event markers, an Events view, and an optional reminder per occasion (off by default).
+          - Qibla compass redesigned: One UI dial with fine ticks and degree labels, Kaaba-styled Qibla marker, haptic feedback when aligned, true-north correction, and a smooth needle.
+          - Tasbeeh moved from the bottom tabs to the side drawer; Qibla also opens from the drawer.
+          - Hijri converter rewritten: type day/month/year directly, with a Today shortcut and an instant result card.
           - New Location & calculation screen: location, calculation method, juristic school, high-latitude rules, and per-prayer minute adjustments with instant recalculation.
-          - Optional prayer times: Imsak, Duha, Midnight, and Qiyam rows (off by default, enabled from Settings).
-          - Full English UI audit and localized lock-screen widgets.
-
-          ## Fixes in this pre-release (from device feedback)
-          - Prayer screen: bells now sit in one fixed straight column, whatever the text length.
-          - Header: the title pill no longer clips, and the Hijri/Gregorian dates no longer collide with the header while scrolling.
-          - Alert dialog: One UI sliders; the dialog is height-bounded and scrolls, so nothing is cut even at large font sizes.
-          - Location & calculation: per-prayer minute offsets and the Hijri day adjustment now use center-zero One UI sliders (0 in the middle) instead of +/- steppers.
-          - Light mode: every screen (prayer, settings, dialogs, widget setup) follows the light color scheme - no leftover dark surfaces; lock-screen widgets also follow day/night.
-          - Settings rows show their full subtitles without clipping.
-          - Performance: this is a true release build, and the prayer screen no longer recomposes every second - the countdown tick is scoped to its card.
+          - Optional prayer times: Imsak, Duha, Midnight, and Qiyam rows (off by default).
+          - Reminder time picker rebuilt One UI-style: theme-aware wheels in light and dark, Arabic ص/م markers, hour:minute always reads left-to-right, and it follows the system 12/24-hour setting.
+          - Widget picker previews now follow light/dark; lock-screen widgets localized.
+          - Full English UI, TalkBack labels on the header buttons, standard Android navigation transitions with predictive back, and a faster prayer screen (R8 release build with a baseline profile; the countdown no longer recomposes the page).
 
           ## Notes
           - Hijri occasions follow the Umm al-Qura calendar; actual observance can differ by +/-1 day with moon sighting.
           - Event reminders are rescheduled when the app opens or a reminder is toggled; they are not yet restored automatically after a device reboot.
+          - Widget-picker previews need Android 12+; older Android versions show a static preview image.
           NOTES
-          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --prerelease --title "Wathakker 3.1.0 pre-release ${{ github.run_number }}" --notes-file notes.md
+          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --latest --title "Wathakker 3.1.0" --notes-file notes.md
 
       - name: Fail if build failed
         if: steps.build.outcome == 'failure' || steps.sign.outcome == 'failure'
