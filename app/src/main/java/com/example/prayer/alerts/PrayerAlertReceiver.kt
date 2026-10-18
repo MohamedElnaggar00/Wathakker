@@ -42,6 +42,7 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val isIqama = kind == PrayerAlertScheduler.KIND_IQAMA
+        val isEarly = kind == PrayerAlertScheduler.KIND_EARLY
         val channelId = if (isIqama) IQAMA_CHANNEL else ALERT_CHANNEL
         ensureChannel(context, nm, channelId)
         val openIntent = PendingIntent.getActivity(
@@ -52,10 +53,10 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         )
         val text = if (isIqama) {
             L10n.t(S.IqamaNowFmt).format(prayerName)
+        } else if (isEarly) {
+            L10n.t(S.PrayerApproachingFmt).format(prayerName, PrayerAlertStore.offsetMinutes(context, prayer))
         } else {
-            val offset = PrayerAlertStore.offsetMinutes(context, prayer)
-            if (offset > 0) L10n.t(S.PrayerApproachingFmt).format(prayerName, offset)
-            else L10n.t(S.PrayerNowFmt).format(prayerName)
+            L10n.t(S.PrayerNowFmt).format(prayerName)
         }
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
