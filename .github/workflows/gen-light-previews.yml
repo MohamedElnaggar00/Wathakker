@@ -42,18 +42,18 @@ jobs:
           NPNG=$(ls gen/files/preview_light_*.png 2>/dev/null | wc -l)
           NERR=$(ls gen/files/preview_light_*.err 2>/dev/null | wc -l)
           echo "light renders: $NPNG, errors: $NERR"
-          python3 - <<'PYG'
+          python3 -c "
           import glob, sys
           from PIL import Image
           bad = 0
           for f in sorted(glob.glob('gen/files/preview_light_*.png')):
               try:
-                  im = Image.open(f); im.load()
+                  Image.open(f).load()
               except Exception as e:
                   print('TRUNCATED', f, e); bad += 1
-          if bad: sys.exit(1)
-          print('integrity ok')
-PYG
+          print('integrity bad=%d' % bad)
+          sys.exit(1 if bad else 0)
+          "
           if [ "$NERR" != "0" ] || [ "$NPNG" != "10" ]; then
             echo "GATE FAIL"; ls gen/files; exit 1
           fi
