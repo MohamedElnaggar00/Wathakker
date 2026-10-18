@@ -11,6 +11,12 @@ import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity {
     private static final String PKG = "com.wathakker.app";
@@ -28,6 +34,8 @@ public class MainActivity extends Activity {
     };
 
     private AppWidgetHost host;
+    private final List<String> kinds = new ArrayList<>();
+    private final List<AppWidgetHostView> views = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +64,43 @@ public class MainActivity extends Activity {
             AppWidgetHostView v = host.createView(getApplicationContext(), id, info);
             v.setAppWidget(id, info);
             col.addView(v, new LinearLayout.LayoutParams((int)(wd * d), (int)(ht * d)));
+            kinds.add(kind);
+            views.add(v);
         }
         setContentView(sv);
+        // After updates settle, dump per-widget pixel stats: a blank/never-updated
+        // widget (the R8 regression) is a uniform surface -> std near 0.
+        new Handler(Looper.getMainLooper()).postDelayed(this::dumpPixelStats, 8000);
+    }
+
+    private void dumpPixelStats() {
+        for (int i = 0; i < views.size(); i++) {
+            AppWidgetHostView v = views.get(i);
+            String kind = kinds.get(i);
+            try {
+                int w = v.getWidth(), h = v.getHeight();
+                if (w <= 0 || h <= 0) { Log.i("WidgetPix", kind + " w=" + w + " h=" + h + " SKIP"); continue; }
+                Bitmap b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                Canvas c = new Canvas(b);
+                v.draw(c);
+                int[] px = new int[w * h];
+                b.getPixels(px, 0, w, 0, 0, w, h);
+                long sum = 0, sum2 = 0; int nonbg = 0; int bg = px[0];
+                for (int p : px) {
+                    int lum = ((p >> 16) & 255) * 3 + ((p >> 8) & 255) * 6 + (p & 255);
+                    sum += lum; sum2 += (long) lum * lum;
+                    if (p != bg) nonbg++;
+                }
+                int n = px.length;
+                double mean = (double) sum / n;
+                double std = Math.sqrt(Math.max(0, (double) sum2 / n - mean * mean)) / 10.0;
+                Log.i("WidgetPix", kind + " w=" + w + " h=" + h
+                        + " std=" + String.format(java.util.Locale.US, "%.1f", std)
+                        + " nonbg=" + (100 * nonbg / n) + "%");
+            } catch (Throwable t) {
+                Log.i("WidgetPix", kind + " ERROR " + t);
+            }
+        }
     }
 
     @Override
