@@ -1,0 +1,20 @@
+name: Fix hero_large light preview PNG
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          set -e
+          D=app/src/main/res/drawable-notnight-nodpi
+          ls -la $D/ | grep hero
+          mv $D/1-home_preview_hero_large.png $D/home_preview_hero_large.png
+          python3 -c "from PIL import Image; im=Image.open('$D/home_preview_hero_large.png'); im.load(); print('valid', im.size)"
+          git config user.name 'github-actions'; git config user.email 'actions@github.com'
+          git add -A
+          git commit -m "Replace corrupt hero_large light preview with valid palette flip"
+          for i in 1 2 3 4; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
