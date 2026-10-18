@@ -30,7 +30,12 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_6
-          script: bash tools/emu_gen_light_previews.sh built/app-release-unsigned.apk gen
+          script: bash tools/emu_gen_light_previews.sh built/app-release-unsigned.apk gen || true
+      - name: Save forensics
+        if: always()
+        run: |
+          mkdir -p emulator-evidence/previews-light/forensics
+          cp -r gen/. emulator-evidence/previews-light/forensics/ 2>/dev/null || true
       - name: Gate on render success
         run: |
           NPNG=$(ls gen/files/preview_light_*.png 2>/dev/null | wc -l)
@@ -79,6 +84,7 @@ jobs:
           print('sheet saved', sheet.size)
           PY
       - name: Commit
+        if: always()
         run: |
           git config user.email "actions@github.com"; git config user.name "github-actions"
           git add app/src/main/res/drawable-notnight* emulator-evidence/previews-light
