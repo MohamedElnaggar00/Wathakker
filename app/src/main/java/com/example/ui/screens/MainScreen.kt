@@ -121,33 +121,36 @@ fun MainScreen(viewModel: MainViewModel) {
 
     CompositionLocalProvider(LocalHazeState provides hazeState) {
         Box(Modifier.fillMaxSize()) {
-            // One UI platform page transition, measured frame-by-frame from a 90fps
-            // screen recording of Samsung Settings on the owner's device:
-            //  - the incoming page slides the full width in ~355ms, easing
-            //    cubic-bezier(0.15, 0.5, 0.1, 0.9) (least-squares fit, MSE 2e-5)
-            //  - the outgoing page parallaxes to 25% of the width, settling in ~180ms
-            //  - the outgoing page dims to 74% over ~90ms and holds (no fade on incoming)
+            // One UI platform page transition, frame-measured from three 90/120fps
+            // screen recordings of Samsung Settings on the owner's device:
+            //  - incoming page slides the full width in ~345ms (measured 333-355ms
+            //    across three samples), easing cubic-bezier(0.15, 0.5, 0.1, 0.9),
+            //    least-squares fit against all three videos (MSE 7e-6). No fade on it.
+            //  - outgoing page parallaxes to 25% width on its own faster curve:
+            //    ~120ms (measured 100-133ms), easing cubic-bezier(0.15, 0.0, 0.3, 0.85)
+            //  - outgoing page dims to ~73% brightness over ~75ms and holds
             //  - back is the exact mirror; Navigation 2.8 seeks these transitions for
             //    predictive back automatically (enableOnBackInvokedCallback is set).
             //  - mirrored for RTL like the platform does.
             val oneUiEase = CubicBezierEasing(0.15f, 0.5f, 0.1f, 0.9f)
+            val oneUiParallaxEase = CubicBezierEasing(0.15f, 0.0f, 0.3f, 0.85f)
             val dirSign = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
             NavHost(
                 navController = navController,
                 startDestination = "tabs",
                 enterTransition = {
-                    slideInHorizontally(tween(355, easing = oneUiEase)) { it * dirSign }
+                    slideInHorizontally(tween(345, easing = oneUiEase)) { it * dirSign }
                 },
                 exitTransition = {
-                    slideOutHorizontally(tween(180, easing = oneUiEase)) { -(it / 4) * dirSign } +
-                        fadeOut(tween(90), targetAlpha = 0.74f)
+                    slideOutHorizontally(tween(120, easing = oneUiParallaxEase)) { -(it / 4) * dirSign } +
+                        fadeOut(tween(75), targetAlpha = 0.73f)
                 },
                 popEnterTransition = {
-                    slideInHorizontally(tween(180, easing = oneUiEase)) { -(it / 4) * dirSign } +
-                        fadeIn(tween(90), initialAlpha = 0.74f)
+                    slideInHorizontally(tween(120, easing = oneUiParallaxEase)) { -(it / 4) * dirSign } +
+                        fadeIn(tween(75), initialAlpha = 0.73f)
                 },
                 popExitTransition = {
-                    slideOutHorizontally(tween(355, easing = oneUiEase)) { it * dirSign }
+                    slideOutHorizontally(tween(345, easing = oneUiEase)) { it * dirSign }
                 },
                 modifier = Modifier.fillMaxSize()
             ) {
