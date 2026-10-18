@@ -70,26 +70,46 @@ Wathakker is an open-source Android app that brings the everyday tools a Muslim 
 
 ## 📸 Screenshots
 
-<p align="center"><i>Real captures from the latest automated 3.1.0 emulator verification run.</i></p>
+<p align="center"><i>Real captures from the latest automated 3.1.0 emulator verification.</i></p>
 
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="emulator-evidence/verify310/00-prayer.png" width="220" alt="Prayer screen"><br><sub>Prayer screen with bells</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/02-alert-dialog.png" width="220" alt="Prayer alert sheet"><br><sub>Per-prayer alert settings</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/02b-qibla.png" width="220" alt="Qibla compass"><br><sub>Qibla compass</sub></td>
+      <td align="center"><img src="Screenshot/00-prayer.png" width="220" alt="Prayer screen"><br><sub>Prayer screen with bells</sub></td>
+      <td align="center"><img src="Screenshot/02-alert-dialog.png" width="220" alt="Prayer alert sheet"><br><sub>Per-prayer alerts: at adhan + early reminder</sub></td>
+      <td align="center"><img src="Screenshot/02f-early-reminder-on.png" width="220" alt="Early reminder"><br><sub>Early reminder with exact minutes</sub></td>
     </tr>
     <tr>
-      <td align="center"><img src="emulator-evidence/verify310/04-location-screen.png" width="220" alt="Location and calculation"><br><sub>Location & calculation</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/03-settings.png" width="220" alt="Settings"><br><sub>Settings</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/06-landscape.png" width="220" alt="Landscape"><br><sub>Landscape</sub></td>
+      <td align="center"><img src="Screenshot/02b-qibla-dark.png" width="220" alt="Qibla compass"><br><sub>Qibla compass</sub></td>
+      <td align="center"><img src="Screenshot/04-location-screen.png" width="220" alt="Location and calculation"><br><sub>Location & calculation</sub></td>
+      <td align="center"><img src="Screenshot/03-settings.png" width="220" alt="Settings"><br><sub>Settings</sub></td>
     </tr>
     <tr>
-      <td align="center"><img src="emulator-evidence/verify310/05-english.png" width="220" alt="English UI"><br><sub>English UI</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/01-bell-toggled.png" width="220" alt="Bell toggled"><br><sub>Enabling a prayer alert</sub></td>
-      <td align="center"></td>
+      <td align="center"><img src="Screenshot/06-landscape.png" width="220" alt="Landscape"><br><sub>Landscape</sub></td>
+      <td align="center"><img src="Screenshot/05-english.png" width="220" alt="English UI"><br><sub>English UI</sub></td>
+      <td align="center"><img src="Screenshot/03f-qibla-from-drawer.png" width="220" alt="Qibla from drawer"><br><sub>Qibla from the side drawer</sub></td>
     </tr>
   </table>
+</div>
+
+### 📱 Home-screen widgets
+
+<p align="center"><i>Actual widget renders as drawn on the home screen, in light and dark.</i></p>
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_light_Hero.png" width="220" alt="Hero widget"><br><sub>Hero widget</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_light_PrayerBar.png" width="220" alt="Prayer bar"><br><sub>Prayer bar</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_light_Schedule.png" width="220" alt="Schedule"><br><sub>Schedule</sub></td>
+    </tr>
+    <tr>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_dark_NextPrayer.png" width="220" alt="Next prayer"><br><sub>Next prayer</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_dark_Pill.png" width="220" alt="Pill widget"><br><sub>Pill widget</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_dark_Clock.png" width="220" alt="Clock widget"><br><sub>Clock widget</sub></td>
+    </tr>
+  </table>
+  <p><sub>The system widget picker shows a live theme-aware preview (Android 12+); older versions show a static image.</sub></p>
 </div>
 
 ## 🌍 Supported languages
