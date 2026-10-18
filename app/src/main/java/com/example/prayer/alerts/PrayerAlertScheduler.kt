@@ -20,6 +20,8 @@ object PrayerAlertScheduler {
     const val KIND_ADHAN = 0
     const val KIND_IQAMA = 1
     const val KIND_DND_OFF = 2
+    // Early reminder: an ADDITIONAL alarm before the adhan; the adhan-time alarm always fires.
+    const val KIND_EARLY = 3
 
     private val IQAMA_OFFSETS = intArrayOf(25, 0, 20, 20, 10, 20) // Shuruq has no iqama
 
@@ -41,13 +43,14 @@ object PrayerAlertScheduler {
         context: Context, prayer: Int, times: LongArray, now: Long,
         prefs: FajrPreferences, method: CalculationMethod
     ): Long {
-        val offsetMs = PrayerAlertStore.offsetMinutes(context, prayer) * 60000L
-        var trigger = times[prayer] - offsetMs
+        // The base adhan alarm always fires at the true adhan time; the early reminder is a
+        // separate second alarm (see scheduleOne), never a replacement.
+        var trigger = times[prayer]
         if (trigger <= now) {
             val tomorrow = Calendar.getInstance().apply { add(Calendar.DATE, 1) }
             val t = PrayerAdjustments.calculateAll(context, tomorrow, prefs.latitude, prefs.longitude, method)
             val arr = longArrayOf(t.fajr, t.sunrise, t.dhuhr, t.asr, t.maghrib, t.isha)
-            trigger = arr[prayer] - offsetMs
+            trigger = arr[prayer]
         }
         return trigger
     }
@@ -58,10 +61,15 @@ object PrayerAlertScheduler {
         am.cancel(pending(context, prayer, KIND_ADHAN))
         am.cancel(pending(context, prayer, KIND_IQAMA))
         am.cancel(pending(context, prayer, KIND_DND_OFF))
+        am.cancel(pending(context, prayer, KIND_EARLY))
         if (!PrayerAlertStore.isEnabled(context, prayer)) return
         setExact(am, adhanTrigger, pending(context, prayer, KIND_ADHAN))
-        val iqamaAt = adhanTrigger + IQAMA_OFFSETS[prayer] * 60000L +
-            PrayerAlertStore.offsetMinutes(context, prayer) * 60000L
+        // Additional early reminder: fires IN ADDITION to the adhan-time notification.
+        val leadMs = PrayerAlertStore.offsetMinutes(context, prayer) * 60000L
+        if (leadMs > 0 && adhanTrigger - leadMs > now) {
+            setExact(am, adhanTrigger - leadMs, pending(context, prayer, KIND_EARLY))
+        }
+        val iqamaAt = adhanTrigger + IQAMA_OFFSETS[prayer] * 60000L
         if (PrayerAlertStore.iqamaReminder(context, prayer) && IQAMA_OFFSETS[prayer] > 0) {
             if (iqamaAt > now) {
                 setExact(am, iqamaAt, pending(context, prayer, KIND_IQAMA))
@@ -86,7 +94,7 @@ object PrayerAlertScheduler {
             .putExtra(EXTRA_PRAYER, prayer)
             .putExtra(EXTRA_KIND, kind)
         return PendingIntent.getBroadcast(
-            context, if (kind == KIND_ADHAN) 100 + prayer else if (kind == KIND_IQAMA) 200 + prayer else 300 + prayer,
+            context, if (kind == KIND_ADHAN) 100 + prayer else if (kind == KIND_IQAMA) 200 + prayer else if (kind == KIND_DND_OFF) 300 + prayer else 400 + prayer,
             intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
