@@ -157,8 +157,9 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                     onClick = { viewModel.setUseCurrentLocation(false) }
                 )
                 // City summary row: identical metrics to LocOptionRow above - 12dp insets,
-                // icon on the same column axis as the radio rows' icons (radio slot 40dp +
-                // 8dp spacer = 48dp), same text styles, trailing change label like CalcRow.
+                // icon on the same column axis as the radio rows' icons (RadioButton's
+                // minimum-interactive slot is 48dp + 8dp spacer = 56dp), same text styles,
+                // trailing change label like CalcRow.
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -167,7 +168,7 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                         .padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(Modifier.width(48.dp))
+                    Spacer(Modifier.width(56.dp))
                     Icon(Icons.Outlined.LocationOn, null, tint = cs.primary)
                     Spacer(Modifier.width(10.dp))
                     Column(modifier = Modifier.weight(1f)) {
