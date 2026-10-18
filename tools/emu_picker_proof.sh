@@ -43,9 +43,19 @@ for MODE in no yes; do
   adb shell input tap $C; sleep 3
   C=$(scroll_until "وذكر") || { echo "WARN: app row not found"; shot "${LABEL}_picker_${MODE}_fail"; continue; }
   adb shell input tap $C; sleep 4
-  shot "${LABEL}_picker_${MODE}_1"
-  adb shell input swipe $CX $((SH*70/100)) $CX $((SH*35/100)) 400; sleep 2
-  shot "${LABEL}_picker_${MODE}_2"
+  # ensure the list is scrolled to the very top (sheet can open mid-scroll)
+  for i in 1 2 3; do adb shell input swipe $CX $((SH*35/100)) $CX $((SH*85/100)) 300; sleep 1; done
+  sleep 2
+  # page through the full list: shot, swipe down, repeat; stop early when two
+  # consecutive pages are pixel-identical (end of list)
+  PREV=""
+  for pg in 1 2 3 4 5 6; do
+    shot "${LABEL}_picker_${MODE}_$pg"
+    H=$(md5sum "$OUT/${LABEL}_picker_${MODE}_$pg.png" | awk '{print $1}')
+    if [ "$H" = "$PREV" ]; then rm -f "$OUT/${LABEL}_picker_${MODE}_$pg.png"; break; fi
+    PREV=$H
+    adb shell input swipe $CX $((SH*70/100)) $CX $((SH*30/100)) 450; sleep 2
+  done
   adb shell input keyevent KEYCODE_HOME; sleep 2
 done
 echo "picker proof done: $OUT"
