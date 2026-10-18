@@ -39,7 +39,7 @@ jobs:
             sleep 3
             adb wait-for-device
             mkdir -p gen
-            adb pull /sdcard/Android/data/com.wathakker.app/files/ gen/files ||               adb exec-out "run-as com.wathakker.app tar -C /sdcard/Android/data/com.wathakker.app/files -cf - ." | tar -xf - -C gen
+            adb pull /sdcard/Android/data/com.wathakker.app/files/ gen/files || { mkdir -p gen/files && adb exec-out "run-as com.wathakker.app tar -C /sdcard/Android/data/com.wathakker.app/files -cf - ." | tar -xf - -C gen/files; }
             ls -la gen/files || true
       - name: Gate on render success
         run: |
