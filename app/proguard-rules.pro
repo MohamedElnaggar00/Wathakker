@@ -1,21 +1,34 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Wathakker release (R8) keep rules.
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Reflective access from the home/lock widget renderers:
+# Class.forName("com.example.fajr.data.FajrPreferences").getMethod("getCityNameLocalized", ...)
+# Class.forName("com.example.fajr.calculation.CalculationMethod").getField("Companion"/"INSTANCE"), fromId(int)
+# Class.forName("com.example.fajr.calculation.PrayerAdjustments").getMethod("calculateAll", ...)
+-keep class com.example.fajr.data.FajrPreferences { *; }
+-keep class com.example.fajr.calculation.** { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Room instantiates AppDatabase_Impl and the DAO _Impl classes reflectively.
+-keep class com.example.data.** { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# App widgets / lock-screen widgets / tick + face receivers: several are also
+# referenced by string-built ComponentName("com.example.widget." + kind + "WidgetProvider").
+-keep class com.example.widget.** { *; }
+-keep class com.example.lockwidgets.** { *; }
+
+# Alarm + boot receivers (manifest-declared; belt-and-suspenders).
+-keep class com.example.prayer.alerts.** { *; }
+-keep class com.example.receiver.** { *; }
+-keep class com.example.prayer.EventReminderReceiver { *; }
+
+# Kotlin/Java metadata needed by reflection-adjacent code.
+-keepattributes Signature,InnerClasses,EnclosingMethod,RuntimeVisibleAnnotations,AnnotationDefault
+# Keep original file/line info in release stack traces (cheap, vital for field diagnosis).
+-keepattributes SourceFile,LineNumberTable
+
+
+# Third-party platform-detection warnings are harmless.
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
