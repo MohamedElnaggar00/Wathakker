@@ -84,6 +84,8 @@ object OneUIDimens {
     val CardRadius: Dp = 26.dp
     val HeaderCollapseDistance: Dp = 140.dp
     val BarHeight: Dp = 56.dp
+    // Clears the floating pill tab bar (64dp bar + 12dp bottom margin) with an 8dp gap.
+    val TabBarClearance: Dp = 84.dp
 }
 
 @Composable
@@ -95,11 +97,14 @@ fun OneUIScreen(
     onMenu: (() -> Unit)? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
-    bottomPadding: Dp = 120.dp,
+    bottomPadding: Dp? = null,
     content: LazyListScope.() -> Unit
 ) {
     val density = LocalDensity.current
     val statusTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    // Bottom clearance must match the floating pill's real geometry plus the system nav
+    // inset: a flat value under-pads 3-button navigation and over/under-pads gesture nav.
+    val navBottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val expandedPx = with(density) { OneUIDimens.HeaderCollapseDistance.toPx() }
     val fraction by remember {
         derivedStateOf {
@@ -117,7 +122,7 @@ fun OneUIScreen(
             contentPadding = PaddingValues(
                 start = OneUIDimens.ScreenPadding,
                 end = OneUIDimens.ScreenPadding,
-                bottom = bottomPadding
+                bottom = bottomPadding ?: (OneUIDimens.TabBarClearance + navBottom)
             ),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -185,7 +190,7 @@ fun OneUIScreen(
                         if (onMenu != null) {
                             Icon(Icons.Outlined.Menu, contentDescription = L10n.t(S.Menu), tint = MaterialTheme.colorScheme.onBackground)
                         } else {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = L10n.t(S.Back), tint = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                     Spacer(modifier = Modifier.width(14.dp))
@@ -208,8 +213,10 @@ fun OneUIScreen(
                     modifier = HeaderTools.scrollTile(Modifier, barAlpha).height(52.dp).padding(horizontal = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (showSettingsButton) HeaderTools.SettingsButton()
+                    // Action icons sit nearest the menu (start in RTL), the gear is the
+                    // outermost icon - per user request, matching One UI ordering.
                     actions?.invoke(this)
+                    if (showSettingsButton) HeaderTools.SettingsButton()
                 }
             }
         }
