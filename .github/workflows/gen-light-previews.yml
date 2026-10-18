@@ -30,24 +30,7 @@ jobs:
           api-level: 35
           arch: x86_64
           profile: pixel_6
-          script: |
-            set -e
-            adb install -r built/app-release-unsigned.apk
-            adb shell am start -S -W -n com.wathakker.app/com.example.WidgetRenderCheck
-            adb root || true
-            sleep 3
-            adb wait-for-device
-            for i in $(seq 1 40); do
-              N=$(adb shell 'ls /sdcard/Android/data/com.wathakker.app/files/ 2>/dev/null | grep -c "^preview_light_.*\.png$"' | tr -d '\r')
-              E=$(adb shell 'ls /sdcard/Android/data/com.wathakker.app/files/ 2>/dev/null | grep -c "^preview_light_.*\.err$"' | tr -d '\r')
-              echo "poll $i: png=$N err=$E"
-              [ "${N:-0}" -ge 10 ] && break
-              [ "${E:-0}" -gt 0 ] && [ $((N+E)) -ge 10 ] && break
-              sleep 3
-            done
-            mkdir -p gen
-            adb pull /sdcard/Android/data/com.wathakker.app/files/ gen/files || { mkdir -p gen/files && adb exec-out "run-as com.wathakker.app tar -C /sdcard/Android/data/com.wathakker.app/files -cf - ." | tar -xf - -C gen/files; }
-            ls -la gen/files || true
+          script: bash tools/emu_gen_light_previews.sh built/app-release-unsigned.apk gen
       - name: Gate on render success
         run: |
           NPNG=$(ls gen/files/preview_light_*.png 2>/dev/null | wc -l)
