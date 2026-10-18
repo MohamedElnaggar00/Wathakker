@@ -1,0 +1,18 @@
+PASS: parsed all six prayer times from UI
+sky[fajr] rgb=(16, 36, 52)
+sky[shuruq] rgb=(228, 220, 207)
+sky[dhuhr] rgb=(179, 216, 248)
+sky[asr] rgb=(233, 204, 164)
+sky[maghrib] rgb=(63, 44, 66)
+sky[isha] rgb=(20, 28, 46)
+PASS: 6/6 distinct sky strips
+PASS: sky strips differ from flat dark background (min diff 38)
+INFO: crossfade frames captured (visual gate: t0/t1 mid-blend, t2 settled, no flicker)
+Total frames rendered: 157
+Janky frames: 157 (100.00%)
+Janky frames (legacy): 157 (100.00%)
+PASS: app alive after leaving prayer tab
+PASS: app alive after re-entering prayer tab
+fatal_exceptions: 0
+PASS: no fatal exceptions
+DONE 3.2.0
