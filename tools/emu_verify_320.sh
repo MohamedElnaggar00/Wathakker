@@ -14,6 +14,7 @@ PKG=com.wathakker.app
 adb uninstall $PKG >/dev/null 2>&1 || true
 adb install -g "$APK" > "$OUT/install.txt" 2>&1 || { say "FATAL: install failed"; exit 1; }
 adb shell settings put global hide_error_dialogs 1 || true
+adb shell settings put global anr_show_dialog false || true
 # Clock control for the six scenarios (default-target emulator image allows root).
 adb root >/dev/null 2>&1 || true
 sleep 2; adb wait-for-device
@@ -23,15 +24,31 @@ adb shell settings put global auto_time 0 || true
 adb logcat -c
 adb shell am start -S -W -n $PKG/com.example.MainActivity > "$OUT/launch.txt" 2>&1
 sleep 10
+adb shell settings put global anr_show_dialog false || true
 
 shot() { adb shell screencap -p /sdcard/s.png && adb pull /sdcard/s.png "$OUT/$1.png" >/dev/null; }
 dump() { adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/u320.xml >/dev/null 2>&1; }
 W=$(adb shell wm size | grep -oE '[0-9]+x[0-9]+' | head -1); SW=${W%x*}; SH=${W#*x}
 [ -z "$SW" ] && { SW=1080; SH=2400; }
 CX=$((SW/2))
+dismiss_anr() { # tap "Wait" on any ANR dialog (clock jumps / uimode flips upset Quickstep)
+  dump
+  if grep -q "isn't responding" /tmp/u320.xml 2>/dev/null; then
+    python3 -c "
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+for m in re.finditer(r'text=.(Wait).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
+    print((int(m.group(2))+int(m.group(4)))//2,(int(m.group(3))+int(m.group(5)))//2); break
+" > /tmp/wait.xy
+    [ -s /tmp/wait.xy ] && adb shell input tap $(cat /tmp/wait.xy) && sleep 3
+    rm -f /tmp/wait.xy
+  fi
+}
 alive() { adb shell pidof $PKG >/dev/null 2>&1 && [ -n "$(adb shell pidof $PKG)" ]; }
 fg_guard() { for i in 1 2 3 4 5 6 7 8; do F=$(adb shell dumpsys window 2>/dev/null | grep -m1 "mCurrentFocus"); echo "$F" | grep -q "$PKG" && return 0; sleep 1; adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 2; done; return 1; }
 
+# clear any ANR dialog from boot/uimode before reading the UI
+dismiss_anr
 # --- parse the six prayer times from the list rows (scroll to see all rows) ---
 python3 - <<'PY' > "$OUT/prayer_times.env"
 import re,os,sys
@@ -73,24 +90,33 @@ source "$OUT/prayer_times.env"
 for i in 1 2 3; do adb shell input swipe $CX $((SH*30/100)) $CX $((SH*80/100)) 400; sleep 1; done
 
 # --- scenario runner: set clock, relaunch, verify next-prayer + screenshot ---
-set_clock() { # HH:MM today
+set_clock() { # HH:MM today - verified by readback (adb root can race boot)
+  local WANT=$(echo "$1" | tr -d ':')
   local FMT=$(python3 -c "import datetime;d=datetime.date.today();h,m='$1'.split(':');print(d.strftime('%m%d')+h+m+d.strftime('%Y')+'.00')")
-  adb shell date "$FMT" >/dev/null 2>&1
-  sleep 1
+  for i in 1 2 3 4 5; do
+    adb root >/dev/null 2>&1; sleep 2; adb wait-for-device
+    adb shell date "$FMT" >/dev/null 2>&1
+    sleep 1
+    local GOT=$(adb shell date '+%H%M' | tr -d '\r')
+    [ "$GOT" = "$WANT" ] && return 0
+    sleep 2
+  done
+  say "WARN: set_clock readback mismatch for $1 (got $GOT)"
 }
-relaunch() { adb shell am force-stop $PKG; sleep 1; adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8; }
+dismiss_anr
+relaunch() { adb shell am force-stop $PKG; sleep 1; adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8; dismiss_anr; }
 
 run_scenario() { # <key> <HH:MM> <expected next-prayer arabic>
   local KEY=$1 T=$2 EXPECT=$3
   set_clock "$T"
   relaunch
   fg_guard || say "FAIL[$KEY]: app not foreground after relaunch"
-  adb shell cmd uimode night no; sleep 3
+  adb shell cmd uimode night no; sleep 3; dismiss_anr
   shot "320_${KEY}_light_top"
   adb shell input swipe $CX $((SH*75/100)) $CX $((SH*30/100)) 400; sleep 2
   shot "320_${KEY}_light_scrolled"
   adb shell input swipe $CX $((SH*30/100)) $CX $((SH*80/100)) 400; sleep 2
-  adb shell cmd uimode night yes; sleep 3
+  adb shell cmd uimode night yes; sleep 3; dismiss_anr
   shot "320_${KEY}_dark_top"
   adb shell input swipe $CX $((SH*75/100)) $CX $((SH*30/100)) 400; sleep 2
   shot "320_${KEY}_dark_scrolled"
