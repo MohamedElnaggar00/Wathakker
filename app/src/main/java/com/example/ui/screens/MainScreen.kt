@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.AdsClick
 import androidx.compose.material.icons.outlined.FormatListBulleted
@@ -91,6 +92,7 @@ val oneUIDrawerItems: List<OneUIDrawerItem> = listOf(
     OneUIDrawerItem("statistics", L10n.t(S.Stats), Icons.Outlined.BarChart, Color(4283289796L)),
     OneUIDrawerItem("tags", L10n.t(S.Tags), Icons.AutoMirrored.Outlined.Label, Color(4290617322L)),
     OneUIDrawerItem("hijri_converter", L10n.t(S.HijriConvTitle), Icons.Outlined.DateRange, Color(4284061916L)),
+    OneUIDrawerItem("qibla", L10n.t(S.QiblaTitle), Icons.Outlined.Explore, Color(4280391411L)),
     OneUIDrawerItem("tasbeeh", L10n.t(S.TasbeehTab), Icons.Outlined.AdsClick, Color(4290617322L)),
     OneUIDrawerItem("settings", L10n.t(S.Settings), Icons.Outlined.Settings, Color(4287669422L)),
     OneUIDrawerItem("about", L10n.t(S.About), Icons.Outlined.Info, Color(4287532691L))
