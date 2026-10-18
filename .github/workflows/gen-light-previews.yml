@@ -87,6 +87,7 @@ jobs:
         if: always()
         run: |
           git config user.email "actions@github.com"; git config user.name "github-actions"
-          git add app/src/main/res/drawable-notnight* emulator-evidence/previews-light
+          git add emulator-evidence/previews-light || true
+          git add app/src/main/res/drawable-notnight* 2>/dev/null || true
           git commit -m "light-theme picker previews (notnight variants) [skip ci]" || echo none
           for i in 1 2 3 4; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
