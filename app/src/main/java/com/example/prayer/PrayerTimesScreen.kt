@@ -69,9 +69,7 @@ import com.example.ui.oneui.OneUIDivider
 import com.example.ui.oneui.OneUIProgressBar
 import com.example.ui.oneui.OneUIIconAction
 import com.example.ui.oneui.OneUIScreen
-import com.example.ThemeSettings
 import com.example.ui.theme.OneUIActiveGreen
-import com.example.ui.theme.OneUITimeCyan
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -191,7 +189,18 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         displayRows.add(Triple(L10n.t(S.Qiyam), today.maghrib + nightLen * 2 / 3, Icons.Outlined.Brightness3)); rowBells.add(null)
     }
 
+    // Time-of-day sky (v3.2.0): period flips at each prayer-time boundary; the
+    // background crossfades between the six bundled skies. Keyed on `days` so a
+    // day/location/method change re-reads the right prayer times.
+    val period by remember(days) {
+        androidx.compose.runtime.derivedStateOf {
+            val t = days.first
+            DayPeriod.forTime(nowState.longValue, t.fajr, t.sunrise, t.dhuhr, t.asr, t.maghrib, t.isha)
+        }
+    }
+
     PrayerTimesContent(
+        period = period,
         city = city,
         country = country,
         hijriText = hijri,
@@ -264,6 +273,7 @@ private fun formatCountdown(millis: Long): String {
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun PrayerTimesContent(
+    period: DayPeriod,
     city: String,
     country: String,
     hijriText: String,
@@ -282,25 +292,38 @@ fun PrayerTimesContent(
     onBellClick: (Int) -> Unit = {},
     onBellLongClick: (Int) -> Unit = {}
 ) {
-    val cs = MaterialTheme.colorScheme
-    OneUIScreen(
+    // Per-scene content colors keep text legible over bright and dark skies.
+    // Header buttons/icons and the bottom bar are intentionally untouched (user scope):
+    // they keep their theme-driven tints. Only the big title follows the scene.
+    val sc = sceneColors(period.darkScene)
+    val skyHaze = dev.chrisbanes.haze.rememberHazeState()
+    Box(Modifier.fillMaxSize()) {
+        TimeOfDayBackground(period, skyHaze)
+        SkyStatusBarEffect(period.darkScene)
+        OneUIScreen(
         title = L10n.t(S.PrayerTimes),
         onMenu = onMenu,
+        containerColor = Color.Transparent,
+        titleColor = sc.textPrimary,
         actions = if (onQibla != null) {
             { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
         } else null
     ) {
         item(key = "prayer-overview") {
             // One card: date and location, a divider, then the next-prayer block.
-            OneUICard(padding = PaddingValues(20.dp)) {
+            OneUICard(
+                modifier = Modifier.skyGlass(RoundedCornerShape(OneUIDimens.CardRadius), skyHaze, sc),
+                padding = PaddingValues(20.dp),
+                color = Color.Transparent
+            ) {
                 Text(
                     hijriText,
-                    color = cs.onSurface,
+                    color = sc.textPrimary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Spacer(Modifier.height(4.dp))
-                Text(gregorianText, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
+                Text(gregorianText, color = sc.textSecondary, style = MaterialTheme.typography.bodyMedium)
                 Spacer(Modifier.height(12.dp))
                 Row(
                     modifier = Modifier.clip(RoundedCornerShape(12.dp)).clickable(onClick = onChangeCity).padding(vertical = 6.dp),
@@ -310,18 +333,18 @@ fun PrayerTimesContent(
                         Icons.Outlined.LocationOn,
                         null,
                         modifier = Modifier.size(40.dp).padding(11.dp),
-                        tint = cs.onSurfaceVariant
+                        tint = sc.textSecondary
                     )
                     Spacer(Modifier.width(6.dp))
-                    Text(SavedCity(), color = cs.onSurfaceVariant, style = MaterialTheme.typography.labelLarge)
+                    Text(SavedCity(), color = sc.textSecondary, style = MaterialTheme.typography.labelLarge)
                 }
                 // Divider spans the full content width so its ends line up with the icon
                 // circles above/below; the row gets real vertical padding (the circle must not
                 // touch the divider) and the label is centered with the circle, no offset hack.
-                OneUIDivider(0.dp)
+                OneUIDivider(0.dp, color = sc.divider)
                 Row(modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                     Box(
-                        modifier = Modifier.size(40.dp).clip(CircleShape).background(cs.surfaceVariant),
+                        modifier = Modifier.size(40.dp).clip(CircleShape).background(sc.chip),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(Icons.Outlined.Mosque, null, modifier = Modifier.size(22.dp), tint = OneUIActiveGreen)
@@ -329,7 +352,7 @@ fun PrayerTimesContent(
                     Spacer(Modifier.width(12.dp))
                     Text(
                         L10n.t(S.NextPrayer),
-                        color = cs.onSurfaceVariant,
+                        color = sc.textSecondary,
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
@@ -346,7 +369,7 @@ fun PrayerTimesContent(
                 ) {
                     Text(
                         countdown,
-                        color = OneUITimeCyan,
+                        color = sc.countdown,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.headlineMedium
@@ -354,26 +377,29 @@ fun PrayerTimesContent(
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
                             nextPrayerName,
-                            color = cs.onSurface,
+                            color = sc.textPrimary,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleLarge
                         )
-                        Text(nextPrayerTime, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
+                        Text(nextPrayerTime, color = sc.textSecondary, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 Spacer(Modifier.height(14.dp))
                 OneUIProgressBar(
                     progressNow,
                     color = OneUIActiveGreen,
-                    trackColor = if (ThemeSettings.isDark()) Color(0xFF38383E) else Color(0xFFC4C4CD),
+                    trackColor = sc.track,
                     gradient = listOf(Color(0xFF5BC950), Color(0xFF24C55E))
                 )
             }
         }
         item(key = "prayer-list") {
-            OneUICard {
+            OneUICard(
+                modifier = Modifier.skyGlass(RoundedCornerShape(OneUIDimens.CardRadius), skyHaze, sc),
+                color = Color.Transparent
+            ) {
                 rows.forEachIndexed { index, row ->
-                    if (index > 0 && !row.isNext && !rows[index - 1].isNext) OneUIDivider()
+                    if (index > 0 && !row.isNext && !rows[index - 1].isNext) OneUIDivider(color = sc.divider)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -387,20 +413,20 @@ fun PrayerTimesContent(
                             modifier = Modifier
                                 .size(38.dp)
                                 .clip(CircleShape)
-                                .background(if (row.isNext) OneUIActiveGreen.copy(alpha = 0.18f) else cs.surfaceVariant),
+                                .background(if (row.isNext) OneUIActiveGreen.copy(alpha = 0.18f) else sc.chip),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 row.icon,
                                 null,
                                 modifier = Modifier.size(20.dp),
-                                tint = if (row.isNext) OneUIActiveGreen else cs.onSurfaceVariant
+                                tint = if (row.isNext) OneUIActiveGreen else sc.textSecondary
                             )
                         }
                         Spacer(Modifier.width(14.dp))
                         Text(
                             row.name,
-                            color = if (row.isNext) OneUIActiveGreen else cs.onSurface,
+                            color = if (row.isNext) OneUIActiveGreen else sc.textPrimary,
                             fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
@@ -409,7 +435,7 @@ fun PrayerTimesContent(
                         val bellOn = bellIndex != null && bellStates.getOrElse(bellIndex) { false }
                         Text(
                             row.timeText,
-                            color = if (row.isNext) cs.primary else cs.onSurface,
+                            color = if (row.isNext) sc.accent else sc.textPrimary,
                             fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
@@ -435,13 +461,14 @@ fun PrayerTimesContent(
                                     if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
                                     contentDescription = "bell_" + bellIndex,
                                     modifier = Modifier.size(19.dp),
-                                    tint = if (bellOn) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.45f)
+                                    tint = if (bellOn) sc.accent else sc.textSecondary.copy(alpha = 0.45f)
                                 )
                             }
                         }
                     }
                 }
             }
+        }
         }
     }
 }

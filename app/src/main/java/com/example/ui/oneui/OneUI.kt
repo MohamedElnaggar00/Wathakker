@@ -100,6 +100,11 @@ fun OneUIScreen(
     actions: (@Composable RowScope.() -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
     bottomPadding: Dp? = null,
+    // Time-of-day sky (v3.2.0): the prayer screen paints its sky behind a transparent
+    // container and tints only the big title for scene legibility. Defaults keep every
+    // other screen byte-identical.
+    containerColor: Color = MaterialTheme.colorScheme.background,
+    titleColor: Color = MaterialTheme.colorScheme.onBackground,
     content: LazyListScope.() -> Unit
 ) {
     val density = LocalDensity.current
@@ -117,7 +122,7 @@ fun OneUIScreen(
     val barAlpha by animateFloatAsState(fraction, tween(180), label = "barAlpha")
     val hazeState = LocalHazeState.current
 
-    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    Box(modifier = modifier.fillMaxSize().background(containerColor)) {
         LazyColumn(
             modifier = Modifier.fillMaxSize().then(if (hazeState != null) Modifier.hazeSource(hazeState) else Modifier),
             state = listState,
@@ -139,7 +144,7 @@ fun OneUIScreen(
                     Column {
                         Text(
                             title,
-                            color = MaterialTheme.colorScheme.onBackground,
+                            color = titleColor,
                             fontSize = 36.sp,
                             lineHeight = 44.sp,
                             style = MaterialTheme.typography.headlineLarge
@@ -260,13 +265,13 @@ fun OneUICard(
 }
 
 @Composable
-fun OneUIDivider(inset: Dp = 16.dp) {
+fun OneUIDivider(inset: Dp = 16.dp, color: Color = MaterialTheme.colorScheme.outline) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = inset)
             .height(0.5.dp)
-            .background(MaterialTheme.colorScheme.outline)
+            .background(color)
     )
 }
 
