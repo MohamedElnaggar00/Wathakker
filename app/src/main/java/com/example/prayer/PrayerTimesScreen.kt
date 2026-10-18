@@ -306,6 +306,7 @@ fun PrayerTimesContent(
         onMenu = onMenu,
         containerColor = Color.Transparent,
         titleColor = sc.textPrimary,
+        alwaysShowHeaderTiles = true,
         actions = if (onQibla != null) {
             { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
         } else null

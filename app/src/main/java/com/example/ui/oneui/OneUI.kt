@@ -105,6 +105,10 @@ fun OneUIScreen(
     // other screen byte-identical.
     containerColor: Color = MaterialTheme.colorScheme.background,
     titleColor: Color = MaterialTheme.colorScheme.onBackground,
+    // v3.2.0 (his call): on the prayer screen the header button pills stay visible in
+    // their frosted frames even at rest, so icons stay legible over every sky/theme
+    // combo. Default false keeps every other screen's fade-in-on-scroll unchanged.
+    alwaysShowHeaderTiles: Boolean = false,
     content: LazyListScope.() -> Unit
 ) {
     val density = LocalDensity.current
@@ -120,6 +124,7 @@ fun OneUIScreen(
         }
     }
     val barAlpha by animateFloatAsState(fraction, tween(180), label = "barAlpha")
+    val tileAlpha by animateFloatAsState(if (alwaysShowHeaderTiles) 1f else fraction, tween(180), label = "tileAlpha")
     val hazeState = LocalHazeState.current
 
     Box(modifier = modifier.fillMaxSize().background(containerColor)) {
@@ -172,7 +177,7 @@ fun OneUIScreen(
         ) {
             Box(modifier = Modifier.weight(1f, fill = false)) {
                 // Glass tile fades in on scroll as a background layer; icons/labels stay visible.
-                Box(Modifier.matchParentSize().alpha(barAlpha).then(HeaderTools.glassTile(Modifier)))
+                Box(Modifier.matchParentSize().alpha(tileAlpha).then(HeaderTools.glassTile(Modifier)))
                 Row(
                     modifier = Modifier
                         .height(52.dp)
@@ -206,7 +211,7 @@ fun OneUIScreen(
             val showSettingsButton = !HeaderTools.isOnSettings()
             if (showSettingsButton || actions != null) {
                 Box {
-                    Box(Modifier.matchParentSize().alpha(barAlpha).then(HeaderTools.glassTile(Modifier)))
+                    Box(Modifier.matchParentSize().alpha(tileAlpha).then(HeaderTools.glassTile(Modifier)))
                     Row(
                         modifier = Modifier.height(52.dp).padding(horizontal = 6.dp),
                         verticalAlignment = Alignment.CenterVertically
