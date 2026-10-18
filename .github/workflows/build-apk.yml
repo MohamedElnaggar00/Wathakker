@@ -111,6 +111,7 @@ jobs:
           وذكر - تطبيق يذكرك بمواقيت الصلاة والذكر في يومك وليلتك
 
           ## What's new in 3.1.0
+          - Hotfix (build 44): home and lock screen widgets rendered blank or froze after the 3.1.0 update - fixed (R8 keep rules for the widget reflection paths). Widget picker previews now have proper per-widget light/dark images.
           - Prayer alerts in one place: a bell on every prayer row (all six, including Shuruq) - tap to toggle, long-press for settings. The adhan-time notification always fires; you can add an optional early reminder before the adhan with an exact-minute picker (1-60 min).
           - Iqama reminders (Fajr 25, Dhuhr/Asr/Isha 20, Maghrib 10 minutes after adhan) and automatic Do-Not-Disturb between adhan and iqama.
           - New Calendar tab: a One UI-style Hijri calendar with Islamic occasions (Umm al-Qura, honoring your Hijri day adjustment), a month grid with Gregorian + Hijri numbers, colored event markers, an Events view, and an optional reminder per occasion (off by default).
@@ -128,7 +129,12 @@ jobs:
           - Event reminders are rescheduled when the app opens or a reminder is toggled; they are not yet restored automatically after a device reboot.
           - Widget-picker previews need Android 12+; older Android versions show a static preview image.
           NOTES
-          gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --latest --title "Wathakker 3.1.0" --notes-file notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" Wathakker-$TAG.apk --clobber
+            gh release edit "$TAG" --notes-file notes.md --latest
+          else
+            gh release create "$TAG" Wathakker-$TAG.apk --target ${{ github.sha }} --latest --title "Wathakker 3.1.0" --notes-file notes.md
+          fi
 
       - name: Fail if build failed
         if: steps.build.outcome == 'failure' || steps.sign.outcome == 'failure'
