@@ -1,7 +1,7 @@
 #!/bin/bash
 # usage: emu_verify_310.sh <apk> <outdir> - verifies 3.1.0: bell/alarm merge, 4 tabs, Location & calculation screen, language switch, rotation, process death, boot reschedule
 APK=$1; OUT=$2
-mkdir -p "$OUT"
+rm -rf "$OUT"; mkdir -p "$OUT"
 SUM="$OUT/SUMMARY.txt"; : > "$SUM"
 say() { echo "$1" | tee -a "$SUM"; }
 adb uninstall com.wathakker.app >/dev/null 2>&1 || true
@@ -270,7 +270,7 @@ dump
 GEAR=$(find_center desc "الإعدادات")
 if [ -z "$GEAR" ]; then say "FAIL: settings gear not found by content description"; else
   adb shell input tap $GEAR; sleep 3; dump
-  has_text "الإصدار" && say "PASS: header gear opens Settings (tap-test)" || say "FAIL: gear tap did not open Settings"
+  has_text "تغيير الموقع" && say "PASS: header gear opens Settings (tap-test)" || say "FAIL: gear tap did not open Settings"
   shot 00c-settings-via-gear
   adb shell input keyevent KEYCODE_BACK; sleep 2; back_to_prayer
   [ -n "$(find_center desc bell_0)" ] && say "PASS: BACK from Settings returns to prayer screen" || say "FAIL: BACK from Settings did not return to prayer screen"
@@ -581,6 +581,12 @@ LC_FAJR=$(find_center text "الفجر")
 if [ -n "$LC_FAJR" ]; then
   set -- $LC_FAJR
   SL=$(seekbar_below $2)
+  if [ -z "$SL" ]; then
+    # LazyColumn: the slider under the row may be just below the viewport; nudge and retry
+    adb shell input swipe 360 1300 360 950 600; sleep 2; dump
+    LC_FAJR=$(find_center text "الفجر")
+    [ -n "$LC_FAJR" ] && { set -- $LC_FAJR; SL=$(seekbar_below $2); }
+  fi
   if [ -n "$SL" ]; then
     set -- $SL
     # RTL slider: increasing is toward the LEFT; drag decisively, retry opposite direction if the
@@ -690,6 +696,7 @@ if tap_node text "القبلة" "Drawer qibla row"; then
   has_text "القبلة" && say "PASS: Qibla screen opened from drawer" || say "FAIL: Qibla screen did not open from drawer"
   shot 03f-qibla-from-drawer
   adb shell input keyevent KEYCODE_BACK; sleep 2
+  back_to_prayer
 else
   say "FAIL: Qibla row missing from drawer"
 fi
@@ -760,7 +767,7 @@ BL=$(find_center desc bell_0)
 if [ -n "$BL" ]; then
   adb shell input swipe $BL $BL 900; sleep 3
   dump
-  has_text "وقت التنبيه" && say "PASS: alert dialog renders in light mode" || say "WARN: alert dialog not opened in light mode"
+  has_text "عند الأذان" && say "PASS: alert dialog renders in light mode" || say "WARN: alert dialog not opened in light mode"
   shot 06d-light-dialog
   adb shell input keyevent KEYCODE_BACK; sleep 2
 fi
@@ -778,7 +785,7 @@ BL=$(find_center desc bell_0)
 if [ -n "$BL" ]; then
   adb shell input swipe $BL $BL 900; sleep 3
   dump
-  has_text "وقت التنبيه" && say "PASS: alert dialog renders in dark mode" || say "WARN: alert dialog not opened in dark mode"
+  has_text "عند الأذان" && say "PASS: alert dialog renders in dark mode" || say "WARN: alert dialog not opened in dark mode"
   shot 06g-dark-dialog
   adb shell input keyevent KEYCODE_BACK; sleep 2
 fi
@@ -807,6 +814,12 @@ shot 08-after-tabs
 # CHECK 11: widget render harness - renders every widget kind x 3 background modes to PNGs on-device
 adb shell am start -S -W -n com.wathakker.app/com.example.WidgetRenderCheck > "$OUT/rendercheck.txt" 2>&1 || true
 sleep 4
+if ! grep -q "Status: ok" "$OUT/rendercheck.txt"; then
+  adb reconnect offline >/dev/null 2>&1 || true
+  adb wait-for-device; sleep 3
+  adb shell am start -S -W -n com.wathakker.app/com.example.WidgetRenderCheck > "$OUT/rendercheck.txt" 2>&1 || true
+  sleep 4
+fi
 grep -q "Status: ok" "$OUT/rendercheck.txt" && say "PASS: widget render harness launched" || say "FAIL: widget render harness did not launch"
 mkdir -p "$OUT/widget-renders"
 adb shell ls /sdcard/Android/data/com.wathakker.app/files/ > "$OUT/widget-files.txt" 2>&1 || true
