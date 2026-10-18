@@ -74,21 +74,41 @@
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="emulator-evidence/verify310/00-prayer.png" width="220" alt="شاشة الصلاة"><br><sub>شاشة الصلاة والأجراس</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/02-alert-dialog.png" width="220" alt="نافذة تنبيه الصلاة"><br><sub>إعدادات تنبيه كل صلاة</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/02b-qibla.png" width="220" alt="بوصلة القبلة"><br><sub>بوصلة القبلة</sub></td>
+      <td align="center"><img src="Screenshot/00-prayer.png" width="220" alt="شاشة الصلاة"><br><sub>شاشة الصلاة والأجراس</sub></td>
+      <td align="center"><img src="Screenshot/02-alert-dialog.png" width="220" alt="نافذة تنبيه الصلاة"><br><sub>تنبيه كل صلاة: عند الأذان + قبل الأذان</sub></td>
+      <td align="center"><img src="Screenshot/02f-early-reminder-on.png" width="220" alt="تنبيه قبل الأذان"><br><sub>تنبيه قبل الأذان بدقة الدقائق</sub></td>
     </tr>
     <tr>
-      <td align="center"><img src="emulator-evidence/verify310/04-location-screen.png" width="220" alt="الموقع والحساب"><br><sub>الموقع والحساب</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/03-settings.png" width="220" alt="الإعدادات"><br><sub>الإعدادات</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/06-landscape.png" width="220" alt="الوضع الأفقي"><br><sub>الوضع الأفقي</sub></td>
+      <td align="center"><img src="Screenshot/02b-qibla-dark.png" width="220" alt="بوصلة القبلة"><br><sub>بوصلة القبلة</sub></td>
+      <td align="center"><img src="Screenshot/04-location-screen.png" width="220" alt="الموقع والحساب"><br><sub>الموقع والحساب</sub></td>
+      <td align="center"><img src="Screenshot/03-settings.png" width="220" alt="الإعدادات"><br><sub>الإعدادات</sub></td>
     </tr>
     <tr>
-      <td align="center"><img src="emulator-evidence/verify310/05-english.png" width="220" alt="الواجهة الإنجليزية"><br><sub>الواجهة الإنجليزية</sub></td>
-      <td align="center"><img src="emulator-evidence/verify310/01-bell-toggled.png" width="220" alt="تفعيل الجرس"><br><sub>تفعيل تنبيه صلاة</sub></td>
-      <td align="center"></td>
+      <td align="center"><img src="Screenshot/06-landscape.png" width="220" alt="الوضع الأفقي"><br><sub>الوضع الأفقي</sub></td>
+      <td align="center"><img src="Screenshot/05-english.png" width="220" alt="الواجهة الإنجليزية"><br><sub>الواجهة الإنجليزية</sub></td>
+      <td align="center"><img src="Screenshot/03f-qibla-from-drawer.png" width="220" alt="القبلة من القائمة"><br><sub>القبلة من القائمة الجانبية</sub></td>
     </tr>
   </table>
+</div>
+
+### 📱 ودجت الشاشة الرئيسية
+
+<p align="center"><i>عروض فعلية للودجت كما تُرسم على الشاشة الرئيسية، بالمظهرين الفاتح والداكن.</i></p>
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_light_Hero.png" width="220" alt="الودجت الرئيسي"><br><sub>الودجت الرئيسي</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_light_PrayerBar.png" width="220" alt="شريط الصلاة"><br><sub>شريط الصلاة</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_light_Schedule.png" width="220" alt="الجدول"><br><sub>الجدول</sub></td>
+    </tr>
+    <tr>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_dark_NextPrayer.png" width="220" alt="الصلاة القادمة"><br><sub>الصلاة القادمة</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_dark_Pill.png" width="220" alt="الحبة"><br><sub>ودجت الحبة</sub></td>
+      <td align="center"><img src="Screenshot/widget-renders/files/widget_dark_Clock.png" width="220" alt="الساعة"><br><sub>ودجت الساعة</sub></td>
+    </tr>
+  </table>
+  <p><sub>منتقي الودجت في النظام يعرض معاينة حية بألوان المظهر (أندرويد 12+)؛ على الأنظمة الأقدم تظهر صورة ثابتة.</sub></p>
 </div>
 
 ## 🌍 اللغات المدعومة
