@@ -1,0 +1,29 @@
+outcome: failure  bom: 2025.10.01  run: 39265914297  sha: 2f4b4b0c9ac779592a84d27eb7a3c15738d62078
+errors: 2
+--- per file
+      2 WidgetUpdater.java
+--- per symbol
+sign outcome: skipped
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+--- details
+67:/home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetUpdater.java:558: error: mmss(long) is not public in HomeWidgets; cannot be accessed from outside package
+68-        views.setTextViewText(R.id.widget_iqama_countdown, com.example.lockwidgets.HomeWidgets.mmss(iq.getIqamaMillis() - now));
+69-                                                                                              ^
+70-Note: Some input files use or override a deprecated API.
+71-Note: Recompile with -Xlint:deprecation for details.
+--
+82:* What went wrong:
+83:Execution failed for task ':app:compileReleaseJavaWithJavac'.
+84-> Compilation failed; see the compiler output below.
+85-  Note: Recompile with -Xlint:deprecation for details.
+86:  /home/runner/work/Wathakker/Wathakker/app/src/main/java/com/example/widget/WidgetUpdater.java:558: error: mmss(long) is not public in HomeWidgets; cannot be accessed from outside package
+87-          views.setTextViewText(R.id.widget_iqama_countdown, com.example.lockwidgets.HomeWidgets.mmss(iq.getIqamaMillis() - now));
+88-                                                                                                ^
+89-  Note: Recompile with -Xlint:unchecked for details.
+90-  Note: Some input files use or override a deprecated API.
+--
+98:BUILD FAILED in 1m 57s
+99-34 actionable tasks: 34 executed
