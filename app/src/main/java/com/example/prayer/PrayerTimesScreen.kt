@@ -86,7 +86,7 @@ import com.example.ui.i18n.Lang
 fun SavedCity(): String = FajrPreferences(LocalContext.current).cityName
 
 @Composable
-fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = null) {
+fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = null, onLocation: (() -> Unit)? = null) {
     val context: Context = LocalContext.current
     val prefs = remember { FajrPreferences(context) }
     var latitude by remember { mutableDoubleStateOf(prefs.latitude) }
@@ -220,7 +220,7 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
             PrayerRowDisplay(name, formatPrayerTime(time), name == next.first && time == next.second, icon)
         },
         rowBells = rowBells,
-        onChangeCity = { showCitySearch = true },
+        onChangeCity = { if (onLocation != null) onLocation() else showCitySearch = true },
         onMenu = onMenu,
         onQibla = onQibla,
         bellStates = remember(bellTick, resumeTick, L10n.lang) { (0..5).map { PrayerAlertStore.isEnabled(context, it) } },
@@ -268,8 +268,9 @@ private fun formatPrayerTime(millis: Long): String {
     return SimpleDateFormat("hh:mm", Locale.US).format(cal.time) + " " + ampm
 }
 
-private fun formatCountdown(millis: Long): String {
+private fun formatCountdown(millis: Long, minutesOnly: Boolean = false): String {
     val totalSeconds = millis / 1000
+    if (minutesOnly) return String.format("%02d:%02d", totalSeconds / 60, totalSeconds % 60)
     val h = totalSeconds / 3600
     val m = (totalSeconds % 3600) / 60
     val s = totalSeconds % 60
@@ -383,7 +384,7 @@ fun PrayerTimesContent(
                 val now = nowState.value
                 val interval = (nextMillis - prevMillis).coerceAtLeast(1L)
                 val progressNow = ((now - prevMillis).toFloat() / interval.toFloat()).coerceIn(0f, 1f)
-                val countdown = formatCountdown((nextMillis - now).coerceAtLeast(0L))
+                val countdown = formatCountdown((nextMillis - now).coerceAtLeast(0L), isIqama)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -409,13 +410,14 @@ fun PrayerTimesContent(
                 Spacer(Modifier.height(14.dp))
                 OneUIProgressBar(
                     progressNow,
-                    color = OneUIActiveGreen,
+                    color = if (isIqama) Color(0xFFE5B455) else OneUIActiveGreen,
                     trackColor = sc.track,
-                    gradient = listOf(Color(0xFF5BC950), Color(0xFF24C55E))
+                    gradient = if (isIqama) listOf(Color(0xFFE5B455), Color(0xFFE5B455)) else listOf(Color(0xFF5BC950), Color(0xFF24C55E))
                 )
             }
         }
         item(key = "prayer-list") {
+            val navBlue = if (com.example.ThemeSettings.isDark()) Color(0xFF78B8F8) else Color(0xFF2E6DB4)
             OneUICard(
                 modifier = Modifier.skyGlass(RoundedCornerShape(OneUIDimens.CardRadius), skyHaze, sc),
                 color = Color.Transparent
@@ -427,7 +429,7 @@ fun PrayerTimesContent(
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                             .clip(RoundedCornerShape(OneUIDimens.CardRadius))
-                            .background(if (row.isNext) OneUIActiveGreen.copy(alpha = 0.14f) else Color.Transparent)
+                            .background(if (row.isNext) navBlue.copy(alpha = 0.16f) else Color.Transparent)
                             .padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -435,20 +437,20 @@ fun PrayerTimesContent(
                             modifier = Modifier
                                 .size(38.dp)
                                 .clip(CircleShape)
-                                .background(if (row.isNext) OneUIActiveGreen.copy(alpha = 0.18f) else sc.chip),
+                                .background(if (row.isNext) navBlue.copy(alpha = 0.16f) else sc.chip),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 row.icon,
                                 null,
                                 modifier = Modifier.size(20.dp),
-                                tint = if (row.isNext) sc.nextName else sc.textSecondary
+                                tint = if (row.isNext) navBlue else sc.textSecondary
                             )
                         }
                         Spacer(Modifier.width(14.dp))
                         Text(
                             row.name,
-                            color = if (row.isNext) sc.nextName else sc.textPrimary,
+                            color = if (row.isNext) navBlue else sc.textPrimary,
                             fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )

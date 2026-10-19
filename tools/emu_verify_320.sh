@@ -411,7 +411,7 @@ adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot_fg 320_flat_calendar_
 adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot_fg 320_flat_calendar_light
 flat_check 320_flat_calendar_dark.png  dark  "calendar dark"
 flat_check 320_flat_calendar_light.png light "calendar light"
-tab_tap "الأذكار"
+tab_tap "التذكيرات"
 shot_fg 320_flat_azkar_light
 flat_check 320_flat_azkar_light.png light "azkar light"
 tab_tap "حصن المسلم"
@@ -419,7 +419,7 @@ shot_fg 320_flat_hisn_light
 flat_check 320_flat_hisn_light.png light "hisn light"
 
 # --- blue selected tab on all four tabs, both themes ---
-for T in "الصلاة" "الأذكار" "حصن المسلم" "التقويم"; do
+for T in "الصلاة" "التذكيرات" "حصن المسلم" "التقويم"; do
   tab_tap "$T"
   adb shell cmd uimode night yes; sleep 2; dismiss_anr
   shot_fg "320_tab_${T}_dark"
@@ -448,7 +448,7 @@ adb shell input keyevent 4; sleep 2
 adb shell cmd uimode night no; sleep 3
 open_drawer_wait; shot_fg 320_drawer_over_prayer_light
 adb shell input keyevent 4; sleep 2
-tab_tap "الأذكار"
+tab_tap "التذكيرات"
 open_drawer; shot_fg 320_drawer_over_azkar_light
 adb shell input keyevent 4; sleep 2
 fg_guard || say "WARN: app not foreground after drawer section"

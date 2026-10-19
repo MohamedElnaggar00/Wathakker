@@ -79,11 +79,11 @@ val oneUITabs: List<BottomTab> = listOf(
     BottomTab("prayer", L10n.t(S.PrayerTab)) { c ->
         Icon(Icons.Outlined.Mosque, null, Modifier.size(24.dp), tint = c)
     },
-    BottomTab("azkar", L10n.t(S.AzkarTab)) { c ->
-        Icon(Icons.Outlined.FormatListBulleted, null, Modifier.size(24.dp), tint = c)
-    },
     BottomTab("hisn", L10n.t(S.HisnTab)) { c ->
         Icon(Icons.AutoMirrored.Outlined.MenuBook, null, Modifier.size(24.dp), tint = c)
+    },
+    BottomTab("azkar", L10n.t(S.AzkarTab)) { c ->
+        Icon(Icons.Outlined.FormatListBulleted, null, Modifier.size(24.dp), tint = c)
     },
     BottomTab("calendar", L10n.t(S.CalendarTab)) { c ->
         Icon(Icons.Outlined.CalendarMonth, null, Modifier.size(24.dp), tint = c)
@@ -159,7 +159,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                         when (oneUITabs[page].route) {
                             "calendar" -> HijriCalendarScreen { drawerOpen = true }
-                            "prayer" -> PrayerTimesScreen({ navController.navigate("qibla") }) { drawerOpen = true }
+                            "prayer" -> PrayerTimesScreen(onQibla = { navController.navigate("qibla") }, onMenu = { drawerOpen = true }, onLocation = { navController.navigate("location_calc") })
                             "hisn" -> HisnListScreen(
                                 hisnViewModel,
                                 { chapter -> navController.navigate("hisn/" + chapter.id) },

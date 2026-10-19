@@ -179,7 +179,7 @@ fun OneUIScreen(
         // Scroll-aware scrim behind the floating header (3.1.0 look, non-prayer screens
         // only): keeps scrolled content from colliding with the status bar. The prayer
         // screen (frost != null) keeps its sky clear.
-        if (frost == null) {
+        if (false) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

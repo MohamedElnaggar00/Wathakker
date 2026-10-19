@@ -236,7 +236,7 @@ adb shell input swipe $CX $((SH*45/100)) $CX $((SH*70/100)) 400; sleep 2   # scr
 
 # CHECK 2: 4 tabs (Prayer/Azkar/Hisn/More), no Fajr tab
 T=0
-for t in "مواعيد الصلاة" "الأذكار" "حصن المسلم" "التقويم"; do has_text "$t" && T=$((T+1)); done
+for t in "مواعيد الصلاة" "التذكيرات" "حصن المسلم" "التقويم"; do has_text "$t" && T=$((T+1)); done
 [ "$T" = 4 ] && say "PASS: 4 main tabs present (prayer/azkar/hisn/calendar)" || say "FAIL: $T/4 tab labels found"
 has_text "السبحة" && say "FAIL: tasbeeh still a bottom tab" || say "PASS: tasbeeh removed from bottom tabs"
 
@@ -338,7 +338,7 @@ dump
 
 # CHECK 2d: reminder time picker - Arabic markers, LTR hour:minute order, dark + light + font 1.3
 open_picker() { # leaves the وقت التنبيه picker open on screen; nonzero if the path failed
-  tap_tab "الأذكار" || return 1
+  tap_tab "التذكيرات" || return 1
   dump
   local C
   C=$(find_center desc "إضافة ذكر"); [ -z "$C" ] && { say "FAIL: add-dhikr action not found (picker path)"; return 1; }
@@ -818,7 +818,7 @@ say "INFO: boot broadcast sent (see alarms_after_boot.txt)"
 dismiss_anr
 tap_tab "الصلاة"
 adb shell dumpsys gfxinfo com.wathakker.app reset
-for t in "الأذكار" "حصن المسلم" "التقويم" "حصن المسلم" "الأذكار" "الصلاة"; do dismiss_anr; tap_tab "$t"; done
+for t in "التذكيرات" "حصن المسلم" "التقويم" "حصن المسلم" "التذكيرات" "الصلاة"; do dismiss_anr; tap_tab "$t"; done
 adb shell dumpsys gfxinfo com.wathakker.app > "$OUT/gfxinfo.txt"
 shot 08-after-tabs
 

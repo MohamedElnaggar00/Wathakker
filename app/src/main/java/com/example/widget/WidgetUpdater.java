@@ -555,7 +555,7 @@ public final class WidgetUpdater {
             return;
         }
         RemoteViews views = new RemoteViews(context.getPackageName(), barLayout(context, R.layout.widget_iqama));
-        views.setTextViewText(R.id.widget_iqama_countdown, formatRemaining(iq.getIqamaMillis() - now));
+        views.setTextViewText(R.id.widget_iqama_countdown, com.example.lockwidgets.HomeWidgets.mmss(iq.getIqamaMillis() - now));
         views.setTextViewText(R.id.widget_iqama_adhan, iq.getPrayerName() + " " + formatTimeShort(iq.getAdhanMillis()));
         views.setTextViewText(R.id.widget_iqama_time, "الإقامة " + formatTimeShort(iq.getIqamaMillis()));
         views.setTextViewText(R.id.widget_iqama_next, "الإقامة " + formatTimeShort(iq.getNextIqamaMillis()));
@@ -604,7 +604,7 @@ public final class WidgetUpdater {
                 str = h < 11 ? h + " ساعات" : h + " ساعة";
                 break;
         }
-        return str + " و" + formatRemaining$minutesText(m);
+        return str + " و " + formatRemaining$minutesText(m);
     }
 
     private static final String formatRemaining$minutesText(int n) {

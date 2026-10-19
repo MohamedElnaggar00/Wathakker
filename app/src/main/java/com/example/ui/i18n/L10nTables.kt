@@ -6,7 +6,7 @@ internal fun table(l: Lang): Map<S, String> = when (l) {
 }
 
 internal val AR = mapOf(
-    S.PrayerTab to "الصلاة", S.AzkarTab to "الأذكار", S.HisnTab to "حصن المسلم", S.FajrTab to "الفجر",
+    S.PrayerTab to "الصلاة", S.AzkarTab to "التذكيرات", S.HisnTab to "حصن المسلم", S.FajrTab to "الفجر",
     S.TasbeehTab to "السبحة", S.Favorites to "المفضلة", S.Reminders to "التنبيهات", S.Stats to "الإحصائيات",
     S.Tags to "التصنيفات", S.Settings to "الإعدادات", S.About to "حول التطبيق", S.More to "المزيد", S.Menu to "القائمة",
     S.AddDhikr to "إضافة ذكر", S.SearchAzkar to "ابحث عن ذكر أو تصنيف", S.All to "الكل", S.NoAzkar to "لا توجد أذكار",
@@ -14,7 +14,7 @@ internal val AR = mapOf(
     S.Options to "خيارات", S.EditDhikrTags to "تعديل الذكر والتصنيفات", S.ReminderTimes to "أوقات التنبيه", S.Delete to "حذف",
     S.NoActiveReminders to "لا توجد تنبيهات مفعلة", S.Today to "اليوم", S.ThisWeek to "هذا الأسبوع",
     S.DayStreak to "أيام متتالية", S.CurrentReminder to "التذكير الحالي", S.NextReminder to "التذكير القادم",
-    S.NoActiveAzkar to "لا توجد أذكار مفعلة. فعّلها من قائمة الأذكار.", S.Shortcuts to "اختصارات",
+    S.NoActiveAzkar to "لا توجد أذكار مفعلة. فعّلها من قائمة التذكيرات.", S.Shortcuts to "اختصارات",
     S.TasbeehCounter to "عداد التسبيح", S.HisnSubtitle to "أذكار وأدعية من الكتاب والسنة", S.FavSubtitle to "الأذكار التي تحبها",
     S.ReadDone to "تمت القراءة", S.TotalSuffix to " إجمالًا", S.NoReadsYet to "لا توجد قراءات بعد", S.DhikrIdFmt to "ذكر #%1\$d",
     S.Periods to "الفترات الزمنية", S.Week to "الأسبوع", S.Month to "الشهر",
@@ -57,7 +57,7 @@ internal val AR = mapOf(
     S.PrayerMaghrib to "المغرب",
     S.PrayerIsha to "العشاء",
     S.PrayerTimes to "مواعيد الصلاة",
-    S.NextPrayer to "الصلاة القادمة",
+    S.NextPrayer to "المتبقي للصلاة القادمة:",
     S.AmMarker to "ص",
     S.PmMarker to "م",
     S.PickCountryCity to "اختر الدولة والمدينة",
@@ -108,7 +108,7 @@ internal val AR = mapOf(
     S.NotifReadDone to "تم القراءة",
     S.NotifRemindLater to "ذكرني بعد 10 دقائق",
     S.NotifOpenApp to "فتح التطبيق",
-    S.NotifChannelAzkar to "إشعارات تذكير الأذكار",
+    S.NotifChannelAzkar to "إشعارات التذكيرات",
     S.NotifChannelFajr to "قناة تنبيهات صلاة الفجر",
     S.TodayAt to "اليوم في",
     S.TomorrowAt to "غداً في",
