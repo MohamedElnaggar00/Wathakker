@@ -5,7 +5,7 @@ public final class HomeWidgets {
  static final ThreadLocal<State> batchState=new ThreadLocal<State>();
  static volatile Typeface regularFace,boldFace;
  public static int initialPage(){return 0;}
- static String mmss(long ms){long t=Math.max(0,ms/1000);return String.format(Locale.ENGLISH,"%02d:%02d",t/60,t%60);}
+ public static String mmss(long ms){long t=Math.max(0,ms/1000);return String.format(Locale.ENGLISH,"%02d:%02d",t/60,t%60);}
  public static boolean handleIntent(Intent i){openPrayer=i!=null&&"com.wathakker.locktest.OPEN_PRAYER".equals(i.getAction());return openPrayer;}
  static int res(Context c,String t,String n){return c.getResources().getIdentifier(n,t,c.getPackageName());}
  static PendingIntent open(Context c,boolean prayer){Intent i=new Intent().setClassName(c.getPackageName(),"com.example.MainActivity").setAction(prayer?"com.wathakker.locktest.OPEN_PRAYER":Intent.ACTION_MAIN).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);return PendingIntent.getActivity(c,prayer?91212:91213,i,PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);}
