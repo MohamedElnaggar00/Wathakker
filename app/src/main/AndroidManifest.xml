@@ -175,7 +175,7 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/lock_prayer_countdown_clean_info" />
         </receiver>
-        <receiver android:exported="false" android:label="تقدم الصلاة 4×3" android:name="com.example.widget.HeroLargeWidgetProvider">
+        <receiver android:exported="false" android:label="تقدم الصلاة 2×4" android:name="com.example.widget.HeroLargeWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
