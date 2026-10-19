@@ -14,9 +14,9 @@ sky[isha] rgb=(20, 28, 46)
 PASS: 6/6 distinct sky strips
 PASS: sky strips differ from flat dark background (min diff 38)
 INFO: crossfade frames captured around the maghrib boundary (visual gate: t0/t1 mid-blend, t3 settled maghrib sky, no flicker)
-Total frames rendered: 141
-Janky frames: 141 (100.00%)
-Janky frames (legacy): 141 (100.00%)
+Total frames rendered: 119
+Janky frames: 119 (100.00%)
+Janky frames (legacy): 119 (100.00%)
 sky gone after leaving prayer tab strip rgb=(18, 18, 18) spread=0
 PASS: sky gone after leaving prayer tab
 sky back after re-entering prayer tab strip rgb=(63, 44, 66) spread=22
@@ -60,7 +60,7 @@ auto-on-white-bg[994]: dark=(0, 0, 0) bright=(246, 246, 246) blue=(196, 196, 205
 PASS: auto bar is black on light widget bg
 auto-on-black-bg[992]: dark=(0, 0, 0) bright=(255, 255, 255) blue=(56, 56, 62) -> black=True white=True blue=False
 PASS: auto bar is white on dark widget bg
-explicit-blue-on-white-bg[991]: dark=(59, 133, 254) bright=(246, 246, 246) blue=(59, 133, 254) -> black=False white=True blue=True
+explicit-blue-on-white-bg[991]: dark=(59, 132, 254) bright=(246, 246, 246) blue=(59, 132, 254) -> black=False white=True blue=True
 PASS: explicit blue option still blue
 glass995: center-top alpha=179
 PASS: glass widget bg is translucent
