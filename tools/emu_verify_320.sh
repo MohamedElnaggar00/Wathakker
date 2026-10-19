@@ -237,85 +237,41 @@ alive && say "PASS: app alive across tab leave/re-enter" || say "FAIL: app died 
 
 # ================= v3.2.0 glass-system / smoke / widget checks =================
 
-# --- date converter: frosted fields + month drop-down (One UI popup, no typing) ---
-open_drawer
-tab_tap "محول التاريخ"
-adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot 320_converter_dark
-adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot 320_converter_light
-# fill today so both converters have values
-tab_tap "اليوم"
-sleep 2; shot 320_converter_today
-tap_below_text() { # <label> <occurrence 1|2> <dy px> - tap dy px below the label's center-x
+# --- helpers (defined before first use) ---
+shot_fg() { # <name> - screenshot, guaranteeing the app is foreground first
+  fg_guard || say "FAIL: app not foreground for $1"
+  shot "$1"
+}
+
+open_drawer() { # tap the hamburger (content-desc القائمة/Menu) in the top header
   dump
   python3 -c "
 import re,os
 x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
-n=0
-for m in re.finditer(r'text=.([^\"]*).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
-    if m.group(1)=='$1':
-        n+=1
-        if n==$2:
-            a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
-            print((a+c)//2, d+$3); break
-" > /tmp/tbt.xy
-  [ -s /tmp/tbt.xy ] && adb shell input tap $(cat /tmp/tbt.xy) && sleep 3
-  rm -f /tmp/tbt.xy
+for m in re.finditer(r'content-desc=.([^\"]*).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
+    d=m.group(1)
+    if d in ('القائمة','Menu'):
+        a,b,c,e=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+        if b < 500: print((a+c)//2,(b+e)//2); break
+" > /tmp/drw.xy
+  [ -s /tmp/drw.xy ] && adb shell input tap $(cat /tmp/drw.xy) && sleep 4
+  rm -f /tmp/drw.xy
 }
-# open the Gregorian month drop-down (first الشهر label) and check the popup
-tap_below_text "الشهر" 1 110
-shot 320_converter_month_popup_g
-dump
-python3 - >> "$SUM" <<'PY'
-import os
-x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
-ok = ('يناير' in x) and ('ديسمبر' in x)
-print(('PASS' if ok else 'FAIL')+': gregorian month popup lists month names')
-PY
-# pick January (يناير)
-tab_tap "يناير"
-sleep 2; shot 320_converter_month_picked
-dump
-python3 - >> "$SUM" <<'PY'
-import re,os
-x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
-# result card shows a Hijri date line with a hijri month name
-hm=['محرم','صفر','ربيع','جمادى','رجب','شعبان','رمضان','شوال','ذو']
-res=[t for t in re.findall(r'text="([^"]*)"',x) if any(m in t for m in hm) and any(ch.isdigit() for ch in t)]
-print(('PASS' if res else 'FAIL')+f': G->H conversion result after month pick: {res[:1]}')
-PY
-# open the Hijri month drop-down (second الشهر) and pick محرم
-tap_below_text "الشهر" 2 110
-shot 320_converter_month_popup_h
-dump
-python3 - >> "$SUM" <<'PY'
-import os
-x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
-ok = ('محرم' in x) and ('ذو الحجة' in x)
-print(('PASS' if ok else 'FAIL')+': hijri month popup lists month names')
-PY
-tab_tap "محرم"
-sleep 2
-dump
-python3 - >> "$SUM" <<'PY'
-import re,os
-x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
-gm=['يناير','فبراير','مارس','أبريل','ابريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر',
-    'January','February','March','April','May','June','July','August','September','October','November','December']
-res=[t for t in re.findall(r'text="([^"]*)"',x) if any(m in t for m in gm) and any(ch.isdigit() for ch in t)]
-print(('PASS' if res else 'FAIL')+f': H->G conversion result after month pick: {res[:1]}')
-PY
-adb shell input keyevent 4; sleep 2
 
-# --- tasbih screen: frosted counter ring over smoke, both themes ---
-open_drawer
-tab_tap "السبحة"
-adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot 320_tasbeeh_dark
-smoke_check 320_tasbeeh_dark.png "tasbeeh dark"
-adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot 320_tasbeeh_light
-smoke_check 320_tasbeeh_light.png "tasbeeh light"
-adb shell input keyevent 4; sleep 2
-
-
+goto_drawer_item() { # <arabic title> - open drawer, verify target listed, tap it, verify screen opened
+  local TARGET="$1"
+  fg_guard || { say "FAIL: app not foreground before drawer nav to $TARGET"; return 1; }
+  open_drawer
+  dump
+  if ! grep -q "text=\"$TARGET\"" /tmp/u320.xml 2>/dev/null; then
+    say "FAIL: drawer did not list $TARGET (drawer nav broken)"
+    adb shell input keyevent 4; sleep 2
+    return 1
+  fi
+  tab_tap "$TARGET"
+  sleep 3
+  return 0
+}
 
 smoke_check() { # <png> <label>
 python3 -c "
@@ -345,54 +301,133 @@ print(('PASS' if n>8 else 'FAIL')+': $3 selected-tab blue tint in bottom bar')
 " >> "$SUM"
 }
 
+# --- date converter: frosted fields + month drop-down (One UI popup, no typing) ---
+if goto_drawer_item "محول التاريخ"; then
+  dump
+  grep -q "من ميلادي إلى هجري" /tmp/u320.xml && say "PASS: converter screen opened" || say "FAIL: converter screen content missing"
+  adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot_fg 320_converter_dark
+  adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot_fg 320_converter_light
+  # reset to today (reset row is the LOWEST اليوم match on this screen)
+  tab_tap "اليوم"
+  sleep 2; shot_fg 320_converter_today
+  tap_below_text() { # <label> <occurrence 1|2> <dy px> - tap dy px below the label's center-x
+    dump
+    python3 -c "
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+n=0
+for m in re.finditer(r'text=.([^\"]*).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
+    if m.group(1)=='$1':
+        n+=1
+        if n==$2:
+            a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+            print((a+c)//2, d+$3); break
+" > /tmp/tbt.xy
+    [ -s /tmp/tbt.xy ] && adb shell input tap $(cat /tmp/tbt.xy) && sleep 3
+    rm -f /tmp/tbt.xy
+  }
+  result_snapshot() { # hijri/gregorian result lines with digits -> stdout
+    python3 -c "
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+hm=['محرم','صفر','ربيع','جمادى','رجب','شعبان','رمضان','شوال','ذو']
+gm=['يناير','فبراير','مارس','أبريل','ابريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']
+res=sorted(t for t in re.findall(r'text=\"([^\"]*)\"',x) if any(m in t for m in hm+gm) and any(ch.isdigit() for ch in t))
+print('|'.join(res))
+"
+  }
+  # open the Gregorian month drop-down (first الشهر label) and check the popup
+  dump; result_snapshot > /tmp/res_before_g.txt
+  tap_below_text "الشهر" 1 110
+  shot_fg 320_converter_month_popup_g
+  dump
+  python3 - >> "$SUM" <<'PY'
+import os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+ok = ('يناير' in x) and ('ديسمبر' in x)
+print(('PASS' if ok else 'FAIL')+': gregorian month popup lists month names')
+PY
+  # pick January (يناير); result must CHANGE vs the today snapshot
+  tab_tap "يناير"
+  sleep 2; shot_fg 320_converter_month_picked
+  dump; result_snapshot > /tmp/res_after_g.txt
+  python3 - >> "$SUM" <<'PY'
+b=open('/tmp/res_before_g.txt',encoding='utf-8').read().strip()
+a=open('/tmp/res_after_g.txt',encoding='utf-8').read().strip()
+changed = a and a != b
+print(('PASS' if changed else 'FAIL')+f': G->H conversion result changed after month pick (before={b[:60]} after={a[:60]})')
+PY
+  # open the Hijri month drop-down (second الشهر) and pick محرم
+  dump; result_snapshot > /tmp/res_before_h.txt
+  tap_below_text "الشهر" 2 110
+  shot_fg 320_converter_month_popup_h
+  dump
+  python3 - >> "$SUM" <<'PY'
+import os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+ok = ('محرم' in x) and ('ذو الحجة' in x)
+print(('PASS' if ok else 'FAIL')+': hijri month popup lists month names')
+PY
+  tab_tap "محرم"
+  sleep 2
+  dump; result_snapshot > /tmp/res_after_h.txt
+  python3 - >> "$SUM" <<'PY'
+b=open('/tmp/res_before_h.txt',encoding='utf-8').read().strip()
+a=open('/tmp/res_after_h.txt',encoding='utf-8').read().strip()
+changed = a and a != b
+print(('PASS' if changed else 'FAIL')+f': H->G conversion result changed after month pick (before={b[:60]} after={a[:60]})')
+PY
+  adb shell input keyevent 4; sleep 2
+  fg_guard || say "FAIL: app not foreground after converter back"
+fi
+
+# --- tasbih screen: frosted counter ring over smoke, both themes ---
+if goto_drawer_item "السبحة"; then
+  adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot_fg 320_tasbeeh_dark
+  smoke_check 320_tasbeeh_dark.png "tasbeeh dark"
+  adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot_fg 320_tasbeeh_light
+  smoke_check 320_tasbeeh_light.png "tasbeeh light"
+  adb shell input keyevent 4; sleep 2
+  fg_guard || say "FAIL: app not foreground after tasbeeh back"
+fi
+
 # --- smoke background on the three non-prayer tabs, both themes ---
+fg_guard || say "FAIL: app not foreground before smoke section"
 tab_tap "التقويم"
-adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot 320_smoke_calendar_dark
-adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot 320_smoke_calendar_light
+adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot_fg 320_smoke_calendar_dark
+adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot_fg 320_smoke_calendar_light
 smoke_check 320_smoke_calendar_dark.png  "calendar dark"
 smoke_check 320_smoke_calendar_light.png "calendar light"
 tab_tap "الأذكار"
-shot 320_smoke_azkar_light
+shot_fg 320_smoke_azkar_light
 smoke_check 320_smoke_azkar_light.png "azkar light"
 tab_tap "حصن المسلم"
-shot 320_smoke_hisn_light
+shot_fg 320_smoke_hisn_light
 smoke_check 320_smoke_hisn_light.png "hisn light"
 
 # --- blue selected tab on all four tabs, both themes ---
 for T in "الصلاة" "الأذكار" "حصن المسلم" "التقويم"; do
   tab_tap "$T"
   adb shell cmd uimode night yes; sleep 2; dismiss_anr
-  shot "320_tab_${T}_dark"
+  shot_fg "320_tab_${T}_dark"
   blue_tab_check "320_tab_${T}_dark.png" dark "tab $T dark"
   adb shell cmd uimode night no; sleep 2; dismiss_anr
-  shot "320_tab_${T}_light"
+  shot_fg "320_tab_${T}_light"
   blue_tab_check "320_tab_${T}_light.png" light "tab $T light"
 done
 
 # --- drawer: frost over the prayer sky, default over azkar ---
-open_drawer() {
-  dump
-  python3 -c "
-import re,os
-x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
-for m in re.finditer(r'content-desc=.([^\"]*).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
-    d=m.group(1)
-    if ('ettings' in d) or ('إعداد' in d):
-        a,b,c,e=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
-        if b < 300: print((a+c)//2,(b+e)//2); break
-" > /tmp/drw.xy
-  [ -s /tmp/drw.xy ] && adb shell input tap $(cat /tmp/drw.xy) && sleep 4
-  rm -f /tmp/drw.xy
-}
 tab_tap "الصلاة"
 adb shell cmd uimode night yes; sleep 2
-open_drawer; shot 320_drawer_over_prayer_dark
+open_drawer; shot_fg 320_drawer_over_prayer_dark
+adb shell input keyevent 4; sleep 2
 adb shell cmd uimode night no; sleep 2
-open_drawer; shot 320_drawer_over_prayer_light
+open_drawer; shot_fg 320_drawer_over_prayer_light
 adb shell input keyevent 4; sleep 2
 tab_tap "الأذكار"
-open_drawer; shot 320_drawer_over_azkar_light
+open_drawer; shot_fg 320_drawer_over_azkar_light
 adb shell input keyevent 4; sleep 2
+fg_guard || say "WARN: app not foreground after drawer section"
 say "INFO: drawer shots captured (visual gate: frosted over sky, legible everywhere)"
 
 # --- widget renderer: auto bar = black on light bg, white on dark bg ---
@@ -404,59 +439,56 @@ python3 - "$OUT" <<'PY' >> "$SUM"
 import sys,os
 from PIL import Image
 out=sys.argv[1]
-def barcolor(path):
+def band(path):
+    # Hero compact layout: name text ~0.389h, bar ~0.57h, times ~0.78h.
+    # Sample the band strictly between name and times so only bar+track+bg remain.
     im=Image.open(path).convert('RGB'); w,h=im.size
-    y=int(h*0.57)
-    row=[im.getpixel((x,y)) for x in range(int(w*0.06),int(w*0.94),3)]
-    # filled part = pixel most different from the track greys; classify extremes
-    dark=min(row,key=lambda c:sum(c)); bright=max(row,key=lambda c:sum(c))
-    blue=max(row,key=lambda c:c[2]-c[0])
+    px=[]
+    for y in range(int(h*0.50),int(h*0.64),2):
+        for x in range(int(w*0.06),int(w*0.94),3):
+            px.append(im.getpixel((x,y)))
+    dark=min(px,key=lambda c:sum(c)); bright=max(px,key=lambda c:sum(c))
+    blue=max(px,key=lambda c:c[2]-c[0])
     return dark,bright,blue
-def classify(path,label):
+def present(path,label):
+    # returns (has_black, has_white, has_blue) for the bar band
     if not os.path.exists(path):
-        print(f'WARN: {label} missing ({os.path.basename(path)})'); return
-    dark,bright,blue=barcolor(path)
-    if blue[2]-blue[0]>50: c='blue'
-    elif sum(dark)<120: c='black'
-    elif sum(bright)>600: c='white'
-    else: c='unknown'
-    print(f'{label}: bar={c} dark={dark} bright={bright} blue={blue}')
-    return c
-# preview_light_* = white bg + DEFAULT (auto) bar -> expect black after the fix
-c=classify(f'{out}/widget_render/preview_light_Hero.png','auto-on-white-bg')
-print(('PASS' if c=='black' else 'FAIL')+': auto bar is black on light widget bg')
-# 992 = black bg + auto bar -> expect white
-c2=None
-for k in ['Hero','PrayerBar','NextPrayer']:
-    p=f'{out}/widget_render/{k}_992_dark.png'
-    if os.path.exists(p): c2=classify(p,f'auto-on-black-bg[{k}]'); break
-if c2: print(('PASS' if c2=='white' else 'FAIL')+': auto bar is white on dark widget bg')
-else:
-    import glob
-    fs=glob.glob(f'{out}/widget_render/*992*')
-    print('INFO: 992 renders found: '+str([os.path.basename(f) for f in fs]))
-# 991 = white bg + explicit blue -> expect blue (explicit options untouched)
+        print(f'WARN: {label} missing ({os.path.basename(path)})'); return None
+    dark,bright,blue=band(path)
+    hb = sum(dark)<150          # bar band has near-black pixels
+    hw = sum(bright)>690        # bar band has near-white pixels
+    hbl = blue[2]-blue[0]>50    # bar band has blue-dominant pixels
+    print(f'{label}: dark={dark} bright={bright} blue={blue} -> black={hb} white={hw} blue={hbl}')
+    return hb,hw,hbl
+# preview_light_* (id 994) = white bg + DEFAULT (auto) bar -> expect BLACK pixels (the bar)
+r=present(f'{out}/widget_render/preview_light_Hero.png','auto-on-white-bg[994]')
+print(('PASS' if r and r[0] else 'FAIL')+': auto bar is black on light widget bg')
+# widget_dark_* (id 992) = black bg + auto bar -> expect WHITE pixels (the bar)
+r=present(f'{out}/widget_render/widget_dark_Hero.png','auto-on-black-bg[992]')
+print(('PASS' if r and r[1] else 'FAIL')+': auto bar is white on dark widget bg')
+# widget_light_* (id 991) = white bg + explicit blue -> explicit options untouched
+r=present(f'{out}/widget_render/widget_light_Hero.png','explicit-blue-on-white-bg[991]')
+print(('PASS' if r and r[2] else 'FAIL')+': explicit blue option still blue')
+# widget_glass_* (id 995) = glass bg: translucent + border stroke
 import glob
-f=glob.glob(f'{out}/widget_render/*991*')
-if f:
-    c3=classify(f[0],'explicit-blue-on-white-bg')
-    print(('PASS' if c3=='blue' else 'FAIL')+': explicit blue option still blue')
-# 995 = glass bg: translucent (alpha<255 inside the card) + border stroke
-import glob
-f995=glob.glob(f'{out}/widget_render/*995*')
+f995=glob.glob(f'{out}/widget_render/widget_glass_Hero.png')
 if f995:
     im=Image.open(f995[0]).convert('RGBA'); w,h=im.size
-    a=im.getpixel((w//2,4))[3]; ab=im.getpixel((w//2,h-4))[3]
+    a=im.getpixel((w//2,4))[3]
     print(f'glass995: center-top alpha={a}')
     print(('PASS' if a<200 else 'FAIL')+': glass widget bg is translucent')
-f996=glob.glob(f'{out}/widget_render/*996*')
+else:
+    print('FAIL: glass widget render missing')
+f996=glob.glob(f'{out}/widget_render/widget_wallblur_Hero.png')
 if f996:
     im=Image.open(f996[0]).convert('RGB'); w,h=im.size
     px=[im.getpixel((x,y)) for x in range(8,w-8,17) for y in range(8,h-8,17)]
     rs=[p[0] for p in px]; var=max(rs)-min(rs)
     print(f'wallblur996: red-channel spread={var}')
     print(('PASS' if var>12 else 'WARN')+': wallblur widget bg is a (blurred) photo, not flat')
-print('INFO: widget render files: '+str(sorted(os.path.basename(x) for x in glob.glob(f'{out}/widget_render/*'))[:40]))
+else:
+    print('WARN: wallblur widget render missing')
+print('INFO: widget render files: '+str(sorted(os.path.basename(x) for x in glob.glob(f'{out}/widget_render/*.png'))))
 PY
 adb shell am force-stop $PKG; sleep 1
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 6
