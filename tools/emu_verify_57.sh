@@ -21,4 +21,4 @@ PY
 adb install -r -g "$OLD" >/dev/null; adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 5; adb shell am force-stop $PKG
 snap before
 adb install -r -g "$APK" >/dev/null; snap after
-echo done56 | tee "$OUT/SUMMARY.txt"
+echo done57 | tee "$OUT/SUMMARY.txt"
