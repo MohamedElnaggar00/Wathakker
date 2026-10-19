@@ -54,6 +54,18 @@ class WidgetRenderCheck : Activity() {
                 File(out, "preview_light_${kind}.err").writeText(e.toString())
             }
         }
+        // Picker previews for the One UI widget: real renders (330x90 dp, card + date tile), both themes.
+        for ((tag, nightFlag) in listOf("light" to android.content.res.Configuration.UI_MODE_NIGHT_NO, "dark" to android.content.res.Configuration.UI_MODE_NIGHT_YES)) {
+            try {
+                val cfg = android.content.res.Configuration(resources.configuration)
+                cfg.uiMode = (cfg.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK.inv()) or nightFlag
+                val ctx = createConfigurationContext(cfg)
+                val bmp = HomeWidgets.renderKind(ctx, "OneUI", 330, 90, 994)
+                FileOutputStream(File(out, "oneui_preview_${tag}.png")).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            } catch (e: Exception) {
+                File(out, "oneui_preview_${tag}.err").writeText(e.toString())
+            }
+        }
         sp.edit()
             .putString("widget_bg_color_995", "glass").remove("widget_bar_color_995")
             .putString("widget_bg_color_996", "wallblur").remove("widget_bar_color_996")
