@@ -42,7 +42,7 @@ adb shell date 101914002026.00 >/dev/null
 for M in no yes; do
  adb shell cmd uimode night $M; adb shell am force-stop $PKG
  adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
- for PAGE in prayer reminders hisn calendar settings; do
+ for PAGE in prayer reminders hisn calendar; do
   case $PAGE in prayer) T="الصلاة";; reminders) T="التذكيرات";; hisn) T="حصن المسلم";; calendar) T="التقويم";; settings) T="الإعدادات";; esac
   tap_text "$T"; sleep 3
   adb exec-out screencap -p > "$OUT/page_${PAGE}_rest_$M.png"
@@ -50,6 +50,24 @@ for M in no yes; do
   adb shell input swipe 540 1700 540 1250 500; sleep 2
   adb exec-out screencap -p > "$OUT/page_${PAGE}_scrolled_$M.png"
  done
+done
+for M in no yes; do
+ adb shell cmd uimode night $M; adb shell am force-stop $PKG
+ adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
+ adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/u59.xml >/dev/null 2>&1
+ XY=$(python3 - <<'PY'
+import re
+x=open('/tmp/u59.xml',encoding='utf-8').read()
+for m in re.finditer(r'content-desc="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
+    if m.group(1) in ('الإعدادات','Settings'):
+        print((int(m.group(2))+int(m.group(4)))//2,(int(m.group(3))+int(m.group(5)))//2); break
+PY
+)
+ echo "settings tap: $XY" >> "$OUT/SUMMARY.txt"
+ [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+ adb exec-out screencap -p > "$OUT/page_settings_rest_$M.png"
+ adb shell input swipe 540 1700 540 900 500; sleep 2
+ adb exec-out screencap -p > "$OUT/page_settings_scrolled_$M.png"
 done
 adb shell cmd uimode night no
 adb logcat -d > "$OUT/logcat.txt"

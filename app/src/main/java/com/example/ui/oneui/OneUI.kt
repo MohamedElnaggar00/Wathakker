@@ -150,12 +150,12 @@ fun OneUIScreen(
                 .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
                 .drawWithContent {
                     drawContent()
-                    val topH = (statusTop + 100.dp).toPx()
+                    val topH = (statusTop + 112.dp).toPx()
                     val f = fraction
                     if (f > 0.001f) {
                         drawRect(
                             brush = Brush.verticalGradient(
-                                colorStops = arrayOf(0f to Color.Black.copy(alpha = 0f), 0.22f to Color.Black.copy(alpha = 0.04f * f), 0.55f to Color.Black.copy(alpha = 0.55f * f + (1f - f)), 1f to Color.Black),
+                                colorStops = arrayOf(0f to Color.Black.copy(alpha = 0f), 0.36f to Color.Black.copy(alpha = 0.02f * f + (1f - f)), 0.72f to Color.Black.copy(alpha = 0.5f * f + (1f - f)), 1f to Color.Black),
                                 startY = 0f, endY = topH
                             ),
                             size = androidx.compose.ui.geometry.Size(size.width, topH),
