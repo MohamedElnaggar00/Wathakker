@@ -5,23 +5,56 @@ PASS[dhuhr]: next prayer shows العصر
 PASS[asr]: next prayer shows المغرب
 PASS[maghrib]: next prayer shows العشاء
 PASS[isha]: next prayer shows الفجر
-sky[fajr] rgb=(24, 24, 26)
-sky[shuruq] rgb=(24, 24, 26)
-sky[dhuhr] rgb=(24, 24, 26)
-sky[asr] rgb=(24, 24, 26)
-sky[maghrib] rgb=(24, 24, 26)
-sky[isha] rgb=(24, 24, 26)
-FAIL: 1/6 distinct sky strips
-PASS: sky strips differ from flat dark background (min diff 18)
+sky[fajr] rgb=(16, 36, 52)
+sky[shuruq] rgb=(228, 220, 207)
+sky[dhuhr] rgb=(179, 216, 248)
+sky[asr] rgb=(233, 204, 164)
+sky[maghrib] rgb=(63, 44, 66)
+sky[isha] rgb=(20, 28, 46)
+PASS: 6/6 distinct sky strips
+PASS: sky strips differ from flat dark background (min diff 38)
 INFO: crossfade frames captured around the maghrib boundary (visual gate: t0/t1 mid-blend, t3 settled maghrib sky, no flicker)
-Total frames rendered: 162
-Janky frames: 162 (100.00%)
-Janky frames (legacy): 162 (100.00%)
-sky gone after leaving prayer tab strip rgb=(3, 3, 3) spread=0
+Total frames rendered: 148
+Janky frames: 148 (100.00%)
+Janky frames (legacy): 148 (100.00%)
+sky gone after leaving prayer tab strip rgb=(18, 18, 20) spread=2
 PASS: sky gone after leaving prayer tab
-sky back after re-entering prayer tab strip rgb=(24, 24, 26) spread=2
-FAIL: sky back after re-entering prayer tab
+sky back after re-entering prayer tab strip rgb=(63, 44, 66) spread=22
+PASS: sky back after re-entering prayer tab
 PASS: app alive across tab leave/re-enter
+FAIL: gregorian month popup lists month names
+PASS: G->H conversion result after month pick: ['8 جمادى الأولى 1448 هـ']
+FAIL: hijri month popup lists month names
+PASS: H->G conversion result after month pick: ['الاثنين، ١٩ أكتوبر ٢٠٢٦']
+calendar dark top=(221, 224, 237) glow=(20, 22, 34) diff=606
+PASS: calendar dark smoke glow visible
+calendar light top=(221, 224, 237) glow=(20, 22, 34) diff=606
+PASS: calendar light smoke glow visible
+azkar light top=(221, 224, 237) glow=(20, 22, 34) diff=606
+PASS: azkar light smoke glow visible
+hisn light top=(221, 224, 237) glow=(20, 22, 34) diff=606
+PASS: hisn light smoke glow visible
+tab الصلاة dark bluepx=722
+PASS: tab الصلاة dark selected-tab blue tint in bottom bar
+tab الصلاة light bluepx=722
+PASS: tab الصلاة light selected-tab blue tint in bottom bar
+tab الأذكار dark bluepx=722
+PASS: tab الأذكار dark selected-tab blue tint in bottom bar
+tab الأذكار light bluepx=722
+PASS: tab الأذكار light selected-tab blue tint in bottom bar
+tab حصن المسلم dark bluepx=722
+PASS: tab حصن المسلم dark selected-tab blue tint in bottom bar
+tab حصن المسلم light bluepx=722
+PASS: tab حصن المسلم light selected-tab blue tint in bottom bar
+tab التقويم dark bluepx=722
+PASS: tab التقويم dark selected-tab blue tint in bottom bar
+tab التقويم light bluepx=722
+PASS: tab التقويم light selected-tab blue tint in bottom bar
+INFO: drawer shots captured (visual gate: frosted over sky, legible everywhere)
+auto-on-white-bg: bar=white dark=(168, 168, 170) bright=(246, 246, 246) blue=(231, 231, 235)
+FAIL: auto bar is black on light widget bg
+INFO: 992 renders found: []
+INFO: widget render files: ['preview_light_Clock.png', 'preview_light_DayPrayer.png', 'preview_light_Gregorian.png', 'preview_light_Hero.png', 'preview_light_HeroLarge.png', 'preview_light_Hijri.png', 'preview_light_NextPrayer.png', 'preview_light_Pill.png', 'preview_light_PrayerBar.png', 'preview_light_Schedule.png', 'widget_dark_Clock.png', 'widget_dark_DayPrayer.png', 'widget_dark_Gregorian.png', 'widget_dark_Hero.png', 'widget_dark_Hijri.png', 'widget_dark_NextPrayer.png', 'widget_dark_Pill.png', 'widget_dark_PrayerBar.png', 'widget_dark_Schedule.png', 'widget_default_Clock.png', 'widget_default_DayPrayer.png', 'widget_default_Gregorian.png', 'widget_default_Hero.png', 'widget_default_Hijri.png', 'widget_default_NextPrayer.png', 'widget_default_Pill.png', 'widget_default_PrayerBar.png', 'widget_default_Schedule.png', 'widget_glass_Clock.png', 'widget_glass_DayPrayer.png', 'widget_glass_Gregorian.png', 'widget_glass_Hero.png', 'widget_glass_Hijri.png', 'widget_glass_NextPrayer.png', 'widget_glass_Pill.png', 'widget_glass_PrayerBar.png', 'widget_glass_Schedule.png', 'widget_light_Clock.png', 'widget_light_DayPrayer.png', 'widget_light_Gregorian.png']
 fatal_exceptions: 0
 PASS: no fatal exceptions
 DONE 3.2.0
