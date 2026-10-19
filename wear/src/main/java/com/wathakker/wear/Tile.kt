@@ -18,7 +18,7 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 
 /** The gold arc watch widget: arc progress between the previous and the next prayer, next prayer in the middle. */
-class PrayerTileService : TileService() {
+open class PrayerTileService : TileService() {
 
     private fun text(t: String, size: Float, color: Int, bold: Boolean) =
         LayoutElementBuilders.Text.Builder()
@@ -30,7 +30,7 @@ class PrayerTileService : TileService() {
                     .build()
             ).build()
 
-    private fun layout(s: PrayerState): LayoutElementBuilders.LayoutElement {
+    fun layout(s: PrayerState): LayoutElementBuilders.LayoutElement {
         val sweep = 270f
         val track = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep)).setThickness(dp(16f)).setColor(argb(0xFF3A3420.toInt())).build()
         val fill = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep * s.progress)).setThickness(dp(16f)).setColor(argb(0xFFD6B64A.toInt())).build()

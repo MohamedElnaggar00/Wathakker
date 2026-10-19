@@ -15,7 +15,7 @@ import androidx.wear.watchface.complications.datasource.SuspendingComplicationDa
 import java.time.Instant
 
 /** Remaining time to the next prayer, with a progress ring on faces that draw one. Tapping opens the five prayer circles. */
-class PrayerComplicationService : SuspendingComplicationDataSourceService() {
+open class PrayerComplicationService : SuspendingComplicationDataSourceService() {
 
     private fun tap(): PendingIntent = PendingIntent.getActivity(
         this, 0,
@@ -23,7 +23,7 @@ class PrayerComplicationService : SuspendingComplicationDataSourceService() {
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    private fun build(type: ComplicationType, s: PrayerState): ComplicationData? {
+    fun build(type: ComplicationType, s: PrayerState): ComplicationData? {
         val countdown = TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(s.next.at)))
             .setText("^1")
             .build()

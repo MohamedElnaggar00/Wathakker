@@ -26,6 +26,8 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".PreviewActivity" android:exported="true" android:taskAffinity="" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

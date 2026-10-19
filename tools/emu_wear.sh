@@ -22,4 +22,9 @@ sleep 4; adb exec-out screencap -p > "$OUT/wear_circles_done.png"
 adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 0 >/dev/null 2>&1; sleep 14; adb exec-out screencap -p > "$OUT/wear_page_0_again.png"
 adb shell dumpsys activity activities | grep -i "mResumedActivity\|topResumed" > "$OUT/resumed.txt" 2>&1
 adb logcat -d | grep -i "wathakker\|AndroidRuntime\|FATAL" | head -80 > "$OUT/logcat.txt" 2>&1
+for M in tile ranged short; do
+  adb shell am start -S -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode $M >/dev/null 2>&1
+  sleep 8; adb exec-out screencap -p > "$OUT/wear_preview_$M.png"
+done
+adb logcat -d | grep -i "AndroidRuntime\|FATAL EXCEPTION" -A8 | head -60 > "$OUT/logcat_preview.txt" 2>&1
 echo done > "$OUT/SUMMARY.txt"
