@@ -292,7 +292,7 @@ fun CirclesPage(s: PrayerState, now: Long, w: Float, visible: Boolean) {
         } else anim.snapTo(0f)
     }
     val ids = listOf(0, 2, 3, 4, 5)  // clockwise from the top: Fajr, Dhuhr, Asr, Maghrib, Isha
-    val slots = ids.map { id -> if (id == 0 && s.next.id == 0) s.nextFajrTomorrow else s.today[id] }
+    val slots = ids.map { id -> if (id == 0 && s.next.at == s.nextFajrTomorrow.at) s.nextFajrTomorrow else s.today[id] }
     val d = w * 0.295f
     val rad = w * 0.285f
     Box(Modifier.fillMaxSize().background(Color.Black)) {
