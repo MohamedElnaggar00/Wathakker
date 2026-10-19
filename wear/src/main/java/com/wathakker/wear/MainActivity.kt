@@ -252,7 +252,7 @@ fun QiblaPage(w: Float) {
     val needle = bearing - heading
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         Text1("القبلة", tx(w * 0.065f, Color(0xFFB9B9BE)), Modifier.align(Alignment.TopCenter).padding(top = (w * 0.085f).dp))
-        Box(Modifier.align(Alignment.Center).size((w * 0.74f).dp)) {
+        Box(Modifier.align(Alignment.Center).padding(bottom = (w * 0.03f).dp).size((w * 0.56f).dp)) {
             Canvas(Modifier.fillMaxSize()) {
                 val c = center
                 drawCircle(Color(0xFF2B2B2E), radius = size.minDimension / 2 - 2f, style = Stroke(width = size.minDimension * 0.008f))

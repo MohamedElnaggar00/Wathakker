@@ -19,5 +19,7 @@ done
 adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ez circles true >/dev/null 2>&1
 sleep 1; adb exec-out screencap -p > "$OUT/wear_circles_anim_1s.png"
 sleep 4; adb exec-out screencap -p > "$OUT/wear_circles_done.png"
-adb logcat -d -s AndroidRuntime:E ActivityManager:W WathakkerWear:V > "$OUT/logcat.txt" 2>&1
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 0 >/dev/null 2>&1; sleep 14; adb exec-out screencap -p > "$OUT/wear_page_0_again.png"
+adb shell dumpsys activity activities | grep -i "mResumedActivity\|topResumed" > "$OUT/resumed.txt" 2>&1
+adb logcat -d | grep -i "wathakker\|AndroidRuntime\|FATAL" | head -80 > "$OUT/logcat.txt" 2>&1
 echo done > "$OUT/SUMMARY.txt"
