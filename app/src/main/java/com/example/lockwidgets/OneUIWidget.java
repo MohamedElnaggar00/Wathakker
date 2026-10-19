@@ -49,8 +49,8 @@ final class OneUIWidget {
         sp.setStrokeWidth(Math.max(0.8f, 0.9f * d));
         sp.setColor(night ? 0xFFFFFFFF : 0xFF7C8396);
         sp.setAlpha(night ? 48 : 70);
-        float R = H * (lerp(0.30f, 0.17f, t)) ;
-        float step = R * 1.55f;
+        float R = H * lerp(0.115f, 0.092f, t);
+        float step = R * 1.7f;
         for (float cy = H + R * 0.2f, row = 0; cy > -R; cy -= step * 0.78f, row++) {
             for (float cx = (row % 2 == 0 ? 0 : step / 2); cx < cardW + R; cx += step) {
                 star(cv, cx * d, cy * d, R * d, sp);
@@ -84,13 +84,13 @@ final class OneUIWidget {
         p.setColor(track);
         cv.drawRoundRect(tr, bh * d / 2, bh * d / 2, p);
         float fw = inner * progress;
-        RectF fr = rtl ? new RectF((padX + inner - fw) * d, tr.top, (padX + inner) * d, tr.bottom) : new RectF(padX * d, tr.top, (padX + fw) * d, tr.bottom);
+        RectF fr = rtl ? new RectF(padX * d, tr.top, (padX + fw) * d, tr.bottom) : new RectF((padX + inner - fw) * d, tr.top, (padX + inner) * d, tr.bottom); // fill starts at the previous prayer side
         Paint glow = new Paint(Paint.ANTI_ALIAS_FLAG);
         glow.setColor(barB);
         glow.setAlpha(night ? 70 : 60);
         glow.setMaskFilter(new BlurMaskFilter(bh * d * 0.9f, BlurMaskFilter.Blur.NORMAL));
         cv.drawRoundRect(fr, bh * d / 2, bh * d / 2, glow);
-        p.setShader(new LinearGradient(fr.left, 0, fr.right, 0, rtl ? barB : barA, rtl ? barA : barB, Shader.TileMode.CLAMP));
+        p.setShader(new LinearGradient(fr.left, 0, fr.right, 0, rtl ? barA : barB, rtl ? barB : barA, Shader.TileMode.CLAMP));
         cv.drawRoundRect(fr, bh * d / 2, bh * d / 2, p);
         p.setShader(null);
 
