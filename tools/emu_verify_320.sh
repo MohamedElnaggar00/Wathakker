@@ -235,6 +235,137 @@ shot 320_reenter_prayer
 strip_check 320_reenter_prayer.png sky "sky back after re-entering prayer tab"
 alive && say "PASS: app alive across tab leave/re-enter" || say "FAIL: app died across tab leave/re-enter"
 
+# ================= v3.2.0 glass-system / smoke / widget checks =================
+
+smoke_check() { # <png> <label>
+python3 -c "
+from PIL import Image
+im=Image.open('$OUT/$1').convert('RGB'); w,h=im.size
+def avg(x0,y0,x1,y1):
+    px=[im.getpixel((x,y)) for x in range(int(w*x0),int(w*x1),24) for y in range(int(h*y0),int(h*y1),24)]
+    return tuple(sum(c[i] for c in px)//max(1,len(px)) for i in range(3))
+top=avg(0.2,0.05,0.8,0.12); glow=avg(0.3,0.60,0.7,0.78)
+d=sum(abs(glow[i]-top[i]) for i in range(3))
+print('$2 top=%s glow=%s diff=%d'%(top,glow,d))
+print(('PASS' if d>18 else 'FAIL')+': $2 smoke glow visible')
+" >> "$SUM"
+}
+
+blue_tab_check() { # <png> <dark|light> <label>  - selected-tab blue pixels in the bar
+python3 -c "
+from PIL import Image
+im=Image.open('$OUT/$1').convert('RGB'); w,h=im.size
+n=0
+for x in range(0,w,4):
+    for y in range(int(h*0.88),h-8,4):
+        r,g,b=im.getpixel((x,y))
+        if b-r>40 and b-g>15 and b>120: n+=1
+print('$3 bluepx=%d'%n)
+print(('PASS' if n>8 else 'FAIL')+': $3 selected-tab blue tint in bottom bar')
+" >> "$SUM"
+}
+
+# --- smoke background on the three non-prayer tabs, both themes ---
+tab_tap "التقويم"
+adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot 320_smoke_calendar_dark
+adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot 320_smoke_calendar_light
+smoke_check 320_smoke_calendar_dark.png  "calendar dark"
+smoke_check 320_smoke_calendar_light.png "calendar light"
+tab_tap "الأذكار"
+shot 320_smoke_azkar_light
+smoke_check 320_smoke_azkar_light.png "azkar light"
+tab_tap "حصن المسلم"
+shot 320_smoke_hisn_light
+smoke_check 320_smoke_hisn_light.png "hisn light"
+
+# --- blue selected tab on all four tabs, both themes ---
+for T in "الصلاة" "الأذكار" "حصن المسلم" "التقويم"; do
+  tab_tap "$T"
+  adb shell cmd uimode night yes; sleep 2; dismiss_anr
+  shot "320_tab_${T}_dark"
+  blue_tab_check "320_tab_${T}_dark.png" dark "tab $T dark"
+  adb shell cmd uimode night no; sleep 2; dismiss_anr
+  shot "320_tab_${T}_light"
+  blue_tab_check "320_tab_${T}_light.png" light "tab $T light"
+done
+
+# --- drawer: frost over the prayer sky, default over azkar ---
+open_drawer() {
+  dump
+  python3 -c "
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+for m in re.finditer(r'content-desc=.([^\"]*).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
+    d=m.group(1)
+    if ('ettings' in d) or ('إعداد' in d):
+        a,b,c,e=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+        if b < 300: print((a+c)//2,(b+e)//2); break
+" > /tmp/drw.xy
+  [ -s /tmp/drw.xy ] && adb shell input tap $(cat /tmp/drw.xy) && sleep 4
+  rm -f /tmp/drw.xy
+}
+tab_tap "الصلاة"
+adb shell cmd uimode night yes; sleep 2
+open_drawer; shot 320_drawer_over_prayer_dark
+adb shell cmd uimode night no; sleep 2
+open_drawer; shot 320_drawer_over_prayer_light
+adb shell input keyevent 4; sleep 2
+tab_tap "الأذكار"
+open_drawer; shot 320_drawer_over_azkar_light
+adb shell input keyevent 4; sleep 2
+say "INFO: drawer shots captured (visual gate: frosted over sky, legible everywhere)"
+
+# --- widget renderer: auto bar = black on light bg, white on dark bg ---
+adb shell am force-stop $PKG; sleep 1
+adb shell am start -S -W -n $PKG/com.example.WidgetRenderCheck >/dev/null 2>&1; sleep 10
+adb pull /sdcard/Android/data/$PKG/files "$OUT/widget_render" >/dev/null 2>&1 || \
+  adb shell "run-as $PKG ls files/rendercheck" 2>/dev/null
+python3 - "$OUT" <<'PY' >> "$SUM"
+import sys,os
+from PIL import Image
+out=sys.argv[1]
+def barcolor(path):
+    im=Image.open(path).convert('RGB'); w,h=im.size
+    y=int(h*0.57)
+    row=[im.getpixel((x,y)) for x in range(int(w*0.06),int(w*0.94),3)]
+    # filled part = pixel most different from the track greys; classify extremes
+    dark=min(row,key=lambda c:sum(c)); bright=max(row,key=lambda c:sum(c))
+    blue=max(row,key=lambda c:c[2]-c[0])
+    return dark,bright,blue
+def classify(path,label):
+    if not os.path.exists(path):
+        print(f'WARN: {label} missing ({os.path.basename(path)})'); return
+    dark,bright,blue=barcolor(path)
+    if blue[2]-blue[0]>50: c='blue'
+    elif sum(dark)<120: c='black'
+    elif sum(bright)>600: c='white'
+    else: c='unknown'
+    print(f'{label}: bar={c} dark={dark} bright={bright} blue={blue}')
+    return c
+# preview_light_* = white bg + DEFAULT (auto) bar -> expect black after the fix
+c=classify(f'{out}/widget_render/preview_light_Hero.png','auto-on-white-bg')
+print(('PASS' if c=='black' else 'FAIL')+': auto bar is black on light widget bg')
+# 992 = black bg + auto bar -> expect white
+c2=None
+for k in ['Hero','PrayerBar','NextPrayer']:
+    p=f'{out}/widget_render/{k}_992_dark.png'
+    if os.path.exists(p): c2=classify(p,f'auto-on-black-bg[{k}]'); break
+if c2: print(('PASS' if c2=='white' else 'FAIL')+': auto bar is white on dark widget bg')
+else:
+    import glob
+    fs=glob.glob(f'{out}/widget_render/*992*')
+    print('INFO: 992 renders found: '+str([os.path.basename(f) for f in fs]))
+# 991 = white bg + explicit blue -> expect blue (explicit options untouched)
+import glob
+f=glob.glob(f'{out}/widget_render/*991*')
+if f:
+    c3=classify(f[0],'explicit-blue-on-white-bg')
+    print(('PASS' if c3=='blue' else 'FAIL')+': explicit blue option still blue')
+print('INFO: widget render files: '+str(sorted(os.path.basename(x) for x in glob.glob(f'{out}/widget_render/*'))[:40]))
+PY
+adb shell am force-stop $PKG; sleep 1
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 6
+
 # --- crash check across the whole run ---
 adb logcat -d > "$OUT/logcat.txt" 2>&1
 grep -c "FATAL EXCEPTION" "$OUT/logcat.txt" | sed 's/^/fatal_exceptions: /' | tee -a "$SUM"
