@@ -193,6 +193,7 @@ fun SettingsContent(
 ) {
     OneUIScreen(title = L10n.t(S.Settings), onBack = onBack) {
         if (onLocation != null || onFajr != null) {
+            item(key = "loc-l") { SectionLabel(L10n.t(S.LocSection)) }
             item(key = "fajr") {
                 OneUICard {
                     OneUIRow(
