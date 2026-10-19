@@ -417,7 +417,11 @@ fun PrayerTimesContent(
             }
         }
         item(key = "prayer-list") {
-            val navBlue = if (com.example.ThemeSettings.isDark()) Color(0xFF78B8F8) else Color(0xFF2E6DB4)
+            // Next-prayer row: solid green pill with high-contrast content in both themes.
+            val nextDark = com.example.ThemeSettings.isDark()
+            val nextRowBg = if (nextDark) Color(0xFF14532D) else Color(0xFF1E7E34)
+            val nextChipBg = if (nextDark) Color(0xFF62D484) else Color.White
+            val nextChipIcon = if (nextDark) Color(0xFF0B2E1A) else Color(0xFF1E7E34)
             OneUICard(
                 modifier = Modifier.skyGlass(RoundedCornerShape(OneUIDimens.CardRadius), skyHaze, sc),
                 color = Color.Transparent
@@ -429,7 +433,7 @@ fun PrayerTimesContent(
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                             .clip(RoundedCornerShape(OneUIDimens.CardRadius))
-                            .background(if (row.isNext) navBlue.copy(alpha = 0.16f) else Color.Transparent)
+                            .background(if (row.isNext) nextRowBg else Color.Transparent)
                             .padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -437,21 +441,21 @@ fun PrayerTimesContent(
                             modifier = Modifier
                                 .size(38.dp)
                                 .clip(CircleShape)
-                                .background(if (row.isNext) navBlue.copy(alpha = 0.16f) else sc.chip),
+                                .background(if (row.isNext) nextChipBg else sc.chip),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 row.icon,
                                 null,
                                 modifier = Modifier.size(20.dp),
-                                tint = if (row.isNext) navBlue else sc.textSecondary
+                                tint = if (row.isNext) nextChipIcon else sc.textSecondary
                             )
                         }
                         Spacer(Modifier.width(14.dp))
                         Text(
                             row.name,
-                            color = if (row.isNext) navBlue else sc.textPrimary,
-                            fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
+                            color = if (row.isNext) Color.White else sc.textPrimary,
+                            fontWeight = if (row.isNext) FontWeight.ExtraBold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Spacer(Modifier.weight(1f))
@@ -459,8 +463,8 @@ fun PrayerTimesContent(
                         val bellOn = bellIndex != null && bellStates.getOrElse(bellIndex) { false }
                         Text(
                             row.timeText,
-                            color = if (row.isNext) sc.nextTime else sc.textPrimary,
-                            fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
+                            color = if (row.isNext) Color.White else sc.textPrimary,
+                            fontWeight = if (row.isNext) FontWeight.ExtraBold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
                         Spacer(Modifier.width(8.dp))
