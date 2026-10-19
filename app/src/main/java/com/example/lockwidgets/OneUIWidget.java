@@ -63,7 +63,7 @@ final class OneUIWidget {
         cv.restore();
 
         // text rows (fractions of card height, interpolated between 4x1 and 4x2)
-        float nameY = H * lerp(0.18f, 0.20f, t), barY = H * lerp(0.36f, 0.43f, t), timeY = H * lerp(0.53f, 0.63f, t), remY = H * lerp(0.76f, 0.84f, t);
+        float nameY = H * lerp(0.21f, 0.20f, t), barY = H * lerp(0.385f, 0.43f, t), timeY = H * lerp(0.565f, 0.63f, t), remY = H * lerp(0.795f, 0.84f, t);
         float nameSz = H * lerp(0.162f, 0.116f, t), timeSz = H * lerp(0.152f, 0.096f, t), remSz = H * lerp(0.132f, 0.086f, t);
         float padX = Math.min(24f, cardW * 0.06f), inner = cardW - 2 * padX, side = inner * 0.46f;
         boolean rtl = s.rtl;
