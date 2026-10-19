@@ -430,12 +430,23 @@ for T in "الصلاة" "الأذكار" "حصن المسلم" "التقويم";
 done
 
 # --- drawer: frost over the prayer sky, default over azkar ---
+open_drawer_wait() { # tap hamburger and wait until the drawer content is really up
+  local i
+  for i in 1 2 3; do
+    open_drawer
+    dump
+    grep -q "المفضلة" /tmp/u320.xml 2>/dev/null && return 0
+    sleep 2
+  done
+  say "WARN: drawer did not open after 3 tries"
+  return 1
+}
 tab_tap "الصلاة"
-adb shell cmd uimode night yes; sleep 2
-open_drawer; shot_fg 320_drawer_over_prayer_dark
+adb shell cmd uimode night yes; sleep 3
+open_drawer_wait; shot_fg 320_drawer_over_prayer_dark
 adb shell input keyevent 4; sleep 2
-adb shell cmd uimode night no; sleep 2
-open_drawer; shot_fg 320_drawer_over_prayer_light
+adb shell cmd uimode night no; sleep 3
+open_drawer_wait; shot_fg 320_drawer_over_prayer_light
 adb shell input keyevent 4; sleep 2
 tab_tap "الأذكار"
 open_drawer; shot_fg 320_drawer_over_azkar_light
