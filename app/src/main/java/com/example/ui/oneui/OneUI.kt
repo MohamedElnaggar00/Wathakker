@@ -134,7 +134,7 @@ fun OneUIScreen(
         }
     }
     val barAlpha by animateFloatAsState(fraction, tween(180), label = "barAlpha")
-    val tileAlpha by animateFloatAsState(if (alwaysShowHeaderTiles) 1f else fraction, tween(180), label = "tileAlpha")
+    val tileAlpha by animateFloatAsState(if (alwaysShowHeaderTiles) 1f else if (frost == null) (if (fraction > 0.02f) 1f else 0f) else fraction, tween(180), label = "tileAlpha")
     val hazeState = LocalHazeState.current
 
     Box(modifier = modifier.fillMaxSize().background(containerColor)) {
