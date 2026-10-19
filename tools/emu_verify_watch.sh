@@ -25,6 +25,23 @@ for M in no yes; do
  tapdesc "نظام 24 ساعة"; sleep 2
  adb exec-out screencap -p > "$OUT/watch_settings_24h_$M.png"
 done
+# side drawer over the prayer sky, light and dark
+for M in no yes; do
+ adb shell cmd uimode night $M; adb shell am force-stop $PKG
+ adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
+ adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
+ XY=$(python3 - <<'PY'
+import re
+x=open('/tmp/uw.xml',encoding='utf-8').read()
+for m in re.finditer(r'content-desc="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
+    if m.group(1) in ('القائمة','Menu'):
+        print((int(m.group(2))+int(m.group(4)))//2,(int(m.group(3))+int(m.group(5)))//2); break
+PY
+)
+ echo "menu tap: $XY" >> "$OUT/SUMMARY.txt"
+ [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+ adb exec-out screencap -p > "$OUT/drawer_$M.png"
+done
 adb shell cmd uimode night no
 adb logcat -d > "$OUT/logcat.txt"
 ! grep -E 'FATAL EXCEPTION' "$OUT/logcat.txt"

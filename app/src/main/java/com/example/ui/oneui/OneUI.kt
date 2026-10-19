@@ -756,6 +756,10 @@ fun OneUIDrawer(
     frost: FrostSpec? = null
 ) {
     val cs = MaterialTheme.colorScheme
+    // 3.3.0: denser frosted drawer panel (content behind stays faintly visible, items stay readable).
+    val drawerDark = com.example.ThemeSettings.isDark()
+    val drawerFrost = if (drawerDark) FrostSpec(Color(0xFF1B1C1F), 0.86f, Color.White.copy(alpha = 0.08f))
+    else FrostSpec(Color(0xFFF4F5F8), 0.88f, Color.Black.copy(alpha = 0.06f))
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(visible = open, enter = fadeIn(tween(220)), exit = fadeOut(tween(220))) {
             Box(
@@ -781,7 +785,7 @@ fun OneUIDrawer(
                     .padding(start = 12.dp, top = 28.dp, bottom = 28.dp)
                     .width(300.dp)
                     .fillMaxHeight()
-                    .then(if (frost != null) Modifier.oneUIFrosted(RoundedCornerShape(28.dp), frost, 30) else Modifier.oneUIFrosted(RoundedCornerShape(28.dp), FrostSpec(cs.surfaceVariant, 0.90f, Color.Transparent), 30))
+                    .then(Modifier.oneUIFrosted(RoundedCornerShape(28.dp), drawerFrost, 48))
                     .padding(vertical = 18.dp)
             ) {
                 DrawerHeader()
