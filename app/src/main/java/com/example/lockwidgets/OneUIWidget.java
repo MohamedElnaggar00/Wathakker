@@ -20,7 +20,7 @@ final class OneUIWidget {
         float W = wd, H = ht;
         float t = Math.max(0f, Math.min(1f, (H - 80f) / 100f)); // 0 = 4x1, 1 = 4x2
         float gap = Math.max(6f, W * 0.02f);
-        float tileW = Math.min(H * 1.14f, W * 0.27f);
+        float tileW = Math.min(H * 0.93f, W * 0.225f);
         float cardW = W - tileW - gap;
         float corner = Math.min(H * 0.30f, 34f);
         RectF card = new RectF(0, 0, cardW, H);
