@@ -508,6 +508,7 @@ fun OneUISwitch(checked: Boolean, onCheckedChange: ((Boolean) -> Unit)?, modifie
     val trackOff = if (dark) Color(0xFF39393C) else Color(0xFFB7B7B7)
     val track by animateColorAsState(if (checked) cs.primary else trackOff, label = "swTrack")
     val thumb by animateDpAsState(if (checked) 22.dp else 0.dp, spring(0.75f, 1500f), label = "swThumb")
+    val switchView = androidx.compose.ui.platform.LocalView.current
     Box(
         modifier = modifier
             .width(52.dp)
@@ -520,7 +521,17 @@ fun OneUISwitch(checked: Boolean, onCheckedChange: ((Boolean) -> Unit)?, modifie
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = onCheckedChange != null
-            ) { onCheckedChange?.invoke(!checked) }
+            ) {
+                // 3.3.0: the platform's own toggle haptic (API 34+), a soft click on older Android.
+                // Respects the system touch-feedback setting.
+                val turningOn = !checked
+                switchView.performHapticFeedback(
+                    if (android.os.Build.VERSION.SDK_INT >= 34)
+                        (if (turningOn) android.view.HapticFeedbackConstants.TOGGLE_ON else android.view.HapticFeedbackConstants.TOGGLE_OFF)
+                    else android.view.HapticFeedbackConstants.CLOCK_TICK
+                )
+                onCheckedChange?.invoke(turningOn)
+            }
             .padding(3.dp)
     ) {
         Box(
