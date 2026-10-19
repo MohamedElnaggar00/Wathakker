@@ -96,6 +96,7 @@ fun tx(size: Float, color: Color = Color.White, bold: Boolean = false, align: Te
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocationSync.refresh(this)
         val page = intent.getIntExtra("page", if (intent.getBooleanExtra("circles", false)) 3 else 0)
         setContent { WearApp(page) }
     }
@@ -204,7 +205,7 @@ fun ListPage(s: PrayerState, w: Float) {
     val pitch = w * 0.215f
     val nextIdx = s.today.indexOfFirst { it.at == s.next.at }.let { if (it < 0) 0 else it }
     val pitchPx = with(androidx.compose.ui.platform.LocalDensity.current) { pitch.dp.toPx() }
-    LaunchedEffect(nextIdx) { scroll.scrollTo((((nextIdx - 2).coerceIn(0, 1)) * pitchPx).roundToInt()) }
+    LaunchedEffect(nextIdx) { scroll.scrollTo(max(0f, (nextIdx - 1.9f) * pitchPx).roundToInt()) }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         Column(Modifier.fillMaxSize().verticalScroll(scroll).padding(horizontal = (w * 0.115f).dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.height((w * 0.12f).dp))
@@ -225,7 +226,7 @@ fun ListPage(s: PrayerState, w: Float) {
                 }
                 Spacer(Modifier.height((w * 0.025f).dp))
             }
-            Spacer(Modifier.height((w * 0.2f).dp))
+            Spacer(Modifier.height((w * 0.42f).dp))
         }
     }
 }

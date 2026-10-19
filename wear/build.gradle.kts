@@ -53,5 +53,6 @@ dependencies {
   implementation("androidx.wear.protolayout:protolayout:1.2.1")
   implementation("androidx.wear.protolayout:protolayout-expression:1.2.1")
   implementation("androidx.wear:wear-remote-interactions:1.1.0")
+  implementation("com.google.android.gms:play-services-wearable:19.0.0")
   implementation("com.google.guava:guava:33.3.1-android")
 }

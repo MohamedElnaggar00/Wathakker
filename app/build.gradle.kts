@@ -66,6 +66,7 @@ dependencies {
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.okhttp)
   implementation("androidx.autofill:autofill:1.1.0")
+  implementation("com.google.android.gms:play-services-wearable:19.0.0")
   implementation("androidx.profileinstaller:profileinstaller:1.4.1")
   implementation("dev.chrisbanes.haze:haze:1.6.0")
 }

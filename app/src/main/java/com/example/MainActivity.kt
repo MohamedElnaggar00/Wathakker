@@ -22,6 +22,11 @@ import com.example.ui.i18n.L10n
 class MainActivity : ComponentActivity() {
     private val mainViewModel: MainViewModel by viewModels()
 
+    override fun onResume() {
+        super.onResume()
+        com.example.utils.WearSync.push(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // A widget tap that targets a specific tab starts the activity fresh, without saved state.
         val state = if (HomeWidgets.handleIntent(intent)) null else savedInstanceState

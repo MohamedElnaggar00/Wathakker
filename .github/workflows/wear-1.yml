@@ -42,7 +42,7 @@ jobs:
         api-level: 34
         arch: x86_64
         target: android-wear
-        profile: wearos_small_round
+        profile: wearos_large_round
         disable-animations: false
         script: bash tools/emu_wear.sh wear/build/outputs/apk/debug/wear-debug.apk emulator-evidence/wear
     - uses: actions/upload-artifact@v4
