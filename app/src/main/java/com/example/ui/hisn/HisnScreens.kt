@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NotificationAdd
 import androidx.compose.material.icons.outlined.Search
+import kotlinx.coroutines.launch
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -78,8 +79,21 @@ fun HisnListContent(
 ) {
     val filtered = remember(state, items) { filterChapters(state, items) }
     val subtitle = if (state.chapters.isEmpty()) null else L10n.t(S.ChaptersFmt).format(state.chapters.size)
-    OneUIScreen(title = L10n.t(S.HisnTab), subtitle = subtitle, onMenu = onMenu) {
-        item { OneUISearchField(state.query, onQuery, L10n.t(S.SearchHisn)) }
+    val searchFocus = remember { androidx.compose.ui.focus.FocusRequester() }
+    val hisnListState = androidx.compose.foundation.lazy.rememberLazyListState()
+    val searchScope = androidx.compose.runtime.rememberCoroutineScope()
+    OneUIScreen(
+        title = L10n.t(S.HisnTab), subtitle = subtitle, onMenu = onMenu, listState = hisnListState,
+        actions = {
+            OneUIIconAction(Icons.Outlined.Search, L10n.t(S.SearchHisn)) {
+                searchScope.launch {
+                    hisnListState.animateScrollToItem(0)
+                    try { searchFocus.requestFocus() } catch (_: Exception) {}
+                }
+            }
+        }
+    ) {
+        item { OneUISearchField(state.query, onQuery, L10n.t(S.SearchHisn), focusRequester = searchFocus) }
         item {
             LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 item { OneUIChip(L10n.t(S.All), !state.onlyFavorites, { onOnlyFavorites(false) }) }

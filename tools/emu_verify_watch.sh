@@ -5,12 +5,15 @@ mkdir -p "$OUT"; adb root >/dev/null 2>&1; sleep 2
 adb install -r "$APK" >/dev/null 2>&1
 adb shell settings put global auto_time 0
 tapdesc(){ adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
- XY=$(python3 - "$1" <<'PY'
+ XY=$(python3 - "$1" $2 <<'PY'
 import re,sys
 x=open('/tmp/uw.xml',encoding='utf-8').read()
 for m in re.finditer(r'(?:content-desc|text)="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
     if m.group(1)==sys.argv[1]:
-        print((int(m.group(2))+int(m.group(4)))//2,(int(m.group(3))+int(m.group(5)))//2); break
+        r=((int(m.group(2))+int(m.group(4)))//2,(int(m.group(3))+int(m.group(5)))//2)
+        if len(sys.argv)<3: print(*r); break
+        last=r
+if len(sys.argv)>=3 and 'last' in dir(): print(*last)
 PY
 )
  echo "tap $1: $XY" >> "$OUT/SUMMARY.txt"; [ -n "$XY" ] && adb shell input tap $XY; }
@@ -41,6 +44,16 @@ PY
  echo "menu tap: $XY" >> "$OUT/SUMMARY.txt"
  [ -n "$XY" ] && adb shell input tap $XY; sleep 3
  adb exec-out screencap -p > "$OUT/drawer_$M.png"
+done
+# Hisn page: search icon next to the gear
+for M in no yes; do
+ adb shell cmd uimode night $M; adb shell am force-stop $PKG
+ adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
+ tapdesc "حصن المسلم"; sleep 3
+ adb exec-out screencap -p > "$OUT/hisn_$M.png"
+ tapdesc "ابحث في حصن المسلم" last; sleep 2
+ adb shell input text "wudu"; sleep 1
+ adb exec-out screencap -p > "$OUT/hisn_search_$M.png"
 done
 adb shell cmd uimode night no
 adb logcat -d > "$OUT/logcat.txt"

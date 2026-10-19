@@ -49,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -436,7 +437,8 @@ fun OneUISearchField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    focusRequester: androidx.compose.ui.focus.FocusRequester? = null
 ) {
     val cs = MaterialTheme.colorScheme
     Row(
@@ -460,7 +462,7 @@ fun OneUISearchField(
                 singleLine = true,
                 textStyle = MaterialTheme.typography.bodyMedium.copy(color = cs.onSurface),
                 cursorBrush = SolidColor(cs.primary),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
             )
         }
     }
