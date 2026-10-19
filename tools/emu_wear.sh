@@ -9,6 +9,7 @@ adb shell settings put global auto_time 0; adb shell setprop persist.sys.timezon
 adb shell date 101918032026.00 >/dev/null 2>&1
 adb shell cmd package query-services -a androidx.wear.tiles.action.BIND_TILE_PROVIDER > "$OUT/tile_services.txt" 2>&1
 adb shell cmd package query-services -a android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST > "$OUT/complication_services.txt" 2>&1
+adb shell svc power stayon true; adb shell settings put system screen_off_timeout 1800000
 adb shell am start -W -n $PKG/com.wathakker.wear.MainActivity >/dev/null 2>&1; sleep 15
 for P in 0 1 2 3 4; do
   adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page $P >/dev/null 2>&1
