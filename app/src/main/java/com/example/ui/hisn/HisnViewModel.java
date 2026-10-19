@@ -71,7 +71,7 @@ public final class HisnViewModel extends AndroidViewModel {
         this.dao = AppDatabase.Companion.getDatabase(application).hisnDao();
         this._query = StateFlowKt.MutableStateFlow("");
         this.query = FlowKt.asStateFlow(this._query);
-        this._onlyFavorites = StateFlowKt.MutableStateFlow(false);
+        this._onlyFavorites = StateFlowKt.MutableStateFlow(true);
         this.onlyFavorites = FlowKt.asStateFlow(this._onlyFavorites);
         this.chapters = FlowKt.stateIn(this.dao.chapters(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
         this.allItems = FlowKt.stateIn(this.dao.allItems(), ViewModelKt.getViewModelScope(this), SharingStarted.Companion.WhileSubscribed(5000L, 0L), CollectionsKt.emptyList());
