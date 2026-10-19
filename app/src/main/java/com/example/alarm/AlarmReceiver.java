@@ -50,9 +50,7 @@ public final class AlarmReceiver extends BroadcastReceiver {
                 NotificationManager manager = systemService instanceof NotificationManager ? (NotificationManager) systemService : null;
                 NotificationChannel channel = new NotificationChannel(AlarmReceiver.CHANNEL_ID, AlarmReceiver.CHANNEL_NAME, 4);
                 channel.setDescription(L10n.INSTANCE.t(S.NotifChannelAzkar));
-                if (manager != null) {
-                    manager.createNotificationChannel(channel);
-                }
+                com.example.utils.NotifPrefs.configureChannel(context, manager, channel);
             }
         }
     }

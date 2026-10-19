@@ -28,6 +28,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -70,9 +71,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
             val uri: android.net.Uri? = result.data?.getParcelableExtra("android.intent.extra.ringtone.PICKED_URI")
             if (uri != null) {
                 val title = RingtoneHelper(context).getRingtoneTitle(uri)
-                val prefs = FajrPreferences(context)
-                prefs.ringtoneUri = uri.toString()
-                prefs.ringtoneTitle = title
+                PrayerAlertStore.setToneOverride(context, prayer, uri.toString(), title); com.example.prayer.alerts.PrayerAlertScheduler.scheduleAll(context)
                 tick++
             }
         }
@@ -82,9 +81,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
     ) { uri: android.net.Uri? ->
         if (uri != null) {
             val title = RingtoneHelper(context).getRingtoneTitle(uri)
-            val prefs = FajrPreferences(context)
-            prefs.ringtoneUri = uri.toString()
-            prefs.ringtoneTitle = title
+            PrayerAlertStore.setToneOverride(context, prayer, uri.toString(), title); com.example.prayer.alerts.PrayerAlertScheduler.scheduleAll(context)
             tick++
         }
     }
@@ -250,8 +247,18 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     }
                 }
                 Spacer(Modifier.height(12.dp))
-                // Shared profile
-                Text(L10n.t(S.SharedAlertSettings), color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                // 3.3.0: starts from the app-level tone/vibration; changing it here applies to this prayer only.
+                val isAr = L10n.lang == com.example.ui.i18n.Lang.AR
+                val customized = remember(tick) { PrayerAlertStore.hasOverride(context, prayer) }
+                Text(
+                    if (isAr) "نغمة واهتزاز هذه الصلاة" else "This prayer's tone and vibration",
+                    color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold
+                )
+                Text(
+                    if (customized) (if (isAr) "مخصص لهذه الصلاة فقط" else "Custom for this prayer only")
+                    else (if (isAr) "يتبع إعدادات التطبيق" else "Follows app settings"),
+                    color = cs.onSurfaceVariant, fontSize = 11.sp
+                )
                 Spacer(Modifier.height(4.dp))
                 Row(
                     modifier = Modifier
@@ -272,7 +279,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     Spacer(Modifier.width(10.dp))
                     Column(Modifier.weight(1f)) {
                         Text(L10n.t(S.SelectedTone), color = cs.onSurfaceVariant, fontSize = 11.sp)
-                        Text(prefs.ringtoneTitle, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text((if (PrayerAlertStore.toneOverride(context, prayer) != null) PrayerAlertStore.toneOverrideTitle(context, prayer) else com.example.utils.NotifPrefs.toneTitle(context)) ?: L10n.t(S.Default), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
                     Text(
                         L10n.t(S.AudioFile), color = cs.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold,
@@ -292,7 +299,25 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         Spacer(Modifier.width(10.dp))
                         Text(L10n.t(S.VibrateDuringAlarm), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
-                    OneUISwitch(prefs.isVibrationEnabled, { prefs.isVibrationEnabled = it; tick++ })
+                    OneUISwitch(PrayerAlertStore.effectiveVibration(context, prayer), { PrayerAlertStore.setVibrationOverride(context, prayer, it); tick++ })
+                }
+                if (customized) {
+                    Text(
+                        if (isAr) "العودة لإعدادات التطبيق" else "Reset to app settings",
+                        color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable {
+                                PrayerAlertStore.clearOverride(context, prayer)
+                                if (Build.VERSION.SDK_INT >= 26) {
+                                    val nmx = context.getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
+                                    nmx.deleteNotificationChannel("prayer_alerts_channel_p" + prayer)
+                                    nmx.deleteNotificationChannel("iqama_reminders_channel_p" + prayer)
+                                }
+                                changed()
+                            }
+                            .padding(6.dp)
+                    )
                 }
             }
         }

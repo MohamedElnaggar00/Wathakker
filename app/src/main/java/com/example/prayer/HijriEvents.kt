@@ -130,11 +130,7 @@ class EventReminderReceiver : BroadcastReceiver() {
         val name = intent.getStringExtra("event_name") ?: return
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chId = "event_reminders_channel"
-        if (nm.getNotificationChannel(chId) == null) {
-            nm.createNotificationChannel(
-                NotificationChannel(chId, "مناسبات هجرية", NotificationManager.IMPORTANCE_DEFAULT)
-            )
-        }
+        com.example.utils.NotifPrefs.configureChannel(context, nm, NotificationChannel(chId, "مناسبات هجرية", NotificationManager.IMPORTANCE_DEFAULT))
         nm.notify(
             (System.currentTimeMillis() % 100000).toInt(),
             NotificationCompat.Builder(context, chId)

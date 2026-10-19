@@ -87,6 +87,7 @@ public final class MainViewModel extends AndroidViewModel {
         Intrinsics.checkNotNullParameter(application, "application");
         this.prefs = application.getSharedPreferences("tasbeeh_prefs", 0);
         this.appPrefs = application.getSharedPreferences("app_prefs", 0);
+        com.example.utils.NotifPrefs.migrate(application);
         String string = this.appPrefs.getString("language", "ar");
         this._language = StateFlowKt.MutableStateFlow(string != null ? string : "ar");
         this.language = FlowKt.asStateFlow(this._language);
@@ -156,7 +157,7 @@ public final class MainViewModel extends AndroidViewModel {
 
     public final void updateVibrationEnabled(boolean enabled) {
         this._vibrationEnabled.setValue(Boolean.valueOf(enabled));
-        this.appPrefs.edit().putBoolean("vibration_enabled", enabled).apply();
+        com.example.utils.NotifPrefs.setVibration(getApplication(), enabled);
     }
 
     public final void updateUseDeviceFont(boolean use) {
@@ -167,7 +168,7 @@ public final class MainViewModel extends AndroidViewModel {
     public final void updateNotificationSound(String sound) {
         Intrinsics.checkNotNullParameter(sound, "sound");
         this._notificationSound.setValue(sound);
-        this.appPrefs.edit().putString("notification_sound", sound).apply();
+        com.example.utils.NotifPrefs.setTone(getApplication(), sound, com.example.utils.NotifPrefs.titleFor(getApplication(), sound));
     }
 
     public final StateFlow<String> getSearchQuery() {

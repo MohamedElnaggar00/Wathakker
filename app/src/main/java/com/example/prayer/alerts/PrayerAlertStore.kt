@@ -56,6 +56,34 @@ object PrayerAlertStore {
         p(context).edit().putBoolean("iqama_$prayer", enabled).apply()
     }
 
+    // 3.3.0: optional per-prayer tone/vibration. Absent = follow the app-level Settings values.
+    /** null = inherit; "default" = system default; otherwise a uri string. */
+    fun toneOverride(context: Context, prayer: Int): String? = p(context).getString("tone_ov_$prayer", null)
+    fun toneOverrideTitle(context: Context, prayer: Int): String? = p(context).getString("tone_ov_title_$prayer", null)?.takeIf { it.isNotBlank() }
+    fun setToneOverride(context: Context, prayer: Int, uri: String, title: String?) {
+        p(context).edit().putString("tone_ov_$prayer", uri.ifEmpty { "default" }).putString("tone_ov_title_$prayer", title ?: "").apply()
+        PrayerAlertReceiver.refreshChannels(context)
+    }
+    /** null = inherit. */
+    fun vibrationOverride(context: Context, prayer: Int): Boolean? =
+        if (p(context).contains("vib_ov_$prayer")) p(context).getBoolean("vib_ov_$prayer", true) else null
+    fun setVibrationOverride(context: Context, prayer: Int, on: Boolean) {
+        p(context).edit().putBoolean("vib_ov_$prayer", on).apply()
+        PrayerAlertReceiver.refreshChannels(context)
+    }
+    fun hasOverride(context: Context, prayer: Int) = toneOverride(context, prayer) != null || vibrationOverride(context, prayer) != null
+    fun clearOverride(context: Context, prayer: Int) {
+        p(context).edit().remove("tone_ov_$prayer").remove("tone_ov_title_$prayer").remove("vib_ov_$prayer").apply()
+        PrayerAlertReceiver.refreshChannels(context)
+    }
+    /** Effective values for this prayer: its own choice if set, otherwise the app-level setting. */
+    fun effectiveTone(context: Context, prayer: Int): String {
+        val o = toneOverride(context, prayer) ?: return com.example.utils.NotifPrefs.tone(context)
+        return if (o == "default") "" else o
+    }
+    fun effectiveVibration(context: Context, prayer: Int): Boolean =
+        vibrationOverride(context, prayer) ?: com.example.utils.NotifPrefs.vibration(context)
+
     /** Legacy alarm path gate: always false after migration silenced the legacy flag. */
     fun isFajrAlarmActive(context: Context): Boolean {
         migrate(context)

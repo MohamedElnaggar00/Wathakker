@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Widgets
+import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,6 +62,8 @@ fun SettingsScreen(
 ) {
     val contextApp = LocalContext.current.applicationContext
     val vibration by viewModel.vibrationEnabled.collectAsState()
+    val toneState by viewModel.notificationSound.collectAsState()
+    val toneSummary = remember(toneState) { com.example.utils.NotifPrefs.toneTitle(contextApp) ?: L10n.t(S.Default) }
     val appFont by viewModel.appFont.collectAsState()
     var showFontPicker by remember { mutableStateOf(false) }
     var showThemePicker by remember { mutableStateOf(false) }
@@ -86,6 +89,7 @@ fun SettingsScreen(
         themeTitle = themeTitle,
         onBack = onBack,
         onVibration = { viewModel.updateVibrationEnabled(it) },
+        toneSummary = toneSummary,
         onPickFont = { showFontPicker = true },
         onPickSound = {
             val intent = Intent("android.intent.action.RINGTONE_PICKER")
@@ -183,6 +187,7 @@ fun SettingsContent(
     themeTitle: String,
     onBack: () -> Unit,
     onVibration: (Boolean) -> Unit,
+    toneSummary: String,
     onPickFont: () -> Unit,
     onPickSound: () -> Unit,
     onFajr: (() -> Unit)? = null,
@@ -237,7 +242,7 @@ fun SettingsContent(
             OneUICard {
                 OneUIRow(
                     title = L10n.t(S.NotifSound),
-                    summary = L10n.t(S.Default),
+                    summary = toneSummary,
                     leading = { OneUIIconBadge(Icons.Outlined.MusicNote) },
                     trailing = { ChevronIcon() },
                     onClick = onPickSound

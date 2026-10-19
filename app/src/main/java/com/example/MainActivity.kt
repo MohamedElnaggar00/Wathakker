@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         com.example.utils.WearSync.push(this)
+        com.example.utils.NotifPrefs.refreshChannels(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
