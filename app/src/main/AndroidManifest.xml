@@ -64,6 +64,12 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_iqama_small_info" />
         </receiver>
+        <receiver android:exported="false" android:label="تقدم الصلاة One UI" android:name="com.example.widget.OneUIWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_oneui_info" />
+        </receiver>
         <receiver android:exported="false" android:label="تقدم الصلاة 4×1" android:name="com.example.widget.HeroWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
