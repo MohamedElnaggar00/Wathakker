@@ -42,8 +42,8 @@ adb shell date 101914002026.00 >/dev/null
 for M in no yes; do
  adb shell cmd uimode night $M; adb shell am force-stop $PKG
  adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
- for PAGE in prayer reminders hisn calendar; do
-  case $PAGE in prayer) T="الصلاة";; reminders) T="التذكيرات";; hisn) T="حصن المسلم";; calendar) T="التقويم";; esac
+ for PAGE in prayer reminders hisn calendar settings; do
+  case $PAGE in prayer) T="الصلاة";; reminders) T="التذكيرات";; hisn) T="حصن المسلم";; calendar) T="التقويم";; settings) T="الإعدادات";; esac
   tap_text "$T"; sleep 3
   adb exec-out screencap -p > "$OUT/page_${PAGE}_rest_$M.png"
   adb shell input swipe 540 1700 540 1100 500; sleep 1

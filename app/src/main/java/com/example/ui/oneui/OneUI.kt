@@ -150,22 +150,22 @@ fun OneUIScreen(
                 .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
                 .drawWithContent {
                     drawContent()
-                    val topH = (statusTop + 78.dp).toPx()
+                    val topH = (statusTop + 100.dp).toPx()
                     val f = fraction
                     if (f > 0.001f) {
                         drawRect(
                             brush = Brush.verticalGradient(
-                                colorStops = arrayOf(0f to Color.Black.copy(alpha = 1f - f), 1f to Color.Black),
+                                colorStops = arrayOf(0f to Color.Black.copy(alpha = 0f), 0.22f to Color.Black.copy(alpha = 0.04f * f), 0.55f to Color.Black.copy(alpha = 0.55f * f + (1f - f)), 1f to Color.Black),
                                 startY = 0f, endY = topH
                             ),
                             size = androidx.compose.ui.geometry.Size(size.width, topH),
                             blendMode = androidx.compose.ui.graphics.BlendMode.DstIn
                         )
                     }
-                    val botH = ((bottomPadding ?: (OneUIDimens.TabBarClearance + navBottom)) + 6.dp).toPx().coerceAtMost(size.height / 2f)
+                    val botH = ((bottomPadding ?: (OneUIDimens.TabBarClearance + navBottom)) + 18.dp).toPx().coerceAtMost(size.height / 2f)
                     drawRect(
                         brush = Brush.verticalGradient(
-                            colorStops = arrayOf(0f to Color.Black, 1f to Color.Black.copy(alpha = 0f)),
+                            colorStops = arrayOf(0f to Color.Black, 0.35f to Color.Black.copy(alpha = 0.7f), 0.75f to Color.Black.copy(alpha = 0.15f), 1f to Color.Black.copy(alpha = 0f)),
                             startY = size.height - botH, endY = size.height
                         ),
                         topLeft = androidx.compose.ui.geometry.Offset(0f, size.height - botH),
