@@ -32,8 +32,8 @@ open class PrayerTileService : TileService() {
 
     fun layout(s: PrayerState): LayoutElementBuilders.LayoutElement {
         val sweep = 270f
-        val track = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep)).setThickness(dp(16f)).setColor(argb(0xFF3A3420.toInt())).build()
-        val fill = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep * s.progress)).setThickness(dp(16f)).setColor(argb(0xFFD6B64A.toInt())).build()
+        val track = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep)).setThickness(dp(13f)).setColor(argb(0xFF3A3420.toInt())).build()
+        val fill = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep * s.progress)).setThickness(dp(13f)).setColor(argb(0xFFD6B64A.toInt())).build()
         fun arc(line: LayoutElementBuilders.ArcLine) = LayoutElementBuilders.Arc.Builder()
             .setAnchorAngle(degrees(-135f)).setAnchorType(LayoutElementBuilders.ARC_ANCHOR_START).addContent(line).build()
 
@@ -52,7 +52,7 @@ open class PrayerTileService : TileService() {
 
         return LayoutElementBuilders.Box.Builder()
             .setWidth(expand()).setHeight(expand())
-            .setModifiers(ModifiersBuilders.Modifiers.Builder().setClickable(click).build())
+            .setModifiers(ModifiersBuilders.Modifiers.Builder().setPadding(ModifiersBuilders.Padding.Builder().setAll(dp(6f)).build()).setClickable(click).build())
             .addContent(arc(track)).addContent(arc(fill)).addContent(center)
             .build()
     }

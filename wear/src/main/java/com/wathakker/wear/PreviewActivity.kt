@@ -45,6 +45,7 @@ class PreviewActivity : Activity() {
                 override fun onDraw(canvas: Canvas) {
                     val sz = (width * 0.30f).toInt(); val cx = width / 2; val cy = height / 2
                     cd.bounds = Rect(cx - sz / 2, cy - sz / 2, cx + sz / 2, cy + sz / 2)
+                    cd.currentTime = java.time.Instant.now()
                     cd.draw(canvas)
                     postInvalidateDelayed(1000)
                 }
