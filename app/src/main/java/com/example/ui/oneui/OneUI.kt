@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -139,7 +140,35 @@ fun OneUIScreen(
 
     Box(modifier = modifier.fillMaxSize().background(containerColor)) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().then(if (hazeState != null) Modifier.hazeSource(hazeState) else Modifier),
+            modifier = Modifier.fillMaxSize().then(if (hazeState != null) Modifier.hazeSource(hazeState) else Modifier)
+                // One UI edge fade: content dissolves smoothly under the floating pills and the nav pill.
+                // No coloured strip and no blur. The top fade grows with the scroll so the resting title stays solid.
+                .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
+                .drawWithContent {
+                    drawContent()
+                    val topH = (statusTop + 78.dp).toPx()
+                    val f = fraction
+                    if (f > 0.001f) {
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                colorStops = arrayOf(0f to Color.Black.copy(alpha = 1f - f), 1f to Color.Black),
+                                startY = 0f, endY = topH
+                            ),
+                            size = androidx.compose.ui.geometry.Size(size.width, topH),
+                            blendMode = androidx.compose.ui.graphics.BlendMode.DstIn
+                        )
+                    }
+                    val botH = ((bottomPadding ?: (OneUIDimens.TabBarClearance + navBottom)) + 6.dp).toPx().coerceAtMost(size.height / 2f)
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            colorStops = arrayOf(0f to Color.Black, 1f to Color.Black.copy(alpha = 0f)),
+                            startY = size.height - botH, endY = size.height
+                        ),
+                        topLeft = androidx.compose.ui.geometry.Offset(0f, size.height - botH),
+                        size = androidx.compose.ui.geometry.Size(size.width, botH),
+                        blendMode = androidx.compose.ui.graphics.BlendMode.DstIn
+                    )
+                },
             state = listState,
             contentPadding = PaddingValues(
                 start = OneUIDimens.ScreenPadding,
