@@ -66,6 +66,7 @@ public class MainActivity extends Activity {
             AppWidgetHostView v = host.createView(getApplicationContext(), id, info);
             v.setAppWidget(id, info);
             col.addView(v, new LinearLayout.LayoutParams((int)(wd * d), (int)(ht * d)));
+            v.updateAppWidgetSize(new Bundle(), wd, ht, wd, ht);
             kinds.add(kind);
             views.add(v);
         }
