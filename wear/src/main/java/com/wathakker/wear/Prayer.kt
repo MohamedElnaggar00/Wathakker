@@ -47,7 +47,7 @@ object Prayer {
         val cal = Calendar.getInstance(TimeZone.getDefault())
         cal.timeInMillis = now
         cal.add(Calendar.DAY_OF_YEAR, offsetDays)
-        val d = PrayerTimesCalculator.INSTANCE.calculateAll(cal, lat, lon, CalculationMethod.EGYPTIAN)
+        val d = PrayerTimesCalculator.INSTANCE.calculateAll(cal, lat, lon, CalculationMethod.EGYPTIAN, 1, 0, intArrayOf(0, 0, 0, 0, 0, 0))
         val t = longArrayOf(d.fajr, d.sunrise, d.dhuhr, d.asr, d.maghrib, d.isha)
         return t.mapIndexed { i, v -> Slot(i, names[i], v) }
     }

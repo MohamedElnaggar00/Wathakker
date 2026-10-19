@@ -11,10 +11,11 @@ adb shell cmd package query-services -a androidx.wear.tiles.action.BIND_TILE_PRO
 adb shell cmd package query-services -a android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST > "$OUT/complication_services.txt" 2>&1
 for P in 0 1 2 3 4; do
   adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page $P >/dev/null 2>&1
-  sleep 5
+  sleep 14
   adb exec-out screencap -p > "$OUT/wear_page_$P.png"
 done
 adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ez circles true >/dev/null 2>&1
+sleep 9
 sleep 1; adb exec-out screencap -p > "$OUT/wear_circles_anim_1s.png"
 sleep 4; adb exec-out screencap -p > "$OUT/wear_circles_done.png"
 adb logcat -d -s AndroidRuntime:E ActivityManager:W WathakkerWear:V > "$OUT/logcat.txt" 2>&1
