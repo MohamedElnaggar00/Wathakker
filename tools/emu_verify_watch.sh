@@ -7,7 +7,8 @@ adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
 adb shell appops set $PKG SCHEDULE_EXACT_ALARM allow >/dev/null 2>&1
 adb shell appops set $PKG USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
 adb shell settings put global auto_time 0
-tapdesc(){ adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
+dumpui(){ for i in 1 2 3 4 5; do rm -f /tmp/uw.xml; adb shell rm -f /sdcard/u.xml; adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1; [ -s /tmp/uw.xml ] && return; sleep 2; done; echo "dump failed" >> "$OUT/SUMMARY.txt"; : > /tmp/uw.xml; }
+tapdesc(){ dumpui
  XY=$(python3 - "$1" $2 <<'PY'
 import re,sys
 x=open('/tmp/uw.xml',encoding='utf-8').read()
@@ -35,7 +36,7 @@ done
 for M in no yes; do
  adb shell cmd uimode night $M; adb shell am force-stop $PKG
  adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
- adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
+ dumpui
  XY=$(python3 - <<'PY'
 import re
 x=open('/tmp/uw.xml',encoding='utf-8').read()
@@ -72,7 +73,7 @@ tapdesc "الاهتزاز للإشعارات"; sleep 3
 adb exec-out screencap -p > "$OUT/notif_settings_vib_off.png"
 chans 2_global_vibration_off
 adb shell input keyevent 4; sleep 2
-adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
+dumpui
 BXY=$(python3 - <<'PY'
 import re
 x=open('/tmp/uw.xml',encoding='utf-8').read()
@@ -83,7 +84,7 @@ PY
 echo "bell_0: $BXY" >> "$OUT/SUMMARY.txt"
 [ -n "$BXY" ] && adb shell input swipe $BXY $BXY 1200; sleep 3
 adb exec-out screencap -p > "$OUT/sheet_inherit.png"
-swtap(){ adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
+swtap(){ dumpui
  XY=$(python3 - <<'PY'
 import re
 x=open('/tmp/uw.xml',encoding='utf-8').read()
@@ -106,7 +107,7 @@ adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
 tapdesc "القائمة"; sleep 3
 tapdesc "منبه صلاة الفجر"; sleep 3
 adb exec-out screencap -p > "$OUT/fajr_alarm_off.png"
-adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
+dumpui
 FXY=$(python3 - <<'PY'
 import re
 x=open('/tmp/uw.xml',encoding='utf-8').read()
