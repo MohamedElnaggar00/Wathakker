@@ -52,7 +52,10 @@ private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
     "auto" to (L10n.t(S.Auto) to Color(0xFF171719)),
     "black" to (L10n.t(S.ColorBlack) to Color(0xFF000000)),
     "gray" to (L10n.t(S.ColorGray) to Color(0xFF2B2B2B)),
-    "white" to (L10n.t(S.ColorWhite) to Color(0xFFF6F6F6))
+    "white" to (L10n.t(S.ColorWhite) to Color(0xFFF6F6F6)),
+    // v3.2.0 (his additions 1 & 2): frosted glass + blurred-wallpaper backgrounds.
+    "glass" to (L10n.t(S.BgGlass) to Color(0x8FFFFFFF)),
+    "wallblur" to (L10n.t(S.BgWallBlur) to Color(0xFF7E7EAA))
 )
 
 @Composable

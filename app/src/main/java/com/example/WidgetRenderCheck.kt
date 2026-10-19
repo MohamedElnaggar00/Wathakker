@@ -54,7 +54,11 @@ class WidgetRenderCheck : Activity() {
                 File(out, "preview_light_${kind}.err").writeText(e.toString())
             }
         }
-        for ((id, tag) in listOf(991 to "light", 992 to "dark", 993 to "default")) {
+        sp.edit()
+            .putString("widget_bg_color_995", "glass").remove("widget_bar_color_995")
+            .putString("widget_bg_color_996", "wallblur").remove("widget_bar_color_996")
+            .apply()
+        for ((id, tag) in listOf(991 to "light", 992 to "dark", 993 to "default", 995 to "glass", 996 to "wallblur")) {
             for (kind in kinds) {
                 try {
                     val (w, h) = dims[kind] ?: (110 to 90)
