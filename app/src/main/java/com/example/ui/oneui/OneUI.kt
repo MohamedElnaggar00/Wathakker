@@ -525,7 +525,8 @@ fun OneUISwitch(checked: Boolean, onCheckedChange: ((Boolean) -> Unit)?, modifie
                 // 3.3.0: the platform's own toggle haptic (API 34+), a soft click on older Android.
                 // Respects the system touch-feedback setting.
                 val turningOn = !checked
-                switchView.performHapticFeedback(
+                com.example.utils.AppHaptics.load(switchView.context)
+                if (com.example.utils.AppHaptics.enabled) switchView.performHapticFeedback(
                     if (android.os.Build.VERSION.SDK_INT >= 34)
                         (if (turningOn) android.view.HapticFeedbackConstants.TOGGLE_ON else android.view.HapticFeedbackConstants.TOGGLE_OFF)
                     else android.view.HapticFeedbackConstants.CLOCK_TICK

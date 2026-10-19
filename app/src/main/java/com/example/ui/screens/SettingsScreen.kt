@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.MoreTime
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material.icons.outlined.Vibration
+import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -246,6 +247,15 @@ fun SettingsContent(
                     leading = { OneUIIconBadge(Icons.Outlined.Vibration) },
                     trailing = { OneUISwitch(vibration, onVibration) },
                     onClick = { onVibration(!vibration) }
+                )
+                val hapticCtx = androidx.compose.ui.platform.LocalContext.current
+                androidx.compose.runtime.LaunchedEffect(Unit) { com.example.utils.AppHaptics.load(hapticCtx) }
+                val hapticOn = com.example.utils.AppHaptics.enabled
+                OneUIRow(
+                    title = if (L10n.lang == com.example.ui.i18n.Lang.AR) "الاستجابة اللمسية" else "Haptic feedback",
+                    leading = { OneUIIconBadge(Icons.Outlined.TouchApp) },
+                    trailing = { OneUISwitch(hapticOn, { com.example.utils.AppHaptics.set(hapticCtx, it) }) },
+                    onClick = { com.example.utils.AppHaptics.set(hapticCtx, !hapticOn) }
                 )
             }
         }

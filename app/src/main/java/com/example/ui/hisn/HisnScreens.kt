@@ -252,7 +252,7 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
                     .background(chipBg)
                     .semantics { contentDescription = "عداد الذكر" }
                     .clickable {
-                        haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                        if (com.example.utils.AppHaptics.enabled) haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         remaining = if (remaining > 0) remaining - 1 else item.count
                     }
                     .padding(horizontal = 16.dp),

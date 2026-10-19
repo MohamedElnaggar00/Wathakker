@@ -76,7 +76,7 @@ fun TasbeehContent(count: Int, onMenu: (() -> Unit)?, onTap: () -> Unit, onReset
                         .clip(CircleShape)
                         .background(cs.surface)
                         .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
-                            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            if (com.example.utils.AppHaptics.enabled) haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                             onTap()
                         },
                     contentAlignment = Alignment.Center
