@@ -419,9 +419,10 @@ fun PrayerTimesContent(
         item(key = "prayer-list") {
             // Next-prayer row: solid green pill with high-contrast content in both themes.
             val nextDark = com.example.ThemeSettings.isDark()
-            val nextRowBg = if (nextDark) Color(0xFF14532D) else Color(0xFF1E7E34)
-            val nextChipBg = if (nextDark) Color(0xFF62D484) else Color.White
-            val nextChipIcon = if (nextDark) Color(0xFF0B2E1A) else Color(0xFF1E7E34)
+            val nextRowBg = if (nextDark) Color(0xFF24533A) else Color(0xFFC2E8CE)
+            val nextChipBg = if (nextDark) Color(0xFF7DDC9A) else Color(0xFF1E7E34)
+            val nextChipIcon = if (nextDark) Color(0xFF0B2E1A) else Color.White
+            val nextText = if (nextDark) Color(0xFFE3F7E9) else Color(0xFF0D4A21)
             OneUICard(
                 modifier = Modifier.skyGlass(RoundedCornerShape(OneUIDimens.CardRadius), skyHaze, sc),
                 color = Color.Transparent
@@ -454,7 +455,7 @@ fun PrayerTimesContent(
                         Spacer(Modifier.width(14.dp))
                         Text(
                             row.name,
-                            color = if (row.isNext) Color.White else sc.textPrimary,
+                            color = if (row.isNext) nextText else sc.textPrimary,
                             fontWeight = if (row.isNext) FontWeight.ExtraBold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
@@ -463,7 +464,7 @@ fun PrayerTimesContent(
                         val bellOn = bellIndex != null && bellStates.getOrElse(bellIndex) { false }
                         Text(
                             row.timeText,
-                            color = if (row.isNext) Color.White else sc.textPrimary,
+                            color = if (row.isNext) nextText else sc.textPrimary,
                             fontWeight = if (row.isNext) FontWeight.ExtraBold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
@@ -489,7 +490,7 @@ fun PrayerTimesContent(
                                     if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
                                     contentDescription = "bell_" + bellIndex,
                                     modifier = Modifier.size(19.dp),
-                                    tint = if (row.isNext) Color.White.copy(alpha = if (bellOn) 1f else 0.8f) else if (bellOn) sc.accent else sc.textSecondary.copy(alpha = 0.45f)
+                                    tint = if (row.isNext) nextText.copy(alpha = if (bellOn) 1f else 0.75f) else if (bellOn) sc.accent else sc.textSecondary.copy(alpha = 0.45f)
                                 )
                             }
                         }
