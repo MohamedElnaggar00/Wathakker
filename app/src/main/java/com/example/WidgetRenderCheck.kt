@@ -55,6 +55,7 @@ class WidgetRenderCheck : Activity() {
             }
         }
         // Picker previews for the One UI widget: real renders (330x90 dp, card + date tile), both themes.
+        File(out, "oneui_preview_started.txt").writeText("started")
         for ((tag, nightFlag) in listOf("light" to android.content.res.Configuration.UI_MODE_NIGHT_NO, "dark" to android.content.res.Configuration.UI_MODE_NIGHT_YES)) {
             try {
                 val cfg = android.content.res.Configuration(resources.configuration)
@@ -62,7 +63,8 @@ class WidgetRenderCheck : Activity() {
                 val ctx = createConfigurationContext(cfg)
                 val bmp = HomeWidgets.renderKind(ctx, "OneUI", 330, 90, 994)
                 FileOutputStream(File(out, "oneui_preview_${tag}.png")).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
+                android.util.Log.e("WathakkerHome", "oneui preview failed", e)
                 File(out, "oneui_preview_${tag}.err").writeText(e.toString())
             }
         }
