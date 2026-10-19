@@ -15,6 +15,14 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.RestartAlt
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +45,10 @@ import com.example.ui.i18n.S
 import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIIconBadge
 import com.example.ui.oneui.OneUIRow
+import com.example.ThemeSettings
+import com.example.ui.oneui.FrostSpec
+import com.example.ui.oneui.oneUIFrosted
+import com.example.ui.oneui.oneUIBorderColor
 import com.example.ui.oneui.OneUIScreen
 import com.example.ui.oneui.SectionLabel
 import java.text.DateFormatSymbols
@@ -100,8 +112,7 @@ private fun DateField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(14.dp))
-                .background(cs.surfaceVariant.copy(alpha = 0.6f))
+                .oneUIFrosted(RoundedCornerShape(14.dp), FrostSpec(cs.surfaceVariant, if (ThemeSettings.isDark()) 0.50f else 0.62f, oneUIBorderColor()), 14)
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -121,13 +132,71 @@ private fun DateField(
     }
 }
 
-/** Parses a month entry: a 1-12 number or a localized month name (case-insensitive). */
-private fun parseMonth(raw: String, names: List<String>): Int? {
-    val t = raw.trim()
-    if (t.isEmpty()) return null
-    t.toIntOrNull()?.let { if (it in 1..12) return it }
-    val idx = names.indexOfFirst { it.equals(t, ignoreCase = true) }
-    return if (idx >= 0) idx + 1 else null
+/** One UI month spinner (v3.2.0, his call): month is picked ONLY from a
+ *  drop-down list of month names - no typing. Same frosted field as DateField;
+ *  the popup follows One UI: large rounded elevated card, hairline border,
+ *  generous rows, selected item in One UI blue with a check at the end side. */
+@Composable
+private fun MonthField(
+    selected: Int?,
+    onPick: (Int) -> Unit,
+    label: String,
+    names: List<String>,
+    modifier: Modifier = Modifier
+) {
+    val cs = MaterialTheme.colorScheme
+    var open by remember { mutableStateOf(false) }
+    val blue = if (ThemeSettings.isDark()) Color(0xFF78B8F8) else Color(0xFF2E6DB4)
+    Column(modifier = modifier) {
+        Text(label, color = cs.onSurfaceVariant, fontSize = 11.sp, fontWeight = FontWeight.Medium)
+        Spacer(Modifier.height(4.dp))
+        Box {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .oneUIFrosted(RoundedCornerShape(14.dp), FrostSpec(cs.surfaceVariant, if (ThemeSettings.isDark()) 0.50f else 0.62f, oneUIBorderColor()), 14)
+                    .clickable { open = true }
+                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    selected?.let { names.getOrNull(it - 1) } ?: "",
+                    color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center, modifier = Modifier.weight(1f)
+                )
+                Icon(Icons.Outlined.KeyboardArrowDown, contentDescription = null,
+                    tint = cs.onSurfaceVariant, modifier = Modifier.width(18.dp))
+            }
+            DropdownMenu(
+                expanded = open,
+                onDismissRequest = { open = false },
+                shape = RoundedCornerShape(24.dp),
+                containerColor = cs.surfaceContainerHigh,
+                tonalElevation = 6.dp,
+                shadowElevation = 10.dp,
+                border = BorderStroke(1.dp, oneUIBorderColor())
+            ) {
+                names.forEachIndexed { i, name ->
+                    val sel = selected == i + 1
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                name,
+                                color = if (sel) blue else cs.onSurface,
+                                fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal,
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        },
+                        trailingIcon = if (sel) {
+                            { Icon(Icons.Outlined.Check, contentDescription = null, tint = blue) }
+                        } else null,
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 20.dp, vertical = 6.dp),
+                        onClick = { onPick(i + 1); open = false }
+                    )
+                }
+            }
+        }
+    }
 }
 
 /** Hijri <-> Gregorian date converter: D/M/Y filled fields per direction,
@@ -140,11 +209,11 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
     val locale = remember(langCode) { Locale(langCode) }
 
     var gDay by remember { mutableStateOf("") }
-    var gMonth by remember { mutableStateOf("") }
+    var gMonth by remember { mutableStateOf<Int?>(null) }
     var gYear by remember { mutableStateOf("") }
 
     var hDay by remember { mutableStateOf("") }
-    var hMonth by remember { mutableStateOf("") }
+    var hMonth by remember { mutableStateOf<Int?>(null) }
     var hYear by remember { mutableStateOf("") }
 
     val gMonths = gregorianMonths(locale)
@@ -152,7 +221,7 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
 
     // G -> H result (null until fields form a valid Gregorian date)
     val gY = gYear.trim().toIntOrNull()
-    val gM = parseMonth(gMonth, gMonths)
+    val gM = gMonth
     val gD = gDay.trim().toIntOrNull()
     val gValid = gY != null && gY in G_YEAR_MIN..G_YEAR_MAX && gM != null &&
         gD != null && gD in 1..gregorianMaxDay(gY, gM)
@@ -162,7 +231,7 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
 
     // H -> G result
     val hY = hYear.trim().toIntOrNull()
-    val hM = parseMonth(hMonth, hMonths)
+    val hM = hMonth
     val hD = hDay.trim().toIntOrNull()
     val hValid = hY != null && hY in H_YEAR_MIN..H_YEAR_MAX && hM != null &&
         hD != null && hD in 1..hijriMaxDay(hY, hM)
@@ -183,7 +252,7 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
                     Row(Modifier.fillMaxWidth()) {
                         DateField(gDay, { gDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
                         Spacer(Modifier.width(10.dp))
-                        DateField(gMonth, { gMonth = it.take(20) }, L10n.t(S.MonthLabel), Modifier.weight(1.4f), numeric = false)
+                        MonthField(gMonth, { gMonth = it }, L10n.t(S.MonthLabel), gMonths, Modifier.weight(1.4f))
                         Spacer(Modifier.width(10.dp))
                         DateField(gYear, { gYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
                     }
@@ -203,7 +272,7 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
                     Row(Modifier.fillMaxWidth()) {
                         DateField(hDay, { hDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
                         Spacer(Modifier.width(10.dp))
-                        DateField(hMonth, { hMonth = it.take(20) }, L10n.t(S.MonthLabel), Modifier.weight(1.4f), numeric = false)
+                        MonthField(hMonth, { hMonth = it }, L10n.t(S.MonthLabel), hMonths, Modifier.weight(1.4f))
                         Spacer(Modifier.width(10.dp))
                         DateField(hYear, { hYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
                     }
@@ -221,11 +290,11 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
                     onClick = {
                         val now = Calendar.getInstance()
                         gDay = now.get(Calendar.DAY_OF_MONTH).toString()
-                        gMonth = (now.get(Calendar.MONTH) + 1).toString()
+                        gMonth = now.get(Calendar.MONTH) + 1
                         gYear = now.get(Calendar.YEAR).toString()
                         val hy = HijriDate.INSTANCE.hijriYmd(now)
                         hDay = hy.third!!.toString()
-                        hMonth = hy.second!!.toString()
+                        hMonth = hy.second
                         hYear = hy.first!!.toString()
                     }
                 )

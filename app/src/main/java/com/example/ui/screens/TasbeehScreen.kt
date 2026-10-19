@@ -36,6 +36,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.oneui.OneUIButton
 import com.example.ui.oneui.OneUIChip
+import com.example.ThemeSettings
+import com.example.ui.oneui.FrostSpec
+import com.example.ui.oneui.oneUIFrosted
+import com.example.ui.oneui.oneUIBorderColor
 import com.example.ui.oneui.OneUIScreen
 import com.example.ui.theme.OneUIActiveGreen
 import com.example.ui.viewmodel.MainViewModel
@@ -73,8 +77,7 @@ fun TasbeehContent(count: Int, onMenu: (() -> Unit)?, onTap: () -> Unit, onReset
                 Box(
                     modifier = Modifier
                         .size(268.dp)
-                        .clip(CircleShape)
-                        .background(cs.surface)
+                        .oneUIFrosted(CircleShape, FrostSpec(cs.surface, if (ThemeSettings.isDark()) 0.50f else 0.62f, oneUIBorderColor()), 24)
                         .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
                             haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                             onTap()
