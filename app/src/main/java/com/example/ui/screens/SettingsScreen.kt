@@ -243,7 +243,7 @@ fun SettingsContent(
                     onClick = onPickSound
                 )
                 OneUIRow(
-                    title = L10n.t(S.Vibration),
+                    title = when (L10n.lang) { com.example.ui.i18n.Lang.AR -> "الاهتزاز للإشعارات"; com.example.ui.i18n.Lang.EN -> "Notification vibration"; else -> L10n.t(S.Vibration) },
                     leading = { OneUIIconBadge(Icons.Outlined.Vibration) },
                     trailing = { OneUISwitch(vibration, onVibration) },
                     onClick = { onVibration(!vibration) }
