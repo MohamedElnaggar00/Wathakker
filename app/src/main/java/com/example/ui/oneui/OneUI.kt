@@ -117,6 +117,10 @@ fun OneUIScreen(
     // their frosted frames even at rest, so icons stay legible over every sky/theme
     // combo. Default false keeps every other screen's fade-in-on-scroll unchanged.
     alwaysShowHeaderTiles: Boolean = false,
+    // Prayer page only: nudges the large title down away from the always-visible pills and
+    // closer to the first card. Defaults keep every other page unchanged.
+    titleTopExtra: Dp = 0.dp,
+    titleBottomTrim: Dp = 0.dp,
     // v3.2.0 glass system: when non-null the header pills use this frost material
     // (prayer screen: matches the cards over the sky). Null = default tile, unchanged.
     frost: FrostSpec? = null,
@@ -181,7 +185,7 @@ fun OneUIScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = statusTop + 4.dp, bottom = 16.dp)
+                        .padding(top = statusTop + 4.dp + titleTopExtra, bottom = 16.dp - titleBottomTrim)
                         .alpha(1f - minOf(fraction * 3f, 1f))
                 ) {
                     Spacer(modifier = Modifier.height(52.dp))
