@@ -45,7 +45,14 @@ for m in re.finditer(r'text=.(Wait).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\]
   fi
 }
 alive() { adb shell pidof $PKG >/dev/null 2>&1 && [ -n "$(adb shell pidof $PKG)" ]; }
-fg_guard() { for i in 1 2 3 4 5 6 7 8; do F=$(adb shell dumpsys window 2>/dev/null | grep -m1 "mCurrentFocus"); echo "$F" | grep -q "$PKG" && return 0; sleep 1; adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 2; done; return 1; }
+fg_guard() { for i in 1 2 3 4 5 6 7 8; do
+  F=$(adb shell dumpsys window 2>/dev/null | grep -m1 "mCurrentFocus")
+  echo "$F" | grep -q "$PKG" && return 0
+  # a Compose popup/dropdown window can own focus without the package in mCurrentFocus;
+  # the app's top activity is still ours then - treat as foreground
+  adb shell dumpsys activity activities 2>/dev/null | grep -m1 "topResumedActivity" | grep -q "$PKG" && return 0
+  sleep 1; adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 2
+done; return 1; }
 
 # clear any ANR dialog from boot/uimode before reading the UI
 dismiss_anr
