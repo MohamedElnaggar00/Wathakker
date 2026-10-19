@@ -237,6 +237,86 @@ alive && say "PASS: app alive across tab leave/re-enter" || say "FAIL: app died 
 
 # ================= v3.2.0 glass-system / smoke / widget checks =================
 
+# --- date converter: frosted fields + month drop-down (One UI popup, no typing) ---
+open_drawer
+tab_tap "محول التاريخ"
+adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot 320_converter_dark
+adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot 320_converter_light
+# fill today so both converters have values
+tab_tap "اليوم"
+sleep 2; shot 320_converter_today
+tap_below_text() { # <label> <occurrence 1|2> <dy px> - tap dy px below the label's center-x
+  dump
+  python3 -c "
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+n=0
+for m in re.finditer(r'text=.([^\"]*).[^>]*?bounds=.\[(\d+),(\d+)\]\[(\d+),(\d+)\].',x):
+    if m.group(1)=='$1':
+        n+=1
+        if n==$2:
+            a,b,c,d=int(m.group(2)),int(m.group(3)),int(m.group(4)),int(m.group(5))
+            print((a+c)//2, d+$3); break
+" > /tmp/tbt.xy
+  [ -s /tmp/tbt.xy ] && adb shell input tap $(cat /tmp/tbt.xy) && sleep 3
+  rm -f /tmp/tbt.xy
+}
+# open the Gregorian month drop-down (first الشهر label) and check the popup
+tap_below_text "الشهر" 1 110
+shot 320_converter_month_popup_g
+dump
+python3 - >> "$SUM" <<'PY'
+import os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+ok = ('يناير' in x) and ('ديسمبر' in x)
+print(('PASS' if ok else 'FAIL')+': gregorian month popup lists month names')
+PY
+# pick January (يناير)
+tab_tap "يناير"
+sleep 2; shot 320_converter_month_picked
+dump
+python3 - >> "$SUM" <<'PY'
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+# result card shows a Hijri date line with a hijri month name
+hm=['محرم','صفر','ربيع','جمادى','رجب','شعبان','رمضان','شوال','ذو']
+res=[t for t in re.findall(r'text="([^"]*)"',x) if any(m in t for m in hm) and any(ch.isdigit() for ch in t)]
+print(('PASS' if res else 'FAIL')+f': G->H conversion result after month pick: {res[:1]}')
+PY
+# open the Hijri month drop-down (second الشهر) and pick محرم
+tap_below_text "الشهر" 2 110
+shot 320_converter_month_popup_h
+dump
+python3 - >> "$SUM" <<'PY'
+import os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+ok = ('محرم' in x) and ('ذو الحجة' in x)
+print(('PASS' if ok else 'FAIL')+': hijri month popup lists month names')
+PY
+tab_tap "محرم"
+sleep 2
+dump
+python3 - >> "$SUM" <<'PY'
+import re,os
+x=open('/tmp/u320.xml',encoding='utf-8').read() if os.path.exists('/tmp/u320.xml') else ''
+gm=['يناير','فبراير','مارس','أبريل','ابريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر',
+    'January','February','March','April','May','June','July','August','September','October','November','December']
+res=[t for t in re.findall(r'text="([^"]*)"',x) if any(m in t for m in gm) and any(ch.isdigit() for ch in t)]
+print(('PASS' if res else 'FAIL')+f': H->G conversion result after month pick: {res[:1]}')
+PY
+adb shell input keyevent 4; sleep 2
+
+# --- tasbih screen: frosted counter ring over smoke, both themes ---
+open_drawer
+tab_tap "السبحة"
+adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot 320_tasbeeh_dark
+smoke_check 320_tasbeeh_dark.png "tasbeeh dark"
+adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot 320_tasbeeh_light
+smoke_check 320_tasbeeh_light.png "tasbeeh light"
+adb shell input keyevent 4; sleep 2
+
+
+
 smoke_check() { # <png> <label>
 python3 -c "
 from PIL import Image
@@ -361,6 +441,21 @@ f=glob.glob(f'{out}/widget_render/*991*')
 if f:
     c3=classify(f[0],'explicit-blue-on-white-bg')
     print(('PASS' if c3=='blue' else 'FAIL')+': explicit blue option still blue')
+# 995 = glass bg: translucent (alpha<255 inside the card) + border stroke
+import glob
+f995=glob.glob(f'{out}/widget_render/*995*')
+if f995:
+    im=Image.open(f995[0]).convert('RGBA'); w,h=im.size
+    a=im.getpixel((w//2,4))[3]; ab=im.getpixel((w//2,h-4))[3]
+    print(f'glass995: center-top alpha={a}')
+    print(('PASS' if a<200 else 'FAIL')+': glass widget bg is translucent')
+f996=glob.glob(f'{out}/widget_render/*996*')
+if f996:
+    im=Image.open(f996[0]).convert('RGB'); w,h=im.size
+    px=[im.getpixel((x,y)) for x in range(8,w-8,17) for y in range(8,h-8,17)]
+    rs=[p[0] for p in px]; var=max(rs)-min(rs)
+    print(f'wallblur996: red-channel spread={var}')
+    print(('PASS' if var>12 else 'WARN')+': wallblur widget bg is a (blurred) photo, not flat')
 print('INFO: widget render files: '+str(sorted(os.path.basename(x) for x in glob.glob(f'{out}/widget_render/*'))[:40]))
 PY
 adb shell am force-stop $PKG; sleep 1
