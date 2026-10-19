@@ -36,16 +36,16 @@ class PreviewActivity : Activity() {
             val type = if (mode == "short") ComplicationType.SHORT_TEXT else ComplicationType.RANGED_VALUE
             val data = PreviewComp(this).build(type, s)!!
             val cd = ComplicationDrawable(this)
-            cd.activeStyle.setRangedValuePrimaryColor(0xFFD6B64A.toInt())
-            cd.activeStyle.setRangedValueSecondaryColor(0xFF3A3420.toInt())
-            cd.activeStyle.setTextColor(Color.WHITE)
-            cd.activeStyle.setTitleColor(0xFFD6B64A.toInt())
-            cd.setComplicationData(data.asWireComplicationData(), true)
+            cd.activeStyle.rangedValuePrimaryColor = 0xFFD6B64A.toInt()
+            cd.activeStyle.rangedValueSecondaryColor = 0xFF3A3420.toInt()
+            cd.activeStyle.textColor = Color.WHITE
+            cd.activeStyle.titleColor = 0xFFD6B64A.toInt()
+            cd.setComplicationData(data, true)
             root.addView(object : View(this) {
                 override fun onDraw(canvas: Canvas) {
                     val sz = (width * 0.30f).toInt(); val cx = width / 2; val cy = height / 2
                     cd.bounds = Rect(cx - sz / 2, cy - sz / 2, cx + sz / 2, cy + sz / 2)
-                    cd.draw(canvas, System.currentTimeMillis())
+                    cd.draw(canvas)
                     postInvalidateDelayed(1000)
                 }
             }, ViewGroup.LayoutParams(-1, -1))
