@@ -22,6 +22,8 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.NotificationAdd
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.Icon
@@ -236,11 +238,19 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
         Spacer(Modifier.height(14.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             val done = remaining == 0
+            // 3.3.0: counter is light One UI blue (same as the bottom bar), turning light green when finished.
+            val dk = com.example.ThemeSettings.isDark()
+            val blue = if (dk) Color(0xFF78B8F8) else Color(0xFF2E6DB4)
+            val greenBg = if (dk) Color(0xFF24533A) else Color(0xFFC2E8CE)
+            val greenFg = if (dk) Color(0xFFE3F7E9) else Color(0xFF0D4A21)
+            val chipBg by androidx.compose.animation.animateColorAsState(if (done) greenBg else blue.copy(alpha = 0.16f), androidx.compose.animation.core.tween(350), label = "cntBg")
+            val chipFg by androidx.compose.animation.animateColorAsState(if (done) greenFg else blue, androidx.compose.animation.core.tween(350), label = "cntFg")
             Row(
                 modifier = Modifier
                     .height(40.dp)
                     .clip(CircleShape)
-                    .background(if (done) cs.primary.copy(alpha = 0.16f) else cs.surfaceVariant)
+                    .background(chipBg)
+                    .semantics { contentDescription = "عداد الذكر" }
                     .clickable {
                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         remaining = if (remaining > 0) remaining - 1 else item.count
@@ -249,7 +259,7 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (done) {
-                    Icon(Icons.Outlined.Check, null, tint = cs.primary, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Outlined.Check, null, tint = chipFg, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(8.dp))
                 }
                 val label = when {
@@ -259,7 +269,7 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
                 }
                 Text(
                     label,
-                    color = if (done) cs.primary else cs.onSurface,
+                    color = chipFg,
                     style = MaterialTheme.typography.labelLarge
                 )
             }
