@@ -21,6 +21,7 @@ public final class BootReceiver extends BroadcastReceiver {
         Intrinsics.checkNotNullParameter(context, "context");
         Intrinsics.checkNotNullParameter(intent, "intent");
         try { com.example.prayer.alerts.PrayerAlertScheduler.INSTANCE.scheduleAll(context); } catch (Throwable ignored) {}
+        try { new com.example.fajr.alarm.FajrAlarmScheduler(context).scheduleNextFajrAlarm(); } catch (Throwable ignored) {}
         String action = intent.getAction();
         if (action != null) {
             switch (action.hashCode()) {

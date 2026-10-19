@@ -177,5 +177,14 @@ public final class FajrPreferences {
         Intrinsics.checkNotNullParameter(value, "value");
         this.prefs.edit().putString("widget_bar_color", value).apply();
     }
-}
 
+    // 3.3.0 alarm timing / snooze options
+    public final int getAlarmBeforeMin() { return this.prefs.getInt("alarm_before_min", 0); }
+    public final void setAlarmBeforeMin(int v) { this.prefs.edit().putInt("alarm_before_min", v).apply(); }
+    public final int getAlarmAfterMin() { return this.prefs.getInt("alarm_after_min", 0); }
+    public final void setAlarmAfterMin(int v) { this.prefs.edit().putInt("alarm_after_min", v).apply(); }
+    public final int getSnoozeMinutes() { return this.prefs.getInt("snooze_minutes", 10); }
+    public final void setSnoozeMinutes(int v) { this.prefs.edit().putInt("snooze_minutes", v).apply(); }
+    public final String getSlotDate(String slot) { String s = this.prefs.getString("alarm_slot_date_" + slot, ""); return s == null ? "" : s; }
+    public final void setSlotDate(String slot, String date) { this.prefs.edit().putString("alarm_slot_date_" + slot, date).apply(); }
+}

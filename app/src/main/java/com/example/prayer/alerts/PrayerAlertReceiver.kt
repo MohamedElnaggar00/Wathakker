@@ -31,6 +31,13 @@ class PrayerAlertReceiver : BroadcastReceiver() {
             restoreDnd(context)
             return
         }
+        // 3.3.0: while the full-screen Fajr alarm is on, the Fajr bell does not also notify at the adhan.
+        if (prayer == 0 && kind == PrayerAlertScheduler.KIND_ADHAN &&
+            com.example.fajr.data.FajrPreferences(context).isAlarmEnabled) {
+            android.util.Log.i("FajrBellSuppressed", "fajr adhan bell skipped, full-screen alarm is on")
+            PrayerAlertScheduler.scheduleAll(context)
+            return
+        }
         if (!PrayerAlertStore.isEnabled(context, prayer)) return
 
         val nameKey = when (prayer) {

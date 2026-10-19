@@ -98,6 +98,7 @@ val oneUIDrawerItems: List<OneUIDrawerItem> = listOf(
     OneUIDrawerItem("hijri_converter", L10n.t(S.HijriConvTitle), Icons.Outlined.DateRange, Color(4284061916L)),
     OneUIDrawerItem("qibla", L10n.t(S.QiblaTitle), Icons.Outlined.Explore, Color(4280391411L)),
     OneUIDrawerItem("tasbeeh", L10n.t(S.TasbeehTab), Icons.Outlined.AdsClick, Color(4290617322L)),
+    OneUIDrawerItem("fajr_alarm", L10n.t(S.FajrAlarm), Icons.Outlined.Alarm, Color(0xFFE5B455)),
     OneUIDrawerItem("settings", L10n.t(S.Settings), Icons.Outlined.Settings, Color(4287669422L)),
     OneUIDrawerItem("about", L10n.t(S.About), Icons.Outlined.Info, Color(4287532691L))
 )
@@ -213,6 +214,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 composable("location_calc") {
                     val fajrViewModel: FajrViewModel = viewModel()
                     com.example.prayer.LocationCalculationScreen(fajrViewModel) { navController.popBackStack() }
+                }
+                composable("fajr_alarm") {
+                    val fajrAlarmVm: FajrViewModel = viewModel()
+                    FajrAlarmSettingsScreen(fajrAlarmVm) { navController.popBackStack() }
                 }
                 composable("watch_settings") { WatchSettingsScreen { navController.popBackStack() } }
                 composable("about") { AboutScreen { navController.popBackStack() } }

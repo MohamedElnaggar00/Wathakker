@@ -68,6 +68,7 @@ fun FajrAlarmScreen(prayerName: String, onDismiss: () -> Unit, onSnooze: (Int) -
     var currentTimeStr by remember { mutableStateOf("") }
     var currentDateStr by remember { mutableStateOf("") }
     var showSnoozeOptions by remember { mutableStateOf(false) }
+    val ctxAlarm = androidx.compose.ui.platform.LocalContext.current
 
     LaunchedEffect(L10n.lang) {
         val loc = Locale.forLanguageTag(L10n.lang.code)
@@ -120,7 +121,7 @@ fun FajrAlarmScreen(prayerName: String, onDismiss: () -> Unit, onSnooze: (Int) -
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             OutlinedButton(
-                                onClick = { showSnoozeOptions = !showSnoozeOptions },
+                                onClick = { onSnooze(com.example.fajr.data.FajrPreferences(ctxAlarm).snoozeMinutes) },
                                 modifier = Modifier.weight(1f).height(56.dp),
                                 shape = RoundedCornerShape(20.dp)
                             ) {
@@ -262,7 +263,7 @@ class FajrAlarmActivity : ComponentActivity() {
         val prefs = FajrPreferences(this)
         if (prefs.snoozeCount < 3) {
             prefs.snoozeCount = prefs.snoozeCount + 1
-            FajrAlarmScheduler(this).scheduleSnooze(prefs.maxDurationMinutes)
+            FajrAlarmScheduler(this).scheduleSnooze(prefs.snoozeMinutes)
         }
         stopAndFinish()
     }

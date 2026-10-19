@@ -3,6 +3,9 @@
 APK=$1;OUT=$2;PKG=com.wathakker.app
 mkdir -p "$OUT"; adb root >/dev/null 2>&1; sleep 2
 adb install -r "$APK" >/dev/null 2>&1
+adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
+adb shell appops set $PKG SCHEDULE_EXACT_ALARM allow >/dev/null 2>&1
+adb shell appops set $PKG USE_FULL_SCREEN_INTENT allow >/dev/null 2>&1
 adb shell settings put global auto_time 0
 tapdesc(){ adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
  XY=$(python3 - "$1" $2 <<'PY'
@@ -64,6 +67,7 @@ adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
 adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 7
 chans 1_start
 tapdesc "الإعدادات"; sleep 3
+adb shell input swipe 540 1700 540 700 500; sleep 2
 tapdesc "الاهتزاز للإشعارات"; sleep 3
 adb exec-out screencap -p > "$OUT/notif_settings_vib_off.png"
 chans 2_global_vibration_off
@@ -95,6 +99,40 @@ chans 3_prayer_override
 tapdesc "العودة لإعدادات التطبيق"; sleep 3
 adb exec-out screencap -p > "$OUT/sheet_reset.png"
 chans 4_after_reset
+
+# 3.3.0 Fajr full-screen alarm: drawer entry, settings screen, real scheduler, real receiver
+adb shell cmd uimode night yes; adb shell am force-stop $PKG
+adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
+tapdesc "القائمة"; sleep 3
+tapdesc "منبه صلاة الفجر"; sleep 3
+adb exec-out screencap -p > "$OUT/fajr_alarm_off.png"
+adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/uw.xml >/dev/null 2>&1
+FXY=$(python3 - <<'PY'
+import re
+x=open('/tmp/uw.xml',encoding='utf-8').read()
+c=[m for m in re.finditer(r'checkable="true"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x)]
+if c:
+    m=c[0]; print((int(m.group(1))+int(m.group(3)))//2,(int(m.group(2))+int(m.group(4)))//2)
+PY
+)
+echo "fajr switch: $FXY" >> "$OUT/SUMMARY.txt"
+[ -n "$FXY" ] && adb shell input tap $FXY; sleep 3
+adb exec-out screencap -p > "$OUT/fajr_alarm_on.png"
+adb shell input swipe 540 1700 540 600 500; sleep 2
+adb exec-out screencap -p > "$OUT/fajr_alarm_on_2.png"
+adb shell dumpsys alarm | grep -B1 -A4 "$PKG" | grep -iE "RTC_WAKEUP|FajrAlarm|type=" | head -12 > "$OUT/fajr_alarms_scheduled.txt"
+adb shell dumpsys alarm | grep -c "FajrAlarmReceiver" >> "$OUT/fajr_alarms_scheduled.txt"
+# bell suppression: fire the Fajr ADHAN bell with the alarm on, then the alarm itself
+adb shell cmd notification allow_listener x >/dev/null 2>&1
+adb shell am broadcast -n $PKG/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 0 --ei alert_kind 0 > "$OUT/bell_broadcast.txt" 2>&1
+sleep 2
+adb logcat -d | grep -E "FajrBellSuppressed" > "$OUT/after_bell_adhan_alarm_on.txt"
+adb shell am broadcast -n $PKG/com.example.fajr.alarm.FajrAlarmReceiver -a com.example.fajr.ACTION_FAJR_ALARM > "$OUT/alarm_broadcast.txt" 2>&1
+sleep 5
+adb exec-out screencap -p > "$OUT/fajr_alarm_ringing.png"
+adb shell dumpsys window | grep -E "mCurrentFocus" > "$OUT/fajr_focus.txt"
+adb shell dumpsys notification --noredact | grep -E "fajr_alarm_channel" | head -3 >> "$OUT/after_bell_adhan_alarm_on.txt"
+adb shell am force-stop $PKG
 adb shell cmd uimode night no
 adb logcat -d > "$OUT/logcat.txt"
 ! grep -E 'FATAL EXCEPTION' "$OUT/logcat.txt"

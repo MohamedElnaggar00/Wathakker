@@ -35,24 +35,55 @@ public final class FajrAlarmScheduler {
         this.prefs = new FajrPreferences(this.context);
     }
 
+    public static final int BEFORE_REQUEST_CODE = 88003;
+    public static final int AFTER_REQUEST_CODE = 88004;
+
+    private long fajrAt(int dayOffset) {
+        Calendar c = Calendar.getInstance();
+        if (dayOffset != 0) c.add(Calendar.DAY_OF_YEAR, dayOffset);
+        CalculationMethod method = CalculationMethod.INSTANCE.fromId(this.prefs.getCalculationMethodId());
+        return com.example.fajr.calculation.PrayerAdjustments.INSTANCE.fajrTime(this.context, c, this.prefs.getLatitude(), this.prefs.getLongitude(), method);
+    }
+
+    /** Next trigger for a slot: today's Fajr plus delta if still ahead, otherwise tomorrow's. */
+    private long nextFor(long deltaMillis, long now) {
+        long t = fajrAt(0) + deltaMillis;
+        if (t <= now) t = fajrAt(1) + deltaMillis;
+        return t;
+    }
+
     public final long scheduleNextFajrAlarm() {
         if (!this.prefs.isAlarmEnabled()) {
             cancelAllAlarms();
             return 0L;
         }
         long now = System.currentTimeMillis();
-        Calendar calendar = Calendar.getInstance();
-        CalculationMethod method = CalculationMethod.INSTANCE.fromId(this.prefs.getCalculationMethodId());
-        PrayerTimesCalculator prayerTimesCalculator = PrayerTimesCalculator.INSTANCE;
-        Intrinsics.checkNotNull(calendar);
-        long fajrTime = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.fajrTime(this.context, calendar, this.prefs.getLatitude(), this.prefs.getLongitude(), method);
-        if (fajrTime <= now) {
-            calendar.add(6, 1);
-            fajrTime = com.example.fajr.calculation.PrayerAdjustments.INSTANCE.fajrTime(this.context, calendar, this.prefs.getLatitude(), this.prefs.getLongitude(), method);
-        }
+        long fajrTime = nextFor(0L, now);
         this.prefs.setLastCalculatedFajrTimeMillis(fajrTime);
         setExactAlarm(fajrTime, ALARM_REQUEST_CODE);
+        int before = this.prefs.getAlarmBeforeMin();
+        if (before > 0) {
+            setExactAlarm(nextFor(-before * 60000L, now), BEFORE_REQUEST_CODE);
+        } else {
+            cancelOne(BEFORE_REQUEST_CODE);
+        }
+        int after = this.prefs.getAlarmAfterMin();
+        if (after > 0) {
+            setExactAlarm(nextFor(after * 60000L, now), AFTER_REQUEST_CODE);
+        } else {
+            cancelOne(AFTER_REQUEST_CODE);
+        }
         return fajrTime;
+    }
+
+    private void cancelOne(int requestCode) {
+        Intent intent = new Intent(this.context, (Class<?>) FajrAlarmReceiver.class);
+        intent.setAction(ACTION_FAJR_ALARM);
+        PendingIntent pi = PendingIntent.getBroadcast(this.context, requestCode, intent, 603979776);
+        if (pi != null) {
+            this.alarmManager.cancel(pi);
+            pi.cancel();
+        }
     }
 
     public final void scheduleSnooze(int snoozeMinutes) {
@@ -63,6 +94,7 @@ public final class FajrAlarmScheduler {
     private final void setExactAlarm(long triggerAtMillis, int requestCode) {
         Intent intent = new Intent(this.context, (Class<?>) FajrAlarmReceiver.class);
         intent.setAction(requestCode == 88002 ? "ACTION_SNOOZE_TRIGGER" : ACTION_FAJR_ALARM);
+        intent.putExtra("slot", requestCode == 88003 ? "before" : requestCode == 88004 ? "after" : "main");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.context, requestCode, intent, 201326592);
         Intent showIntent = new Intent(this.context, (Class<?>) FajrAlarmActivity.class);
         showIntent.setFlags(335544320);
@@ -89,6 +121,8 @@ public final class FajrAlarmScheduler {
             this.alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();
         }
+        cancelOne(BEFORE_REQUEST_CODE);
+        cancelOne(AFTER_REQUEST_CODE);
         PendingIntent snoozeIntent = PendingIntent.getBroadcast(this.context, SNOOZE_REQUEST_CODE, intent, 603979776);
         if (snoozeIntent != null) {
             this.alarmManager.cancel(snoozeIntent);
