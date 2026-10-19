@@ -69,9 +69,9 @@ final class OneUIWidget {
         boolean rtl = s.rtl;
         String nextName = s.targetName, prevName = s.names[s.previous];
         String nextTime = time(c, s, s.at), prevTime = time(c, s, s.prev);
-        float xNext = rtl ? padX + inner - side : padX, xPrev = rtl ? padX : padX + inner - side;
-        Layout.Alignment nextA = rtl ? Layout.Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL;
-        Layout.Alignment prevA = rtl ? Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_OPPOSITE;
+        float xNext = padX + inner - side, xPrev = padX; // previous prayer on the left, next on the right, as in the mockup
+        Layout.Alignment nextA = Layout.Alignment.ALIGN_OPPOSITE;
+        Layout.Alignment prevA = Layout.Alignment.ALIGN_NORMAL;
         line(cv, nextName, xNext, nameY, side, nameSz, bold, ink, nextA, d);
         line(cv, prevName, xPrev, nameY, side, nameSz, bold, ink, prevA, d);
         line(cv, nextTime, xNext, timeY, side, timeSz, reg, ink, nextA, d);
@@ -84,13 +84,13 @@ final class OneUIWidget {
         p.setColor(track);
         cv.drawRoundRect(tr, bh * d / 2, bh * d / 2, p);
         float fw = inner * progress;
-        RectF fr = rtl ? new RectF(padX * d, tr.top, (padX + fw) * d, tr.bottom) : new RectF((padX + inner - fw) * d, tr.top, (padX + inner) * d, tr.bottom); // fill starts at the previous prayer side
+        RectF fr = new RectF(padX * d, tr.top, (padX + fw) * d, tr.bottom); // fills left to right
         Paint glow = new Paint(Paint.ANTI_ALIAS_FLAG);
         glow.setColor(barB);
         glow.setAlpha(night ? 70 : 60);
         glow.setMaskFilter(new BlurMaskFilter(bh * d * 0.9f, BlurMaskFilter.Blur.NORMAL));
         cv.drawRoundRect(fr, bh * d / 2, bh * d / 2, glow);
-        p.setShader(new LinearGradient(fr.left, 0, fr.right, 0, rtl ? barA : barB, rtl ? barB : barA, Shader.TileMode.CLAMP));
+        p.setShader(new LinearGradient(fr.left, 0, fr.right, 0, barA, barB, Shader.TileMode.CLAMP));
         cv.drawRoundRect(fr, bh * d / 2, bh * d / 2, p);
         p.setShader(null);
 
