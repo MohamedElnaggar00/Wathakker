@@ -25,7 +25,7 @@ ASR=$(sed -n '4p' "$OUT/initial/actual_prayers.txt")
 set_epoch() {
  local FMT=$(python3 -c "import datetime;from zoneinfo import ZoneInfo;print(datetime.datetime.fromtimestamp(int('$1')/1000,ZoneInfo('Africa/Cairo')).strftime('%m%d%H%M%Y.%S'))")
  adb shell date "$FMT" >/dev/null
- adb shell date '+%Y-%m-%d %H:%M:%S %Z' >> "$OUT/clock.txt"
+ adb shell date +%s >> "$OUT/clock.txt"
 }
 # Test runner executes the real Java phase class in the Android runtime.
 adb push tools/phase-test.dex /data/local/tmp/phase-test.dex >/dev/null

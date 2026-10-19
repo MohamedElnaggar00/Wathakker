@@ -139,12 +139,12 @@ print(('PASS' if expect in x else 'FAIL')+f'[{key}]: next prayer shows {expect}'
 PY
 }
 
-run_scenario fajr    "$(python3 -c "h,m='$FAJR'.split(':');print(f'{(int(h)*60+int(m)+20)//60:02d}:{(int(h)*60+int(m)+20)%60:02d}')")"    "الشروق"
-run_scenario shuruq  "$(python3 -c "h,m='$SHURUQ'.split(':');t=int(h)*60+int(m)+20;print(f'{t//60:02d}:{t%60:02d}')")"  "الظهر"
-run_scenario dhuhr   "$(python3 -c "h,m='$DHUHR'.split(':');t=int(h)*60+int(m)+20;print(f'{t//60:02d}:{t%60:02d}')")"   "العصر"
-run_scenario asr     "$(python3 -c "h,m='$ASR'.split(':');t=int(h)*60+int(m)+20;print(f'{t//60:02d}:{t%60:02d}')")"     "المغرب"
-run_scenario maghrib "$(python3 -c "h,m='$MAGHRIB'.split(':');t=int(h)*60+int(m)+20;print(f'{t//60:02d}:{t%60:02d}')")" "العشاء"
-run_scenario isha    "$(python3 -c "h,m='$ISHA'.split(':');t=int(h)*60+int(m)+20;print(f'{t//60:02d}:{t%60:02d}')")"    "الفجر"
+run_scenario fajr    "$(python3 -c "h,m='$FAJR'.split(':');print(f'{(int(h)*60+int(m)+30)//60:02d}:{(int(h)*60+int(m)+30)%60:02d}')")"    "الشروق"
+run_scenario shuruq  "$(python3 -c "h,m='$SHURUQ'.split(':');t=int(h)*60+int(m)+30;print(f'{t//60:02d}:{t%60:02d}')")"  "الظهر"
+run_scenario dhuhr   "$(python3 -c "h,m='$DHUHR'.split(':');t=int(h)*60+int(m)+30;print(f'{t//60:02d}:{t%60:02d}')")"   "العصر"
+run_scenario asr     "$(python3 -c "h,m='$ASR'.split(':');t=int(h)*60+int(m)+30;print(f'{t//60:02d}:{t%60:02d}')")"     "المغرب"
+run_scenario maghrib "$(python3 -c "h,m='$MAGHRIB'.split(':');t=int(h)*60+int(m)+30;print(f'{t//60:02d}:{t%60:02d}')")" "العشاء"
+run_scenario isha    "$(python3 -c "h,m='$ISHA'.split(':');t=int(h)*60+int(m)+30;print(f'{t//60:02d}:{t%60:02d}')")"    "الفجر"
 
 # --- sky pixels differ per period and are not the flat theme background ---
 python3 - "$OUT" <<'PY' >> "$SUM"
