@@ -418,7 +418,7 @@ fun PrayerTimesContent(
         }
         item(key = "prayer-list") {
             // Next-prayer row: solid green pill with high-contrast content in both themes.
-            val nextDark = com.example.ThemeSettings.isDark()
+            val nextDark = false // prayer page always sits on the wallpaper: one pale-green look in both themes
             val nextRowBg = if (nextDark) Color(0xFF24533A) else Color(0xFFC2E8CE)
             val nextChipBg = if (nextDark) Color(0xFF7DDC9A).copy(alpha = 0.22f) else Color(0xFF1E7E34).copy(alpha = 0.18f)
             val nextText = if (nextDark) Color(0xFFE3F7E9) else Color(0xFF0D4A21)
