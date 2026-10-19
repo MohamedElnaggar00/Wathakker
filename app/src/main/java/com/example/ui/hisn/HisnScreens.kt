@@ -241,8 +241,8 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
             // 3.3.0: counter is light One UI blue (same as the bottom bar), turning light green when finished.
             val dk = com.example.ThemeSettings.isDark()
             val blue = Color(0xFF3D96FD) // sampled from the One UI RAM bar the user sent
-            val greenBg = if (dk) Color(0xFF24533A) else Color(0xFFC2E8CE)
-            val greenFg = if (dk) Color(0xFFE3F7E9) else Color(0xFF0D4A21)
+            val greenBg = Color(0xFF24A890) // sampled from the One UI teal-green the user sent
+            val greenFg = Color.White
             val chipBg by androidx.compose.animation.animateColorAsState(if (done) greenBg else blue, androidx.compose.animation.core.tween(350), label = "cntBg")
             val chipFg by androidx.compose.animation.animateColorAsState(if (done) greenFg else Color.White, androidx.compose.animation.core.tween(350), label = "cntFg")
             Row(
