@@ -55,6 +55,7 @@ import androidx.navigation.navArgument
 import com.example.R
 import com.example.fajr.ui.FajrViewModel
 import com.example.lockwidgets.HomeWidgets
+import com.example.prayer.PrayerSkyGlass
 import com.example.prayer.PrayerTimesScreen
 import com.example.ui.hisn.HisnChapterScreen
 import com.example.ui.hisn.HisnListScreen
@@ -215,10 +216,15 @@ fun MainScreen(viewModel: MainViewModel) {
                 composable("about") { AboutScreen { navController.popBackStack() } }
                 composable("tasbeeh") { TasbeehScreen(viewModel) { navController.popBackStack() } }
             }
+            // v3.2.0 glass system: over the prayer sky the bottom bar and the drawer
+            // use the same frost material as the cards; everywhere else they keep
+            // their default look.
+            val skyFrost = if (isTab && currentTabRoute == "prayer") PrayerSkyGlass.spec.value else null
             if (isTab) {
                 OneUIBottomBar(
                     tabs = oneUITabs,
                     selectedRoute = currentTabRoute,
+                    frost = skyFrost,
                     onSelect = { tab ->
                         val i = oneUITabs.indexOf(tab)
                         if (i >= 0) scope.launch {
@@ -240,6 +246,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     if (route != it) navController.navigate(it) { launchSingleTop = true }
                 },
                 onDismiss = { drawerOpen = false },
+                frost = skyFrost,
                 footer = {
                     val uri = LocalUriHandler.current
                     Text(

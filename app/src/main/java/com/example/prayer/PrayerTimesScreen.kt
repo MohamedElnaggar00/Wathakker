@@ -32,6 +32,7 @@ import androidx.compose.material.icons.outlined.WbTwilight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -69,6 +70,8 @@ import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIDivider
 import com.example.ui.oneui.OneUIProgressBar
 import com.example.ui.oneui.OneUIIconAction
+import com.example.ui.oneui.FrostSpec
+import com.example.ui.oneui.LocalHazeState
 import com.example.ui.oneui.OneUIScreen
 import com.example.ui.theme.OneUIActiveGreen
 import kotlinx.coroutines.delay
@@ -299,14 +302,28 @@ fun PrayerTimesContent(
     val sc = sceneColors(period.darkScene)
     val skyHaze = dev.chrisbanes.haze.rememberHazeState()
     Box(Modifier.fillMaxSize()) {
-        TimeOfDayBackground(period, skyHaze)
+        TimeOfDayBackground(period, skyHaze, LocalHazeState.current)
         SkyStatusBarEffect(period.darkScene)
+        // v3.2.0 glass system: the prayer screen's frost material (theme tint +
+        // scene alpha/border), shared with the bottom bar and drawer while this
+        // tab is visible so every surface over the sky is the same glass.
+        val frost = FrostSpec(
+            base = MaterialTheme.colorScheme.surfaceContainerHigh,
+            alpha = sc.glassAlpha,
+            border = sc.glassBorder
+        )
+        DisposableEffect(frost.base, frost.alpha, frost.border) {
+            PrayerSkyGlass.set(frost)
+            onDispose { PrayerSkyGlass.set(null) }
+        }
         OneUIScreen(
         title = L10n.t(S.PrayerTimes),
         onMenu = onMenu,
         containerColor = Color.Transparent,
         titleColor = sc.textPrimary,
         alwaysShowHeaderTiles = true,
+        frost = frost,
+        smokeBackground = false,
         actions = if (onQibla != null) {
             { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
         } else null

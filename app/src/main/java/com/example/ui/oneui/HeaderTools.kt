@@ -64,12 +64,11 @@ object HeaderTools {
     // Apply on a background layer only (see OneUIScreen) so the fade-in alpha never touches
     // the pill's icons/labels; the strip between pills stays clear.
     @androidx.compose.runtime.Composable
-    fun glassTile(modifier: Modifier): Modifier =
-        modifier.oneUIGlass(
-            RoundedCornerShape(26.dp),
-            androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh,
-            0.85f,
-            28
-        )
+    fun glassTile(modifier: Modifier, frost: FrostSpec? = null): Modifier =
+        if (frost != null) {
+            modifier.oneUIFrosted(RoundedCornerShape(26.dp), frost, 28)
+        } else {
+            modifier.oneUIFrosted(RoundedCornerShape(26.dp), themeFrostSpec(0.85f), 28)
+        }
 }
 

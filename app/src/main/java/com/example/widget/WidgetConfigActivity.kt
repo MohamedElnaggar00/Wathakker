@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -55,7 +56,7 @@ private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
 )
 
 @Composable
-fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>, current: String, onPick: (String) -> Unit) {
+fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>, current: String, onPick: (String) -> Unit, splitAutoSwatch: Boolean = false) {
     val cs = MaterialTheme.colorScheme
     Text(title, color = cs.onSurfaceVariant, fontSize = 13.sp)
     Spacer(Modifier.height(8.dp))
@@ -72,7 +73,21 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
+            // v3.2.0 (his call): the bar's Auto is contrast-based (black bar on a light
+            // widget background, white on dark) - the swatch shows both halves.
+            if (splitAutoSwatch && key == "auto") {
+                Box(
+                    modifier = Modifier
+                        .size(22.dp)
+                        .clip(CircleShape)
+                        .then(if (selected) Modifier.border(2.dp, cs.primary, CircleShape) else Modifier)
+                ) {
+                    Row(Modifier.fillMaxSize()) {
+                        Box(Modifier.weight(1f).fillMaxHeight().background(Color.Black))
+                        Box(Modifier.weight(1f).fillMaxHeight().background(Color.White))
+                    }
+                }
+            } else Box(
                 modifier = Modifier
                     .size(22.dp)
                     .clip(CircleShape)
@@ -106,7 +121,7 @@ fun ConfigScreen(current: String, currentBg: String, onPick: (String) -> Unit, o
         ) {
             Text(L10n.t(S.WidgetSettings), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(12.dp))
-            ColorSection(L10n.t(S.BarColor), options, current, onPick)
+            ColorSection(L10n.t(S.BarColor), options, current, onPick, splitAutoSwatch = true)
             Spacer(Modifier.height(16.dp))
             ColorSection(L10n.t(S.BgColor), bgOptions, currentBg, onPickBg)
         }

@@ -32,6 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
+import com.example.ThemeSettings
+import com.example.ui.oneui.oneUIBorderColor
+import com.example.ui.oneui.oneUIFrosted
+import com.example.ui.oneui.FrostSpec
 import com.example.ui.oneui.OneUIButton
 import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIDivider
@@ -219,7 +223,7 @@ fun DhikrHighlightCard(instance: DhikrInstance, onMarkAsRead: () -> Unit) {
         Spacer(Modifier.height(12.dp))
         Column(
             modifier = Modifier.fillMaxWidth()
-                .background(cs.surfaceVariant, RoundedCornerShape(16.dp))
+                .oneUIFrosted(RoundedCornerShape(16.dp), FrostSpec(cs.surfaceVariant, if (ThemeSettings.isDark()) 0.50f else 0.62f, oneUIBorderColor()), 16)
                 .padding(14.dp)
         ) {
             Text(

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.R
 import com.example.ThemeSettings
+import com.example.ui.oneui.FrostSpec
 import com.example.ui.oneui.blurSupported
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
@@ -109,17 +110,35 @@ fun Modifier.skyGlass(shape: Shape, haze: HazeState?, colors: SceneColors): Modi
         this.clip(shape).background(colors.glassBase.copy(alpha = 0.96f))
     }
 
-/** The sky itself, crossfaded when the period flips at a prayer-time boundary. */
+/**
+ * The sky itself, crossfaded when the period flips at a prayer-time boundary.
+ * Feeds both the card haze and the shell haze (bottom bar, header pills, drawer),
+ * so every frosted surface blurs the sky behind it.
+ */
 @Composable
-fun TimeOfDayBackground(period: DayPeriod, haze: HazeState) {
+fun TimeOfDayBackground(period: DayPeriod, haze: HazeState, shellHaze: HazeState? = null) {
     Crossfade(targetState = period, animationSpec = tween(1400), label = "sky") { p ->
         Image(
             painter = painterResource(p.drawableRes),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize().hazeSource(haze),
+            modifier = Modifier
+                .fillMaxSize()
+                .hazeSource(haze)
+                .then(if (shellHaze != null) Modifier.hazeSource(shellHaze) else Modifier),
             contentScale = ContentScale.Crop
         )
     }
+}
+
+/**
+ * The prayer screen's current frost material, shared with the shell (bottom bar,
+ * drawer) while the prayer tab is visible. Null off the prayer screen: those
+ * surfaces keep their default look everywhere else. Set/cleared by PrayerTimesContent.
+ */
+object PrayerSkyGlass {
+    private val _spec = androidx.compose.runtime.mutableStateOf<FrostSpec?>(null)
+    val spec: androidx.compose.runtime.State<FrostSpec?> get() = _spec
+    fun set(spec: FrostSpec?) { _spec.value = spec }
 }
 
 /**
