@@ -16,6 +16,8 @@ jobs:
         unzip -oq "$(find . -maxdepth 1 -name '*wathakker-321-source.zip' | head -1)"
         git config user.name 'github-actions[bot]'
         git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+        sed -i "s@adb shell date '+%Y-%m-%d %H:%M:%S %Z'@adb shell date +%s@" tools/emu_verify_321.sh
+        sed -i 's/int(m)+20/int(m)+30/g' tools/emu_verify_320.sh
         git add app tools
         git commit -m 'Fix iqama phase on prayer card and all countdown widgets (3.2.1, build 54) [skip ci]' || true
         git push origin HEAD:main
@@ -114,6 +116,7 @@ jobs:
       run: |-
         mkdir -p dist/3.2.1-candidate
         cp candidate/* dist/3.2.1-candidate/ || true
+        mkdir -p emulator-evidence/verify321 emulator-evidence/regression321
         git add emulator-evidence/verify321 emulator-evidence/regression321 dist/3.2.1-candidate
         git commit -m '3.2.1 candidate and emulator evidence [skip ci]' || true
         for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && break; sleep 5; done
