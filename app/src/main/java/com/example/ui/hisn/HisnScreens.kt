@@ -222,6 +222,8 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
     var remaining by rememberSaveable(item.id) { mutableIntStateOf(item.count) }
     var showFadl by rememberSaveable(item.id) { mutableStateOf(false) }
     val haptic = LocalHapticFeedback.current
+    val meta = listOf(item.source, item.hokm).filter { it.isNotBlank() }.joinToString(" · ")
+    val hasNotes = item.fadl.isNotBlank() || meta.isNotBlank()
     OneUICard(padding = androidx.compose.foundation.layout.PaddingValues(16.dp)) {
         Text(
             item.text,
@@ -262,10 +264,10 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
                 )
             }
             Spacer(Modifier.weight(1f))
-            if (item.fadl.isNotBlank()) {
+            if (hasNotes) {
                 Icon(
                     Icons.Outlined.Info,
-                    null,
+                    if (L10n.t(S.Done) == "تم") "معلومات الذكر" else "Info",
                     tint = if (showFadl) cs.primary else cs.onSurfaceVariant,
                     modifier = Modifier
                         .size(40.dp)
@@ -285,14 +287,21 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
                     .padding(8.dp)
             )
         }
-        if (showFadl && item.fadl.isNotBlank()) {
-            Spacer(Modifier.height(10.dp))
-            Text(item.fadl, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
-        }
-        val meta = listOf(item.source, item.hokm).filter { it.isNotBlank() }.joinToString(" · ")
-        if (meta.isNotBlank()) {
-            Spacer(Modifier.height(10.dp))
-            Text(meta, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+        androidx.compose.animation.AnimatedVisibility(
+            visible = showFadl && hasNotes,
+            enter = androidx.compose.animation.expandVertically(androidx.compose.animation.core.tween(260)) + androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(260)),
+            exit = androidx.compose.animation.shrinkVertically(androidx.compose.animation.core.tween(220)) + androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(180))
+        ) {
+            Column {
+                if (item.fadl.isNotBlank()) {
+                    Spacer(Modifier.height(10.dp))
+                    Text(item.fadl, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
+                }
+                if (meta.isNotBlank()) {
+                    Spacer(Modifier.height(10.dp))
+                    Text(meta, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+                }
+            }
         }
     }
 }

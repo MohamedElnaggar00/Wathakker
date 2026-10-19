@@ -51,7 +51,7 @@ for M in no yes; do
  adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
  tapdesc "حصن المسلم"; sleep 3
  adb exec-out screencap -p > "$OUT/hisn_$M.png"
- adb shell input tap 540 1000; sleep 3; adb exec-out screencap -p > "$OUT/hisn_chapter_$M.png"; adb shell input keyevent 4; sleep 2
+ adb shell input tap 540 1000; sleep 3; adb exec-out screencap -p > "$OUT/hisn_chapter_$M.png"; tapdesc "معلومات الذكر" last; sleep 2; adb exec-out screencap -p > "$OUT/hisn_notes_$M.png"; adb shell input keyevent 4; sleep 2
  tapdesc "ابحث في حصن المسلم" last; sleep 2
  adb shell input text "wudu"; sleep 1
  adb exec-out screencap -p > "$OUT/hisn_search_$M.png"
