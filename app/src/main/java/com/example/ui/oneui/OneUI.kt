@@ -748,7 +748,7 @@ fun OneUIDrawer(
                     .padding(start = 12.dp, top = 28.dp, bottom = 28.dp)
                     .width(300.dp)
                     .fillMaxHeight()
-                    .then(if (frost != null) Modifier.oneUIFrosted(RoundedCornerShape(28.dp), frost, 30) else Modifier.oneUIFrosted(RoundedCornerShape(28.dp), FrostSpec(cs.surfaceVariant, 0.90f, oneUIBorderColor()), 30))
+                    .then(if (frost != null) Modifier.oneUIFrosted(RoundedCornerShape(28.dp), frost, 30) else Modifier.oneUIFrosted(RoundedCornerShape(28.dp), FrostSpec(cs.surfaceVariant, 0.90f, Color.Transparent), 30))
                     .padding(vertical = 18.dp)
             ) {
                 DrawerHeader()
