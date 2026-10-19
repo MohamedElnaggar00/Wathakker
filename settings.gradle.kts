@@ -25,3 +25,6 @@ dependencyResolutionManagement {
 rootProject.name = "My Application"
 
 include(":app")
+
+// Wear OS watch app: only part of the build when asked for, so phone builds are unaffected.
+if (providers.gradleProperty("withWear").isPresent) include(":wear")
