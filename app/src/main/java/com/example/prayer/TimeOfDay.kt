@@ -111,10 +111,11 @@ fun sceneColors(darkScene: Boolean): SceneColors =
  * sky reads through. Falls back to a near-opaque surface on API < 31.
  */
 fun Modifier.skyGlass(shape: Shape, haze: HazeState?, colors: SceneColors): Modifier =
+    // Build 50+ (his call): NO border on the sky glass - the light hairline read as
+    // an annoying white edge over bright skies. Frosted fill only.
     if (haze != null && blurSupported) {
         this.clip(shape)
             .hazeEffect(haze, HazeStyle(colors.glassBase, HazeTint(colors.glassBase.copy(alpha = colors.glassAlpha)), 28.dp, 0.04f))
-            .border(1.dp, colors.glassBorder, shape)
     } else {
         this.clip(shape).background(colors.glassBase.copy(alpha = 0.96f))
     }

@@ -307,10 +307,11 @@ fun PrayerTimesContent(
         // v3.2.0 glass system: the prayer screen's frost material (theme tint +
         // scene alpha/border), shared with the bottom bar and drawer while this
         // tab is visible so every surface over the sky is the same glass.
+        // Border-free glass (his call): bottom bar + header pills share this spec.
         val frost = FrostSpec(
             base = MaterialTheme.colorScheme.surfaceContainerHigh,
             alpha = sc.glassAlpha,
-            border = sc.glassBorder
+            border = Color.Transparent
         )
         DisposableEffect(frost.base, frost.alpha, frost.border) {
             PrayerSkyGlass.set(frost)
