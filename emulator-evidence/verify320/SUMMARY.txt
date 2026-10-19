@@ -6,46 +6,44 @@ PASS[asr]: next prayer shows المغرب
 PASS[maghrib]: next prayer shows العشاء
 PASS[isha]: next prayer shows الفجر
 sky[fajr] rgb=(16, 36, 52)
-sky[shuruq] rgb=(228, 219, 207)
+sky[shuruq] rgb=(228, 220, 207)
 sky[dhuhr] rgb=(179, 216, 248)
 sky[asr] rgb=(233, 204, 164)
-sky[maghrib] rgb=(63, 44, 67)
+sky[maghrib] rgb=(63, 44, 66)
 sky[isha] rgb=(20, 28, 46)
 PASS: 6/6 distinct sky strips
 PASS: sky strips differ from flat dark background (min diff 38)
 INFO: crossfade frames captured around the maghrib boundary (visual gate: t0/t1 mid-blend, t3 settled maghrib sky, no flicker)
-Total frames rendered: 124
-Janky frames: 123 (99.19%)
-Janky frames (legacy): 124 (100.00%)
-sky gone after leaving prayer tab strip rgb=(3, 3, 5) spread=2
+Total frames rendered: 133
+Janky frames: 133 (100.00%)
+Janky frames (legacy): 133 (100.00%)
+sky gone after leaving prayer tab strip rgb=(18, 18, 20) spread=2
 PASS: sky gone after leaving prayer tab
 sky back after re-entering prayer tab strip rgb=(63, 44, 66) spread=22
 PASS: sky back after re-entering prayer tab
 PASS: app alive across tab leave/re-enter
 PASS: converter screen opened
-FAIL: app not foreground for 320_converter_month_popup_g
 PASS: gregorian month popup lists month names
 PASS: G->H conversion result changed after month pick (before=8 جمادى الأولى 1448 هـ|١٩ أكتوبر ٢٠٢٦ after=30 رجب 1447 هـ|١٩ أكتوبر ٢٠٢٦)
-FAIL: app not foreground for 320_converter_month_popup_h
 PASS: hijri month popup lists month names
 PASS: H->G conversion result changed after month pick (before=30 رجب 1447 هـ|١٩ أكتوبر ٢٠٢٦ after=30 رجب 1447 هـ|٢٣ يونيو ٢٠٢٦)
-tasbeeh dark top=(0, 0, 0) glow=(36, 6, 58) diff=100
+tasbeeh dark top=(0, 0, 0) glow=(37, 8, 59) diff=104
 PASS: tasbeeh dark smoke glow visible
-tasbeeh light top=(253, 253, 253) glow=(232, 224, 246) diff=57
+tasbeeh light top=(253, 253, 253) glow=(232, 223, 245) diff=59
 PASS: tasbeeh light smoke glow visible
-calendar dark top=(0, 0, 0) glow=(33, 18, 52) diff=103
+calendar dark top=(0, 0, 0) glow=(36, 23, 53) diff=112
 PASS: calendar dark smoke glow visible
-calendar light top=(253, 253, 253) glow=(234, 233, 247) diff=45
+calendar light top=(253, 253, 253) glow=(233, 232, 244) diff=50
 PASS: calendar light smoke glow visible
-azkar light top=(253, 253, 253) glow=(231, 228, 251) diff=49
+azkar light top=(253, 253, 253) glow=(232, 230, 253) diff=44
 PASS: azkar light smoke glow visible
-hisn light top=(252, 252, 252) glow=(229, 226, 249) diff=52
+hisn light top=(253, 253, 253) glow=(226, 224, 246) diff=63
 PASS: hisn light smoke glow visible
-tab الصلاة dark bluepx=235
+tab الصلاة dark bluepx=232
 PASS: tab الصلاة dark selected-tab blue tint in bottom bar
 tab الصلاة light bluepx=125
 PASS: tab الصلاة light selected-tab blue tint in bottom bar
-tab الأذكار dark bluepx=98
+tab الأذكار dark bluepx=97
 PASS: tab الأذكار dark selected-tab blue tint in bottom bar
 tab الأذكار light bluepx=98
 PASS: tab الأذكار light selected-tab blue tint in bottom bar
