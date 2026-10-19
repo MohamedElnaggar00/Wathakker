@@ -55,7 +55,8 @@ fun SettingsScreen(
     onNavigateToLocation: (() -> Unit)? = null,
     onNavigateToOptionalTimes: (() -> Unit)? = null,
     onNavigateToHijriConverter: (() -> Unit)? = null,
-    onNavigateToAbout: (() -> Unit)? = null
+    onNavigateToAbout: (() -> Unit)? = null,
+    onNavigateToWatch: (() -> Unit)? = null
 ) {
     val contextApp = LocalContext.current.applicationContext
     val vibration by viewModel.vibrationEnabled.collectAsState()
@@ -99,7 +100,8 @@ fun SettingsScreen(
         onPickTheme = { showThemePicker = true },
         onLockWidgets = { showLockWidgets = true },
         onPickLanguage = { showLanguagePicker = true },
-        onAbout = onNavigateToAbout
+        onAbout = onNavigateToAbout,
+        onWatch = onNavigateToWatch
     )
 
     if (showFontPicker) {
@@ -189,7 +191,8 @@ fun SettingsContent(
     onPickTheme: () -> Unit = {},
     onLockWidgets: () -> Unit = {},
     onPickLanguage: () -> Unit = {},
-    onAbout: (() -> Unit)? = null
+    onAbout: (() -> Unit)? = null,
+    onWatch: (() -> Unit)? = null
 ) {
     OneUIScreen(title = L10n.t(S.Settings), onBack = onBack) {
         if (onLocation != null || onFajr != null) {
@@ -272,6 +275,20 @@ fun SettingsContent(
                     trailing = { ChevronIcon() },
                     onClick = onPickLanguage
                 )
+            }
+        }
+        if (onWatch != null) {
+            item(key = "watch-l") { SectionLabel(if (L10n.lang == com.example.ui.i18n.Lang.AR) "الساعة الذكية" else "Smartwatch") }
+            item(key = "watch") {
+                OneUICard {
+                    OneUIRow(
+                        title = if (L10n.lang == com.example.ui.i18n.Lang.AR) "إعدادات الساعة الذكية" else "Smartwatch settings",
+                        summary = if (L10n.lang == com.example.ui.i18n.Lang.AR) "الإعدادات الخاصة بتطبيق وَذكِّر للساعة" else "Settings for the Wathakker watch app",
+                        leading = { OneUIIconBadge(androidx.compose.material.icons.Icons.Outlined.Watch) },
+                        trailing = { ChevronIcon() },
+                        onClick = onWatch
+                    )
+                }
             }
         }
         if (onAbout != null) {

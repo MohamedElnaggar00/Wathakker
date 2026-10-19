@@ -197,7 +197,8 @@ fun MainScreen(viewModel: MainViewModel) {
                         onNavigateToLocation = { navController.navigate("location_calc") },
                         onNavigateToOptionalTimes = { navController.navigate("optional_times") },
                         onNavigateToHijriConverter = { navController.navigate("hijri_converter") },
-                        onNavigateToAbout = { navController.navigate("about") }
+                        onNavigateToAbout = { navController.navigate("about") },
+                        onNavigateToWatch = { navController.navigate("watch_settings") }
                     )
                 }
                 composable("optional_times") {
@@ -213,6 +214,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     val fajrViewModel: FajrViewModel = viewModel()
                     com.example.prayer.LocationCalculationScreen(fajrViewModel) { navController.popBackStack() }
                 }
+                composable("watch_settings") { WatchSettingsScreen { navController.popBackStack() } }
                 composable("about") { AboutScreen { navController.popBackStack() } }
                 composable("tasbeeh") { TasbeehScreen(viewModel) { navController.popBackStack() } }
             }

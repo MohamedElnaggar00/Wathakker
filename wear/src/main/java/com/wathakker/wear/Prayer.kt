@@ -53,7 +53,10 @@ object Prayer {
         return t.mapIndexed { i, v -> Slot(i, names[i], v) }
     }
 
+    @Volatile var h24 = false
+
     fun compute(c: Context, now: Long = System.currentTimeMillis()): PrayerState {
+        h24 = c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).getBoolean("h24", false)
         val y = day(c, -1, now); val t = day(c, 0, now); val n = day(c, 1, now)
         val all = y + t + n
         val next = all.first { it.at > now }
@@ -66,6 +69,7 @@ object Prayer {
 
     /** "05:32 ص" */
     fun time12(ms: Long): String {
+        if (h24) return fmt("HH:mm", ms)
         val cal = Calendar.getInstance(); cal.timeInMillis = ms
         val ap = if (cal.get(Calendar.HOUR_OF_DAY) < 12) "ص" else "م"
         return fmt("hh:mm", ms) + " " + ap
