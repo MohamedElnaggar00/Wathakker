@@ -23,7 +23,7 @@ object PrayerAlertScheduler {
     // Early reminder: an ADDITIONAL alarm before the adhan; the adhan-time alarm always fires.
     const val KIND_EARLY = 3
 
-    private val IQAMA_OFFSETS = intArrayOf(25, 0, 20, 20, 10, 20) // Shuruq has no iqama
+    private val IQAMA_OFFSETS = IntArray(6) { com.example.lockwidgets.PrayerPhase.iqamaMinutes(it) } // Shuruq has no iqama
 
     fun scheduleAll(context: Context) {
         PrayerAlertStore.migrate(context)

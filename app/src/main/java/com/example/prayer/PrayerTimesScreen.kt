@@ -156,11 +156,12 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
     val nextPrev by remember(days, L10n.lang) {
         androidx.compose.runtime.derivedStateOf {
             val n = nowState.longValue
-            val nx = ordered.firstOrNull { it.second > n }
-                ?: Triple(L10n.t(S.PrayerFajr), days.second.fajr, Icons.Outlined.WbTwilight)
-            val pv = ordered.lastOrNull { it.second <= n }
-                ?: Triple(L10n.t(S.PrayerIsha), days.third.isha, Icons.Outlined.DarkMode)
-            nx to pv
+            fun arr(t: com.example.fajr.calculation.PrayerTimesCalculator.DayPrayerTimes) = longArrayOf(t.fajr, t.sunrise, t.dhuhr, t.asr, t.maghrib, t.isha)
+            val phase = com.example.lockwidgets.PrayerPhase.resolve(arr(days.first), arr(days.third), arr(days.second), n,
+                cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY, true)
+            val nx = Triple(phase.label(ordered.map { it.first }.toTypedArray(), L10n.lang.code), phase.target, ordered[phase.targetIndex].third)
+            val pv = Triple(ordered[phase.previousIndex].first, phase.start, ordered[phase.previousIndex].third)
+            Triple(nx, pv, phase.iqama)
         }
     }
     val next = nextPrev.first
@@ -210,6 +211,7 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         hijriText = hijri,
         gregorianText = gregorian,
         nextPrayerName = next.first,
+        isIqama = nextPrev.third,
         nextPrayerTime = formatPrayerTime(next.second),
         prevMillis = prev.second,
         nextMillis = next.second,
@@ -283,6 +285,7 @@ fun PrayerTimesContent(
     hijriText: String,
     gregorianText: String,
     nextPrayerName: String,
+    isIqama: Boolean,
     nextPrayerTime: String,
     prevMillis: Long,
     nextMillis: Long,
@@ -370,7 +373,7 @@ fun PrayerTimesContent(
                     }
                     Spacer(Modifier.width(12.dp))
                     Text(
-                        L10n.t(S.NextPrayer),
+                        if (isIqama) com.example.lockwidgets.PrayerPhase.iqamaLabel(L10n.lang.code) else L10n.t(S.NextPrayer),
                         color = sc.textSecondary,
                         style = MaterialTheme.typography.titleSmall
                     )

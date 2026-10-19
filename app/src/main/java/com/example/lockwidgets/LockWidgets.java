@@ -34,7 +34,16 @@ public class LockWidgets extends AppWidgetProvider {
     private static Locale locale(Context c){return new Locale(lang(c));}
     private static PendingIntent pulse(Context c){return PendingIntent.getBroadcast(c,700001,new Intent(c,LockWidgets.class).setAction(action(c,"TICK")),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);}
     private static boolean active(Context c){AppWidgetManager m=AppWidgetManager.getInstance(c);for(Class<?> t:TYPES)if(m.getAppWidgetIds(new ComponentName(c,t)).length>0)return true;return false;}
-    private static void schedule(Context c){watchLanguage(c);AlarmManager a=(AlarmManager)c.getSystemService(Context.ALARM_SERVICE);if(active(c))a.setInexactRepeating(AlarmManager.RTC,System.currentTimeMillis()+60000,60000,pulse(c));else a.cancel(pulse(c));}
+    public static void schedule(Context c){watchLanguage(c);AlarmManager a=(AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
+        boolean any=active(c);AppWidgetManager m=AppWidgetManager.getInstance(c);
+        for(String k:new String[]{"Hero","HeroLarge","NextPrayer","PrayerBar","Clock","Pill","DayPrayer"})any|=m.getAppWidgetIds(new ComponentName(c,"com.example.widget."+k+"WidgetProvider")).length>0;
+        if(!any){a.cancel(pulse(c));return;}
+        long now=System.currentTimeMillis(),next=(now/60000+1)*60000;
+        try{Calendar day=Calendar.getInstance();for(int d=0;d<2;d++){long[] ts=times(c,day);boolean friday=day.get(Calendar.DAY_OF_WEEK)==Calendar.FRIDAY;
+            for(int i=0;i<6;i++){if(i==1)continue;if(ts[i]>now)next=Math.min(next,ts[i]);if(!(friday&&i==2)){long iq=ts[i]+PrayerPhase.iqamaMinutes(i)*60000L;if(iq>now)next=Math.min(next,iq);}}day.add(Calendar.DATE,1);}
+        }catch(Exception e){android.util.Log.w("WathakkerLock","Boundary scheduling fallback",e);}
+        try{a.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,next,pulse(c));}catch(SecurityException e){a.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,next,pulse(c));}
+    }
     @Override public void onUpdate(Context c,AppWidgetManager m,int[] ids){for(int id:ids)update(c,m,id,getClass());schedule(c);}
     @Override public void onEnabled(Context c){schedule(c);}
     @Override public void onDisabled(Context c){schedule(c);}
@@ -48,7 +57,7 @@ public class LockWidgets extends AppWidgetProvider {
             if(info!=null&&info.provider.equals(new ComponentName(c,Tasbih.class))){SharedPreferences p=c.getSharedPreferences("lock_tasbih",0);String key="count_"+id;p.edit().putInt(key,p.getInt(key,0)+1).apply();update(c,AppWidgetManager.getInstance(c),id,Tasbih.class);}return;
         }
         if(action(c,"TICK").equals(a)||Intent.ACTION_BOOT_COMPLETED.equals(a)||Intent.ACTION_TIME_CHANGED.equals(a)||Intent.ACTION_TIMEZONE_CHANGED.equals(a)||Intent.ACTION_DATE_CHANGED.equals(a)||Intent.ACTION_MY_PACKAGE_REPLACED.equals(a)){
-            updateAll(c);schedule(c);return;
+            updateAll(c);HomeWidgets.updateAll(c);schedule(c);return;
         }
         super.onReceive(c,in);
     }
@@ -87,7 +96,7 @@ public class LockWidgets extends AppWidgetProvider {
     public static Bitmap render(Context c,Class<?> type,int id){return renderSize(c,type,id,false);}
     private static void centered(Canvas cv,String text,float cx,float cy,TextPaint p,float max){float width=p.measureText(text);if(width>max)p.setTextSize(p.getTextSize()*max/width);StaticLayout line=StaticLayout.Builder.obtain(text,0,text.length(),p,(int)max).setAlignment(Layout.Alignment.ALIGN_CENTER).setTextDirection(TextDirectionHeuristics.FIRSTSTRONG_LTR).setIncludePad(false).setMaxLines(1).setEllipsize(TextUtils.TruncateAt.END).build();cv.save();cv.translate(cx-max/2,cy-line.getHeight()/2f);line.draw(cv);cv.restore();}
     public static String errText(String code){if(code.startsWith("ar"))return "تعذر حساب الصلاة";if(code.startsWith("fr"))return "Heure de prière indisponible";if(code.startsWith("de"))return "Gebetszeit nicht verfügbar";if(code.startsWith("es"))return "Hora de oración no disponible";if(code.startsWith("it"))return "Ora della preghiera non disponibile";if(code.startsWith("tr"))return "Namaz vakti hesaplanamadı";if(code.startsWith("ur"))return "نماز کا وقت دستیاب نہیں";if(code.startsWith("id"))return "Waktu salat tidak tersedia";if(code.startsWith("ru"))return "Время молитвы недоступно";if(code.startsWith("pt"))return "Hora de oração indisponível";return "Prayer time unavailable";}
-    public static long[] iqamaWindow(long[] today,long[] yesterday,long now){int[] offsets={25,0,20,20,10,20};boolean friday=Calendar.getInstance().get(Calendar.DAY_OF_WEEK)==Calendar.FRIDAY;for(int i=5;i>=0;i--)if(i!=1&&!(friday&&i==2)&&today[i]<=now&&now<today[i]+offsets[i]*60000L)return new long[]{i,today[i],today[i]+offsets[i]*60000L};if(yesterday!=null&&yesterday[5]<=now&&now<yesterday[5]+20*60000L)return new long[]{5,yesterday[5],yesterday[5]+20*60000L};return null;}
+    public static long[] iqamaWindow(long[] today,long[] yesterday,long now){return PrayerPhase.window(today,yesterday,now,Calendar.getInstance().get(Calendar.DAY_OF_WEEK)==Calendar.FRIDAY);}
     public static Bitmap renderSize(Context c,Class<?> type,int id,boolean tiny){
         float d=c.getResources().getDisplayMetrics().density;int wd=tiny?54:123,hd=54;
         Bitmap bmp=Bitmap.createBitmap((int)(wd*d),(int)(hd*d),Bitmap.Config.ARGB_8888);Canvas cv=new Canvas(bmp);int w=bmp.getWidth(),h=bmp.getHeight();Locale l=locale(c);int INK=ink(c),SOFT=inkSoft(c),TRACK=track(c);boolean ar=arabic(c);boolean rtl=rtl(c);String code=lang(c);Typeface sysM=Typeface.create("sans-serif-medium",Typeface.NORMAL),sysB=Typeface.create("sans-serif",Typeface.BOLD);com.example.ui.i18n.L10n.INSTANCE.init(c);
@@ -100,8 +109,8 @@ public class LockWidgets extends AppWidgetProvider {
             try {Calendar today=Calendar.getInstance();long[] ts=times(c,today);long now=System.currentTimeMillis();int next=-1;for(int i=0;i<6;i++)if(i!=1&&ts[i]>now){next=i;break;}long at,prev;
                 if(next<0){Calendar tomorrow=(Calendar)today.clone();tomorrow.add(Calendar.DAY_OF_MONTH,1);at=times(c,tomorrow)[0];prev=ts[5];next=0;}else{at=ts[next];if(next>0)prev=ts[next==2?0:next-1];else{Calendar yesterday=(Calendar)today.clone();yesterday.add(Calendar.DAY_OF_MONTH,-1);prev=times(c,yesterday)[5];}}
                 com.example.ui.i18n.L10n lx=com.example.ui.i18n.L10n.INSTANCE;String[] names={lx.t(com.example.ui.i18n.S.PrayerFajr),lx.t(com.example.ui.i18n.S.PrayerShuruq),lx.t(com.example.ui.i18n.S.PrayerDhuhr),lx.t(com.example.ui.i18n.S.PrayerAsr),lx.t(com.example.ui.i18n.S.PrayerMaghrib),lx.t(com.example.ui.i18n.S.PrayerIsha)};
-                boolean iqama=false;if(type==Bar.class||type==Next.class){Calendar yesterday=(Calendar)today.clone();yesterday.add(Calendar.DAY_OF_MONTH,-1);long[] window=iqamaWindow(ts,times(c,yesterday),now);if(window!=null){iqama=true;next=(int)window[0];prev=window[1];at=window[2];}}
-                String target=iqama?(ar?"الإقامة":"Iqama"):names[next];
+                boolean iqama=false;if(type==Bar.class||type==Next.class||type==Countdown.class||type==CountdownClean.class){Calendar yesterday=(Calendar)today.clone();yesterday.add(Calendar.DAY_OF_MONTH,-1);long[] window=iqamaWindow(ts,times(c,yesterday),now);if(window!=null){iqama=true;next=(int)window[0];prev=window[1];at=window[2];}}
+                String target=iqama?PrayerPhase.iqamaLabel(code)+" "+names[next]:names[next];
                 if(type==Prayers.class){int[] indexes={0,2,3,4,5};float cell=(w-2*pad)/5;for(int j=0;j<5;j++){int i=indexes[j];float x=rtl?w-pad-cell*(j+.5f):pad+cell*(j+.5f);centered(cv,names[i],x,20*d,paint(medium,7,d,INK),cell-1*d);centered(cv,time(ts[i],l),x,34*d,paint(bold,8,d,INK),cell-1*d);if(i==next){Paint marker=new Paint(Paint.ANTI_ALIAS_FLAG);marker.setColor(INK);cv.drawRoundRect(new RectF(x-cell*.35f,41*d,x+cell*.35f,42.5f*d),d,d,marker);}}}
                 else if(type==Countdown.class||type==CountdownClean.class){
                     centered(cv,target,rtl?w-pad-25*d:pad+25*d,12*d,paint(rtl?bold:sysB,13,d,INK),48*d);

@@ -72,6 +72,15 @@ class WidgetRenderCheck : Activity() {
             }
         }
         File(out, "widget_prefs.txt").writeText(sp.all.toSortedMap().toString())
+        val c = java.util.Calendar.getInstance()
+        val pref = com.example.fajr.data.FajrPreferences(this)
+        val method = com.example.fajr.calculation.CalculationMethod.INSTANCE.fromId(pref.calculationMethodId)
+        val pt = com.example.fajr.calculation.PrayerAdjustments.calculateAll(this, c, pref.latitude, pref.longitude, method)
+        File(out, "actual_prayers.txt").writeText(listOf(pt.fajr,pt.sunrise,pt.dhuhr,pt.asr,pt.maghrib,pt.isha).joinToString("\n"))
+        for ((type, tag) in listOf(com.example.lockwidgets.LockWidgets.Bar::class.java to "Bar", com.example.lockwidgets.LockWidgets.Next::class.java to "Next", com.example.lockwidgets.LockWidgets.Countdown::class.java to "Countdown", com.example.lockwidgets.LockWidgets.CountdownClean::class.java to "CountdownClean")) {
+            val bmp = com.example.lockwidgets.LockWidgets.renderSize(this, type, 0, false)
+            FileOutputStream(File(out, "lock_${tag}.png")).use { bmp.compress(Bitmap.CompressFormat.PNG,100,it) }
+        }
         finish()
     }
 }

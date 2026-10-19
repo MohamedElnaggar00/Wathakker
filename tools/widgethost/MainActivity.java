@@ -48,13 +48,15 @@ public class MainActivity extends Activity {
         LinearLayout col = new LinearLayout(this);
         col.setOrientation(LinearLayout.VERTICAL);
         sv.addView(col);
-        for (String[] w : WIDGETS) {
+        String mode=getIntent().getStringExtra("mode");
+        String[][] selected="iqama".equals(mode)?new String[][]{{"Hero","330","90"},{"Lock:CountdownClean","123","54"},{"Lock:Countdown","123","54"},{"Lock:Bar","123","54"},{"Lock:Next","123","54"},{"Clock","250","90"}}:WIDGETS;
+        for (String[] w : selected) {
             String kind = w[0];
             int wd = Integer.parseInt(w[1]), ht = Integer.parseInt(w[2]);
             TextView label = new TextView(this);
             col.addView(label);
             int id = host.allocateAppWidgetId();
-            ComponentName cn = new ComponentName(PKG, "com.example.widget." + kind + "WidgetProvider");
+            ComponentName cn = new ComponentName(PKG, kind.startsWith("Lock:") ? "com.example.lockwidgets.LockWidgets$"+kind.substring(5) : "com.example.widget." + kind + "WidgetProvider");
             boolean ok = awm.bindAppWidgetIdIfAllowed(id, cn, null);
             Log.i("WidgetHost", "bind " + kind + " id=" + id + " -> " + ok);
             label.setText(kind + " bind=" + ok);
