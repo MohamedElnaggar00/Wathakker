@@ -3,7 +3,6 @@ package com.example.ui.oneui
 import android.os.Build
 import android.view.View
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -75,7 +74,8 @@ fun OneUIDialogSurface(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .oneUIFrosted(RoundedCornerShape(30.dp), FrostSpec(cs.surface, 0.90f, oneUIBorderColor()), 24)
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(cs.surface)
             ) {
                 Text(
                     title,
@@ -100,8 +100,7 @@ fun OneUIDialogSurface(
                         .fillMaxWidth()
                         .height(56.dp)
                         .clip(RoundedCornerShape(28.dp))
-                        .background(cs.surfaceContainerHighest.copy(alpha = 0.85f))
-                        .border(1.dp, oneUIBorderColor(), RoundedCornerShape(28.dp)),
+                        .background(cs.surfaceContainerHighest),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(

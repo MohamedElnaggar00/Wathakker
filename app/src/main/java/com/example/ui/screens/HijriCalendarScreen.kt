@@ -46,7 +46,6 @@ import com.example.prayer.HijriDate
 import com.example.prayer.HijriEvents
 import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
-import com.example.ui.oneui.oneUIBorderColor
 import com.example.ui.oneui.OneUIScreen
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -79,8 +78,7 @@ fun HijriCalendarScreen(onMenu: (() -> Unit)? = null) {
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 6.dp)
                     .clip(RoundedCornerShape(24.dp))
-                    .background(cs.surfaceVariant.copy(alpha = 0.45f))
-                    .border(1.dp, oneUIBorderColor(), RoundedCornerShape(24.dp))
+                    .background(cs.surfaceVariant.copy(alpha = 0.55f))
                     .padding(4.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -90,8 +88,7 @@ fun HijriCalendarScreen(onMenu: (() -> Unit)? = null) {
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(20.dp))
-                            .background(if (active) cs.surface.copy(alpha = 0.85f) else Color.Transparent)
-                            .then(if (active) Modifier.border(1.dp, oneUIBorderColor(), RoundedCornerShape(20.dp)) else Modifier)
+                            .background(if (active) cs.surface else Color.Transparent)
                             .clickable { showEvents = ev }
                             .padding(vertical = 9.dp),
                         contentAlignment = Alignment.Center

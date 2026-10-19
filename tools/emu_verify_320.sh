@@ -280,17 +280,23 @@ goto_drawer_item() { # <arabic title> - open drawer, verify target listed, tap i
   return 0
 }
 
-smoke_check() { # <png> <label>
+flat_check() { # <png> <dark|light> <label> - build 50: non-prayer screens must be the
+  # flat 3.1.0 backgrounds again (dark #000000 / light #F6F6F6), no smoke haze.
+  # Samples the left padding strip (background-only) at several heights and checks the
+  # median color against the theme background.
 python3 -c "
 from PIL import Image
 im=Image.open('$OUT/$1').convert('RGB'); w,h=im.size
-def avg(x0,y0,x1,y1):
-    px=[im.getpixel((x,y)) for x in range(int(w*x0),int(w*x1),24) for y in range(int(h*y0),int(h*y1),24)]
-    return tuple(sum(c[i] for c in px)//max(1,len(px)) for i in range(3))
-top=avg(0.2,0.05,0.8,0.12); glow=avg(0.3,0.60,0.7,0.78)
-d=sum(abs(glow[i]-top[i]) for i in range(3))
-print('$2 top=%s glow=%s diff=%d'%(top,glow,d))
-print(('PASS' if d>18 else 'FAIL')+': $2 smoke glow visible')
+exp=(0,0,0) if '$2'=='dark' else (246,246,246)
+xs=int(w*0.015)
+vals=[]
+for y in range(int(h*0.18),int(h*0.82),max(1,int(h*0.05))):
+    vals.append(im.getpixel((xs,y)))
+vals.sort()
+med=vals[len(vals)//2]
+d=sum(abs(med[i]-exp[i]) for i in range(3))
+print('$3 leftstrip-median=%s expected=%s diff=%d'%(med,exp,d))
+print(('PASS' if d<48 else 'FAIL')+': $3 flat 3.1.0 background (no smoke)')
 " >> "$SUM"
 }
 
@@ -388,29 +394,29 @@ PY
   fg_guard || say "FAIL: app not foreground after converter back"
 fi
 
-# --- tasbih screen: frosted counter ring over smoke, both themes ---
+# --- tasbih screen: flat 3.1.0 background again, both themes ---
 if goto_drawer_item "السبحة"; then
   adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot_fg 320_tasbeeh_dark
-  smoke_check 320_tasbeeh_dark.png "tasbeeh dark"
+  flat_check 320_tasbeeh_dark.png dark "tasbeeh dark"
   adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot_fg 320_tasbeeh_light
-  smoke_check 320_tasbeeh_light.png "tasbeeh light"
+  flat_check 320_tasbeeh_light.png light "tasbeeh light"
   adb shell input keyevent 4; sleep 2
   fg_guard || say "FAIL: app not foreground after tasbeeh back"
 fi
 
-# --- smoke background on the three non-prayer tabs, both themes ---
+# --- flat 3.1.0 background on the three non-prayer tabs, both themes ---
 fg_guard || say "FAIL: app not foreground before smoke section"
 tab_tap "التقويم"
-adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot_fg 320_smoke_calendar_dark
-adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot_fg 320_smoke_calendar_light
-smoke_check 320_smoke_calendar_dark.png  "calendar dark"
-smoke_check 320_smoke_calendar_light.png "calendar light"
+adb shell cmd uimode night yes; sleep 2; dismiss_anr; shot_fg 320_flat_calendar_dark
+adb shell cmd uimode night no;  sleep 2; dismiss_anr; shot_fg 320_flat_calendar_light
+flat_check 320_flat_calendar_dark.png  dark  "calendar dark"
+flat_check 320_flat_calendar_light.png light "calendar light"
 tab_tap "الأذكار"
-shot_fg 320_smoke_azkar_light
-smoke_check 320_smoke_azkar_light.png "azkar light"
+shot_fg 320_flat_azkar_light
+flat_check 320_flat_azkar_light.png light "azkar light"
 tab_tap "حصن المسلم"
-shot_fg 320_smoke_hisn_light
-smoke_check 320_smoke_hisn_light.png "hisn light"
+shot_fg 320_flat_hisn_light
+flat_check 320_flat_hisn_light.png light "hisn light"
 
 # --- blue selected tab on all four tabs, both themes ---
 for T in "الصلاة" "الأذكار" "حصن المسلم" "التقويم"; do

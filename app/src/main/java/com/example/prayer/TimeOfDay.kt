@@ -63,6 +63,10 @@ class SceneColors(
     val chip: Color,
     val divider: Color,
     val accent: Color,
+    // Current-prayer row (build 50): scene-aware so the green stays readable on light
+    // skies - #62D484 on a bright day sky fails contrast badly (his report).
+    val nextName: Color,
+    val nextTime: Color,
     val countdown: Color,
     val glassBase: Color,
     val glassAlpha: Float,
@@ -77,6 +81,8 @@ fun sceneColors(darkScene: Boolean): SceneColors =
         chip = Color(0x24FFFFFF),
         divider = Color(0x24FFFFFF),
         accent = Color(0xFF3E91FF),
+        nextName = Color(0xFF62D484),
+        nextTime = Color(0xFF3E91FF),
         countdown = Color(0xFF59C8DC),
         glassBase = Color(0xFF17171B),
         glassAlpha = 0.46f,
@@ -88,6 +94,9 @@ fun sceneColors(darkScene: Boolean): SceneColors =
         chip = Color(0x6BFFFFFF),
         divider = Color(0x1A000000),
         accent = Color(0xFF0381FE),
+        // Dark green / deeper blue on light skies for the current-prayer row.
+        nextName = Color(0xFF1E7E34),
+        nextTime = Color(0xFF0266C8),
         // Deeper than OneUITimeCyan: #59C8DC fails contrast on bright frosted glass.
         countdown = Color(0xFF1E8FA8),
         glassBase = Color.White,

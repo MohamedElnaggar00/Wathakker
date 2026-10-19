@@ -323,7 +323,6 @@ fun PrayerTimesContent(
         titleColor = sc.textPrimary,
         alwaysShowHeaderTiles = true,
         frost = frost,
-        smokeBackground = false,
         actions = if (onQibla != null) {
             { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
         } else null
@@ -439,13 +438,13 @@ fun PrayerTimesContent(
                                 row.icon,
                                 null,
                                 modifier = Modifier.size(20.dp),
-                                tint = if (row.isNext) OneUIActiveGreen else sc.textSecondary
+                                tint = if (row.isNext) sc.nextName else sc.textSecondary
                             )
                         }
                         Spacer(Modifier.width(14.dp))
                         Text(
                             row.name,
-                            color = if (row.isNext) OneUIActiveGreen else sc.textPrimary,
+                            color = if (row.isNext) sc.nextName else sc.textPrimary,
                             fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )
@@ -454,7 +453,7 @@ fun PrayerTimesContent(
                         val bellOn = bellIndex != null && bellStates.getOrElse(bellIndex) { false }
                         Text(
                             row.timeText,
-                            color = if (row.isNext) sc.accent else sc.textPrimary,
+                            color = if (row.isNext) sc.nextTime else sc.textPrimary,
                             fontWeight = if (row.isNext) FontWeight.Bold else FontWeight.Normal,
                             style = MaterialTheme.typography.bodyLarge
                         )

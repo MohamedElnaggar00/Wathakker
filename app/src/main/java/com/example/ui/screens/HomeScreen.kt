@@ -41,10 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
 import com.example.data.Tag
-import com.example.ui.oneui.oneUIBorderColor
-import com.example.ui.oneui.oneUIFrosted
-import com.example.ThemeSettings
-import com.example.ui.oneui.FrostSpec
 import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIChip
 import com.example.ui.oneui.OneUIEmptyState
@@ -290,7 +286,8 @@ fun DhikrItemCard(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .oneUIFrosted(RoundedCornerShape(16.dp), FrostSpec(cs.surfaceVariant, if (ThemeSettings.isDark()) 0.50f else 0.62f, oneUIBorderColor()), 16)
+                .clip(RoundedCornerShape(16.dp))
+                .background(cs.surfaceVariant)
                 .padding(14.dp)
         ) {
             Text(dhikr.content, color = cs.onSurface, style = MaterialTheme.typography.bodyLarge)

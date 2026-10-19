@@ -112,7 +112,7 @@ private fun DateField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .oneUIFrosted(RoundedCornerShape(14.dp), FrostSpec(cs.surfaceVariant, if (ThemeSettings.isDark()) 0.50f else 0.62f, oneUIBorderColor()), 14)
+                .clip(RoundedCornerShape(14.dp)).background(cs.surfaceVariant.copy(alpha = 0.6f))
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -154,7 +154,7 @@ private fun MonthField(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .oneUIFrosted(RoundedCornerShape(14.dp), FrostSpec(cs.surfaceVariant, if (ThemeSettings.isDark()) 0.50f else 0.62f, oneUIBorderColor()), 14)
+                    .clip(RoundedCornerShape(14.dp)).background(cs.surfaceVariant.copy(alpha = 0.6f))
                     .clickable { open = true }
                     .padding(horizontal = 12.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically

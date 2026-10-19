@@ -68,7 +68,10 @@ object HeaderTools {
         if (frost != null) {
             modifier.oneUIFrosted(RoundedCornerShape(26.dp), frost, 28)
         } else {
-            modifier.oneUIFrosted(RoundedCornerShape(26.dp), themeFrostSpec(0.85f), 28)
+            // Non-prayer screens (build 50, his call - 3.1.0 design): solid pill like
+            // HeaderTools.tile; the layer alpha outside handles the fade-in.
+            modifier.clip(RoundedCornerShape(26.dp))
+                .background(androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainerHigh, RoundedCornerShape(26.dp))
         }
 }
 

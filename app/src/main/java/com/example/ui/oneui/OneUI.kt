@@ -119,9 +119,6 @@ fun OneUIScreen(
     // v3.2.0 glass system: when non-null the header pills use this frost material
     // (prayer screen: matches the cards over the sky). Null = default tile, unchanged.
     frost: FrostSpec? = null,
-    // v3.2.0: static smoky color haze painted behind every screen (Samsung Clock
-    // style). The prayer screen passes false - its time-of-day sky shows instead.
-    smokeBackground: Boolean = true,
     content: LazyListScope.() -> Unit
 ) {
     val density = LocalDensity.current
@@ -141,16 +138,6 @@ fun OneUIScreen(
     val hazeState = LocalHazeState.current
 
     Box(modifier = modifier.fillMaxSize().background(containerColor)) {
-        if (smokeBackground) {
-            Image(
-                painter = painterResource(
-                    if (ThemeSettings.isDark()) R.drawable.bg_smoke_night else R.drawable.bg_smoke_day
-                ),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
         LazyColumn(
             modifier = Modifier.fillMaxSize().then(if (hazeState != null) Modifier.hazeSource(hazeState) else Modifier),
             state = listState,
@@ -189,6 +176,24 @@ fun OneUIScreen(
             }
             content()
         }
+        // Scroll-aware scrim behind the floating header (3.1.0 look, non-prayer screens
+        // only): keeps scrolled content from colliding with the status bar. The prayer
+        // screen (frost != null) keeps its sky clear.
+        if (frost == null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(statusTop + 92.dp)
+                    .graphicsLayer { alpha = barAlpha }
+                    .background(
+                        Brush.verticalGradient(
+                            0f to MaterialTheme.colorScheme.background,
+                            0.78f to MaterialTheme.colorScheme.background,
+                            1f to MaterialTheme.colorScheme.background.copy(alpha = 0f)
+                        )
+                    )
+            )
+        }
         // Top bar: menu or back on one side, settings and extra actions on the other.
         // The row itself is always visible; only the tile behind each group and the small title fade in on scroll.
         Row(
@@ -220,7 +225,7 @@ fun OneUIScreen(
                 }
                 Text(
                     title,
-                    modifier = Modifier.alpha(barAlpha),
+                    modifier = Modifier.alpha(if (alwaysShowHeaderTiles) tileAlpha else barAlpha),
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.titleMedium,
                     fontSize = 18.sp,
@@ -281,17 +286,11 @@ fun OneUICard(
     content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit
 ) {
     val shape = RoundedCornerShape(OneUIDimens.CardRadius)
-    val defaultColor = MaterialTheme.colorScheme.surface
     Column(
         modifier = modifier
             .fillMaxWidth()
-            // v3.2.0 glass system: default cards are frosted glass over the screen
-            // background; explicit colors (incl. Transparent, used by the prayer
-            // screen's own skyGlass cards) keep their exact old behavior.
-            .then(
-                if (color == defaultColor) Modifier.oneUIFrosted(shape, themeFrostSpec(), 20)
-                else Modifier.clip(shape).background(color)
-            )
+            .clip(shape)
+            .background(color)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(padding),
         content = content
@@ -319,8 +318,7 @@ fun OneUIIconBadge(
         modifier = Modifier
             .size(size)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.62f))
-            .border(1.dp, oneUIBorderColor(), CircleShape),
+            .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center
     ) {
         Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(size * 0.5f))
@@ -444,13 +442,12 @@ fun OneUIChip(
     dot: Color? = null
 ) {
     val cs = MaterialTheme.colorScheme
-    val bg by animateColorAsState(if (selected) cs.primary.copy(alpha = 0.16f) else cs.surface.copy(alpha = 0.62f), label = "chipBg")
+    val bg by animateColorAsState(if (selected) cs.primary.copy(alpha = 0.16f) else cs.surface, label = "chipBg")
     Row(
         modifier = modifier
             .height(38.dp)
             .clip(CircleShape)
             .background(bg)
-            .border(1.dp, oneUIBorderColor(), CircleShape)
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -532,8 +529,7 @@ fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable Col
         onDismissRequest = onDismiss,
         modifier = Modifier.widthIn(min = 200.dp),
         shape = RoundedCornerShape(22.dp),
-        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.94f),
-        border = BorderStroke(1.dp, oneUIBorderColor()),
+        containerColor = MaterialTheme.colorScheme.surface,
         content = content
     )
 }
@@ -608,7 +604,7 @@ fun OneUIBottomBar(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .padding(bottom = navInset + 12.dp)
-            .then(if (frost != null) Modifier.oneUIFrosted(RoundedCornerShape(32.dp), frost, 28) else Modifier.oneUIFrosted(RoundedCornerShape(32.dp), themeFrostSpec(0.85f), 28))
+            .then(if (frost != null) Modifier.oneUIFrosted(RoundedCornerShape(32.dp), frost, 28) else Modifier.oneUIGlass(RoundedCornerShape(32.dp), cs.surfaceContainerHigh, 0.85f, 28))
             .height(64.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
