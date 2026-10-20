@@ -1,6 +1,7 @@
 package com.example.utils
 
 import androidx.compose.foundation.Indication
+import androidx.compose.foundation.clickable as foundationClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -16,7 +17,7 @@ fun Modifier.clickable(
     onClick: () -> Unit
 ): Modifier = composed {
     val view = LocalView.current
-    androidx.compose.foundation.clickable(enabled = enabled, onClickLabel = onClickLabel, role = role) {
+    this.foundationClickable(enabled = enabled, onClickLabel = onClickLabel, role = role) {
         AppHaptics.tick(view); onClick()
     }
 }
@@ -30,7 +31,7 @@ fun Modifier.clickable(
     onClick: () -> Unit
 ): Modifier = composed {
     val view = LocalView.current
-    androidx.compose.foundation.clickable(
+    this.foundationClickable(
         interactionSource = interactionSource ?: remember { MutableInteractionSource() },
         indication = indication, enabled = enabled, onClickLabel = onClickLabel, role = role
     ) { AppHaptics.tick(view); onClick() }
