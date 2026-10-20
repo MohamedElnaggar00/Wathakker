@@ -136,6 +136,14 @@ adb shell am force-stop com.wathakker.app; adb shell am force-stop com.example.w
 adb shell am start -W -n com.example.widgethost/.MainActivity --es mode frost; sleep 12
 adb exec-out screencap -p > "$OUT/frost_no_wallblur_GRANTED.png"
 adb logcat -d -v threadtime | grep -E 'WallBlur' > "$OUT/wallblur_source_log.txt"
+for V in media ext; do
+  adb logcat -c
+  if [ $V = media ]; then adb shell appops set --uid com.wathakker.app READ_MEDIA_IMAGES allow; adb shell pm grant com.wathakker.app android.permission.READ_MEDIA_IMAGES; else adb shell appops set --uid com.wathakker.app READ_EXTERNAL_STORAGE allow; fi
+  adb shell am force-stop com.wathakker.app; adb shell am force-stop com.example.widgethost
+  adb shell am start -W -n com.example.widgethost/.MainActivity --es mode frost; sleep 12
+  adb exec-out screencap -p > "$OUT/frost_no_wallblur_GRANTED_$V.png"
+  adb logcat -d -v threadtime | grep -E 'WallBlur' | sort -u -k6 > "$OUT/wallblur_source_log_$V.txt"
+done
 # settings screen with the two options and the caption
 adb shell cmd role add-role-holder android.app.role.HOME com.android.launcher3 >/dev/null 2>&1
 adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity --ei appWidgetId 0; sleep 3

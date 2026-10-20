@@ -64,15 +64,19 @@ object PermissionFlow {
     fun Host() {
         val ctx = LocalContext.current
         val sp = remember { ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE) }
-        // 0 = nothing to show, 1 = location, 2 = files
-        var step by remember {
-            mutableIntStateOf(
-                if (sp.getBoolean(KEY_DONE, false)) 0
-                else if (!hasLocation(ctx)) 1 else if (!hasFiles(ctx)) 2 else 0
-            )
+        // stage persisted in prefs so an activity recreation (e.g. after the system location prompt) resumes at the right step
+        // 1 = location pending, 2 = files pending, 3 = finished (never asked again)
+        fun initial(): Int {
+            val st = sp.getInt("perm_stage", if (sp.getBoolean(KEY_DONE, false)) 3 else 1)
+            return when {
+                st >= 3 -> 0
+                st == 1 -> if (!hasLocation(ctx)) 1 else if (!hasFiles(ctx)) 2 else 0
+                else -> if (!hasFiles(ctx)) 2 else 0
+            }
         }
-        fun finish() { sp.edit().putBoolean(KEY_DONE, true).apply(); step = 0 }
-        fun toFiles() { if (hasFiles(ctx)) finish() else { sp.edit().putBoolean(KEY_DONE, true).apply(); step = 2 } }
+        var step by remember { mutableIntStateOf(initial()) }
+        fun finish() { sp.edit().putInt("perm_stage", 3).putBoolean(KEY_DONE, true).apply(); step = 0 }
+        fun toFiles() { if (hasFiles(ctx)) finish() else { sp.edit().putInt("perm_stage", 2).apply(); step = 2 } }
         val locLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { toFiles() }
         val dir = if (L10n.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
         CompositionLocalProvider(LocalLayoutDirection provides dir) {
