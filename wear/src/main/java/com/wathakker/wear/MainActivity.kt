@@ -339,7 +339,9 @@ private val density: Float get() = android.content.res.Resources.getSystem().dis
 fun PhonePage(w: Float) {
     val ctx = LocalContext.current
     var status by remember { mutableStateOf("") }
-    Box(Modifier.fillMaxSize().background(Color.Black).clickable { openOnPhone(ctx) { status = it } }, contentAlignment = Alignment.Center) {
+    var busy by remember { mutableStateOf(false) }
+    LaunchedEffect(busy) { if (busy) { delay(3000); busy = false } }
+    Box(Modifier.fillMaxSize().background(Color.Black).clickable(enabled = !busy) { busy = true; openOnPhone(ctx) { status = it } }, contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box(Modifier.size((w * 0.56f).dp).clip(CircleShape).background(Color(0xFFBFA03A)), contentAlignment = Alignment.Center) {
                 Canvas(Modifier.fillMaxSize()) {
