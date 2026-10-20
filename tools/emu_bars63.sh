@@ -158,6 +158,7 @@ tap_text "السماح"; sleep 2
 adb exec-out screencap -p > "$OUT/perm_a2_system_location.png"
 tap_text "While using the app"; sleep 2; sleep 2
 adb exec-out screencap -p > "$OUT/perm_a3_files_dialog.png"
+adb logcat -d -v threadtime | grep -E "PermFlow" > "$OUT/permflow_a_log.txt"
 tap_text "فتح الإعدادات"; sleep 3
 adb exec-out screencap -p > "$OUT/perm_a4_all_files_settings.png"
 adb shell input keyevent KEYCODE_BACK; sleep 1
@@ -182,3 +183,11 @@ for NIGHT in no yes; do
   adb shell am force-stop com.wathakker.app
 done
 adb shell cmd uimode night no
+# --- files dialog in isolation: location already granted -> the files step must show straight away
+adb shell pm clear com.wathakker.app >/dev/null
+adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
+adb shell pm grant com.wathakker.app android.permission.ACCESS_FINE_LOCATION
+adb logcat -c
+adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
+adb exec-out screencap -p > "$OUT/perm_b1_files_dialog_isolated.png"
+adb logcat -d -v threadtime | grep -E "PermFlow" > "$OUT/permflow_log.txt"

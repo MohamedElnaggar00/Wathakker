@@ -74,9 +74,9 @@ object PermissionFlow {
                 else -> if (!hasFiles(ctx)) 2 else 0
             }
         }
-        var step by remember { mutableIntStateOf(initial()) }
+        var step by remember { mutableIntStateOf(initial().also { android.util.Log.i("PermFlow", "initial step=$it") }) }
         fun finish() { sp.edit().putInt("perm_stage", 3).putBoolean(KEY_DONE, true).apply(); step = 0 }
-        fun toFiles() { if (hasFiles(ctx)) finish() else { sp.edit().putInt("perm_stage", 2).apply(); step = 2 } }
+        fun toFiles() { android.util.Log.i("PermFlow", "toFiles hasFiles=${hasFiles(ctx)}"); if (hasFiles(ctx)) finish() else { sp.edit().putInt("perm_stage", 2).apply(); step = 2 } }
         val locLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { toFiles() }
         val dir = if (L10n.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr
         CompositionLocalProvider(LocalLayoutDirection provides dir) {
