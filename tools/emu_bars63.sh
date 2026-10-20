@@ -191,3 +191,15 @@ adb logcat -c
 adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
 adb exec-out screencap -p > "$OUT/perm_b1_files_dialog_isolated.png"
 adb logcat -d -v threadtime | grep -E "PermFlow" > "$OUT/permflow_log.txt"
+# --- adhan alarm exactness: how the pending prayer alarms are registered (exact vs inexact window)
+adb shell am force-stop com.wathakker.app
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><boolean name=\\\"migrated_v1\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_0\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_2\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_3\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_4\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_5\\\" value=\\\"true\\\" /></map>\" > /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
+for MODE in default deny allow; do
+  case $MODE in deny) adb shell appops set --uid com.wathakker.app SCHEDULE_EXACT_ALARM deny; adb shell appops set --uid com.wathakker.app USE_EXACT_ALARM deny;; allow) adb shell appops set --uid com.wathakker.app SCHEDULE_EXACT_ALARM allow; adb shell appops set --uid com.wathakker.app USE_EXACT_ALARM allow;; esac
+  adb shell am force-stop com.wathakker.app
+  adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 8
+  adb shell appops get com.wathakker.app SCHEDULE_EXACT_ALARM > "$OUT/alarm_${MODE}_ops.txt" 2>&1
+  adb shell appops get com.wathakker.app USE_EXACT_ALARM >> "$OUT/alarm_${MODE}_ops.txt" 2>&1
+  adb shell dumpsys alarm | grep -B1 -A8 "com.wathakker.app" | grep -E "Batch|RTC|type|origWhen|window|flags|PrayerAlertReceiver|exact" | head -60 > "$OUT/alarm_${MODE}_dump.txt"
+  adb shell am force-stop com.wathakker.app
+done
