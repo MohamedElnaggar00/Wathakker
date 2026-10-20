@@ -35,7 +35,7 @@ enum class S {
     Light, Dark, SystemAuto, LockWidgets, LockWidgetsToast, OpenEditor, Close, LockWidgetsDesc, LockWidgetsSteps,
     LockWidgetsHint, ChangeLocation, LocationSubtitle, FajrAlarmSubtitle, LockScreenSection, LockWidgetsRowSub,
     Notifications, NotifSound, Default, Vibration, Appearance, AppFont, Language,
-    NewDhikr, EditDhikr, TitleLabel, DhikrText, Cancel, Add, AddReminderTime, RepeatReminder, ReminderTime, Save,
+    NewDhikr, EditDhikr, TitleLabel, DhikrText, Cancel, Add, AddReminderTime, RepeatReminder, ReminderTime, Save, Apply,
     ChaptersFmt, SearchHisn, NoFavChapters, NoResults, ReadTodaySuffix, AddToMyAzkar, Done,
     Tagline, Version, Developer, DevName, HisnCredit, InstinctCredit, Dua,
     Font, FontLight, FontBold, FontSystem, FontCairo, FontNaskh, FontAmiri, FontRuqaa,

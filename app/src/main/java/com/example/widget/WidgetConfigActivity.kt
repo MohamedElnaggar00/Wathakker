@@ -28,6 +28,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -108,8 +113,11 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, onPick: (String) -> Unit, onPickBg: (String) -> Unit) {
+fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -> Unit, onCancel: () -> Unit) {
     val cs = MaterialTheme.colorScheme
+    // Taps only select; nothing is saved or closed until Apply (One UI style).
+    var barSel by remember { mutableStateOf(current) }
+    var bgSel by remember { mutableStateOf(currentBg) }
     Box(
         modifier = Modifier.fillMaxSize().background(cs.background).padding(24.dp),
         contentAlignment = Alignment.Center
@@ -119,14 +127,37 @@ fun ConfigScreen(current: String, currentBg: String, onPick: (String) -> Unit, o
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(24.dp))
                 .background(cs.surface)
-                .verticalScroll(rememberScrollState())
-                .padding(20.dp)
         ) {
-            Text(L10n.t(S.WidgetSettings), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(12.dp))
-            ColorSection(L10n.t(S.BarColor), options, current, onPick, splitAutoSwatch = true)
-            Spacer(Modifier.height(16.dp))
-            ColorSection(L10n.t(S.BgColor), bgOptions, currentBg, onPickBg)
+            Column(
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .verticalScroll(rememberScrollState())
+                    .padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 8.dp)
+            ) {
+                Text(L10n.t(S.WidgetSettings), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(12.dp))
+                ColorSection(L10n.t(S.BarColor), options, barSel, { barSel = it }, splitAutoSwatch = true)
+                Spacer(Modifier.height(16.dp))
+                ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it })
+            }
+            // Same bottom action pill as the One UI dialogs (Cancel | Apply).
+            Row(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(cs.surfaceContainerHighest),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(Modifier.weight(1f).fillMaxHeight().clickable(onClick = onCancel), contentAlignment = Alignment.Center) {
+                    Text(L10n.t(S.Cancel), color = cs.primary, style = MaterialTheme.typography.labelLarge)
+                }
+                Box(Modifier.width(0.5.dp).fillMaxHeight().background(cs.outline))
+                Box(Modifier.weight(1f).fillMaxHeight().clickable { onApply(barSel, bgSel) }, contentAlignment = Alignment.Center) {
+                    Text(L10n.t(S.Apply), color = cs.primary, style = MaterialTheme.typography.labelLarge)
+                }
+            }
         }
     }
 }
@@ -152,20 +183,14 @@ class WidgetConfigActivity : ComponentActivity() {
                 ConfigScreen(
                     current = curBar,
                     currentBg = curBg,
-                    onPick = { choice ->
-                        sp.edit().putString(keyFor("widget_bar_color"), choice).apply()
+                    onApply = { bar, bg ->
+                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
                         finish()
                     },
-                    onPickBg = { choice ->
-                        sp.edit().putString(keyFor("widget_bg_color"), choice).apply()
-                        WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
-                        com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
-                        setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
-                        finish()
-                    }
+                    onCancel = { finish() }
                 )
             }
         }
