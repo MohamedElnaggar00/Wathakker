@@ -157,7 +157,7 @@ class PrayerAlertReceiver : BroadcastReceiver() {
                         com.example.utils.NotifPrefs.deleteVariants(nm, IQAMA_CHANNEL + "_p" + p, null)
                     }
                 }
-            } catch (_: Throwable) {}
+            } catch (t: Throwable) { android.util.Log.e("NotifPrefs", "prayer channels failed", t) }
         }
     }
 }

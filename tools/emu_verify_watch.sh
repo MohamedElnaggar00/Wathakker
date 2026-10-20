@@ -65,7 +65,7 @@ for M in no yes; do
 done
 adb shell cmd uimode night no
 # Notification channels: global tone/vibration, per-prayer override, revert
-chans(){ adb shell dumpsys notification --noredact 2>/dev/null | grep -o "NotificationChannel{mId='[^']*'[^}]*}" | grep -E "dhikr_channel|prayer_alerts_channel|iqama_reminders_channel" | sed -E "s/mName=[^,]*, //; s/mDescription=[^,]*, //" | grep -oE "mId='[^']*'|mImportance=[0-9]+|mSound=[^,]*|mVibrationEnabled=[a-z]+" | paste -sd' ' | sed "s/mId=/\nmId=/g" > "$OUT/channels_$1.txt"; }
+chans(){ adb shell dumpsys notification --noredact 2>/dev/null | grep -o "NotificationChannel{mId='[^']*'[^}]*}" | grep -E "dhikr_channel|prayer_alerts_channel|iqama_reminders_channel" | grep -oE "mId='[^']*'|mImportance=[0-9]+|mSound=[^,]*|mVibrationEnabled=[a-z]+|mDeleted=[a-z]+" | paste -sd' ' | sed "s/mId=/\nmId=/g" > "$OUT/channels_$1.txt"; adb logcat -d -s NotifPrefs:V > "$OUT/notifprefs_$1.txt" 2>&1; }
 adb shell cmd uimode night yes; adb shell am force-stop $PKG
 adb shell pm grant $PKG android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
 adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 7

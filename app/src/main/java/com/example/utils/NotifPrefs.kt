@@ -65,7 +65,8 @@ object NotifPrefs {
     /** Applies the current values to every notification channel right away. */
     @JvmStatic
     fun refreshChannels(c: Context) {
-        try { com.example.alarm.AlarmReceiver.INSTANCE.createNotificationChannel(c.applicationContext) } catch (_: Throwable) {}
+        android.util.Log.i("NotifPrefs", "refreshChannels tone=${tone(c)} vib=${vibration(c)}")
+        try { com.example.alarm.AlarmReceiver.INSTANCE.createNotificationChannel(c.applicationContext) } catch (t: Throwable) { android.util.Log.e("NotifPrefs", "azkar channel failed", t) }
         com.example.prayer.alerts.PrayerAlertReceiver.refreshChannels(c.applicationContext)
     }
 
@@ -115,6 +116,7 @@ object NotifPrefs {
             }
             n.enableVibration(vib)
             nm.createNotificationChannel(n)
+            android.util.Log.i("NotifPrefs", "created channel $id vib=$vib tone=$tone")
         }
         deleteVariants(nm, ch.id, id)
         return id
