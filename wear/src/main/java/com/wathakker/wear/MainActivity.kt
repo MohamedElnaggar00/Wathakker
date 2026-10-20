@@ -194,6 +194,8 @@ fun StarField(modifier: Modifier) {
                         2 -> rosette(12, 5, r * 1.18f, -Math.PI / 2)
                         3 -> { rosette(8, 3, half * 0.92f, -Math.PI / 2 + Math.PI / 8); drawPath(diamondPath(cx, cy, half * 0.98f), col, style = Stroke(width = sw)) }
                         4 -> { rosette(10, 4, half * 0.95f, -Math.PI / 2); rosette(10, 2, half * 0.42f, -Math.PI / 2 + Math.PI / 10); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw)) }
+                        6 -> { rosette(12, 5, half * 0.97f, -Math.PI / 2); rosette(12, 4, half * 0.62f, -Math.PI / 2); rosette(12, 2, half * 0.3f, -Math.PI / 2 + Math.PI / 12); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw)) }
+                        7 -> { rosette(10, 3, half * 0.95f, -Math.PI / 2); rosette(10, 2, half * 0.5f, -Math.PI / 2); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw * 1.8f)) }
                         else -> { rosette(12, 5, half * 0.97f, -Math.PI / 2); rosette(12, 3, half * 0.46f, -Math.PI / 2 + Math.PI / 12); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw)) }
                     }
                 } else drawPath(starPath(cx, cy, r), Color.White.copy(alpha = al), style = Stroke(width = sw))
