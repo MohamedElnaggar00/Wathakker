@@ -2,6 +2,7 @@ package com.example.fajr.ui
 
 import androidx.compose.foundation.background
 import com.example.utils.clickable
+import com.example.utils.plainClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                     leadingIcon = { Icon(Icons.Outlined.Search, null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = com.example.utils.AppHaptics.tap { searchQuery = "" }) { Icon(Icons.Outlined.Close, "Clear") }
+                            IconButton(onClick = { searchQuery = "" }) { Icon(Icons.Outlined.Close, "Clear") }
                         }
                     },
                     singleLine = true,
@@ -99,7 +100,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                     }
                 }
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(56.dp).clickable(onClick = onDismiss),
+                    modifier = Modifier.fillMaxWidth().height(56.dp).plainClickable(onClick = onDismiss),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(L10n.t(S.Cancel), color = cs.onSurface, fontSize = 17.sp, fontWeight = FontWeight.Bold)

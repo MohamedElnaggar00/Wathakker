@@ -117,7 +117,7 @@ fun WatchSettingsScreen(onBack: () -> Unit) {
                     summary = w("عرض أوقات الصلاة على الساعة بنظام 24 ساعة", "Show prayer times on the watch in 24-hour format"),
                     leading = { OneUIIconBadge(Icons.Outlined.AccessTime) },
                     trailing = { OneUISwitch(h24, { h24 = it; WearSync.setHour24(ctx, it) }) },
-                    onClick = { h24 = !h24; WearSync.setHour24(ctx, h24) }
+                    onClick = com.example.utils.AppHaptics.tap { h24 = !h24; WearSync.setHour24(ctx, h24) }
                 )
             }
         }

@@ -251,7 +251,7 @@ fun OneUIScreen(
                 ) {
                 val leading = onBack ?: onMenu
                 if (leading != null) {
-                    IconButton(onClick = com.example.utils.AppHaptics.tap(leading)) {
+                    IconButton(onClick = leading) {
                         if (onMenu != null) {
                             Icon(Icons.Outlined.Menu, contentDescription = L10n.t(S.Menu), tint = MaterialTheme.colorScheme.onBackground)
                         } else {
@@ -299,7 +299,7 @@ private fun SettingsGlyph() {
 
 @Composable
 fun OneUIIconAction(icon: ImageVector, contentDescription: String?, onClick: () -> Unit) {
-    IconButton(onClick = com.example.utils.AppHaptics.tap(onClick)) {
+    IconButton(onClick = onClick) {
         Icon(icon, contentDescription = contentDescription, tint = MaterialTheme.colorScheme.onBackground)
     }
 }
@@ -373,7 +373,7 @@ fun OneUIRow(
     titleColor: Color = Color.Unspecified
 ) {
     val resolvedTitleColor = if (titleColor == Color.Unspecified) MaterialTheme.colorScheme.onSurface else titleColor
-    val tapRow = onClick?.let { com.example.utils.AppHaptics.tap(it) }
+    val tapRow = onClick
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -421,7 +421,7 @@ fun OneUIButton(
     val accent = accentOverride ?: if (destructive) cs.error else cs.primary
     val container = if (filled) accent else accent.copy(alpha = 0.14f)
     val content = if (filled) Color.White else accent
-    val tapBtn = com.example.utils.AppHaptics.tap(onClick)
+    val tapBtn = onClick
     Row(
         modifier = modifier
             .heightIn(min = 44.dp)
@@ -607,7 +607,7 @@ fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable Col
 fun OneUIMenuItem(text: String, onClick: () -> Unit, icon: ImageVector? = null, destructive: Boolean = false) {
     DropdownMenuItem(
         text = { Text(text, color = MaterialTheme.colorScheme.onSurface, fontSize = 17.sp, maxLines = 1) },
-        onClick = com.example.utils.AppHaptics.tap(onClick),
+        onClick = onClick,
         modifier = Modifier.heightIn(min = 48.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp, vertical = 4.dp)
     )
@@ -689,7 +689,7 @@ fun OneUIBottomBar(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    ) { com.example.utils.AppHaptics.tick(tabView); onSelect(tab) },
+                    ) { onSelect(tab) },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

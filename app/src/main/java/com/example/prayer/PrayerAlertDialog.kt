@@ -7,6 +7,7 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.utils.clickable
+import com.example.utils.plainClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -158,7 +159,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         Text(
                             L10n.t(S.MinBeforeFmt).format(dragOffset),
                             color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold,
-                            modifier = Modifier.clickable { showMinuteInput = true }
+                            modifier = Modifier.plainClickable { showMinuteInput = true }
                         )
                     }
                     if (showMinuteInput) {
@@ -271,7 +272,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .clickable {
+                        .plainClickable {
                             val intent = Intent("android.intent.action.RINGTONE_PICKER")
                             intent.putExtra("android.intent.extra.ringtone.TYPE", 4)
                             intent.putExtra("android.intent.extra.ringtone.TITLE", L10n.t(S.PickRingtone))
@@ -292,7 +293,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         L10n.t(S.AudioFile), color = cs.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .clickable { audioPickerLauncher.launch("audio/*") }
+                            .plainClickable { audioPickerLauncher.launch("audio/*") }
                             .padding(6.dp)
                     )
                 }
@@ -314,7 +315,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .clickable {
+                            .plainClickable {
                                 PrayerAlertStore.clearOverride(context, prayer)
                                 if (Build.VERSION.SDK_INT >= 26) {
                                     val nmx = context.getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager

@@ -108,7 +108,7 @@ fun OneUIDialogSurface(
                     val rtlDir = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
                     val dismissBtn: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {
                         Box(
-                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = com.example.utils.AppHaptics.tap(onDismiss)),
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onDismiss),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(dismissText, color = cs.onSurface, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 17.sp, style = MaterialTheme.typography.labelLarge)
@@ -116,7 +116,7 @@ fun OneUIDialogSurface(
                     }
                     val confirmBtn: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {
                         Box(
-                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(enabled = confirmEnabled, onClick = com.example.utils.AppHaptics.tap(onConfirm ?: {})),
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(enabled = confirmEnabled, onClick = onConfirm ?: {}),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(

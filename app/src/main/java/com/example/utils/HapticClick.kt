@@ -36,3 +36,11 @@ fun Modifier.clickable(
         indication = indication, enabled = enabled, onClickLabel = onClickLabel, role = role
     ) { AppHaptics.tick(view); onClick() }
 }
+
+/** Same as foundation clickable, without a tick: for OK/Cancel-style action buttons. */
+fun Modifier.plainClickable(
+    enabled: Boolean = true,
+    onClickLabel: String? = null,
+    role: Role? = null,
+    onClick: () -> Unit
+): Modifier = this.foundationClickable(enabled = enabled, onClickLabel = onClickLabel, role = role, onClick = onClick)

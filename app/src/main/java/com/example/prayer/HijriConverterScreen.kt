@@ -192,7 +192,7 @@ private fun MonthField(
                             { Icon(Icons.Outlined.Check, contentDescription = null, tint = blue) }
                         } else null,
                         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp, vertical = 4.dp),
-                        onClick = com.example.utils.AppHaptics.tap { onPick(i + 1); open = false }
+                        onClick = { onPick(i + 1); open = false }
                     )
                 }
                 } }

@@ -2,6 +2,7 @@ package com.example.ui.hisn
 
 import androidx.compose.foundation.background
 import com.example.utils.clickable
+import com.example.utils.plainClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -142,7 +143,7 @@ private fun ChapterRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .plainClickable(onClick = onClick)
             .heightIn(min = 64.dp)
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -260,7 +261,7 @@ fun HisnItemCard(item: HisnItem, favorite: Boolean, onFavorite: () -> Unit) {
                     .clip(CircleShape)
                     .background(chipBg)
                     .semantics { contentDescription = "عداد الذكر" }
-                    .clickable {
+                    .plainClickable {
                         if (com.example.utils.AppHaptics.enabled) haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                         remaining = if (remaining > 0) remaining - 1 else item.count
                     }

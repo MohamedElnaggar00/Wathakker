@@ -3,6 +3,7 @@ package com.example.prayer
 import android.content.Context
 import androidx.compose.foundation.background
 import com.example.utils.clickable
+import com.example.utils.plainClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -351,7 +352,7 @@ fun PrayerTimesContent(
                 Text(gregorianText, color = sc.textSecondary, style = MaterialTheme.typography.bodyMedium)
                 Spacer(Modifier.height(12.dp))
                 Row(
-                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).clickable(onClick = onChangeCity).padding(vertical = 6.dp),
+                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).plainClickable(onClick = onChangeCity).padding(vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(

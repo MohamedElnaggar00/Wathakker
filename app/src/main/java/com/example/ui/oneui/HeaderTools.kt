@@ -44,7 +44,7 @@ object HeaderTools {
             val entry by nc.currentBackStackEntryAsState()
             if (entry?.destination?.route == "settings") return
         }
-        androidx.compose.material3.IconButton(onClick = com.example.utils.AppHaptics.tap { settings() }) {
+        androidx.compose.material3.IconButton(onClick = { settings() }) {
             androidx.compose.material3.Icon(
                 Icons.Outlined.Settings,
                 contentDescription = L10n.t(S.Settings),

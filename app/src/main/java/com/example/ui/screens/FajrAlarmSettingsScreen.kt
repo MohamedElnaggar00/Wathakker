@@ -123,7 +123,7 @@ fun FajrAlarmSettingsScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                     summary = if (enabled) L10n.t(S.AlarmOnDesc) else L10n.t(S.AlarmOffDesc),
                     leading = { OneUIIconBadge(Icons.Outlined.Alarm) },
                     trailing = { OneUISwitch(enabled, { viewModel.toggleAlarm(it) }) },
-                    onClick = { viewModel.toggleAlarm(!enabled) }
+                    onClick = com.example.utils.AppHaptics.tap { viewModel.toggleAlarm(!enabled) }
                 )
                 if (enabled) {
                     OneUIDivider(70.dp)
@@ -227,7 +227,7 @@ fun FajrAlarmSettingsScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                     title = L10n.t(S.VibrateDuringAlarm),
                     leading = { OneUIIconBadge(Icons.Outlined.Vibration) },
                     trailing = { OneUISwitch(st.isVibrationEnabled(), { viewModel.toggleVibration(it) }) },
-                    onClick = { viewModel.toggleVibration(!st.isVibrationEnabled()) }
+                    onClick = com.example.utils.AppHaptics.tap { viewModel.toggleVibration(!st.isVibrationEnabled()) }
                 )
             }
         }

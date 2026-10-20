@@ -2,6 +2,7 @@ package com.example.ui.screens
 
 import androidx.compose.foundation.background
 import com.example.utils.clickable
+import com.example.utils.plainClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -273,7 +274,7 @@ fun DhikrItemCard(
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .clickable(onClick = onClickTimes)
+                .plainClickable(onClick = onClickTimes)
                 .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -332,7 +333,7 @@ fun DhikrItemCard(
                     L10n.t(S.Options),
                     modifier = Modifier
                         .clip(CircleShape)
-                        .clickable { menu = true }
+                        .plainClickable { menu = true }
                         .padding(10.dp),
                     tint = cs.onSurfaceVariant
                 )

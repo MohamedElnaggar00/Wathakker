@@ -121,7 +121,7 @@ fun FajrAlarmScreen(prayerName: String, onDismiss: () -> Unit, onSnooze: (Int) -
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             OutlinedButton(
-                                onClick = com.example.utils.AppHaptics.tap { onSnooze(com.example.fajr.data.FajrPreferences(ctxAlarm).snoozeMinutes) },
+                                onClick = { onSnooze(com.example.fajr.data.FajrPreferences(ctxAlarm).snoozeMinutes) },
                                 modifier = Modifier.weight(1f).height(56.dp),
                                 shape = RoundedCornerShape(20.dp)
                             ) {
@@ -130,7 +130,7 @@ fun FajrAlarmScreen(prayerName: String, onDismiss: () -> Unit, onSnooze: (Int) -
                                 Text(L10n.t(S.Snooze), color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                             }
                             Button(
-                                onClick = com.example.utils.AppHaptics.tap(onDismiss),
+                                onClick = onDismiss,
                                 modifier = Modifier.weight(1f).height(56.dp),
                                 shape = RoundedCornerShape(20.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEF4444))
@@ -158,7 +158,7 @@ fun FajrAlarmScreen(prayerName: String, onDismiss: () -> Unit, onSnooze: (Int) -
                                 ) {
                                     listOf(5, 10, 15).map { it to L10n.minutesCount(it) }.forEach { (minutes, label) ->
                                         Button(
-                                            onClick = com.example.utils.AppHaptics.tap { onSnooze(minutes) },
+                                            onClick = { onSnooze(minutes) },
                                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF334155))
                                         ) {
                                             Text(label, color = Color.White)

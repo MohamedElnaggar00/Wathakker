@@ -3,6 +3,7 @@ package com.example.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import com.example.utils.clickable
+import com.example.utils.plainClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -89,7 +90,7 @@ fun HijriCalendarScreen(onMenu: (() -> Unit)? = null) {
                             .weight(1f)
                             .clip(RoundedCornerShape(20.dp))
                             .background(if (active) cs.surface else Color.Transparent)
-                            .clickable { showEvents = ev }
+                            .plainClickable { showEvents = ev }
                             .padding(vertical = 9.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -164,14 +165,14 @@ private fun MonthView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconButton(onClick = com.example.utils.AppHaptics.tap(onPrev)) {
+            IconButton(onClick = onPrev) {
                 Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, null, tint = cs.onSurface)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(hijriTitle, color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Text(gregTitle, color = cs.onSurfaceVariant, fontSize = 13.sp)
             }
-            IconButton(onClick = com.example.utils.AppHaptics.tap(onNext)) {
+            IconButton(onClick = onNext) {
                 Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null, tint = cs.onSurface)
             }
         }

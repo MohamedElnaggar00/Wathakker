@@ -257,7 +257,7 @@ fun SettingsContent(
                     title = when (L10n.lang) { com.example.ui.i18n.Lang.AR -> "الاهتزاز للإشعارات"; com.example.ui.i18n.Lang.EN -> "Notification vibration"; else -> L10n.t(S.Vibration) },
                     leading = { OneUIIconBadge(Icons.Outlined.Vibration) },
                     trailing = { OneUISwitch(vibration, onVibration) },
-                    onClick = { onVibration(!vibration) }
+                    onClick = com.example.utils.AppHaptics.tap { onVibration(!vibration) }
                 )
                 val hapticCtx = androidx.compose.ui.platform.LocalContext.current
                 androidx.compose.runtime.LaunchedEffect(Unit) { com.example.utils.AppHaptics.load(hapticCtx) }
@@ -266,7 +266,7 @@ fun SettingsContent(
                     title = if (L10n.lang == com.example.ui.i18n.Lang.AR) "الاستجابة اللمسية" else "Haptic feedback",
                     leading = { OneUIIconBadge(Icons.Outlined.TouchApp) },
                     trailing = { OneUISwitch(hapticOn, { com.example.utils.AppHaptics.set(hapticCtx, it) }) },
-                    onClick = { com.example.utils.AppHaptics.set(hapticCtx, !hapticOn) }
+                    onClick = com.example.utils.AppHaptics.tap { com.example.utils.AppHaptics.set(hapticCtx, !hapticOn) }
                 )
             }
         }

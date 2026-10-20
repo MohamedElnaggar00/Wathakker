@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.border
 import com.example.utils.clickable
+import com.example.utils.plainClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -150,7 +151,7 @@ fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -
                         .height(52.dp)
                         .clip(RoundedCornerShape(26.dp))
                         .background(Color(0xFF377AFF))
-                        .clickable { onApply(barSel, bgSel) },
+                        .plainClickable { onApply(barSel, bgSel) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(L10n.t(S.Apply), color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
