@@ -2,7 +2,7 @@ package com.example.prayer
 
 import android.content.Context
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import com.example.utils.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -464,6 +464,7 @@ fun PrayerTimesContent(
                         Spacer(Modifier.weight(1f))
                         val bellIndex = rowBells.getOrNull(index)
                         val bellOn = bellIndex != null && bellStates.getOrElse(bellIndex) { false }
+                        val bellView = androidx.compose.ui.platform.LocalView.current
                         Text(
                             row.timeText,
                             color = if (row.isNext) nextText else sc.textPrimary,
@@ -480,8 +481,8 @@ fun PrayerTimesContent(
                                 .then(
                                     if (bellIndex != null) {
                                         Modifier.combinedClickable(
-                                            onClick = { onBellClick(bellIndex) },
-                                            onLongClick = { onBellLongClick(bellIndex) }
+                                            onClick = { com.example.utils.AppHaptics.tick(bellView); onBellClick(bellIndex) },
+                                            onLongClick = { com.example.utils.AppHaptics.tick(bellView); onBellLongClick(bellIndex) }
                                         )
                                     } else Modifier
                                 ),

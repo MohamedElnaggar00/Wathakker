@@ -1,6 +1,6 @@
 package com.example.fajr.ui
 
-import androidx.compose.foundation.clickable
+import com.example.utils.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

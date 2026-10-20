@@ -122,7 +122,10 @@ private fun WheelPickerColumn(
         }
     }
 
+    val wheelView = androidx.compose.ui.platform.LocalView.current
+    val lastTick = remember { androidx.compose.runtime.mutableIntStateOf(selectedIndex) }
     LaunchedEffect(selectedIndex) {
+        if (selectedIndex != lastTick.intValue) { lastTick.intValue = selectedIndex; com.example.utils.AppHaptics.tick(wheelView) }
         onItemSelected(selectedIndex)
     }
 

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import com.example.utils.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -277,7 +277,7 @@ private fun LocOptionRow(selected: Boolean, icon: ImageVector, title: String, su
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        RadioButton(selected = selected, onClick = onClick)
+        RadioButton(selected = selected, onClick = com.example.utils.AppHaptics.tap(onClick))
         Spacer(Modifier.width(8.dp))
         Icon(icon, null, tint = cs.primary)
         Spacer(Modifier.width(10.dp))

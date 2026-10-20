@@ -1,6 +1,6 @@
 package com.example.ui.screens
 
-import androidx.compose.foundation.clickable
+import com.example.utils.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn

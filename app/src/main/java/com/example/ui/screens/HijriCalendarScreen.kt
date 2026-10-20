@@ -2,7 +2,7 @@ package com.example.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import com.example.utils.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -164,14 +164,14 @@ private fun MonthView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            IconButton(onClick = onPrev) {
+            IconButton(onClick = com.example.utils.AppHaptics.tap(onPrev)) {
                 Icon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, null, tint = cs.onSurface)
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(hijriTitle, color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Text(gregTitle, color = cs.onSurfaceVariant, fontSize = 13.sp)
             }
-            IconButton(onClick = onNext) {
+            IconButton(onClick = com.example.utils.AppHaptics.tap(onNext)) {
                 Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, null, tint = cs.onSurface)
             }
         }
@@ -322,7 +322,7 @@ private fun EventRow(o: HijriEvents.Occasion, day: Calendar, locale: Locale, tic
             Text(HijriEvents.name(o, L10n.lang.code), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
             Text("$hDate · $gDate", color = cs.onSurfaceVariant, fontSize = 11.sp)
         }
-        IconButton(onClick = {
+        IconButton(onClick = com.example.utils.AppHaptics.tap {
             HijriEvents.setReminder(context, o.id, !on)
             onToggle()
         }) {

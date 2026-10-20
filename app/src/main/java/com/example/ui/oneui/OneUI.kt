@@ -251,7 +251,7 @@ fun OneUIScreen(
                 ) {
                 val leading = onBack ?: onMenu
                 if (leading != null) {
-                    IconButton(onClick = leading) {
+                    IconButton(onClick = com.example.utils.AppHaptics.tap(leading)) {
                         if (onMenu != null) {
                             Icon(Icons.Outlined.Menu, contentDescription = L10n.t(S.Menu), tint = MaterialTheme.colorScheme.onBackground)
                         } else {
@@ -299,7 +299,7 @@ private fun SettingsGlyph() {
 
 @Composable
 fun OneUIIconAction(icon: ImageVector, contentDescription: String?, onClick: () -> Unit) {
-    IconButton(onClick = onClick) {
+    IconButton(onClick = com.example.utils.AppHaptics.tap(onClick)) {
         Icon(icon, contentDescription = contentDescription, tint = MaterialTheme.colorScheme.onBackground)
     }
 }
@@ -373,10 +373,11 @@ fun OneUIRow(
     titleColor: Color = Color.Unspecified
 ) {
     val resolvedTitleColor = if (titleColor == Color.Unspecified) MaterialTheme.colorScheme.onSurface else titleColor
+    val tapRow = onClick?.let { com.example.utils.AppHaptics.tap(it) }
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .then(if (tapRow != null) Modifier.clickable(onClick = tapRow) else Modifier)
             .heightIn(min = 64.dp)
             .padding(horizontal = 16.dp, vertical = if (summary != null) 14.dp else 12.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -420,12 +421,13 @@ fun OneUIButton(
     val accent = accentOverride ?: if (destructive) cs.error else cs.primary
     val container = if (filled) accent else accent.copy(alpha = 0.14f)
     val content = if (filled) Color.White else accent
+    val tapBtn = com.example.utils.AppHaptics.tap(onClick)
     Row(
         modifier = modifier
             .heightIn(min = 44.dp)
             .clip(CircleShape)
             .background(container)
-            .clickable(onClick = onClick)
+            .clickable(onClick = tapBtn)
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -484,12 +486,13 @@ fun OneUIChip(
 ) {
     val cs = MaterialTheme.colorScheme
     val bg by animateColorAsState(if (selected) cs.primary.copy(alpha = 0.16f) else cs.surface, label = "chipBg")
+    val tapChip = com.example.utils.AppHaptics.tap(onClick)
     Row(
         modifier = modifier
             .height(38.dp)
             .clip(CircleShape)
             .background(bg)
-            .clickable(onClick = onClick)
+            .clickable(onClick = tapChip)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -604,7 +607,7 @@ fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable Col
 fun OneUIMenuItem(text: String, onClick: () -> Unit, icon: ImageVector? = null, destructive: Boolean = false) {
     DropdownMenuItem(
         text = { Text(text, color = MaterialTheme.colorScheme.onSurface, fontSize = 17.sp, maxLines = 1) },
-        onClick = onClick,
+        onClick = com.example.utils.AppHaptics.tap(onClick),
         modifier = Modifier.heightIn(min = 48.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp, vertical = 4.dp)
     )
@@ -663,6 +666,7 @@ fun OneUIBottomBar(
     // circled in Samsung Reminder's Scheduled tile (#78B8F8). Light theme uses a
     // darker shade of the same hue so the label stays legible on light glass.
     val tabBlue = if (ThemeSettings.isDark()) Color(0xFF78B8F8) else Color(0xFF2E6DB4)
+    val tabView = androidx.compose.ui.platform.LocalView.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -685,7 +689,7 @@ fun OneUIBottomBar(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    ) { onSelect(tab) },
+                    ) { com.example.utils.AppHaptics.tick(tabView); onSelect(tab) },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

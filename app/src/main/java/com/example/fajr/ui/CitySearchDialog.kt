@@ -1,7 +1,7 @@
 package com.example.fajr.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import com.example.utils.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -73,7 +73,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                     leadingIcon = { Icon(Icons.Outlined.Search, null) },
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { searchQuery = "" }) { Icon(Icons.Outlined.Close, "Clear") }
+                            IconButton(onClick = com.example.utils.AppHaptics.tap { searchQuery = "" }) { Icon(Icons.Outlined.Close, "Clear") }
                         }
                     },
                     singleLine = true,
