@@ -108,6 +108,13 @@ val oneUIDrawerItems: List<OneUIDrawerItem> = listOf(
 fun MainScreen(viewModel: MainViewModel) {
     val navController = rememberNavController()
     HeaderTools.setNav(navController)
+    val shortcutRoute = com.example.ui.ShortcutNav.route
+    androidx.compose.runtime.LaunchedEffect(shortcutRoute) {
+        if (shortcutRoute != null) {
+            com.example.ui.ShortcutNav.route = null
+            navController.navigate(shortcutRoute)
+        }
+    }
     val hazeState = rememberHazeState()
     val selectedDhikrNotif by viewModel.selectedDhikrFromNotification.collectAsStateWithLifecycle()
     val allTags by viewModel.allTags.collectAsStateWithLifecycle()

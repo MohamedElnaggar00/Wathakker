@@ -42,3 +42,31 @@ flow ar no "التالي" "رجوع" "تحديد الموقع (GPS)" "إنهاء
 flow en no "Next" "Back" "Use my location (GPS)" "Finish"
 flow ar yes "التالي" "رجوع" "تحديد الموقع (GPS)" "إنهاء"
 adb logcat -d -v threadtime | grep -E "FATAL EXCEPTION|AndroidRuntime" | head -20 > "$OUT/crashes.txt"
+# ---- launcher long-press shortcuts
+adb shell pm clear $P >/dev/null
+adb shell "mkdir -p /data/data/$P/shared_prefs"
+UID_=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string><int name=\\\"perm_stage\\\" value=\\\"3\\\" /><boolean name=\\\"perm_flow_done\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/app_prefs.xml; chown $UID_:$UID_ /data/data/$P/shared_prefs/app_prefs.xml; chmod 660 /data/data/$P/shared_prefs/app_prefs.xml; restorecon -R /data/data/$P/shared_prefs"
+adb shell cmd uimode night yes
+adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 8
+adb shell dumpsys shortcut | grep -A6 "$P" | head -60 > "$OUT/shortcuts_dump.txt"
+adb shell pm grant $P android.permission.ACCESS_FINE_LOCATION
+adb shell input keyevent 3; sleep 2
+adb shell uiautomator dump /sdcard/h.xml >/dev/null; adb pull /sdcard/h.xml /tmp/h.xml >/dev/null
+read X Y <<<"$(python3 - <<'PY'
+import re,xml.etree.ElementTree as ET
+for n in ET.parse('/tmp/h.xml').iter('node'):
+    if 'Wathakker' in (n.get('text') or '') or 'وذكر' in (n.get('text') or '') or 'Prayer' in (n.get('text') or '') or 'Wathakker' in (n.get('content-desc') or ''):
+        b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
+PY
+)"
+echo "icon at $X $Y" > "$OUT/icon_pos.txt"
+shot home_before_longpress
+adb shell input swipe ${X:-200} ${Y:-1000} ${X:-200} ${Y:-1000} 1200; sleep 2
+shot longpress_menu
+for G in qibla fajr_alarm hijri_converter; do
+  adb shell am force-stop $P
+  adb shell am start -W -a android.intent.action.VIEW -d "wathakker://open?go=$G" -n $P/com.example.MainActivity >/dev/null; sleep 6
+  shot shortcut_target_$G
+done
+adb logcat -d -v threadtime | grep -E "FATAL EXCEPTION|AndroidRuntime" | head -20 >> "$OUT/crashes.txt"

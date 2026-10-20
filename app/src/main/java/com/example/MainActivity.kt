@@ -73,6 +73,8 @@ class MainActivity : ComponentActivity() {
 
     private fun handleIntent(intent: Intent?) {
         HomeWidgets.handleIntent(intent)
+        com.example.ui.ShortcutNav.fromIntent(intent)
+        com.example.ui.ShortcutNav.publish(this)
         val dhikrId = intent?.getIntExtra("DHIKR_ID", -1) ?: -1
         if (dhikrId != -1) mainViewModel.onDhikrSelectedFromNotification(dhikrId)
     }
