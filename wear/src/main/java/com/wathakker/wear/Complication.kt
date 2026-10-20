@@ -19,7 +19,7 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
 
     private fun tap(): PendingIntent = PendingIntent.getActivity(
         this, 0,
-        Intent(this, MainActivity::class.java).putExtra("circles", true).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
+        Intent(this, CirclesActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 

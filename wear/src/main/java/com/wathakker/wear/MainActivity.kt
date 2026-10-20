@@ -283,7 +283,7 @@ fun QiblaPage(w: Float) {
 }
 
 @Composable
-fun CirclesPage(s: PrayerState, now: Long, w: Float, visible: Boolean) {
+fun CirclesPage(s: PrayerState, now: Long, w: Float, visible: Boolean, bg: Color = Color.Black) {
     val anim = remember { Animatable(0f) }
     LaunchedEffect(visible) {
         if (visible) {
@@ -295,7 +295,7 @@ fun CirclesPage(s: PrayerState, now: Long, w: Float, visible: Boolean) {
     val slots = ids.map { id -> if (id == 0 && s.next.at == s.nextFajrTomorrow.at) s.nextFajrTomorrow else s.today[id] }
     val d = w * 0.295f
     val rad = w * 0.285f
-    Box(Modifier.fillMaxSize().background(Color.Black)) {
+    Box(Modifier.fillMaxSize().background(bg)) {
         slots.forEachIndexed { i, slot ->
             val ang = Math.toRadians(-90.0 + i * 72.0)
             val tx0 = (cos(ang) * rad).toFloat(); val ty0 = (sin(ang) * rad - w * 0.012f).toFloat()

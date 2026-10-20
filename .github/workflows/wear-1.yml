@@ -44,7 +44,7 @@ jobs:
         target: android-wear
         profile: wearos_large_round
         disable-animations: false
-        script: bash tools/emu_wear.sh wear/build/outputs/apk/debug/wear-debug.apk emulator-evidence/wear
+        script: bash tools/emu_circles.sh wear/build/outputs/apk/debug/wear-debug.apk emulator-evidence/wear
     - uses: actions/upload-artifact@v4
       if: always()
       with:
