@@ -18,7 +18,7 @@ import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.rendering.ComplicationDrawable
 
 private class PreviewTile(c: Context) : PrayerTileService() { init { attachBaseContext(c) } }
-private class PreviewComp(c: Context) : PrayerComplicationService() { init { attachBaseContext(c) } }
+private class PreviewComp(c: Context, val k: Int) : PrayerComplicationService() { init { attachBaseContext(c) }; override val kind get() = k }
 
 /** Debug preview: draws the real tile layout with the Tiles renderer, and the real complication data with the platform complication renderer. */
 class PreviewActivity : Activity() {
@@ -34,8 +34,9 @@ class PreviewActivity : Activity() {
             val r = TileRenderer(this, ContextCompat.getMainExecutor(this)) { }
             r.inflateAsync(layout, res, root)
         } else {
-            val type = if (mode == "short") ComplicationType.SHORT_TEXT else ComplicationType.RANGED_VALUE
-            val data = PreviewComp(this).build(type, s)!!
+            val k = intent.getIntExtra("kind", 0)
+            val type = if (k == 3) ComplicationType.LONG_TEXT else if (mode == "short" || k > 0) ComplicationType.SHORT_TEXT else ComplicationType.RANGED_VALUE
+            val data = PreviewComp(this, k).build(type, s)!!
             val cd = ComplicationDrawable(this)
             cd.activeStyle.rangedValuePrimaryColor = WTheme.cur.main.toArgb()
             cd.activeStyle.rangedValueSecondaryColor = 0xFF3A3420.toInt()
