@@ -26,7 +26,7 @@ import com.example.ui.i18n.S
 
 @Composable
 fun FontPickerDialog(selected: FontChoice, onSelect: (FontChoice) -> Unit, onDismiss: () -> Unit) {
-    OneUIDialog(title = L10n.t(S.Font), onDismiss = onDismiss, dismissText = L10n.t(S.Close)) {
+    OneUIDialog(title = L10n.t(S.Font), onDismiss = onDismiss, dismissText = L10n.t(S.Back)) {
         FontChoice.entries.forEachIndexed { index, choice ->
             if (index > 0) OneUIDivider(4.dp)
             Row(
@@ -63,7 +63,7 @@ fun ThemePickerDialog(selected: String, onSelect: (String) -> Unit, onDismiss: (
         ThemeSettings.LIGHT to L10n.t(S.Light),
         ThemeSettings.DARK to L10n.t(S.Dark)
     )
-    OneUIDialog(title = L10n.t(S.Appearance), onDismiss = onDismiss, dismissText = L10n.t(S.Close)) {
+    OneUIDialog(title = L10n.t(S.Appearance), onDismiss = onDismiss, dismissText = L10n.t(S.Back)) {
         options.forEachIndexed { index, (key, label) ->
             if (index > 0) OneUIDivider(4.dp)
             Row(
@@ -96,7 +96,7 @@ fun ThemePickerDialog(selected: String, onSelect: (String) -> Unit, onDismiss: (
 @Composable
 fun FontSizeDialog(selected: Float, onSelect: (Float) -> Unit, onDismiss: () -> Unit) {
     val ar = L10n.lang == com.example.ui.i18n.Lang.AR
-    OneUIDialog(title = if (ar) "حجم الخط" else "Font size", onDismiss = onDismiss, dismissText = L10n.t(S.Close)) {
+    OneUIDialog(title = if (ar) "حجم الخط" else "Font size", onDismiss = onDismiss, dismissText = L10n.t(S.Back)) {
         com.example.FontScaleSettings.STEPS.forEachIndexed { index, step ->
             if (index > 0) OneUIDivider(4.dp)
             Row(

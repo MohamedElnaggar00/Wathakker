@@ -105,3 +105,16 @@ for N in yes no; do
   shot dialog_edit_$N
   adb shell input keyevent 4; sleep 1
 done
+# prayer alert dialog (bell on prayer screen) 
+adb shell cmd uimode night yes
+adb shell am force-stop $P; adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+adb shell uiautomator dump /sdcard/b.xml >/dev/null; adb pull /sdcard/b.xml /tmp/b.xml >/dev/null
+read BX BY <<<"$(python3 - <<'PY'
+import re,xml.etree.ElementTree as ET
+for n in ET.parse('/tmp/b.xml').iter('node'):
+    if (n.get('content-desc') or '').startswith('bell_'):
+        b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
+PY
+)"
+adb shell input swipe ${BX:-100} ${BY:-800} ${BX:-100} ${BY:-800} 1200; sleep 2
+shot prayer_alert_dialog

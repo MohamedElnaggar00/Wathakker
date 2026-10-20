@@ -28,7 +28,7 @@ import com.example.ui.oneui.OneUIDivider
 
 @Composable
 fun LanguagePickerDialog(selected: Lang, onSelect: (Lang) -> Unit, onDismiss: () -> Unit) {
-    OneUIDialog(title = L10n.t(S.Language), onDismiss = onDismiss, dismissText = L10n.t(S.Close)) {
+    OneUIDialog(title = L10n.t(S.Language), onDismiss = onDismiss, dismissText = L10n.t(S.Back)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

@@ -138,7 +138,7 @@ fun OneUIDialog(
     onDismiss: () -> Unit,
     onConfirm: (() -> Unit)? = null,
     confirmText: String = L10n.t(S.Save),
-    dismissText: String = L10n.t(S.Cancel),
+    dismissText: String? = null,
     confirmEnabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -154,7 +154,7 @@ fun OneUIDialog(
             onConfirm = onConfirm,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp).heightIn(max = maxDialogHeight),
             confirmText = confirmText,
-            dismissText = dismissText,
+            dismissText = dismissText ?: L10n.t(if (onConfirm == null) S.Back else S.Cancel),
             confirmEnabled = confirmEnabled,
             content = content
         )
