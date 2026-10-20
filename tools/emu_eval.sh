@@ -119,6 +119,14 @@ adb shell pm grant $P android.permission.POST_NOTIFICATIONS 2>/dev/null
 adb shell am force-stop $P
 UIDN=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
 adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><boolean name=\\\"enabled_3\\\" value=\\\"true\\\" /><boolean name=\\\"migrated_v1\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/prayer_alerts.xml; chown $UIDN:$UIDN /data/data/$P/shared_prefs/prayer_alerts.xml; chmod 660 /data/data/$P/shared_prefs/prayer_alerts.xml; restorecon /data/data/$P/shared_prefs/prayer_alerts.xml"
+NOWMS=$(( $(adb shell date +%s | tr -d '\r') * 1000 + 40000 ))
+adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 3 --el prayer_at $NOWMS >/dev/null 2>&1
+sleep 3
+adb shell dumpsys notification --noredact | grep -E "id=433|timeout" | head > "$OUT/notif_early_present.txt"
+adb shell cmd statusbar expand-notifications; sleep 2; shot notif_early_countdown
+adb shell cmd statusbar collapse
+sleep 40
+adb shell dumpsys notification --noredact | grep -E "id=433" | head > "$OUT/notif_early_after_adhan_time.txt"
 adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 0 > "$OUT/bcast_adhan.txt" 2>&1
 adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 1 > "$OUT/bcast_iqama.txt" 2>&1
 sleep 5
