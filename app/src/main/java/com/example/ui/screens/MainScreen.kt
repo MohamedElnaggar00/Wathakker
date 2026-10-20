@@ -187,10 +187,12 @@ fun MainScreen(viewModel: MainViewModel) {
                     arguments = listOf(navArgument("id") { type = NavType.IntType })
                 ) { entry ->
                     val id = entry.arguments?.getInt("id") ?: 0
+                    val addedDhikr by viewModel.allDhikr.collectAsStateWithLifecycle()
                     HisnChapterScreen(
                         id,
                         hisnViewModel,
                         { navController.popBackStack() },
+                        addedDhikr.map { it.title }.toSet(),
                         { title, content -> viewModel.addDhikrWithSchedule(title, content, listOf("09:00")) }
                     )
                 }

@@ -90,3 +90,8 @@ tap_text "أضف إلى أذكاري"; sleep 1
 shot addbtn_after
 tap_text "تمت الإضافة"; sleep 1
 shot addbtn_after_second_tap
+# leave and return
+adb shell input keyevent 4; sleep 2
+adb shell input tap 540 650; sleep 3
+for i in 1 2 3 4 5 6 7 8; do adb shell input swipe 540 1900 540 400 150; done; sleep 1
+shot addbtn_after_return

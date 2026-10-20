@@ -189,9 +189,11 @@ fun HisnChapterContent(
     onToggleChapterFavorite: () -> Unit,
     onToggleItemFavorite: (HisnItem) -> Unit,
     onMarkRead: () -> Unit,
-    onAddToMyAzkar: () -> Unit
+    onAddToMyAzkar: () -> Unit,
+    alreadyAdded: Boolean = false
 ) {
-    var added by rememberSaveable(chapter.id) { mutableStateOf(false) }
+    var tapped by rememberSaveable(chapter.id) { mutableStateOf(false) }
+    val added = tapped || alreadyAdded
     OneUIScreen(
         title = chapter.name,
         subtitle = azkarCount(items.size),
@@ -215,7 +217,7 @@ fun HisnChapterContent(
                 OneUIButton(L10n.t(S.ReadDone), onMarkRead, Modifier.weight(1f), true, Icons.Outlined.Check)
                 OneUIButton(
                     L10n.t(if (added) S.AddedToMyAzkar else S.AddToMyAzkar),
-                    { if (!added) { added = true; onAddToMyAzkar() } },
+                    { if (!added) { tapped = true; onAddToMyAzkar() } },
                     Modifier.weight(1f), false,
                     if (added) Icons.Outlined.Check else Icons.Outlined.NotificationAdd,
                     accentOverride = if (added) com.example.ui.theme.OneUIActiveGreen else null
@@ -360,6 +362,7 @@ fun HisnChapterScreen(
     chapterId: Int,
     viewModel: HisnViewModel,
     onBack: () -> Unit,
+    onAddedTitles: Set<String> = emptySet(),
     onAddToMyAzkar: (String, String) -> Unit
 ) {
     val chapters by viewModel.chapters.collectAsStateWithLifecycle()
@@ -378,7 +381,8 @@ fun HisnChapterScreen(
         onToggleChapterFavorite = { viewModel.toggleChapterFavorite(chapterId) },
         onToggleItemFavorite = { viewModel.toggleItemFavorite(chapterId, it.id) },
         onMarkRead = { viewModel.markChapterRead(chapterId) },
-        onAddToMyAzkar = { onAddToMyAzkar(chapter.name, items.joinToString("\n\n") { it.text }) }
+        onAddToMyAzkar = { onAddToMyAzkar(chapter.name, items.joinToString("\n\n") { it.text }) },
+        alreadyAdded = chapter.name in onAddedTitles
     )
 }
 
