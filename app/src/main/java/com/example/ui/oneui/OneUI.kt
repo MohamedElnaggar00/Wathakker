@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -798,8 +800,9 @@ fun OneUIDrawer(
                 modifier = Modifier
                     .padding(start = 12.dp, top = 28.dp, bottom = 28.dp)
                     .width(300.dp)
-                    .fillMaxHeight()
+                    .wrapContentHeight()
                     .then(Modifier.oneUIFrosted(RoundedCornerShape(28.dp), drawerFrost, 48))
+                    .then(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState()))
                     .padding(vertical = 18.dp)
             ) {
                 DrawerHeader()
@@ -821,7 +824,7 @@ fun OneUIDrawer(
                         Text(item.label, color = cs.onSurface, style = MaterialTheme.typography.bodyLarge)
                     }
                 }
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.height(10.dp))
                 if (footer != null) {
                     Box(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),

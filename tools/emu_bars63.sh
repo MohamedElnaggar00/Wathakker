@@ -232,7 +232,10 @@ fontshot() { # $1=font id $2=scale $3=name
   adb shell am force-stop com.wathakker.app
   adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string><string name=\\\"app_font\\\">$1</string><float name=\\\"font_scale\\\" value=\\\"$2\\\" /><int name=\\\"perm_stage\\\" value=\\\"3\\\" /><boolean name=\\\"perm_flow_done\\\" value=\\\"true\\\" /></map>\" > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"
   adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
-  adb shell input keyevent KEYCODE_BACK; sleep 1
+  adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml "$OUT/font_$3_home.xml" >/dev/null 2>&1
+  adb exec-out screencap -p > "$OUT/font_$3_home.png"
+  adb shell input tap 110 190; sleep 2
+  adb exec-out screencap -p > "$OUT/drawer_$3.png"
   tap_text "الإعدادات"; sleep 2
   adb shell input swipe 360 1300 360 500 300; sleep 1
   adb exec-out screencap -p > "$OUT/font_$3.png"
