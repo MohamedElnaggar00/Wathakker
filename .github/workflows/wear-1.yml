@@ -1,4 +1,4 @@
-name: Wear circles render (NO RELEASE)
+name: Wear OS watch app preview (NO RELEASE)
 'on':
   workflow_dispatch: {}
 permissions:
@@ -18,8 +18,6 @@ jobs:
         gradle-version: 9.3.1
     - name: Generate Debug Keystore
       run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
-    - name: Apply render-only patch (not committed)
-      run: python3 tools/render_patch.py
     - name: Build watch APK
       run: |
         set -o pipefail
@@ -46,7 +44,7 @@ jobs:
         target: android-wear
         profile: wearos_large_round
         disable-animations: false
-        script: bash tools/emu_circles.sh wear/build/outputs/apk/debug/wear-debug.apk emulator-evidence/wear
+        script: bash tools/emu_wear.sh wear/build/outputs/apk/debug/wear-debug.apk emulator-evidence/wear
     - uses: actions/upload-artifact@v4
       if: always()
       with:
