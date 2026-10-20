@@ -248,14 +248,20 @@ fun QiblaPage(w: Float) {
     val needle = bearing - heading
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         Text1("القبلة", tx(w * 0.065f, Color(0xFFB9B9BE)), Modifier.align(Alignment.TopCenter).padding(top = (w * 0.085f).dp))
-        Box(Modifier.align(Alignment.Center).padding(bottom = (w * 0.03f).dp).size((w * 0.56f).dp)) {
+        Box(Modifier.align(Alignment.Center).padding(bottom = (w * 0.07f).dp).size((w * 0.54f).dp)) {
             Canvas(Modifier.fillMaxSize()) {
                 val c = center
                 drawCircle(Color(0xFF2B2B2E), radius = size.minDimension / 2 - 2f, style = Stroke(width = size.minDimension * 0.008f))
                 rotateScope(needle, c) {
-                    val len = size.minDimension * 0.46f; val half = size.minDimension * 0.055f
+                    val len = size.minDimension * 0.33f; val half = size.minDimension * 0.055f
                     val tip = Path().apply { moveTo(c.x, c.y - len); lineTo(c.x + half, c.y); lineTo(c.x - half, c.y); close() }
                     drawPath(tip, Gold)
+                    // Kaaba above the arrow tip: black cube with a gold band and door
+                    val k = size.minDimension * 0.085f; val ky = c.y - len - k * 1.05f
+                    val cube = Path().apply { moveTo(c.x - k, ky - k * 0.9f); lineTo(c.x + k, ky - k * 0.9f); lineTo(c.x + k, ky + k * 0.9f); lineTo(c.x - k, ky + k * 0.9f); close() }
+                    drawPath(cube, Color(0xFF141414)); drawPath(cube, Gold, style = Stroke(width = k * 0.14f))
+                    drawRect(Gold, Offset(c.x - k, ky - k * 0.45f), Size(k * 2f, k * 0.32f))
+                    drawRect(Gold, Offset(c.x - k * 0.55f, ky - k * 0.45f + k * 0.55f), Size(k * 0.3f, k * 0.62f))
                     val tail = Path().apply { moveTo(c.x, c.y + len * 0.62f); lineTo(c.x + half, c.y); lineTo(c.x - half, c.y); close() }
                     drawPath(tail, Color(0xFF3C3C40))
                 }
@@ -272,9 +278,9 @@ fun QiblaPage(w: Float) {
                 }
             }
         }
-        Row(Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.115f).dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy((w * 0.03f).dp)) {
-            Text1("${bearing.roundToInt()}°", tx(w * 0.10f, Color.White))
-            Text1(Prayer.directionName(bearing), tx(w * 0.058f, SoftGrey))
+        Row(Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.105f).dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy((w * 0.025f).dp)) {
+            Text1("${bearing.roundToInt()}°", tx(w * 0.072f, Color.White))
+            Text1(Prayer.directionName(bearing), tx(w * 0.044f, SoftGrey))
         }
     }
 }
