@@ -219,6 +219,10 @@ for LANG in ar en; do
   adb shell am force-stop com.example.widgethost
   adb shell am start -W -n com.example.widgethost/.MainActivity --es mode barsA; sleep 14
   adb exec-out screencap -p > "$OUT/iqama_${LANG}_barsA.png"
+  adb shell "date $(date -u +%m%d)1005$(date -u +%Y).00" >/dev/null 2>&1; sleep 4
+  adb shell am broadcast -a android.intent.action.TIME_SET >/dev/null 2>&1; sleep 12
+  adb exec-out screencap -p > "$OUT/iqama_${LANG}_after_barsA.png"
+  adb shell "date $(date -u +%m%d)0945$(date -u +%Y).00" >/dev/null 2>&1
   adb shell am force-stop com.wathakker.app; adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
   adb exec-out screencap -p > "$OUT/iqama_${LANG}_app.png"
 done
