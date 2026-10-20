@@ -145,6 +145,7 @@ final class OneUIWidget {
     private static void remaining(Canvas cv, String prefix, String value, float x, float cy, float w, float size, Typeface reg, Typeface bold, int soft, int ink, float d) {
         String full = prefix + value;
         if (HomeWidgets.capture(full, (x + w / 2) * d, cy * d, w * d, size * d, ink)) return;
+        full = com.example.utils.Digits.forWidget(full);
         SpannableString sp = new SpannableString(full);
         sp.setSpan(new android.text.style.ForegroundColorSpan(soft), 0, prefix.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sp.setSpan(new android.text.style.ForegroundColorSpan(ink), prefix.length(), full.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

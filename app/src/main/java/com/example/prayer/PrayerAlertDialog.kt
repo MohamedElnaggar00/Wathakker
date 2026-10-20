@@ -28,7 +28,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
+import com.example.ui.oneui.Text
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
