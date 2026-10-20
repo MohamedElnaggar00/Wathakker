@@ -164,6 +164,18 @@ private fun diamondPath(cx: Float, cy: Float, r: Float): Path {
     val p = Path(); p.moveTo(cx, cy - r); p.lineTo(cx + r, cy); p.lineTo(cx, cy + r); p.lineTo(cx - r, cy); p.close(); return p
 }
 
+/** Outline of an n-pointed star: outer radius ro, inner radius ri, first tip at the top. */
+private fun starOutline(cx: Float, cy: Float, n: Int, ro: Float, ri: Float): Path {
+    val p = Path()
+    for (i in 0 until 2 * n) {
+        val a = -Math.PI / 2 + i * Math.PI / n
+        val rr = if (i % 2 == 0) ro else ri
+        val x = cx + cos(a).toFloat() * rr; val y = cy + sin(a).toFloat() * rr
+        if (i == 0) p.moveTo(x, y) else p.lineTo(x, y)
+    }
+    p.close(); return p
+}
+
 /** Regular square-grid Islamic star pattern that emerges from the bottom-left corner and fades out. */
 @Composable
 fun StarField(modifier: Modifier) {
@@ -173,6 +185,27 @@ fun StarField(modifier: Modifier) {
         val step = if (pat >= 3) r * 3.1f else if (pat == 2) r * 2.36f else r * 2f
         val maxD = hypot(size.width, size.height) * 0.95f
         val sw = size.minDimension * 0.003f
+        if (pat >= 8) {
+            val ro = size.minDimension * 0.095f
+            val hex = pat == 9
+            val dx = if (hex) ro * 1.732f else ro * 2f
+            val dy = if (hex) ro * 1.5f else ro * 2f
+            val c0 = (size.width / dx).toInt() + 3; val r0 = (size.height / dy).toInt() + 3
+            for (row in 0..r0) for (col in 0..c0) {
+                val cx = col * dx + (if (hex && row % 2 == 1) dx / 2 else if (!hex && row % 2 == 1 && pat == 11) dx / 2 else 0f)
+                val cy = size.height - row * dy
+                val al = 0.30f * (1f - hypot(cx, size.height - cy) / maxD).coerceIn(0f, 1f)
+                if (al < 0.01f) continue
+                val col1 = Color.White.copy(alpha = al)
+                when (pat) {
+                    8 -> { drawPath(starOutline(cx, cy, 8, ro, ro * 0.7654f), col1, style = Stroke(width = sw)); drawPath(diamondPath(cx + dx / 2, cy - dy / 2, ro * 0.30f), col1, style = Stroke(width = sw)) }
+                    9 -> { drawPath(starOutline(cx, cy, 6, ro * 0.98f, ro * 0.577f), col1, style = Stroke(width = sw)); drawCircle(col1, ro * 0.16f, Offset(cx, cy), style = Stroke(width = sw)) }
+                    10 -> { drawPath(starOutline(cx, cy, 8, ro, ro * 0.541f), col1, style = Stroke(width = sw)); drawPath(starOutline(cx, cy, 8, ro * 0.5f, ro * 0.27f), col1.copy(alpha = al * 0.7f), style = Stroke(width = sw)) }
+                    else -> { drawPath(starOutline(cx, cy, 12, ro, ro * 0.5176f), col1, style = Stroke(width = sw)); drawCircle(col1, ro * 0.22f, Offset(cx, cy), style = Stroke(width = sw)); drawCircle(col1.copy(alpha = al * 0.6f), ro * 0.62f, Offset(cx, cy), style = Stroke(width = sw)) }
+                }
+            }
+            return@Canvas
+        }
         val cols = (size.width / step).toInt() + 2; val rows = (size.height / step).toInt() + 2
         for (row in 0..rows) for (col in 0..cols) {
             val cx = col * step; val cy = size.height - row * step
