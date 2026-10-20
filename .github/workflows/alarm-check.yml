@@ -1,4 +1,4 @@
-name: alarm repro (NO RELEASE)
+name: alarm repro2 (NO RELEASE)
 'on':
   workflow_dispatch: {}
 permissions:
@@ -6,7 +6,7 @@ permissions:
 jobs:
   repro:
     runs-on: ubuntu-24.04
-    timeout-minutes: 40
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v4
     - name: Download released APKs
