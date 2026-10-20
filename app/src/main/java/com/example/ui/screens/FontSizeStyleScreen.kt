@@ -99,12 +99,12 @@ private fun StepSlider(index: Int, count: Int, onChange: (Int, Boolean) -> Unit)
             // dots
             for (i in 0 until count) {
                 val f = i / (count - 1f)
-                val x = thumbR + usable * (if (rtl) 1f - f else f)
+                val x = thumbR + usable * f
                 Box(Modifier.offset { IntOffset((x - 4.dp.toPx()).roundToInt(), 0) }.size(8.dp).clip(CircleShape).background(dotColor))
             }
             // thumb
             val fx = anim.value / (count - 1f)
-            val tx = thumbR + usable * (if (rtl) 1f - fx else fx)
+            val tx = thumbR + usable * fx
             Box(
                 Modifier.offset { IntOffset((tx - thumbR).roundToInt(), 0) }.size(28.dp)
                     .clip(CircleShape).background(thumbFill).border(2.5.dp, cs.primary, CircleShape)
