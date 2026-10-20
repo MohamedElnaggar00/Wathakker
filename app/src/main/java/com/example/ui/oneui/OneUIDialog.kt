@@ -51,10 +51,10 @@ fun BlurBehindDialogWindow(radiusDp: Int = 28) {
             attrs.blurBehindRadius = with(density) { radiusDp.dp.roundToPx() }
             window.attributes = attrs
             window.setDimAmount(0.28f)
-            window.setGravity(android.view.Gravity.BOTTOM)
+            window.setGravity(android.view.Gravity.BOTTOM); window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         } else {
             window.setDimAmount(0.5f)
-            window.setGravity(android.view.Gravity.BOTTOM)
+            window.setGravity(android.view.Gravity.BOTTOM); window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
     }
 }
