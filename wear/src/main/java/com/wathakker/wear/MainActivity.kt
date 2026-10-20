@@ -205,7 +205,7 @@ fun ListPage(s: PrayerState, w: Float) {
     val listState = androidx.wear.compose.foundation.lazy.rememberScalingLazyListState(initialCenterItemIndex = nextIdx + 1)
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         androidx.wear.compose.foundation.lazy.ScalingLazyColumn(Modifier.fillMaxSize(), state = listState) {
-            item { Text1("مواقيت الصلاة", tx(w * 0.07f, Color(0xFFB9B9BE))) }
+            item { Text1("مواقيت الصلاة", tx(w * 0.07f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.05f).dp)) }
             items(s.today.size) { i ->
                 val slot = s.today[i]
                 val isNext = slot.at == s.next.at
