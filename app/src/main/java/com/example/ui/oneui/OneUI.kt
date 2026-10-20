@@ -588,6 +588,9 @@ fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable Col
         expanded = expanded,
         onDismissRequest = onDismiss,
         modifier = Modifier.widthIn(min = 190.dp),
+        // Samsung overflow popup: pops over its anchor button, a small margin from the screen edge on
+        // the anchor's side (offset x moves toward the layout end, mirrored automatically in RTL).
+        offset = androidx.compose.ui.unit.DpOffset(14.dp, (-44).dp),
         shape = RoundedCornerShape(24.dp),
         containerColor = oneUiMenuColor(),
         tonalElevation = 0.dp,
