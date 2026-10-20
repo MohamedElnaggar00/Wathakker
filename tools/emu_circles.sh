@@ -10,9 +10,9 @@ adb shell am start -W -n $PKG/com.wathakker.wear.CirclesActivity > "$OUT/start1.
 sleep 0.5; adb exec-out screencap -p > "$OUT/c1_anim.png"; sleep 6; adb exec-out screencap -p > "$OUT/c2_done.png"
 # app in background, on another page (qibla=2), then complication-style open
 adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 2 >/dev/null 2>&1; sleep 14; adb exec-out screencap -p > "$OUT/c3_main_page2.png"
-adb shell am start -W -n $PKG/com.wathakker.wear.CirclesActivity --activity-clear-task --activity-new-task >/dev/null 2>&1; sleep 8; adb exec-out screencap -p > "$OUT/c4_from_page2.png"
+adb shell am start -W -n $PKG/com.wathakker.wear.CirclesActivity -f 0x10008000 > "$OUT/start4.txt" 2>&1; sleep 8; adb exec-out screencap -p > "$OUT/c4_from_page2.png"; adb shell dumpsys activity activities | grep -i "topResumed\|ActivityRecord" | head -12 > "$OUT/d4.txt"
 adb shell input keyevent KEYCODE_HOME; sleep 3
-adb shell am start -W -n $PKG/com.wathakker.wear.CirclesActivity --activity-clear-task --activity-new-task >/dev/null 2>&1; sleep 8; adb exec-out screencap -p > "$OUT/c5_from_background.png"
+adb shell am start -W -n $PKG/com.wathakker.wear.CirclesActivity -f 0x10008000 > "$OUT/start5.txt" 2>&1; sleep 8; adb exec-out screencap -p > "$OUT/c5_from_background.png"; adb shell dumpsys activity activities | grep -i "topResumed\|ActivityRecord" | head -12 > "$OUT/d5.txt"
 adb shell dumpsys activity activities | grep -i "topResumed\|mResumedActivity" > "$OUT/resumed.txt" 2>&1
-adb logcat -d | grep -i "AndroidRuntime\|FATAL" -A8 | head -40 > "$OUT/logcat.txt" 2>&1
+adb logcat -d | grep -i "AndroidRuntime\|FATAL\|wathakker" -A3 | head -40 > "$OUT/logcat.txt" 2>&1
 echo done > "$OUT/SUMMARY.txt"
