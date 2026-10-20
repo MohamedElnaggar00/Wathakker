@@ -70,3 +70,12 @@ for G in qibla fajr_alarm hijri_converter; do
   shot shortcut_target_$G
 done
 adb logcat -d -v threadtime | grep -E "FATAL EXCEPTION|AndroidRuntime" | head -20 >> "$OUT/crashes.txt"
+# ---- floating menu check (One UI popup)
+for N in yes no; do
+  adb shell cmd uimode night $N
+  adb shell am force-stop $P; adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+  tap_text "التذكيرات"; sleep 3
+  tap_text "خيارات"; sleep 2
+  shot menu_popup_$N
+  adb shell input keyevent 4; sleep 1
+done

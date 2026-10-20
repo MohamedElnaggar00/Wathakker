@@ -81,6 +81,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
@@ -572,26 +573,34 @@ fun azkarCount(n: Int): String = L10n.azkarCount(n)
 fun readsCount(n: Int): String = L10n.readsCount(n)
 
 @Composable
+fun oneUiMenuColor(): Color {
+    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    return if (dark) Color(0xFF252525) else Color(0xFFFCFCFC)
+}
+
+/** Samsung One UI floating popup: rounded plain panel, no border, soft shadow, text-only rows. */
+@Composable
 fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = onDismiss,
-        modifier = Modifier.widthIn(min = 200.dp),
-        shape = RoundedCornerShape(22.dp),
-        containerColor = MaterialTheme.colorScheme.surface,
+        modifier = Modifier.widthIn(min = 190.dp),
+        shape = RoundedCornerShape(24.dp),
+        containerColor = oneUiMenuColor(),
+        tonalElevation = 0.dp,
+        shadowElevation = 12.dp,
+        border = null,
         content = content
     )
 }
 
 @Composable
 fun OneUIMenuItem(text: String, onClick: () -> Unit, icon: ImageVector? = null, destructive: Boolean = false) {
-    val color = if (destructive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
     DropdownMenuItem(
-        text = { Text(text, color = color, style = MaterialTheme.typography.bodyLarge) },
+        text = { Text(text, color = MaterialTheme.colorScheme.onSurface, fontSize = 17.sp, maxLines = 1) },
         onClick = onClick,
-        leadingIcon = if (icon != null) {
-            { Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(22.dp)) }
-        } else null
+        modifier = Modifier.heightIn(min = 48.dp),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp, vertical = 4.dp)
     )
 }
 

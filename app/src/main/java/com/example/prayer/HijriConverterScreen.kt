@@ -171,10 +171,10 @@ private fun MonthField(
                 expanded = open,
                 onDismissRequest = { open = false },
                 shape = RoundedCornerShape(24.dp),
-                containerColor = cs.surfaceContainerHigh,
-                tonalElevation = 6.dp,
-                shadowElevation = 10.dp,
-                border = BorderStroke(1.dp, oneUIBorderColor())
+                containerColor = com.example.ui.oneui.oneUiMenuColor(),
+                tonalElevation = 0.dp,
+                shadowElevation = 12.dp,
+                border = null
             ) {
                 names.forEachIndexed { i, name ->
                     val sel = selected == i + 1
@@ -190,7 +190,7 @@ private fun MonthField(
                         trailingIcon = if (sel) {
                             { Icon(Icons.Outlined.Check, contentDescription = null, tint = blue) }
                         } else null,
-                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 20.dp, vertical = 6.dp),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp, vertical = 4.dp),
                         onClick = { onPick(i + 1); open = false }
                     )
                 }

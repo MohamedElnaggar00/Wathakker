@@ -148,9 +148,9 @@ final class OneUIWidget {
         SpannableString sp = new SpannableString(full);
         sp.setSpan(new android.text.style.ForegroundColorSpan(soft), 0, prefix.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sp.setSpan(new android.text.style.ForegroundColorSpan(ink), prefix.length(), full.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sp.setSpan(new CustomTypefaceSpan(bold), prefix.length(), full.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sp.setSpan(new CustomTypefaceSpan(bold), 0, full.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         TextPaint tp = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        tp.setTypeface(reg);
+        tp.setTypeface(bold);
         tp.setTextSize(size * d);
         tp.setColor(soft);
         while (tp.measureText(full) > w * d && tp.getTextSize() > 8 * d) tp.setTextSize(tp.getTextSize() - 0.5f * d);
