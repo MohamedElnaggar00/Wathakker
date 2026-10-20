@@ -342,9 +342,14 @@ private fun StepperRow(title: String, value: Int, unit: String, onChange: (Int) 
                 modifier = Modifier.widthIn(min = 56.dp)
             )
         }
+        val hapticView = androidx.compose.ui.platform.LocalView.current
         Slider(
             value = drag.toFloat(),
-            onValueChange = { drag = it.roundToInt() },
+            onValueChange = {
+                val v = it.roundToInt()
+                if (v != drag) com.example.utils.AppHaptics.tick(hapticView)
+                drag = v
+            },
             onValueChangeFinished = { if (drag != value) onChange(drag) },
             valueRange = min.toFloat()..max.toFloat(),
             steps = (max - min) - 1,

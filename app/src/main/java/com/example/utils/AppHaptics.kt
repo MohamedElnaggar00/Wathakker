@@ -22,4 +22,10 @@ object AppHaptics {
         enabled = on
         ctx.applicationContext.getSharedPreferences("app_haptics", Context.MODE_PRIVATE).edit().putBoolean("enabled", on).apply()
     }
+
+    /** One stepped-slider detent: the platform's clock tick, only when haptics are enabled in settings. */
+    fun tick(view: android.view.View) {
+        load(view.context)
+        if (enabled) view.performHapticFeedback(android.view.HapticFeedbackConstants.CLOCK_TICK)
+    }
 }

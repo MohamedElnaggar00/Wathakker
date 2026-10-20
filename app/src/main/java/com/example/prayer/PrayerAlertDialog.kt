@@ -188,9 +188,14 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                             )
                         }
                     }
+                    val hapticView = androidx.compose.ui.platform.LocalView.current
                     Slider(
                         value = dragOffset.toFloat(),
-                        onValueChange = { dragOffset = it.roundToInt().coerceIn(1, 60) },
+                        onValueChange = {
+                            val v = it.roundToInt().coerceIn(1, 60)
+                            if (v != dragOffset) com.example.utils.AppHaptics.tick(hapticView)
+                            dragOffset = v
+                        },
                         onValueChangeFinished = {
                             if (dragOffset != offset) {
                                 PrayerAlertStore.setOffsetMinutes(context, prayer, dragOffset)

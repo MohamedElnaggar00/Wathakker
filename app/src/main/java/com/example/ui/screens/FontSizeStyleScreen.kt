@@ -69,7 +69,7 @@ private fun StepSlider(index: Int, count: Int, onChange: (Int, Boolean) -> Unit)
         var f = ((x - thumbR) / usable).coerceIn(0f, 1f)
         if (rtl) f = 1f - f
         val i = (f * (count - 1)).roundToInt()
-        if (i != last) { last = i; view.performHapticFeedback(android.view.HapticFeedbackConstants.CLOCK_TICK) }
+        if (i != last) { last = i; com.example.utils.AppHaptics.tick(view) }
         onChange(i, commit)
     }
     Row(

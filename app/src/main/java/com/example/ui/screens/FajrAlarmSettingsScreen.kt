@@ -209,9 +209,14 @@ fun FajrAlarmSettingsScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                         Spacer(Modifier.padding(start = 12.dp))
                         Text(w("مستوى الصوت", "Volume") + "  " + volume + "%", color = MaterialTheme.colorScheme.onSurface)
                     }
+                    val hapticView = androidx.compose.ui.platform.LocalView.current
                     Slider(
                         value = volume.toFloat(),
-                        onValueChange = { volume = it.roundToInt() },
+                        onValueChange = {
+                            val v = it.roundToInt()
+                            if (v / 5 != volume / 5) com.example.utils.AppHaptics.tick(hapticView)
+                            volume = v
+                        },
                         onValueChangeFinished = { viewModel.setAlarmVolume(volume) },
                         valueRange = 10f..100f,
                         modifier = Modifier.fillMaxWidth()
