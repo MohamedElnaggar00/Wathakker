@@ -83,7 +83,7 @@ val OneUIShapes = Shapes(
 
 @Composable
 fun MyApplicationTheme(
-    fontChoice: FontChoice = FontChoice.SYSTEM,
+    fontChoice: FontChoice = FontChoice.APP,
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
@@ -110,8 +110,13 @@ fun MyApplicationTheme(
         shapes = OneUIShapes,
         typography = getTypography(fontChoice)
     ) {
+        val appCtx = LocalContext.current.applicationContext
+        androidx.compose.runtime.remember { com.example.FontScaleSettings.init(appCtx) }
+        val userScale by com.example.FontScaleSettings.scale.collectAsState()
+        val baseDensity = androidx.compose.ui.platform.LocalDensity.current
         CompositionLocalProvider(
             LocalLayoutDirection provides (if (L10n.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr),
+            androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(baseDensity.density, baseDensity.fontScale * userScale),
             content = content
         )
     }

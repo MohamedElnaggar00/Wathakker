@@ -40,3 +40,36 @@ object ThemeSettings {
         }
     }
 }
+
+
+/** App-wide text size multiplier (on top of the system font scale), persisted in app_prefs. */
+object FontScaleSettings {
+    val STEPS = floatArrayOf(0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.6f)
+    private const val PREFS = "app_prefs"
+    private const val KEY = "font_scale"
+    private var loaded = false
+
+    private val _scale = MutableStateFlow(1.0f)
+    val scale: StateFlow<Float> = _scale
+
+    fun init(context: Context) {
+        if (loaded) return
+        loaded = true
+        _scale.value = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getFloat(KEY, 1.0f)
+    }
+
+    fun set(context: Context, value: Float) {
+        loaded = true
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putFloat(KEY, value).apply()
+        _scale.value = value
+    }
+
+    fun nearest(value: Float): Int = STEPS.indices.minByOrNull { kotlin.math.abs(STEPS[it] - value) } ?: 2
+
+    fun label(value: Float, ar: Boolean): String = when {
+        value < 0.95f -> if (ar) "صغير" else "Small"
+        value < 1.05f -> if (ar) "افتراضي" else "Default"
+        value < 1.25f -> if (ar) "كبير" else "Large"
+        else -> if (ar) "أكبر" else "Largest"
+    }
+}

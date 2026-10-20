@@ -31,20 +31,29 @@ val TajawalFontFamily = FontFamily(
     Font(R.font.tajawal_bold, FontWeight.Bold)
 )
 val TajawalLightFontFamily = FontFamily(
-    Font(R.font.tajawal_light, FontWeight.Normal),
-    Font(R.font.tajawal, FontWeight.Bold)
+    Font(R.font.expoarabic_book, FontWeight.Normal),
+    Font(R.font.expoarabic_medium, FontWeight.Bold)
 )
 val TajawalBoldFontFamily = FontFamily(
-    Font(R.font.tajawal_bold, FontWeight.Normal),
-    Font(R.font.tajawal_bold, FontWeight.Bold)
+    Font(R.font.expoarabic_bold, FontWeight.Normal),
+    Font(R.font.expoarabic_bold, FontWeight.Bold)
 )
 val CairoFontFamily = FontFamily(
     Font(R.font.cairo, FontWeight.Normal),
     Font(R.font.cairo_bold, FontWeight.Bold)
 )
-val NotoNaskhFontFamily = FontFamily(Font(R.font.noto_naskh, FontWeight.Normal))
-val AmiriFontFamily = FontFamily(Font(R.font.amiri, FontWeight.Normal))
-val ArefRuqaaFontFamily = FontFamily(Font(R.font.aref_ruqaa, FontWeight.Normal))
+val NotoNaskhFontFamily = FontFamily(
+    Font(R.font.noto_naskh, FontWeight.Normal),
+    Font(R.font.noto_naskh_bold, FontWeight.Bold)
+)
+val AmiriFontFamily = FontFamily(
+    Font(R.font.amiri, FontWeight.Normal),
+    Font(R.font.amiri_bold, FontWeight.Bold)
+)
+val ArefRuqaaFontFamily = FontFamily(
+    Font(R.font.aref_ruqaa, FontWeight.Normal),
+    Font(R.font.aref_ruqaa_bold, FontWeight.Bold)
+)
 
 fun fontFamilyFor(choice: FontChoice): FontFamily? = when (choice) {
     FontChoice.APP -> TajawalFontFamily

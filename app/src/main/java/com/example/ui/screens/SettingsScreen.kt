@@ -19,6 +19,7 @@ import androidx.compose.material.icons.outlined.MusicNote
 import androidx.compose.material.icons.outlined.MoreTime
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.TextFields
+import androidx.compose.material.icons.outlined.FormatSize
 import androidx.compose.material.icons.outlined.Vibration
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Widgets
@@ -66,6 +67,7 @@ fun SettingsScreen(
     val toneSummary = remember(toneState) { com.example.utils.NotifPrefs.toneTitle(contextApp) ?: L10n.t(S.Default) }
     val appFont by viewModel.appFont.collectAsState()
     var showFontPicker by remember { mutableStateOf(false) }
+    val fontScale by com.example.FontScaleSettings.scale.collectAsState()
     var showThemePicker by remember { mutableStateOf(false) }
     var showLockWidgets by remember { mutableStateOf(false) }
     var showLanguagePicker by remember { mutableStateOf(false) }
@@ -91,6 +93,8 @@ fun SettingsScreen(
         onVibration = { viewModel.updateVibrationEnabled(it) },
         toneSummary = toneSummary,
         onPickFont = { showFontPicker = true },
+        fontScale = fontScale,
+        onScaleChange = { com.example.FontScaleSettings.set(contextApp, it) },
         onPickSound = {
             val intent = Intent("android.intent.action.RINGTONE_PICKER")
             intent.putExtra("android.intent.extra.ringtone.TYPE", 2)
@@ -189,6 +193,8 @@ fun SettingsContent(
     onVibration: (Boolean) -> Unit,
     toneSummary: String,
     onPickFont: () -> Unit,
+    fontScale: Float = 1f,
+    onScaleChange: (Float) -> Unit = {},
     onPickSound: () -> Unit,
     onFajr: (() -> Unit)? = null,
     onLocation: (() -> Unit)? = null,
@@ -274,6 +280,7 @@ fun SettingsContent(
                     trailing = { ChevronIcon() },
                     onClick = onPickFont
                 )
+                FontSizeSliderRow(current = fontScale, onScale = onScaleChange)
                 OneUIDivider(70.dp)
                 OneUIRow(
                     title = L10n.t(S.Appearance),

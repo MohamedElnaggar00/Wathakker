@@ -91,3 +91,33 @@ fun ThemePickerDialog(selected: String, onSelect: (String) -> Unit, onDismiss: (
         }
     }
 }
+
+
+@Composable
+fun FontSizeDialog(selected: Float, onSelect: (Float) -> Unit, onDismiss: () -> Unit) {
+    val ar = L10n.lang == com.example.ui.i18n.Lang.AR
+    OneUIDialog(title = if (ar) "حجم الخط" else "Font size", onDismiss = onDismiss, dismissText = L10n.t(S.Close)) {
+        com.example.FontScaleSettings.STEPS.forEachIndexed { index, step ->
+            if (index > 0) OneUIDivider(4.dp)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .clickable { onSelect(step) }
+                    .padding(horizontal = 8.dp, vertical = 13.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    com.example.FontScaleSettings.label(step, ar),
+                    modifier = Modifier.weight(1f),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = (19f * step).sp,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                if (kotlin.math.abs(step - selected) < 0.01f) {
+                    Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                }
+            }
+        }
+    }
+}

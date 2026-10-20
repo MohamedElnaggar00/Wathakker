@@ -97,7 +97,7 @@ public final class MainViewModel extends AndroidViewModel {
         this.useDeviceFont = FlowKt.asStateFlow(this._useDeviceFont);
         FontChoice.Companion companion = FontChoice.Companion;
         String string2 = this.appPrefs.getString("app_font", null);
-        this._appFont = StateFlowKt.MutableStateFlow(companion.fromId(string2 == null ? this.appPrefs.getBoolean("use_device_font", true) ? "system" : "app" : string2));
+        this._appFont = StateFlowKt.MutableStateFlow(companion.fromId(string2 == null ? this.appPrefs.contains("use_device_font") && this.appPrefs.getBoolean("use_device_font", false) ? "system" : "app" : string2));
         this.appFont = FlowKt.asStateFlow(this._appFont);
         String string3 = this.appPrefs.getString("notification_sound", "default");
         this._notificationSound = StateFlowKt.MutableStateFlow(string3 != null ? string3 : "default");
