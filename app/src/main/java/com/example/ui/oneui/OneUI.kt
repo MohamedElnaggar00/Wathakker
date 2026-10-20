@@ -761,6 +761,18 @@ fun DrawerHeader() {
 }
 
 @Composable
+fun DottedDivider() {
+    val c = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.28f)
+    androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 8.dp).height(2.dp)) {
+        drawLine(
+            c, androidx.compose.ui.geometry.Offset(0f, 1f), androidx.compose.ui.geometry.Offset(size.width, 1f),
+            strokeWidth = 2.dp.toPx(), cap = androidx.compose.ui.graphics.StrokeCap.Round,
+            pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(0.1f, 6.dp.toPx()), 0f)
+        )
+    }
+}
+
+@Composable
 fun OneUIDrawer(
     open: Boolean,
     currentRoute: String,
@@ -774,8 +786,8 @@ fun OneUIDrawer(
     val cs = MaterialTheme.colorScheme
     // 3.3.0: denser frosted drawer panel (content behind stays faintly visible, items stay readable).
     val drawerDark = com.example.ThemeSettings.isDark()
-    val drawerFrost = if (drawerDark) FrostSpec(Color(0xFF1B1C1F), 0.86f, Color.White.copy(alpha = 0.08f))
-    else FrostSpec(Color(0xFFF4F5F8), 0.88f, Color.Black.copy(alpha = 0.06f))
+    val drawerFrost = if (drawerDark) FrostSpec(Color(0xFF2E2E2E), 0.90f, Color.White.copy(alpha = 0.06f))
+    else FrostSpec(Color(0xFFF3F3F4), 0.90f, Color.Black.copy(alpha = 0.05f))
     Box(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(visible = open, enter = fadeIn(tween(220)), exit = fadeOut(tween(220))) {
             Box(
@@ -792,29 +804,30 @@ fun OneUIDrawer(
         val drawerRtlState = rememberUpdatedState(LocalLayoutDirection.current == LayoutDirection.Rtl)
         AnimatedVisibility(
             visible = open,
-            modifier = Modifier.align(Alignment.CenterStart),
+            modifier = Modifier.align(Alignment.TopStart),
             enter = slideInHorizontally(tween(280)) { if (drawerRtlState.value) it else -it } + fadeIn(tween(220)),
             exit = slideOutHorizontally(tween(280)) { if (drawerRtlState.value) it else -it } + fadeOut(tween(220))
         ) {
+            val statusTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
             Column(
                 modifier = Modifier
-                    .padding(start = 12.dp, top = 28.dp, bottom = 28.dp)
-                    .width(300.dp)
+                    .padding(start = 11.dp, top = statusTop + 14.dp, bottom = 40.dp)
+                    .fillMaxWidth(0.78f)
                     .wrapContentHeight()
-                    .then(Modifier.oneUIFrosted(RoundedCornerShape(28.dp), drawerFrost, 48))
+                    .then(Modifier.oneUIFrosted(RoundedCornerShape(26.dp), drawerFrost, 48))
                     .then(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState()))
                     .padding(vertical = 18.dp)
             ) {
                 DrawerHeader()
                 items.forEach { item ->
-                    if (item.route == "settings") OneUIDivider(16.dp)
+                    if (item.route == "settings") DottedDivider()
                     val selected = item.route == currentRoute
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 2.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .background(if (selected) cs.primary.copy(alpha = 0.12f) else Color.Transparent)
+                            .background(if (selected) (if (drawerDark) Color(0xFF424242) else Color(0xFFE2E2E5)) else Color.Transparent)
                             .clickable { onSelect(item.route) }
                             .padding(horizontal = 14.dp, vertical = 13.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -824,7 +837,7 @@ fun OneUIDrawer(
                         Text(item.label, color = cs.onSurface, style = MaterialTheme.typography.bodyLarge)
                     }
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(56.dp))
                 if (footer != null) {
                     Box(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
