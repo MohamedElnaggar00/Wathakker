@@ -18,6 +18,7 @@ adb shell cmd uimode night yes
 adb install -g -r "$APK" >/dev/null 2>&1
 adb shell pm grant $P android.permission.POST_NOTIFICATIONS
 adb shell pm grant $P android.permission.ACCESS_FINE_LOCATION
+adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6; adb shell am force-stop $P
 for S in 0.8 1.6; do
   adb shell am force-stop $P
   UIDN=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
@@ -27,6 +28,9 @@ for S in 0.8 1.6; do
   shot reminders_$S
   tap_text "خيارات"; sleep 2
   shot menu_$S
+  tap_text "أوقات التنبيه"; sleep 2
+  shot dialog_$S
+  adb shell input keyevent 4; sleep 1
   adb shell input keyevent 4; sleep 1
   tap_text "الصلاة"; sleep 3
   shot prayer_$S

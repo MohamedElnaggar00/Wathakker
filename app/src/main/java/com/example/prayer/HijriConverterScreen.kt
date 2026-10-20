@@ -176,6 +176,7 @@ private fun MonthField(
                 shadowElevation = 12.dp,
                 border = null
             ) {
+                com.example.ui.theme.AppFontScaled { Column {
                 names.forEachIndexed { i, name ->
                     val sel = selected == i + 1
                     DropdownMenuItem(
@@ -194,6 +195,7 @@ private fun MonthField(
                         onClick = com.example.utils.AppHaptics.tap { onPick(i + 1); open = false }
                     )
                 }
+                } }
             }
         }
     }

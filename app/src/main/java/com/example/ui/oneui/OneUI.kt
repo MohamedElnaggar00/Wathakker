@@ -599,7 +599,7 @@ fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable Col
         tonalElevation = 0.dp,
         shadowElevation = 12.dp,
         border = null,
-        content = content
+        content = { com.example.ui.theme.AppFontScaled { Column { content() } } }
     )
 }
 

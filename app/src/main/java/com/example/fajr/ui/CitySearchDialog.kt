@@ -50,6 +50,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
     val filteredCities: List<CityItem> = remember(searchQuery) { CitiesDatabase.INSTANCE.searchCities(searchQuery) }
     val cs = MaterialTheme.colorScheme
     Dialog(onDismissRequest = onDismiss) {
+        com.example.ui.theme.AppFontScaled {
         Surface(
             modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f),
             shape = RoundedCornerShape(28.dp),
@@ -104,6 +105,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                     Text(L10n.t(S.Cancel), color = cs.onSurface, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 }
             }
+        }
         }
     }
 }

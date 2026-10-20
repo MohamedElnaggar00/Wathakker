@@ -124,3 +124,19 @@ fun MyApplicationTheme(
     }
 }
 
+
+/**
+ * Popup windows (menus, dialogs) must follow the in-app text size too. The density is rebuilt from the
+ * device values plus the app multiplier, so the result is the same whether or not the window inherits it.
+ */
+@androidx.compose.runtime.Composable
+fun AppFontScaled(content: @androidx.compose.runtime.Composable () -> Unit) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    val userScale by com.example.FontScaleSettings.scale.collectAsState()
+    val dm = ctx.resources.displayMetrics
+    val sys = ctx.resources.configuration.fontScale
+    CompositionLocalProvider(
+        androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(dm.density, sys * userScale),
+        content = content
+    )
+}

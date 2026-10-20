@@ -153,6 +153,7 @@ fun OneUIDialog(
 ) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         BlurBehindDialogWindow()
+        com.example.ui.theme.AppFontScaled {
         // Bound the surface so the scroll area engages on small screens / large font scale;
         // without a max height the content column outgrows the window and the bottom rows
         // render under the dismiss button.
@@ -167,6 +168,7 @@ fun OneUIDialog(
             confirmEnabled = confirmEnabled,
             content = content
         )
+        }
     }
 }
 
