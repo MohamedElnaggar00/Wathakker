@@ -75,3 +75,14 @@ for NIGHT in yes no; do
   adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity --ei appWidgetId 0; sleep 4
   adb exec-out screencap -p > "$OUT/cfg_ar_night_${NIGHT}.png"
 done
+# Back behaviour: new widget id (no saved keys) -> RESULT_OK defaults; existing id -> discard
+adb logcat -c
+adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity --ei appWidgetId 999; sleep 3
+adb shell input keyevent KEYCODE_BACK; sleep 2
+adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity --ei appWidgetId 998; sleep 3
+tap_text "تطبيق"; sleep 2
+adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity --ei appWidgetId 998; sleep 3
+tap_text "أخضر"; sleep 1
+adb shell input keyevent KEYCODE_BACK; sleep 2
+adb shell cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml | grep -E '_99[89]' > "$OUT/back_prefs.txt"
+adb logcat -d -v threadtime | grep -E 'WidgetConfig' > "$OUT/back_log.txt"

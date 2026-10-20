@@ -174,6 +174,19 @@ class WidgetConfigActivity : ComponentActivity() {
             ?: sp.getString("widget_bar_color", "auto") ?: "auto").let { v -> if (options.any { o -> o.first == v }) v else "auto" }
         val curBg = (sp.getString(keyFor("widget_bg_color"), null)
             ?: sp.getString("widget_bg_color", "auto") ?: "auto").let { v -> if (bgOptions.any { o -> o.first == v }) v else "auto" }
+        // Back on a NEW widget still adds it with its default values; on an existing one it only discards.
+        val isNew = appWidgetId > 0 && !sp.contains(keyFor("widget_bar_color")) && !sp.contains(keyFor("widget_bg_color"))
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                android.util.Log.i("WidgetConfig", "back isNew=" + isNew + " id=" + appWidgetId)
+                if (isNew) {
+                    WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
+                    com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
+                    setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
+                }
+                finish()
+            }
+        })
         setContent {
             com.example.ui.theme.MyApplicationTheme {
                 ConfigScreen(
