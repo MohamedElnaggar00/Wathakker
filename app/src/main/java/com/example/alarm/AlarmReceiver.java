@@ -104,7 +104,7 @@ public final class AlarmReceiver extends BroadcastReceiver {
         snoozeIntent.putExtra("NOTIFICATION_ID", id);
         PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, (id * 10) + 3, snoozeIntent, 201326592);
         PendingIntent openAppPendingIntent = PendingIntent.getActivity(context, (id * 10) + 4, openAppIntent, 201326592);
-        Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID).setContentTitle(title).setContentText(content).setSmallIcon(R.drawable.ic_notification).setStyle(new NotificationCompat.BigTextStyle().bigText(content)).setPriority(1).setAutoCancel(true).setContentIntent(contentPendingIntent).addAction(0, L10n.INSTANCE.t(S.NotifReadDone), markReadPendingIntent).addAction(0, L10n.INSTANCE.t(S.NotifRemindLater), snoozePendingIntent).addAction(0, L10n.INSTANCE.t(S.NotifOpenApp), openAppPendingIntent).build();
+        Notification notification = new NotificationCompat.Builder(context, com.example.utils.NotifPrefs.channelId(context, CHANNEL_ID)).setContentTitle(title).setContentText(content).setSmallIcon(R.drawable.ic_notification).setStyle(new NotificationCompat.BigTextStyle().bigText(content)).setPriority(1).setAutoCancel(true).setContentIntent(contentPendingIntent).addAction(0, L10n.INSTANCE.t(S.NotifReadDone), markReadPendingIntent).addAction(0, L10n.INSTANCE.t(S.NotifRemindLater), snoozePendingIntent).addAction(0, L10n.INSTANCE.t(S.NotifOpenApp), openAppPendingIntent).build();
         Intrinsics.checkNotNullExpressionValue(notification, "build(...)");
         manager.notify(id, notification);
     }

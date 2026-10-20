@@ -51,8 +51,8 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         val isEarly = kind == PrayerAlertScheduler.KIND_EARLY
         val baseId = if (isIqama) IQAMA_CHANNEL else ALERT_CHANNEL
         // A prayer with its own tone/vibration gets its own channel, so it never touches the others.
-        val channelId = if (PrayerAlertStore.hasOverride(context, prayer)) baseId + "_p" + prayer else baseId
-        ensureChannel(context, nm, channelId, prayer, prayerName)
+        val channelBase = if (PrayerAlertStore.hasOverride(context, prayer)) baseId + "_p" + prayer else baseId
+        val channelId = ensureChannel(context, nm, channelBase, prayer, prayerName)
         val openIntent = PendingIntent.getActivity(
             context, 400 + prayer + kind * 10,
             Intent(context, MainActivity::class.java)
@@ -90,8 +90,8 @@ class PrayerAlertReceiver : BroadcastReceiver() {
      * sound/vibration is sticky after creation, so when those settings change the channel
      * is deleted and recreated (tracked by a stored signature).
      */
-    internal fun ensureChannel(context: Context, nm: NotificationManager, channelId: String, prayer: Int, prayerName: String) {
-        if (Build.VERSION.SDK_INT < 26) return
+    internal fun ensureChannel(context: Context, nm: NotificationManager, channelId: String, prayer: Int, prayerName: String): String {
+        if (Build.VERSION.SDK_INT < 26) return channelId
         val isIqama = channelId.startsWith(IQAMA_CHANNEL)
         val own = Regex(".*_p\\d$").matches(channelId)
         val base = L10n.t(if (isIqama) S.IqamaReminder else S.AdhanReminder)
@@ -101,7 +101,7 @@ class PrayerAlertReceiver : BroadcastReceiver() {
             if (isIqama) NotificationManager.IMPORTANCE_DEFAULT else NotificationManager.IMPORTANCE_HIGH
         )
         channel.setShowBadge(true)
-        if (own) {
+        return if (own) {
             com.example.utils.NotifPrefs.configureChannel(
                 context, nm, channel,
                 PrayerAlertStore.effectiveTone(context, prayer), PrayerAlertStore.effectiveVibration(context, prayer)
@@ -153,8 +153,8 @@ class PrayerAlertReceiver : BroadcastReceiver() {
                         r.ensureChannel(context, nm, ALERT_CHANNEL + "_p" + p, p, L10n.t(nameKey))
                         r.ensureChannel(context, nm, IQAMA_CHANNEL + "_p" + p, p, L10n.t(nameKey))
                     } else {
-                        nm.deleteNotificationChannel(ALERT_CHANNEL + "_p" + p)
-                        nm.deleteNotificationChannel(IQAMA_CHANNEL + "_p" + p)
+                        com.example.utils.NotifPrefs.deleteVariants(nm, ALERT_CHANNEL + "_p" + p, null)
+                        com.example.utils.NotifPrefs.deleteVariants(nm, IQAMA_CHANNEL + "_p" + p, null)
                     }
                 }
             } catch (_: Throwable) {}

@@ -17,7 +17,6 @@ object NotifPrefs {
     private const val K_TITLE = "notification_sound_title"
     private const val K_VIB = "vibration_enabled"
     private const val K_MIGRATED = "notif_unified_v330"
-    private const val SIG_PREFS = "notif_channel_sig"
 
     private fun sp(c: Context) = c.applicationContext.getSharedPreferences(APP, Context.MODE_PRIVATE)
 
@@ -70,31 +69,54 @@ object NotifPrefs {
         com.example.prayer.alerts.PrayerAlertReceiver.refreshChannels(c.applicationContext)
     }
 
-    /** Creates the channel with the global tone/vibration. Channel sound is sticky once created,
-     *  so when the tone or vibration changed the channel is deleted and recreated. */
+    /** Android restores a deleted channel's old sound/vibration when a channel with the same id is
+     *  created again, so deleting and recreating one id can never change them. The tone/vibration
+     *  are therefore part of the channel id: default values keep the original id, any other
+     *  combination gets "<base>_s<hash>". Changing a setting means a different id (fresh channel). */
     @JvmStatic
-    fun configureChannel(c: Context, nm: NotificationManager?, ch: NotificationChannel): Unit =
+    fun variantId(base: String, tone: String, vib: Boolean): String =
+        if (tone.isEmpty() && vib) base else base + "_s" + Integer.toHexString("$tone|$vib".hashCode())
+
+    /** The channel id to post to, for the global tone/vibration. */
+    @JvmStatic
+    fun channelId(c: Context, base: String): String = variantId(base, tone(c), vibration(c))
+
+    /** Deletes every variant of [base] (the plain id and "_s<hash>" ones) except [keep]. */
+    @JvmStatic
+    fun deleteVariants(nm: NotificationManager?, base: String, keep: String?) {
+        if (nm == null || android.os.Build.VERSION.SDK_INT < 26) return
+        val rx = Regex("^_s[0-9a-f]{1,8}$")
+        for (x in nm.notificationChannels) {
+            val id = x.id
+            if (id == keep) continue
+            if (id == base || (id.startsWith(base) && rx.matches(id.substring(base.length)))) nm.deleteNotificationChannel(id)
+        }
+    }
+
+    /** Creates the channel with the global tone/vibration; returns the id to post to. */
+    @JvmStatic
+    fun configureChannel(c: Context, nm: NotificationManager?, ch: NotificationChannel): String =
         configureChannel(c, nm, ch, tone(c), vibration(c))
 
     /** Same, with explicit values (used for a prayer that has its own tone/vibration). */
     @JvmStatic
-    fun configureChannel(c: Context, nm: NotificationManager?, ch: NotificationChannel, tone: String, vib: Boolean) {
-        if (nm == null || android.os.Build.VERSION.SDK_INT < 26) return
-        val sig = "$tone|$vib"
-        val sigs = c.applicationContext.getSharedPreferences(SIG_PREFS, Context.MODE_PRIVATE)
-        val existing = nm.getNotificationChannel(ch.id)
-        if (existing != null) {
-            if (sigs.getString(ch.id, null) == sig) return
-            nm.deleteNotificationChannel(ch.id)
+    fun configureChannel(c: Context, nm: NotificationManager?, ch: NotificationChannel, tone: String, vib: Boolean): String {
+        val id = variantId(ch.id, tone, vib)
+        if (nm == null || android.os.Build.VERSION.SDK_INT < 26) return id
+        if (nm.getNotificationChannel(id) == null) {
+            val n = NotificationChannel(id, ch.name, ch.importance)
+            n.description = ch.description
+            n.setShowBadge(ch.canShowBadge())
+            if (tone.isNotEmpty()) {
+                n.setSound(
+                    Uri.parse(tone),
+                    android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION).build()
+                )
+            }
+            n.enableVibration(vib)
+            nm.createNotificationChannel(n)
         }
-        if (tone.isNotEmpty()) {
-            ch.setSound(
-                Uri.parse(tone),
-                android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION).build()
-            )
-        }
-        ch.enableVibration(vib)
-        nm.createNotificationChannel(ch)
-        sigs.edit().putString(ch.id, sig).apply()
+        deleteVariants(nm, ch.id, id)
+        return id
     }
 }

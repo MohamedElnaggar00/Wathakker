@@ -311,8 +311,8 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                                 PrayerAlertStore.clearOverride(context, prayer)
                                 if (Build.VERSION.SDK_INT >= 26) {
                                     val nmx = context.getSystemService(android.content.Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
-                                    nmx.deleteNotificationChannel("prayer_alerts_channel_p" + prayer)
-                                    nmx.deleteNotificationChannel("iqama_reminders_channel_p" + prayer)
+                                    com.example.utils.NotifPrefs.deleteVariants(nmx, "prayer_alerts_channel_p" + prayer, null)
+                                    com.example.utils.NotifPrefs.deleteVariants(nmx, "iqama_reminders_channel_p" + prayer, null)
                                 }
                                 changed()
                             }
