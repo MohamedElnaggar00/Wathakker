@@ -40,4 +40,17 @@ for G in qibla fajr_alarm hijri_converter; do
   adb shell am start -W -a android.intent.action.VIEW -d "wathakker://open?go=$G" -n $P/com.example.MainActivity >/dev/null; sleep 6
   shot $G
 done
+tap_text "اليوم"; sleep 2; shot hijri_converter_today
+tap_text "من هجري إلى ميلادي"; sleep 2; shot hijri_converter_h2g
+tap_text "من ميلادي إلى هجري"; sleep 2; shot hijri_converter_g2h
+
+# time picker dialog (Reminders > card menu > alert times > a time row)
+adb shell am force-stop $P
+adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+tap_text "التذكيرات"; sleep 3
+adb shell input tap 155 1229; sleep 2; shot picker_step1
+tap_text "أوقات التنبيه"; sleep 2; shot picker_step2
+adb shell uiautomator dump /sdcard/u2.xml >/dev/null 2>&1; adb pull /sdcard/u2.xml "$OUT/step2.xml" >/dev/null 2>&1
+adb shell input tap 540 1000; sleep 2; shot picker_step3
+adb shell uiautomator dump /sdcard/u3.xml >/dev/null 2>&1; adb pull /sdcard/u3.xml "$OUT/step3.xml" >/dev/null 2>&1
 echo done > "$OUT/done.txt"
