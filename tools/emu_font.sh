@@ -3,6 +3,8 @@
 APK=$1; OUT=$2; P=com.wathakker.app
 mkdir -p "$OUT"; adb wait-for-device; adb root >/dev/null 2>&1; sleep 2; adb wait-for-device
 adb shell input keyevent 82
+adb shell settings put global hide_error_dialogs 1
+adb shell settings put global window_animation_scale 0; adb shell settings put global transition_animation_scale 0
 shot(){ timeout 30 adb exec-out screencap -p > "$OUT/$1.png"; }
 tap_text() { adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/u.xml >/dev/null 2>&1
   python3 - "$1" <<'PY' | { read x y; [ -n "$x" ] && adb shell input tap $x $y && echo "tapped $1" || echo "NOT FOUND $1"; }
@@ -24,7 +26,7 @@ for S in 0.8 1.6; do
   UIDN=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
   adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string><int name=\\\"perm_stage\\\" value=\\\"3\\\" /><boolean name=\\\"perm_flow_done\\\" value=\\\"true\\\" /><float name=\\\"font_scale\\\" value=\\\"$S\\\" /></map>\" > /data/data/$P/shared_prefs/app_prefs.xml; chown $UIDN:$UIDN /data/data/$P/shared_prefs/app_prefs.xml; chmod 660 /data/data/$P/shared_prefs/app_prefs.xml; restorecon /data/data/$P/shared_prefs/app_prefs.xml"
   adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 7
-  tap_text "التذكيرات"; sleep 3
+  tap_text "Wait"; tap_text "التذكيرات"; sleep 3
   shot reminders_$S
   tap_text "خيارات"; sleep 2
   shot menu_$S
