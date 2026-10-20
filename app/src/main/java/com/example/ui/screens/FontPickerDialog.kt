@@ -26,17 +26,15 @@ import com.example.ui.i18n.S
 
 @Composable
 fun FontPickerDialog(selected: FontChoice, onSelect: (FontChoice) -> Unit, onDismiss: () -> Unit) {
-    OneUIDialog(title = L10n.t(S.Font), onDismiss = onDismiss, dismissText = L10n.t(S.Back)) {
+    var pending by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(selected) }
+    OneUIDialog(title = L10n.t(S.Font), onDismiss = onDismiss, onConfirm = { onSelect(pending); onDismiss() }, confirmText = L10n.t(S.Apply)) {
         FontChoice.entries.forEachIndexed { index, choice ->
             if (index > 0) OneUIDivider(4.dp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .clickable {
-                        onSelect(choice)
-                        onDismiss()
-                    }
+                    .clickable { pending = choice }
                     .padding(horizontal = 8.dp, vertical = 13.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -47,7 +45,7 @@ fun FontPickerDialog(selected: FontChoice, onSelect: (FontChoice) -> Unit, onDis
                     fontSize = 19.sp,
                     style = MaterialTheme.typography.bodyLarge.copy(fontFamily = fontFamilyFor(choice))
                 )
-                if (choice == selected) {
+                if (choice == pending) {
                     Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 }
             }
@@ -63,17 +61,15 @@ fun ThemePickerDialog(selected: String, onSelect: (String) -> Unit, onDismiss: (
         ThemeSettings.LIGHT to L10n.t(S.Light),
         ThemeSettings.DARK to L10n.t(S.Dark)
     )
-    OneUIDialog(title = L10n.t(S.Appearance), onDismiss = onDismiss, dismissText = L10n.t(S.Back)) {
+    var pending by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(selected) }
+    OneUIDialog(title = L10n.t(S.Appearance), onDismiss = onDismiss, onConfirm = { onSelect(pending); onDismiss() }, confirmText = L10n.t(S.Apply)) {
         options.forEachIndexed { index, (key, label) ->
             if (index > 0) OneUIDivider(4.dp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .clickable {
-                        onSelect(key)
-                        onDismiss()
-                    }
+                    .clickable { pending = key }
                     .padding(horizontal = 8.dp, vertical = 13.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -84,7 +80,7 @@ fun ThemePickerDialog(selected: String, onSelect: (String) -> Unit, onDismiss: (
                     fontSize = 19.sp,
                     style = MaterialTheme.typography.bodyLarge
                 )
-                if (key == selected) {
+                if (key == pending) {
                     Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 }
             }
@@ -96,14 +92,15 @@ fun ThemePickerDialog(selected: String, onSelect: (String) -> Unit, onDismiss: (
 @Composable
 fun FontSizeDialog(selected: Float, onSelect: (Float) -> Unit, onDismiss: () -> Unit) {
     val ar = L10n.lang == com.example.ui.i18n.Lang.AR
-    OneUIDialog(title = if (ar) "حجم الخط" else "Font size", onDismiss = onDismiss, dismissText = L10n.t(S.Back)) {
+    var pending by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(selected) }
+    OneUIDialog(title = if (ar) "حجم الخط" else "Font size", onDismiss = onDismiss, onConfirm = { onSelect(pending); onDismiss() }, confirmText = L10n.t(S.Apply)) {
         com.example.FontScaleSettings.STEPS.forEachIndexed { index, step ->
             if (index > 0) OneUIDivider(4.dp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .clickable { onSelect(step) }
+                    .clickable { pending = step }
                     .padding(horizontal = 8.dp, vertical = 13.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -114,7 +111,7 @@ fun FontSizeDialog(selected: Float, onSelect: (Float) -> Unit, onDismiss: () -> 
                     fontSize = (19f * step).sp,
                     style = MaterialTheme.typography.bodyLarge
                 )
-                if (kotlin.math.abs(step - selected) < 0.01f) {
+                if (kotlin.math.abs(step - pending) < 0.01f) {
                     Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                 }
             }

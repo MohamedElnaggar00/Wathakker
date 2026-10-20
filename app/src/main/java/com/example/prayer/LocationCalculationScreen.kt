@@ -356,19 +356,20 @@ private fun StepperRow(title: String, value: Int, unit: String, onChange: (Int) 
 @Composable
 private fun OptionPickerDialog(title: String, options: List<String>, selected: Int, onDismiss: () -> Unit, onPick: (Int) -> Unit) {
     val cs = MaterialTheme.colorScheme
-    OneUIDialog(title = title, onDismiss = onDismiss) {
+    var pending by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(selected) }
+    OneUIDialog(title = title, onDismiss = onDismiss, onConfirm = { onPick(pending) }, confirmText = L10n.t(S.Apply)) {
         options.forEachIndexed { index, label ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .clickable { onPick(index) }
+                    .clickable { pending = index }
                     .padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(label, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                if (index == selected) {
+                if (index == pending) {
                     Icon(Icons.Outlined.Check, null, tint = cs.primary)
                 }
             }

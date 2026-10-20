@@ -30,22 +30,20 @@ fun CalculationMethodDialog(
     onMethodSelected: (CalculationMethod) -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
-    OneUIDialog(title = L10n.t(S.PickCalcMethod), onDismiss = onDismiss) {
+    var pending by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(currentMethod) }
+    OneUIDialog(title = L10n.t(S.PickCalcMethod), onDismiss = onDismiss, onConfirm = { onMethodSelected(pending); onDismiss() }, confirmText = L10n.t(S.Apply)) {
         CalculationMethod.values().forEach { method ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .clickable {
-                        onMethodSelected(method)
-                        onDismiss()
-                    }
+                    .clickable { pending = method }
                     .padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(method.title(L10n.lang.code), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                if (method == currentMethod) {
+                if (method == pending) {
                     Icon(Icons.Outlined.Check, null, tint = cs.primary)
                 }
             }

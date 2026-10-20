@@ -118,3 +118,8 @@ PY
 )"
 adb shell input swipe ${BX:-100} ${BY:-800} ${BX:-100} ${BY:-800} 1200; sleep 2
 shot prayer_alert_dialog
+# alert dialog cancel path: toggle first switch, cancel, reopen and compare
+adb shell uiautomator dump /sdcard/c.xml >/dev/null; adb pull /sdcard/c.xml /tmp/c.xml >/dev/null; cp /tmp/c.xml "$OUT/alert_before_toggle.xml"
+tap_text "إلغاء"; sleep 1
+shot after_cancel_prayer_screen
+adb shell cat /data/data/$P/shared_prefs/prayer_alerts.xml > "$OUT/prayer_alerts_after_cancel.xml" 2>&1

@@ -101,7 +101,7 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                     modifier = Modifier.fillMaxWidth().height(56.dp).clickable(onClick = onDismiss),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(L10n.t(S.Back), color = cs.onSurface, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                    Text(L10n.t(S.Cancel), color = cs.onSurface, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }

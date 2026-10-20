@@ -14,6 +14,25 @@ object PrayerAlertStore {
 
     private fun p(context: Context) = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
+    /** All stored settings of one prayer (keys end with _<prayer>); used to discard staged edits on Cancel. */
+    fun snapshot(context: Context, prayer: Int): Map<String, Any?> =
+        p(context).all.filterKeys { it.endsWith("_$prayer") }
+
+    fun restore(context: Context, prayer: Int, snap: Map<String, Any?>) {
+        val e = p(context).edit()
+        p(context).all.keys.filter { it.endsWith("_$prayer") && it !in snap }.forEach { e.remove(it) }
+        snap.forEach { (k, v) ->
+            when (v) {
+                is Boolean -> e.putBoolean(k, v)
+                is Int -> e.putInt(k, v)
+                is Long -> e.putLong(k, v)
+                is Float -> e.putFloat(k, v)
+                is String -> e.putString(k, v)
+            }
+        }
+        e.apply()
+    }
+
     fun isEnabled(context: Context, prayer: Int): Boolean {
         migrate(context)
         return p(context).getBoolean("enabled_$prayer", false)

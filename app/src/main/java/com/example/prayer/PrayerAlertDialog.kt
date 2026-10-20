@@ -62,6 +62,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val cs = MaterialTheme.colorScheme
     var tick by remember { mutableIntStateOf(0) }
+    val snapshot = remember { PrayerAlertStore.snapshot(context, prayer) }
 
     val ringtonePickerLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -96,7 +97,17 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
     val offset = remember(tick) { PrayerAlertStore.offsetMinutes(context, prayer) }
     val iqama = remember(tick) { PrayerAlertStore.iqamaReminder(context, prayer) }
 
-    OneUIDialog(title = prayerName, onDismiss = onDismiss) {
+    OneUIDialog(
+        title = prayerName,
+        onDismiss = {
+            // Cancel: discard everything changed in this dialog
+            PrayerAlertStore.restore(context, prayer, snapshot)
+            PrayerAlertScheduler.scheduleAll(context)
+            onDismiss()
+        },
+        onConfirm = onDismiss,
+        confirmText = L10n.t(S.Apply)
+    ) {
         Column {
             // Two clearly separate notifications: the base adhan-time notification, and an
             // optional ADDITIONAL early reminder (its switch reveals the exact-minute control).
@@ -152,7 +163,22 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     }
                     if (showMinuteInput) {
                         var text by remember { mutableStateOf(dragOffset.toString()) }
-                        OneUIDialog(title = L10n.t(S.AlertTiming), onDismiss = { showMinuteInput = false }) {
+                        OneUIDialog(
+                            title = L10n.t(S.AlertTiming),
+                            onDismiss = { showMinuteInput = false },
+                            onConfirm = {
+                                val v = text.toIntOrNull()
+                                if (v != null && v in 1..60) {
+                                    dragOffset = v
+                                    if (v != offset) {
+                                        PrayerAlertStore.setOffsetMinutes(context, prayer, v)
+                                        changed()
+                                    }
+                                    showMinuteInput = false
+                                }
+                            },
+                            confirmText = L10n.t(S.Save)
+                        ) {
                             OutlinedTextField(
                                 value = text,
                                 onValueChange = { v -> text = v.filter { ch -> ch.isDigit() }.take(3) },
@@ -160,30 +186,6 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                                 singleLine = true,
                                 modifier = Modifier.fillMaxWidth()
                             )
-                            Spacer(Modifier.height(10.dp))
-                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                                Text(
-                                    L10n.t(S.Cancel),
-                                    color = cs.onSurfaceVariant, fontSize = 14.sp, fontWeight = FontWeight.Medium,
-                                    modifier = Modifier.clickable { showMinuteInput = false }.padding(10.dp)
-                                )
-                                Spacer(Modifier.width(14.dp))
-                                Text(
-                                    L10n.t(S.Save),
-                                    color = cs.primary, fontSize = 14.sp, fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.clickable {
-                                        val v = text.toIntOrNull()
-                                        if (v != null && v in 1..60) {
-                                            dragOffset = v
-                                            if (v != offset) {
-                                                PrayerAlertStore.setOffsetMinutes(context, prayer, v)
-                                                changed()
-                                            }
-                                            showMinuteInput = false
-                                        }
-                                    }.padding(10.dp)
-                                )
-                            }
                         }
                     }
                     Slider(

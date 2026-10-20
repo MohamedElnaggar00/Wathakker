@@ -105,16 +105,18 @@ fun OneUIDialogSurface(
                         .height(56.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Box(
-                        modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onDismiss),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(dismissText, color = cs.onSurface, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 17.sp, style = MaterialTheme.typography.labelLarge)
-                    }
-                    if (onConfirm != null) {
-                        Box(modifier = Modifier.width(1.dp).height(24.dp).background(cs.onSurface.copy(alpha = 0.18f)))
+                    val rtlDir = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
+                    val dismissBtn: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {
                         Box(
-                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(enabled = confirmEnabled, onClick = onConfirm),
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onDismiss),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(dismissText, color = cs.onSurface, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 17.sp, style = MaterialTheme.typography.labelLarge)
+                        }
+                    }
+                    val confirmBtn: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {
+                        Box(
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable(enabled = confirmEnabled, onClick = onConfirm ?: {}),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -124,6 +126,13 @@ fun OneUIDialogSurface(
                                 style = MaterialTheme.typography.labelLarge
                             )
                         }
+                    }
+                    // Apply/confirm sits on the right in RTL (first child), Cancel on the left; LTR is the reverse.
+                    if (onConfirm == null) dismissBtn()
+                    else {
+                        if (rtlDir) { confirmBtn() } else { dismissBtn() }
+                        Box(modifier = Modifier.width(1.dp).height(24.dp).background(cs.onSurface.copy(alpha = 0.18f)))
+                        if (rtlDir) { dismissBtn() } else { confirmBtn() }
                     }
                 }
                 Spacer(modifier = Modifier.height(4.dp))
