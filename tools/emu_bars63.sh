@@ -102,6 +102,7 @@ adb shell cmd uimode night yes
 adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string></map>\" > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/app_prefs.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
 adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
 adb shell am force-stop com.wathakker.app
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><boolean name=\\\"migrated_v1\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_0\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_2\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_3\\\" value=\\\"true\\\" /></map>\" > /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
 adb shell input keyevent KEYCODE_HOME
 adb shell cmd notification allow_listener x >/dev/null 2>&1
 AT=$(( $(date +%s) * 1000 + 100000 ))
@@ -117,13 +118,13 @@ sleep 75
 adb shell dumpsys notification --noredact | grep -E "pkg=com.wathakker.app" > "$OUT/notif_after_deadline_dump.txt"
 adb exec-out screencap -p > "$OUT/notif_4_after_deadline.png"
 adb shell cmd statusbar collapse
-adb shell am broadcast -n com.wathakker.app/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 0 --ei alert_kind 0 > "$OUT/notif_adhan_broadcast.txt" 2>&1
+adb shell am broadcast -n com.wathakker.app/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 2 --ei alert_kind 0 > "$OUT/notif_adhan_broadcast.txt" 2>&1
 sleep 3
-adb shell am broadcast -n com.wathakker.app/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 2 --ei alert_kind 1 > /dev/null 2>&1
+adb shell am broadcast -n com.wathakker.app/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 1 > /dev/null 2>&1
 sleep 2
 adb shell cmd statusbar expand-notifications; sleep 2
 adb exec-out screencap -p > "$OUT/notif_5_adhan_and_iqama.png"
-adb shell dumpsys notification --noredact | grep -E "android.title|android.text|icon=" | head -20 > "$OUT/notif_adhan_dump.txt"
+adb shell dumpsys notification --noredact | grep -E "pkg=com.wathakker.app|android.title|android.text|icon=" | head -30 > "$OUT/notif_adhan_dump.txt"
 # --- real wallpaper blur: after granting All files access the "wallblur" option must use the wallpaper image
 adb shell cmd statusbar collapse; adb shell input keyevent KEYCODE_HOME; adb shell cmd uimode night no; sleep 2
 adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost >/dev/null 2>&1
