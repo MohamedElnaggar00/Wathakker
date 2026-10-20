@@ -127,6 +127,19 @@ adb shell dumpsys alarm | grep -c "FajrAlarmReceiver" >> "$OUT/fajr_alarms_sched
 adb shell cmd notification allow_listener x >/dev/null 2>&1
 adb shell am broadcast -n $PKG/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 0 --ei alert_kind 0 > "$OUT/bell_broadcast.txt" 2>&1
 sleep 2
+
+# 3.3.0 new icon: launcher app drawer + About page
+adb shell cmd uimode night no; adb shell am force-stop $PKG
+adb shell input keyevent 3; sleep 2
+adb shell input swipe 540 1800 540 600 400; sleep 2
+adb exec-out screencap -p > "$OUT/icon_launcher_drawer.png"
+adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null; sleep 6
+tapdesc "القائمة"; sleep 3
+tapdesc "حول التطبيق"; sleep 3
+adb exec-out screencap -p > "$OUT/icon_about.png"
+adb shell cmd uimode night yes; sleep 2
+adb exec-out screencap -p > "$OUT/icon_about_dark.png"
+adb shell cmd uimode night no
 adb logcat -d | grep -E "FajrBellSuppressed" > "$OUT/after_bell_adhan_alarm_on.txt"
 adb shell am broadcast -n $PKG/com.example.fajr.alarm.FajrAlarmReceiver -a com.example.fajr.ACTION_FAJR_ALARM > "$OUT/alarm_broadcast.txt" 2>&1
 sleep 5
