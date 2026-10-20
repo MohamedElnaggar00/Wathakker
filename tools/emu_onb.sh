@@ -86,7 +86,7 @@ adb shell cmd uimode night yes
 adb shell am force-stop $P; adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
 tap_text "حصن المسلم"; sleep 3
 adb shell input tap 540 885; sleep 3
-for i in 1 2 3 4 5 6 7 8; do adb shell input swipe 540 1900 540 400 150; done; sleep 1
+for i in $(seq 1 45); do adb shell input swipe 540 1900 540 400 150; done; sleep 1
 shot addbtn_before
 tap_text "أضف إلى أذكاري"; sleep 1
 shot addbtn_after
@@ -95,7 +95,7 @@ shot addbtn_after_second_tap
 # leave and return
 adb shell input keyevent 4; sleep 2
 adb shell input tap 540 885; sleep 3
-for i in 1 2 3 4 5 6 7 8; do adb shell input swipe 540 1900 540 400 150; done; sleep 1
+for i in $(seq 1 45); do adb shell input swipe 540 1900 540 400 150; done; sleep 1
 shot addbtn_after_return
 # dialogs (language picker via settings is hard blind; edit dialog via popup menu)
 for N in yes no; do
