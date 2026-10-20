@@ -57,7 +57,7 @@ private fun StepSlider(index: Int, count: Int, onChange: (Int, Boolean) -> Unit)
     val dark = cs.background == Color.Black || cs.background.red < 0.2f
     val thumbFill = if (dark) Color.Black else Color.White
     val dotColor = if (dark) Color(0xFF58585C) else Color(0xFFC8C8CC)
-    val rtl = L10n.isRtl
+    val rtl = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
     var widthPx by remember { mutableFloatStateOf(1f) }
     val thumbR = with(LocalDensity.current) { 14.dp.toPx() }
     val anim = remember { Animatable(index.toFloat()) }
