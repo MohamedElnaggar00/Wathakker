@@ -112,6 +112,10 @@ object Prayer {
         return "${h.get(java.time.temporal.ChronoField.DAY_OF_MONTH)} ${hijriMonths[h.get(java.time.temporal.ChronoField.MONTH_OF_YEAR) - 1]}"
     }
 
+    private fun hijriDate(ms: Long) = java.time.chrono.HijrahDate.from(java.time.Instant.ofEpochMilli(ms).atZone(java.time.ZoneId.systemDefault()))
+    fun hijriDay(ms: Long): String = hijriDate(ms).get(java.time.temporal.ChronoField.DAY_OF_MONTH).toString()
+    fun hijriMonth(ms: Long): String = hijriMonths[hijriDate(ms).get(java.time.temporal.ChronoField.MONTH_OF_YEAR) - 1]
+
     /** Initial great-circle bearing to the Kaaba, degrees 0..360. */
     fun qiblaBearing(c: Context): Float {
         val (lat, lon) = coords(c)
