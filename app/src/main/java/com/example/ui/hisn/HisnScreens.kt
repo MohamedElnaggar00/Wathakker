@@ -191,6 +191,7 @@ fun HisnChapterContent(
     onMarkRead: () -> Unit,
     onAddToMyAzkar: () -> Unit
 ) {
+    var added by rememberSaveable(chapter.id) { mutableStateOf(false) }
     OneUIScreen(
         title = chapter.name,
         subtitle = azkarCount(items.size),
@@ -212,7 +213,13 @@ fun HisnChapterContent(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 OneUIButton(L10n.t(S.ReadDone), onMarkRead, Modifier.weight(1f), true, Icons.Outlined.Check)
-                OneUIButton(L10n.t(S.AddToMyAzkar), onAddToMyAzkar, Modifier.weight(1f), false, Icons.Outlined.NotificationAdd)
+                OneUIButton(
+                    L10n.t(if (added) S.AddedToMyAzkar else S.AddToMyAzkar),
+                    { if (!added) { added = true; onAddToMyAzkar() } },
+                    Modifier.weight(1f), false,
+                    if (added) Icons.Outlined.Check else Icons.Outlined.NotificationAdd,
+                    accentOverride = if (added) com.example.ui.theme.OneUIActiveGreen else null
+                )
             }
         }
     }

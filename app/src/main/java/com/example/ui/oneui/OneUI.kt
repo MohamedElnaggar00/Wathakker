@@ -411,10 +411,11 @@ fun OneUIButton(
     modifier: Modifier = Modifier,
     filled: Boolean = true,
     icon: ImageVector? = null,
-    destructive: Boolean = false
+    destructive: Boolean = false,
+    accentOverride: Color? = null
 ) {
     val cs = MaterialTheme.colorScheme
-    val accent = if (destructive) cs.error else cs.primary
+    val accent = accentOverride ?: if (destructive) cs.error else cs.primary
     val container = if (filled) accent else accent.copy(alpha = 0.14f)
     val content = if (filled) Color.White else accent
     Row(
@@ -423,15 +424,15 @@ fun OneUIButton(
             .clip(CircleShape)
             .background(container)
             .clickable(onClick = onClick)
-            .padding(horizontal = 20.dp, vertical = 10.dp),
+            .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         if (icon != null) {
             Icon(icon, contentDescription = null, tint = content, modifier = Modifier.size(18.dp))
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(6.dp))
         }
-        Text(text, color = content, style = MaterialTheme.typography.labelLarge)
+        Text(text, color = content, style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center, maxLines = 1, softWrap = false, modifier = Modifier.weight(1f, fill = false))
     }
 }
 

@@ -36,7 +36,7 @@ enum class S {
     LockWidgetsHint, ChangeLocation, LocationSubtitle, FajrAlarmSubtitle, LockScreenSection, LockWidgetsRowSub,
     Notifications, NotifSound, Default, Vibration, Appearance, AppFont, Language,
     NewDhikr, EditDhikr, TitleLabel, DhikrText, Cancel, Add, AddReminderTime, RepeatReminder, ReminderTime, Save, Apply,
-    ChaptersFmt, SearchHisn, NoFavChapters, NoResults, ReadTodaySuffix, AddToMyAzkar, Done,
+    ChaptersFmt, SearchHisn, NoFavChapters, NoResults, ReadTodaySuffix, AddToMyAzkar, AddedToMyAzkar, Done,
     Tagline, Version, Developer, DevName, HisnCredit, InstinctCredit, Dua,
     Font, FontLight, FontBold, FontSystem, FontCairo, FontNaskh, FontAmiri, FontRuqaa,
     PrayerFajr, PrayerShuruq, PrayerDhuhr, PrayerAsr, PrayerMaghrib, PrayerIsha, PrayerTimes, NextPrayer, AmMarker, PmMarker, PickCountryCity, SearchCityHint, NoSearchResults, FajrPrayer, FajrNow, Snooze, StopAlarm, ChooseSnooze, MinutesShortFmt, ColorWhite, Auto, ColorBlack, ColorPurple, BgGlass, BgWallBlur, ColorGray, ColorBlue, ColorGreen, ColorAmber, ColorBlueDark, ColorGreenDark, WidgetSettings, BarColor, BgColor, PickRingtone, LocationMethod, CurrentLocation, AutoUpdateFajr, PickCitySub, CurrentCity, ChangeCity, NoLocPermission, GpsOff, CalcMethod, SelectedCalcMethod, Change, UpdatingTime, UpdateFajrNow, AlarmToneSection, SelectedTone, SystemTones, AudioFile, ExtraSettings, VibrateDuringAlarm, NextFajrAt, AlarmOnDesc, AlarmOffDesc, PickCalcMethod,
