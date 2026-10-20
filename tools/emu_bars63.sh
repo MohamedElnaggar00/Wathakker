@@ -222,3 +222,18 @@ for LANG in ar en; do
   adb shell am force-stop com.wathakker.app; adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
   adb exec-out screencap -p > "$OUT/iqama_${LANG}_app.png"
 done
+# --- fonts and font size in Settings > Appearance
+adb shell cmd role add-role-holder android.app.role.HOME com.android.launcher3 >/dev/null 2>&1
+fontshot() { # $1=font id $2=scale $3=name
+  adb shell am force-stop com.wathakker.app
+  adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string><string name=\\\"app_font\\\">$1</string><float name=\\\"font_scale\\\" value=\\\"$2\\\" /><int name=\\\"perm_stage\\\" value=\\\"3\\\" /><boolean name=\\\"perm_flow_done\\\" value=\\\"true\\\" /></map>\" > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"
+  adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
+  adb shell input keyevent KEYCODE_BACK; sleep 1
+  tap_text "الإعدادات"; sleep 2
+  adb shell input swipe 360 1300 360 500 300; sleep 1
+  adb exec-out screencap -p > "$OUT/font_$3.png"
+  adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml "$OUT/font_$3.xml" >/dev/null 2>&1
+}
+for F in app app_light app_bold system cairo naskh amiri ruqaa; do fontshot $F 1.0 $F; done
+fontshot app 0.8 scale_080; fontshot app 1.2 scale_120; fontshot app 1.6 scale_160
+adb logcat -d -v threadtime | grep -E 'AndroidRuntime|FATAL' | tail -20 > "$OUT/font_crash.txt"
