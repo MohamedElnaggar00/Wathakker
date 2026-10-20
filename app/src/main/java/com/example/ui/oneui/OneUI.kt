@@ -377,8 +377,8 @@ fun OneUIRow(
         modifier = modifier
             .fillMaxWidth()
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .heightIn(min = 60.dp)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .heightIn(min = 64.dp)
+            .padding(horizontal = 16.dp, vertical = if (summary != null) 14.dp else 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (leading != null) {
@@ -390,10 +390,12 @@ fun OneUIRow(
             if (summary != null) {
                 Text(
                     summary,
+                    modifier = Modifier.padding(top = 4.dp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    // Natural font leading: tall Arabic fonts (Naskh/Amiri) overflow the tight
-                    // 13/18 metric and paint over the divider below the row.
-                    style = MaterialTheme.typography.bodySmall.copy(lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified)
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    // One UI summary: 14sp with a relaxed 1.4 line height so wrapped lines do not stack.
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp, lineHeight = 21.sp)
                 )
             }
         }

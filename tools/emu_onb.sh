@@ -123,3 +123,12 @@ adb shell uiautomator dump /sdcard/c.xml >/dev/null; adb pull /sdcard/c.xml /tmp
 tap_text "إلغاء"; sleep 1
 shot after_cancel_prayer_screen
 adb shell cat /data/data/$P/shared_prefs/prayer_alerts.xml > "$OUT/prayer_alerts_after_cancel.xml" 2>&1
+# settings screen spacing
+for N in yes no; do
+  adb shell cmd uimode night $N
+  adb shell am force-stop $P; adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+  tap_text "الإعدادات"; sleep 3
+  shot settings_spacing_$N
+  adb shell input swipe 540 1700 540 600 300; sleep 1
+  shot settings_spacing_scrolled_$N
+done
