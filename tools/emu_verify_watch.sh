@@ -12,12 +12,15 @@ tapdesc(){ dumpui
  XY=$(python3 - "$1" $2 <<'PY'
 import re,sys
 x=open('/tmp/uw.xml',encoding='utf-8').read()
-for m in re.finditer(r'(?:content-desc|text)="([^"]*)"[^>]*?bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',x):
-    if m.group(1)==sys.argv[1]:
-        r=((int(m.group(2))+int(m.group(4)))//2,(int(m.group(3))+int(m.group(5)))//2)
-        if len(sys.argv)<3: print(*r); break
+last=None
+for n in re.finditer(r'<node [^>]*>',x):
+    t=n.group(0)
+    d=re.search(r' content-desc="([^"]*)"',t); tx=re.search(r' text="([^"]*)"',t); b=re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',t)
+    if b and ((d and d.group(1)==sys.argv[1]) or (tx and tx.group(1)==sys.argv[1])):
+        r=((int(b.group(1))+int(b.group(3)))//2,(int(b.group(2))+int(b.group(4)))//2)
+        if len(sys.argv)<3: print(*r); last=None; break
         last=r
-if len(sys.argv)>=3 and 'last' in dir(): print(*last)
+if last: print(*last)
 PY
 )
  echo "tap $1: $XY" >> "$OUT/SUMMARY.txt"; [ -n "$XY" ] && adb shell input tap $XY; }
