@@ -606,7 +606,7 @@ fun OneUIMenu(expanded: Boolean, onDismiss: () -> Unit, content: @Composable Col
 @Composable
 fun OneUIMenuItem(text: String, onClick: () -> Unit, icon: ImageVector? = null, destructive: Boolean = false) {
     DropdownMenuItem(
-        text = { Text(text, color = MaterialTheme.colorScheme.onSurface, fontSize = 17.sp, maxLines = 1) },
+        text = { Text(text, color = MaterialTheme.colorScheme.onSurface, fontSize = 17.sp, maxLines = 2) },
         onClick = onClick,
         modifier = Modifier.heightIn(min = 48.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 24.dp, vertical = 4.dp)
