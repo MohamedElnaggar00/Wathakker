@@ -55,16 +55,29 @@ public final class HomeWidgets {
   android.graphics.Bitmap small=null;
   boolean fromImage=false;
   // 1) the real wallpaper, when asked for and the system lets this app read it
-  if(real)try{
-   android.graphics.drawable.Drawable d=wm.getDrawable();
-   if(d!=null){
-    int w=d.getIntrinsicWidth(),h=d.getIntrinsicHeight();if(w<=0||h<=0){w=720;h=1280;}
-    int sw=48,sh=Math.max(1,48*h/w);
-    small=android.graphics.Bitmap.createBitmap(sw,sh,android.graphics.Bitmap.Config.ARGB_8888);
-    android.graphics.Canvas cv=new android.graphics.Canvas(small);d.setBounds(0,0,sw,sh);d.draw(cv);fromImage=true;
-   }
-  }catch(Throwable t){small=null;}
+  String why="";
+  if(real){
+   android.graphics.Bitmap full=null;
+   try{android.graphics.drawable.Drawable d=wm.getDrawable();
+    if(d!=null){
+     int w=d.getIntrinsicWidth(),h=d.getIntrinsicHeight();if(w<=0||h<=0){w=720;h=1280;}
+     int sw=48,sh=Math.max(1,48*h/w);
+     full=android.graphics.Bitmap.createBitmap(sw,sh,android.graphics.Bitmap.Config.ARGB_8888);
+     android.graphics.Canvas cv=new android.graphics.Canvas(full);d.setBounds(0,0,sw,sh);d.draw(cv);
+    }else why+="getDrawable=null;";
+   }catch(Throwable t){why+="getDrawable:"+t;full=null;}
+   if(full==null)try{
+    android.os.ParcelFileDescriptor pfd=wm.getWallpaperFile(android.app.WallpaperManager.FLAG_SYSTEM);
+    if(pfd!=null){
+     android.graphics.BitmapFactory.Options o=new android.graphics.BitmapFactory.Options();o.inSampleSize=8;
+     android.graphics.Bitmap b=android.graphics.BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor(),null,o);pfd.close();
+     if(b!=null){int sw=48,sh=Math.max(1,48*b.getHeight()/b.getWidth());full=android.graphics.Bitmap.createScaledBitmap(b,sw,sh,true);}else why+="decode=null;";
+    }else why+="file=null;";
+   }catch(Throwable t){why+="getWallpaperFile:"+t;}
+   if(full!=null){small=full;fromImage=true;}
+  }
   // 2) no wallpaper access (Android 13+ without storage permission): paint soft blobs from the wallpaper's own colours
+  if(small==null&&real){android.util.Log.i("WallBlur","real image unavailable: "+why);android.graphics.Bitmap m=wallBlur(c,false);return m;}
   if(small==null){
    try{
     int c1=0xFF5B6FA6,c2=0xFF8E6BB0,c3=0xFF4FA0C0;

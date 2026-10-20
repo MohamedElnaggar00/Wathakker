@@ -48,7 +48,7 @@ tap_text() { adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull 
 import sys,re,xml.etree.ElementTree as ET
 t=sys.argv[1]
 for n in ET.parse('/tmp/u.xml').iter('node'):
-    if n.get('text')==t or n.get('content-desc')==t:
+    if (n.get('text') or '').lower()==t.lower() or (n.get('content-desc') or '').lower()==t.lower():
         b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
 PY
 }
@@ -125,7 +125,7 @@ adb shell cmd statusbar expand-notifications; sleep 2
 adb exec-out screencap -p > "$OUT/notif_5_adhan_and_iqama.png"
 adb shell dumpsys notification --noredact | grep -E "android.title|android.text|icon=" | head -20 > "$OUT/notif_adhan_dump.txt"
 # --- real wallpaper blur: after granting All files access the "wallblur" option must use the wallpaper image
-adb shell cmd uimode night no; sleep 2
+adb shell cmd statusbar collapse; adb shell input keyevent KEYCODE_HOME; adb shell cmd uimode night no; sleep 2
 adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost >/dev/null 2>&1
 adb logcat -c
 adb shell appops set --uid com.wathakker.app MANAGE_EXTERNAL_STORAGE allow
@@ -147,7 +147,7 @@ adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
 adb exec-out screencap -p > "$OUT/perm_a1_location_dialog.png"
 tap_text "السماح"; sleep 2
 adb exec-out screencap -p > "$OUT/perm_a2_system_location.png"
-tap_text "While using the app"; sleep 2
+tap_text "While using the app"; sleep 2; sleep 2
 adb exec-out screencap -p > "$OUT/perm_a3_files_dialog.png"
 tap_text "فتح الإعدادات"; sleep 3
 adb exec-out screencap -p > "$OUT/perm_a4_all_files_settings.png"
