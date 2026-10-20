@@ -113,4 +113,22 @@ adb shell dumpsys alarm | grep -B1 -A3 "$P" | head -60 > "$OUT/alarms_after_rebo
 adb shell dumpsys alarm | grep -c "$P" > "$OUT/alarm_count_after_reboot.txt"
 adb shell dumpsys appwidget | grep -A2 "$P" | head -30 > "$OUT/widgets_after_reboot.txt"
 shot after_reboot
+# 9) adhan/iqama notification auto-dismiss after 5 minutes (system timeout, survives app kill)
+adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+adb shell pm grant $P android.permission.POST_NOTIFICATIONS 2>/dev/null
+adb shell am force-stop $P
+UIDN=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><boolean name=\\\"enabled_3\\\" value=\\\"true\\\" /><boolean name=\\\"migrated_v1\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/prayer_alerts.xml; chown $UIDN:$UIDN /data/data/$P/shared_prefs/prayer_alerts.xml; chmod 660 /data/data/$P/shared_prefs/prayer_alerts.xml; restorecon /data/data/$P/shared_prefs/prayer_alerts.xml"
+adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 0 > "$OUT/bcast_adhan.txt" 2>&1
+adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 1 > "$OUT/bcast_iqama.txt" 2>&1
+sleep 5
+adb shell dumpsys notification --noredact | grep -E "pkg=$P|NotificationRecord|id=40|timeout" | head -30 > "$OUT/notif_t0.txt"
+adb shell cmd statusbar expand-notifications; sleep 2; shot notif_shade_t0
+adb shell cmd statusbar collapse
+adb shell am force-stop $P
+sleep 270
+adb shell dumpsys notification --noredact | grep -E "pkg=$P|id=40" | head -30 > "$OUT/notif_t4_5.txt"
+sleep 60
+adb shell dumpsys notification --noredact | grep -E "pkg=$P|id=40" | head -30 > "$OUT/notif_t5_6.txt"
+adb shell cmd statusbar expand-notifications; sleep 2; shot notif_shade_t5_6
 echo done >> "$OUT/summary.txt"

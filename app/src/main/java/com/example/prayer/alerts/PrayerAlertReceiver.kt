@@ -85,6 +85,11 @@ class PrayerAlertReceiver : BroadcastReceiver() {
             builder.setShowWhen(true).setWhen(at).setUsesChronometer(true).setChronometerCountDown(true)
                 .setTimeoutAfter(at - now)
         }
+        else {
+            // Adhan and iqama notifications remove themselves 5 minutes after they appear. The system
+            // enforces the timeout (API 26+), so it also works when the app process is gone.
+            builder.setTimeoutAfter(5 * 60 * 1000L)
+        }
         val notification = builder.build()
         if (kind == PrayerAlertScheduler.KIND_ADHAN) nm.cancel(400 + prayer + PrayerAlertScheduler.KIND_EARLY * 10)
         nm.notify(400 + prayer + kind * 10, notification)
