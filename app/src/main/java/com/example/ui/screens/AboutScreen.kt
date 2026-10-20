@@ -101,8 +101,8 @@ fun AboutScreen(onBack: () -> Unit) {
 @Composable
 fun AppIconBadge() {
     AndroidView(
-        factory = { ctx -> android.widget.ImageView(ctx).apply { setImageResource(R.mipmap.ic_launcher) } },
-        modifier = Modifier.size(84.dp).clip(RoundedCornerShape(22.dp))
+        factory = { ctx -> android.widget.ImageView(ctx).apply { setImageResource(R.drawable.app_icon) } },
+        modifier = Modifier.size(84.dp)
     )
 }
 
