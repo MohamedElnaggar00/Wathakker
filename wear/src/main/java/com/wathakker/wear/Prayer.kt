@@ -36,6 +36,8 @@ object Prayer {
 
     private fun coords(c: Context): Pair<Double, Double> {
         val p = c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE)
+        if (p.getInt("locmode", 0) == 1 && p.contains("gps_lat")) return Pair(
+            java.lang.Double.longBitsToDouble(p.getLong("gps_lat", 0L)), java.lang.Double.longBitsToDouble(p.getLong("gps_lon", 0L)))
         return Pair(
             java.lang.Double.longBitsToDouble(p.getLong("lat", java.lang.Double.doubleToLongBits(DEFAULT_LAT))),
             java.lang.Double.longBitsToDouble(p.getLong("lon", java.lang.Double.doubleToLongBits(DEFAULT_LON)))

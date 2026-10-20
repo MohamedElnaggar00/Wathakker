@@ -1,5 +1,6 @@
 package com.wathakker.wear
 
+import androidx.compose.ui.graphics.toArgb
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
@@ -36,10 +37,10 @@ class PreviewActivity : Activity() {
             val type = if (mode == "short") ComplicationType.SHORT_TEXT else ComplicationType.RANGED_VALUE
             val data = PreviewComp(this).build(type, s)!!
             val cd = ComplicationDrawable(this)
-            cd.activeStyle.rangedValuePrimaryColor = 0xFFD6B64A.toInt()
+            cd.activeStyle.rangedValuePrimaryColor = WTheme.cur.main.toArgb()
             cd.activeStyle.rangedValueSecondaryColor = 0xFF3A3420.toInt()
             cd.activeStyle.textColor = Color.WHITE
-            cd.activeStyle.titleColor = 0xFFD6B64A.toInt()
+            cd.activeStyle.titleColor = WTheme.cur.main.toArgb()
             cd.setComplicationData(data, true)
             root.addView(object : View(this) {
                 override fun onDraw(canvas: Canvas) {

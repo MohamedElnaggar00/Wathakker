@@ -12,6 +12,7 @@ import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.tiles.RequestBuilders
+import androidx.compose.ui.graphics.toArgb
 import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
 import com.google.common.util.concurrent.Futures
@@ -19,6 +20,13 @@ import com.google.common.util.concurrent.ListenableFuture
 
 /** The gold arc watch widget: arc progress between the previous and the next prayer, next prayer in the middle. */
 open class PrayerTileService : TileService() {
+
+    private class TC(val main: Int, val dark: Int)
+    private val tc: TC get() {
+        val d = WTheme.defs[Settings.themeIdx(this).coerceIn(0, WTheme.defs.size - 1)]
+        val m = d.main.toArgb()
+        return TC(m, androidx.core.graphics.ColorUtils.blendARGB(0xFF000000.toInt(), m, 0.22f))
+    }
 
     private fun text(t: String, size: Float, color: Int, bold: Boolean) =
         LayoutElementBuilders.Text.Builder()
@@ -32,8 +40,8 @@ open class PrayerTileService : TileService() {
 
     fun layout(s: PrayerState): LayoutElementBuilders.LayoutElement {
         val sweep = 270f
-        val track = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep)).setThickness(dp(13f)).setColor(argb(0xFF3A3420.toInt())).build()
-        val fill = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep * s.progress)).setThickness(dp(13f)).setColor(argb(0xFFD6B64A.toInt())).build()
+        val track = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep)).setThickness(dp(13f)).setColor(argb(tc.dark)).build()
+        val fill = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep * s.progress)).setThickness(dp(13f)).setColor(argb(tc.main)).build()
         fun arc(line: LayoutElementBuilders.ArcLine) = LayoutElementBuilders.Arc.Builder()
             .setAnchorAngle(degrees(-135f)).setAnchorType(LayoutElementBuilders.ARC_ANCHOR_START).addContent(line).build()
 
@@ -44,7 +52,7 @@ open class PrayerTileService : TileService() {
             .addContent(gap(2f))
             .addContent(text(s.next.name, 19f, 0xFFFFFFFF.toInt(), true))
             .addContent(gap(5f))
-            .addContent(text("المتبقي " + Prayer.remainingText(s.next.at - s.now), 12f, 0xFFD6B64A.toInt(), false))
+            .addContent(text("المتبقي " + Prayer.remainingText(s.next.at - s.now), 12f, tc.main, false))
             .addContent(gap(7f))
             .addContent(text(Prayer.hijriDay(s.now), 26f, 0xFFFFFFFF.toInt(), true))
             .addContent(text(Prayer.hijriMonth(s.now), 12f, 0xFF9D9DA2.toInt(), false))

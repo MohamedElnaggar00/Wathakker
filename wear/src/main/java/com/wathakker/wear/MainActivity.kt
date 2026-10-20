@@ -82,7 +82,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-val Gold = Color(0xFFD6B64A)
+val Gold: Color get() = WTheme.cur.main
 val Ink = Color(0xFF0B0B0C)
 val Pill = Color(0xFF1B1B1D)
 val SoftGrey = Color(0xFF9D9DA2)
@@ -98,9 +98,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LocationSync.refresh(this)
-        starPattern = intent.getIntExtra("pat", 1)
+        Settings.load(this)
+        if (intent.hasExtra("pat")) starPattern = intent.getIntExtra("pat", 1)
+        if (intent.hasExtra("theme")) WTheme.idx = intent.getIntExtra("theme", 0)
         val page = intent.getIntExtra("page", 0)
-        setContent { WearApp(page) }
+        val sub = intent.getIntExtra("sub", 0)
+        setContent { WearApp(page, sub) }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -112,7 +115,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WearApp(startPage: Int) {
+fun WearApp(startPage: Int, startSub: Int = 0) {
     val ctx = LocalContext.current
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) { while (true) { now = System.currentTimeMillis(); delay(1000) } }
@@ -120,20 +123,21 @@ fun WearApp(startPage: Int) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         BoxWithConstraints(Modifier.fillMaxSize().background(Color.Black)) {
             val w = maxWidth.value
-            val pager = rememberPagerState(initialPage = startPage) { 4 }
+            val pager = rememberPagerState(initialPage = startPage) { 5 }
             HorizontalPager(pager, Modifier.fillMaxSize()) { page ->
                 when (page) {
                     0 -> MainPage(state, now, w)
                     1 -> ListPage(state, w)
                     2 -> QiblaPage(w)
-                    else -> PhonePage(w)
+                    3 -> PhonePage(w)
+                    else -> SettingsPage(w, startSub)
                 }
             }
             Row(
                 Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.045f).dp),
                 horizontalArrangement = Arrangement.spacedBy((w * 0.018f).dp)
             ) {
-                for (i in 0 until 4) {
+                for (i in 0 until 5) {
                     val on = i == pager.currentPage
                     Box(
                         Modifier.width(((if (on) 0.07f else 0.022f) * w).dp).height((w * 0.022f).dp)
@@ -146,7 +150,7 @@ fun WearApp(startPage: Int) {
 }
 
 /** Pattern chosen for the main page background: 1 = Rub el Hizb stars touching tip to tip, 2 = 12-fold interlaced rosette. */
-var starPattern = 1
+var starPattern by androidx.compose.runtime.mutableIntStateOf(1)
 
 /** Rub el Hizb (eight-pointed Islamic star, two overlaid squares) as a 16-vertex outline. */
 private fun starPath(cx: Float, cy: Float, r: Float): Path {
@@ -178,8 +182,7 @@ private fun starOutline(cx: Float, cy: Float, n: Int, ro: Float, ri: Float): Pat
 
 /** Regular square-grid Islamic star pattern that emerges from the bottom-left corner and fades out. */
 @Composable
-fun StarField(modifier: Modifier) {
-    val pat = starPattern
+fun StarField(modifier: Modifier, pat: Int = starPattern) {
     Canvas(modifier) {
         val r = size.minDimension * 0.085f
         val step = if (pat >= 3) r * 3.1f else if (pat == 2) r * 2.36f else r * 2f
