@@ -390,12 +390,12 @@ fun OneUIRow(
             if (summary != null) {
                 Text(
                     summary,
-                    modifier = Modifier.padding(top = 4.dp),
+                    modifier = Modifier.padding(top = 2.dp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2,
+                    maxLines = 4,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                     // One UI summary: 14sp with a relaxed 1.4 line height so wrapped lines do not stack.
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp, lineHeight = 21.sp)
+                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 14.sp, lineHeight = 20.sp)
                 )
             }
         }

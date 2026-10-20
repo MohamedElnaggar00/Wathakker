@@ -172,7 +172,7 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                     Icon(Icons.Outlined.LocationOn, null, tint = cs.primary)
                     Spacer(Modifier.width(10.dp))
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(L10n.t(S.CurrentCity), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                        Text(L10n.t(S.CurrentCity), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                         Text(state.cityName, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
                     }
                     if (!state.useCurrentLocation) {
@@ -283,7 +283,7 @@ private fun LocOptionRow(selected: Boolean, icon: ImageVector, title: String, su
         Spacer(Modifier.width(10.dp))
         Column {
             Text(title, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-            Text(subtitle, color = cs.onSurfaceVariant, fontSize = 11.sp)
+            Text(subtitle, modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
         }
     }
 }
@@ -304,7 +304,7 @@ private fun CalcRow(icon: ImageVector, title: String, value: String, onClick: ()
             Icon(icon, null, tint = cs.primary)
             Spacer(Modifier.width(8.dp))
             Column {
-                Text(title, color = cs.onSurfaceVariant, fontSize = 11.sp)
+                Text(title, modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                 Text(value, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }
@@ -329,7 +329,7 @@ private fun StepperRow(title: String, value: Int, unit: String, onChange: (Int) 
                     Icon(icon, null, tint = cs.primary, modifier = Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
                 }
-                Text(title, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(title, color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium)
             }
             Text(
                 // LRM pins the sign to the number in RTL ("+3 د", never "3+ د"); the min
@@ -368,7 +368,7 @@ private fun OptionPickerDialog(title: String, options: List<String>, selected: I
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(label, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                Text(label, color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 if (index == pending) {
                     Icon(Icons.Outlined.Check, null, tint = cs.primary)
                 }

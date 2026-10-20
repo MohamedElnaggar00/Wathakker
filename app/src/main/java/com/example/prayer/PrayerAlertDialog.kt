@@ -121,7 +121,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     Spacer(Modifier.width(10.dp))
                     Column {
                         Text(L10n.t(S.AtAdhanRow), color = cs.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                        Text(L10n.t(S.AtAdhanRowSub), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                        Text(L10n.t(S.AtAdhanRowSub), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                     }
                 }
                 OneUISwitch(enabled, { PrayerAlertStore.setEnabled(context, prayer, it); changed() })
@@ -136,8 +136,8 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(Modifier.weight(1f)) {
-                        Text(L10n.t(S.BeforeAdhanRow), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                        Text(L10n.t(S.BeforeAdhanHelper), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                        Text(L10n.t(S.BeforeAdhanRow), color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                        Text(L10n.t(S.BeforeAdhanHelper), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                     }
                     OneUISwitch(earlyOn, { want ->
                         PrayerAlertStore.setOffsetMinutes(context, prayer, if (want) (if (offset > 0) offset else 10) else 0)
@@ -211,8 +211,8 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(Modifier.weight(1f)) {
-                            Text(L10n.t(S.IqamaReminder), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                            Text(L10n.t(S.IqamaReminderSub), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                            Text(L10n.t(S.IqamaReminder), color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            Text(L10n.t(S.IqamaReminderSub), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                         }
                         OneUISwitch(iqama, { PrayerAlertStore.setIqamaReminder(context, prayer, it); changed() })
                     }
@@ -230,8 +230,8 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(Modifier.weight(1f)) {
-                            Text(L10n.t(S.AutoDnd), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                            Text(L10n.t(S.AutoDndSub), color = cs.onSurfaceVariant, fontSize = 11.sp)
+                            Text(L10n.t(S.AutoDnd), color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            Text(L10n.t(S.AutoDndSub), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                         }
                         OneUISwitch(dndOn && dndGranted, { want ->
                             if (want && !dndGranted) {
@@ -259,7 +259,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                 Text(
                     if (customized) (if (isAr) "مخصص لهذه الصلاة فقط" else "Custom for this prayer only")
                     else (if (isAr) "يتبع إعدادات التطبيق" else "Follows app settings"),
-                    color = cs.onSurfaceVariant, fontSize = 11.sp
+                    modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp
                 )
                 Spacer(Modifier.height(4.dp))
                 Row(
@@ -280,8 +280,8 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     Icon(Icons.Outlined.MusicNote, null, tint = cs.primary)
                     Spacer(Modifier.width(10.dp))
                     Column(Modifier.weight(1f)) {
-                        Text(L10n.t(S.SelectedTone), color = cs.onSurfaceVariant, fontSize = 11.sp)
-                        Text((if (PrayerAlertStore.toneOverride(context, prayer) != null) PrayerAlertStore.toneOverrideTitle(context, prayer) else com.example.utils.NotifPrefs.toneTitle(context)) ?: L10n.t(S.Default), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text(L10n.t(S.SelectedTone), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
+                        Text((if (PrayerAlertStore.toneOverride(context, prayer) != null) PrayerAlertStore.toneOverrideTitle(context, prayer) else com.example.utils.NotifPrefs.toneTitle(context)) ?: L10n.t(S.Default), color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     }
                     Text(
                         L10n.t(S.AudioFile), color = cs.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold,
@@ -299,7 +299,7 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.Vibration, null, tint = cs.primary)
                         Spacer(Modifier.width(10.dp))
-                        Text(L10n.t(S.VibrateDuringAlarm), color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text(L10n.t(S.VibrateDuringAlarm), color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     }
                     OneUISwitch(PrayerAlertStore.effectiveVibration(context, prayer), { PrayerAlertStore.setVibrationOverride(context, prayer, it); tick++ })
                 }
