@@ -203,3 +203,20 @@ for MODE in default deny allow; do
   adb shell dumpsys alarm | grep -B1 -A8 "com.wathakker.app" | grep -E "Batch|RTC|type|origWhen|window|flags|PrayerAlertReceiver|exact" | head -60 > "$OUT/alarm_${MODE}_dump.txt"
   adb shell am force-stop com.wathakker.app
 done
+# --- iqama phase look (amber bar, "الإقامة للظهر"): move the clock into the Dhuhr iqama window (emulator is UTC, Dhuhr 09:39, iqama until 09:59)
+adb shell cmd uimode night yes
+for LANG in ar en; do
+  adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">$LANG</string></map>\" > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/app_prefs.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
+  adb shell settings put global auto_time 0
+  adb shell "date $(date -u +%m%d)0945$(date -u +%Y).00" > "$OUT/iqama_date_set_$LANG.txt" 2>&1
+  adb shell date >> "$OUT/iqama_date_set_$LANG.txt"
+  adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost >/dev/null 2>&1
+  adb shell am force-stop com.wathakker.app; adb shell am force-stop com.example.widgethost
+  adb shell am start -W -n com.example.widgethost/.MainActivity --es mode barsB; sleep 14
+  adb exec-out screencap -p > "$OUT/iqama_${LANG}_barsB.png"
+  adb shell am force-stop com.example.widgethost
+  adb shell am start -W -n com.example.widgethost/.MainActivity --es mode barsA; sleep 14
+  adb exec-out screencap -p > "$OUT/iqama_${LANG}_barsA.png"
+  adb shell am force-stop com.wathakker.app; adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
+  adb exec-out screencap -p > "$OUT/iqama_${LANG}_app.png"
+done

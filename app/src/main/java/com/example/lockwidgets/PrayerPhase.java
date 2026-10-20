@@ -41,7 +41,12 @@ public final class PrayerPhase {
         if(code.startsWith("ru"))return "Икама";
         return "Iqama";
     }
+    /** "Iqama Dhuhr" in other languages; Arabic needs the preposition: الإقامة للظهر (ل + الظهر = للظهر). */
+    public static String iqamaFor(String code,String name) {
+        if(code.startsWith("ar")){String n=name==null?"":name;return "الإقامة "+(n.startsWith("ال")?"لل"+n.substring(2):"ل"+n);}
+        return iqamaLabel(code)+" "+name;
+    }
     public String label(String[] names,String code) {
-        return iqama ? iqamaLabel(code)+" "+names[targetIndex] : names[targetIndex];
+        return iqama ? iqamaFor(code,names[targetIndex]) : names[targetIndex];
     }
 }
