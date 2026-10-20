@@ -102,15 +102,17 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
                     .size(22.dp)
                     .clip(CircleShape)
                     .background(swatch)
-                    .then(if (selected) Modifier.border(2.dp, cs.primary, CircleShape) else Modifier)
+                    .then(if (selected) Modifier.border(2.dp, cs.primary, CircleShape) else Modifier.border(1.dp, cs.outline.copy(alpha = 0.7f), CircleShape))
             )
-            Text(
-                label,
-                color = if (selected) cs.onSurface else cs.onSurfaceVariant,
-                fontSize = 15.sp,
-                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
-            )
-            captions[key]?.let { Text(it, color = cs.onSurfaceVariant, fontSize = 11.sp) }
+            Column {
+                Text(
+                    label,
+                    color = if (selected) cs.onSurface else cs.onSurfaceVariant,
+                    fontSize = 15.sp,
+                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+                )
+                captions[key]?.let { Text(it, color = cs.onSurfaceVariant, fontSize = 12.sp) }
+            }
         }
     }
 }
