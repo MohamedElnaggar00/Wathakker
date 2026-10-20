@@ -12,7 +12,8 @@ for n in ET.parse('/tmp/u.xml').iter('node'):
         b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
 PY
 }
-shot() { adb exec-out screencap -p > "$OUT/$1.png"; }
+DEAD=0
+shot() { timeout 30 adb exec-out screencap -p > "$OUT/$1.png"; if [ ! -s "$OUT/$1.png" ]; then DEAD=$((DEAD+1)); echo "empty shot $1" >> "$OUT/summary.txt"; [ $DEAD -ge 6 ] && { echo EMULATOR_UNRESPONSIVE >> "$OUT/summary.txt"; exit 0; }; fi; }
 crashes() { adb logcat -d -v threadtime | grep -E "FATAL EXCEPTION|ANR in" | grep -c . ; }
 seed() { # $1 lang
   adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">$1</string><int name=\\\"perm_stage\\\" value=\\\"3\\\" /><boolean name=\\\"perm_flow_done\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/app_prefs.xml"; }
@@ -32,6 +33,32 @@ echo "crashes_after_update=$(crashes)" > "$OUT/summary.txt"
 adb uninstall $P >/dev/null 2>&1; adb install -r "$NEW" >/dev/null 2>&1
 adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 8; shot fresh_first_launch
 adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml "$OUT/fresh_first_launch.xml" >/dev/null 2>&1
+# 9) adhan/iqama notification auto-dismiss after 5 minutes (system timeout, survives app kill)
+adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+adb shell pm grant $P android.permission.POST_NOTIFICATIONS 2>/dev/null
+adb shell am force-stop $P
+UIDN=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><boolean name=\\\"enabled_3\\\" value=\\\"true\\\" /><boolean name=\\\"migrated_v1\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/prayer_alerts.xml; chown $UIDN:$UIDN /data/data/$P/shared_prefs/prayer_alerts.xml; chmod 660 /data/data/$P/shared_prefs/prayer_alerts.xml; restorecon /data/data/$P/shared_prefs/prayer_alerts.xml"
+NOWMS=$(( $(adb shell date +%s | tr -d '\r') * 1000 + 40000 ))
+adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 3 --el prayer_at $NOWMS >/dev/null 2>&1
+sleep 3
+adb shell dumpsys notification --noredact | grep -E "id=433|timeout" | head > "$OUT/notif_early_present.txt"
+adb shell cmd statusbar expand-notifications; sleep 2; shot notif_early_countdown
+adb shell cmd statusbar collapse
+sleep 40
+adb shell dumpsys notification --noredact | grep -E "id=433" | head > "$OUT/notif_early_after_adhan_time.txt"
+adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 0 > "$OUT/bcast_adhan.txt" 2>&1
+adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 1 > "$OUT/bcast_iqama.txt" 2>&1
+sleep 5
+adb shell dumpsys notification --noredact | grep -E "pkg=$P|NotificationRecord|id=40|timeout" | head -30 > "$OUT/notif_t0.txt"
+adb shell cmd statusbar expand-notifications; sleep 2; shot notif_shade_t0
+adb shell cmd statusbar collapse
+adb shell am force-stop $P
+sleep 270
+adb shell dumpsys notification --noredact | grep -E "pkg=$P|id=40" | head -30 > "$OUT/notif_t4_5.txt"
+sleep 60
+adb shell dumpsys notification --noredact | grep -E "pkg=$P|id=40" | head -30 > "$OUT/notif_t5_6.txt"
+adb shell cmd statusbar expand-notifications; sleep 2; shot notif_shade_t5_6
 # 3) walk every screen, AR and EN, dark and light
 seed ar; adb shell pm grant $P android.permission.ACCESS_FINE_LOCATION; adb shell pm grant $P android.permission.POST_NOTIFICATIONS
 walk() { # $1 tag
@@ -113,30 +140,4 @@ adb shell dumpsys alarm | grep -B1 -A3 "$P" | head -60 > "$OUT/alarms_after_rebo
 adb shell dumpsys alarm | grep -c "$P" > "$OUT/alarm_count_after_reboot.txt"
 adb shell dumpsys appwidget | grep -A2 "$P" | head -30 > "$OUT/widgets_after_reboot.txt"
 shot after_reboot
-# 9) adhan/iqama notification auto-dismiss after 5 minutes (system timeout, survives app kill)
-adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
-adb shell pm grant $P android.permission.POST_NOTIFICATIONS 2>/dev/null
-adb shell am force-stop $P
-UIDN=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
-adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><boolean name=\\\"enabled_3\\\" value=\\\"true\\\" /><boolean name=\\\"migrated_v1\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/prayer_alerts.xml; chown $UIDN:$UIDN /data/data/$P/shared_prefs/prayer_alerts.xml; chmod 660 /data/data/$P/shared_prefs/prayer_alerts.xml; restorecon /data/data/$P/shared_prefs/prayer_alerts.xml"
-NOWMS=$(( $(adb shell date +%s | tr -d '\r') * 1000 + 40000 ))
-adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 3 --el prayer_at $NOWMS >/dev/null 2>&1
-sleep 3
-adb shell dumpsys notification --noredact | grep -E "id=433|timeout" | head > "$OUT/notif_early_present.txt"
-adb shell cmd statusbar expand-notifications; sleep 2; shot notif_early_countdown
-adb shell cmd statusbar collapse
-sleep 40
-adb shell dumpsys notification --noredact | grep -E "id=433" | head > "$OUT/notif_early_after_adhan_time.txt"
-adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 0 > "$OUT/bcast_adhan.txt" 2>&1
-adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 1 > "$OUT/bcast_iqama.txt" 2>&1
-sleep 5
-adb shell dumpsys notification --noredact | grep -E "pkg=$P|NotificationRecord|id=40|timeout" | head -30 > "$OUT/notif_t0.txt"
-adb shell cmd statusbar expand-notifications; sleep 2; shot notif_shade_t0
-adb shell cmd statusbar collapse
-adb shell am force-stop $P
-sleep 270
-adb shell dumpsys notification --noredact | grep -E "pkg=$P|id=40" | head -30 > "$OUT/notif_t4_5.txt"
-sleep 60
-adb shell dumpsys notification --noredact | grep -E "pkg=$P|id=40" | head -30 > "$OUT/notif_t5_6.txt"
-adb shell cmd statusbar expand-notifications; sleep 2; shot notif_shade_t5_6
 echo done >> "$OUT/summary.txt"
