@@ -100,6 +100,11 @@ object OneUIDimens {
     val BarHeight: Dp = 56.dp
     // Clears the floating pill tab bar (64dp bar + 12dp bottom margin) with an 8dp gap.
     val TabBarClearance: Dp = 84.dp
+    // Title block balance (3.3.0): gap above the large title (header row to glyph top) equals
+    // the gap below it (last title/subtitle line to the next element). Measured on a 420dpi
+    // device: above was 13dp, below 37dp (title only) or 31dp (title + subtitle).
+    val TitleTopGap: Dp = 24.dp
+    val TitleSubtitleBottomExtra: Dp = 6.dp
 }
 
 @Composable
@@ -189,7 +194,7 @@ fun OneUIScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = statusTop + 4.dp + titleTopExtra, bottom = 16.dp - titleBottomTrim)
+                        .padding(top = statusTop + 4.dp + OneUIDimens.TitleTopGap + titleTopExtra, bottom = 16.dp - titleBottomTrim + (if (subtitle != null) OneUIDimens.TitleSubtitleBottomExtra else 0.dp))
                         .alpha(1f - minOf(fraction * 3f, 1f))
                 ) {
                     Spacer(modifier = Modifier.height(52.dp))

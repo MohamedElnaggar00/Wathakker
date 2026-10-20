@@ -328,8 +328,8 @@ fun PrayerTimesContent(
         containerColor = Color.Transparent,
         titleColor = sc.textPrimary,
         alwaysShowHeaderTiles = true,
-        titleTopExtra = 14.dp,
-        titleBottomTrim = 10.dp,
+        titleTopExtra = 1.5.dp,
+        titleBottomTrim = 0.dp,
         frost = frost,
         actions = if (onQibla != null) {
             { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
