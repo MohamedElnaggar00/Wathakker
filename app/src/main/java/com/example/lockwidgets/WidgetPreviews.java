@@ -30,7 +30,7 @@ public final class WidgetPreviews {
         if (Build.VERSION.SDK_INT < 35) return;
         final Context c = ctx.getApplicationContext();
         final String key = pkgVersion(c) + "|" + HomeWidgets.lang(c) + "|"
-                + (c.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) + "|" + c.getSharedPreferences("app_prefs", 0).getString("digits_style", "latin");
+                + (c.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK);
         final SharedPreferences sp = c.getSharedPreferences("preview_prefs", 0);
         if (key.equals(sp.getString("generated", null))) return;
         synchronized (WidgetPreviews.class) {
@@ -60,7 +60,6 @@ public final class WidgetPreviews {
 
     /** Returns how many previews were accepted by the system. */
     public static int generate(Context c) throws Exception {
-        com.example.utils.Digits.refresh(c);
         AppWidgetManager m = AppWidgetManager.getInstance(c);
         HomeWidgets.State st = HomeWidgets.state(c);
         int ok = 0;

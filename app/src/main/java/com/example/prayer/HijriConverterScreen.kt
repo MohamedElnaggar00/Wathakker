@@ -28,7 +28,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.MaterialTheme
-import com.example.ui.oneui.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -124,7 +124,6 @@ private fun DateField(
                 value = value,
                 onValueChange = onChange,
                 singleLine = true,
-                visualTransformation = com.example.utils.Digits.visual,
                 textStyle = TextStyle(
                     color = cs.onSurface, fontSize = 16.sp,
                     fontWeight = FontWeight.Medium, textAlign = TextAlign.Center

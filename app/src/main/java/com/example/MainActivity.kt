@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(state)
         L10n.init(this)
         ThemeSettings.init(this)
-        com.example.utils.Digits.init(this)
         WidgetUpdater.INSTANCE.updateAll(this)
         com.example.prayer.alerts.PrayerAlertScheduler.scheduleAll(this)
         handleIntent(intent)

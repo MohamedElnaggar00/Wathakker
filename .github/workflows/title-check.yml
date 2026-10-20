@@ -42,7 +42,7 @@ jobs:
         profile: pixel_6
         disable-animations: false
         script: |-
-          bash tools/emu_digits.sh candidate/onb.apk emulator-evidence/titles
+          bash tools/emu_titles.sh candidate/onb.apk emulator-evidence/titles
     - name: Upload evidence
       if: always()
       uses: actions/upload-artifact@v4

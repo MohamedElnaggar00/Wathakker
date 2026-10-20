@@ -25,7 +25,7 @@ import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material.icons.outlined.Watch
 import androidx.compose.material3.MaterialTheme
-import com.example.ui.oneui.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,10 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.padding
-import com.example.utils.plainClickable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.oneui.OneUICard
@@ -301,10 +297,6 @@ fun SettingsContent(
                     trailing = { ChevronIcon() },
                     onClick = onPickLanguage
                 )
-                if (L10n.lang == com.example.ui.i18n.Lang.AR) {
-                    OneUIDivider(70.dp)
-                    DigitsStyleRow()
-                }
             }
         }
         if (onWatch != null) {
@@ -338,44 +330,3 @@ fun SettingsContent(
 
 
 
-
-
-/** Numbers type (Arabic UI only): One UI segmented choice between Hindi-Indic and Latin digits. */
-@androidx.compose.runtime.Composable
-private fun DigitsStyleRow() {
-    val cs = androidx.compose.material3.MaterialTheme.colorScheme
-    val ctx = androidx.compose.ui.platform.LocalContext.current
-    val hindi = com.example.utils.Digits.isHindiChoice
-    androidx.compose.foundation.layout.Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
-        androidx.compose.material3.Text("نوع الأرقام", color = cs.onSurface, fontSize = 16.sp)
-        androidx.compose.foundation.layout.Spacer(Modifier.height(10.dp))
-        androidx.compose.foundation.layout.Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-                .background(cs.surfaceVariant.copy(alpha = 0.55f))
-                .padding(4.dp)
-        ) {
-            listOf(true to "أرقام هندية  \u0661\u0662\u0663", false to "أرقام عربية  1234").forEach { (h, label) ->
-                val active = hindi == h
-                androidx.compose.foundation.layout.Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
-                        .background(if (active) cs.surface else androidx.compose.ui.graphics.Color.Transparent)
-                        .plainClickable { com.example.utils.Digits.set(ctx, h) }
-                        .padding(vertical = 9.dp, horizontal = 6.dp),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
-                ) {
-                    androidx.compose.material3.Text(
-                        label,
-                        color = if (active) cs.onSurface else cs.onSurfaceVariant,
-                        fontSize = 14.sp,
-                        fontWeight = if (active) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Medium,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center, maxLines = 1
-                    )
-                }
-            }
-        }
-    }
-}

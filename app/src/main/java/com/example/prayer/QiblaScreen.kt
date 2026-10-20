@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import com.example.ui.oneui.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -253,7 +253,7 @@ fun QiblaScreen(onBack: (() -> Unit)? = null) {
                             (cs.onSurfaceVariant.green * 255).toInt(),
                             (cs.onSurfaceVariant.blue * 255).toInt()
                         )
-                        drawContext.canvas.nativeCanvas.drawText(com.example.utils.Digits.ui(ld.toString()), x, y, degPaint)
+                        drawContext.canvas.nativeCanvas.drawText(ld.toString(), x, y, degPaint)
                         ld += 30
                     }
                     // tick ring: fine every 3 deg, bold every 30
