@@ -68,3 +68,10 @@ for LANG in en ar; do
   adb shell cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml | grep -E 'widget_(bar|bg)_color' > "$OUT/cfg_${LANG}_prefs_after_apply.txt"
   adb exec-out screencap -p > "$OUT/cfg_${LANG}_2_after_apply.png"
 done
+# dark and light screenshots of the settings screen (Apply pill)
+for NIGHT in yes no; do
+  adb shell cmd uimode night $NIGHT; sleep 2
+  adb shell am force-stop com.wathakker.app
+  adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity --ei appWidgetId 0; sleep 4
+  adb exec-out screencap -p > "$OUT/cfg_ar_night_${NIGHT}.png"
+done

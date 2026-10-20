@@ -113,7 +113,7 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -> Unit, onCancel: () -> Unit) {
+fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -> Unit) {
     val cs = MaterialTheme.colorScheme
     // Taps only select; nothing is saved or closed until Apply (One UI style).
     var barSel by remember { mutableStateOf(current) }
@@ -140,22 +140,18 @@ fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -
                 Spacer(Modifier.height(16.dp))
                 ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it })
             }
-            // Same bottom action pill as the One UI dialogs (Cancel | Apply).
-            Row(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .clip(RoundedCornerShape(28.dp))
-                    .background(cs.surfaceContainerHighest),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(Modifier.weight(1f).fillMaxHeight().clickable(onClick = onCancel), contentAlignment = Alignment.Center) {
-                    Text(L10n.t(S.Cancel), color = cs.primary, style = MaterialTheme.typography.labelLarge)
-                }
-                Box(Modifier.width(0.5.dp).fillMaxHeight().background(cs.outline))
-                Box(Modifier.weight(1f).fillMaxHeight().clickable { onApply(barSel, bgSel) }, contentAlignment = Alignment.Center) {
-                    Text(L10n.t(S.Apply), color = cs.primary, style = MaterialTheme.typography.labelLarge)
+            // One UI "Scan phone" style: one centered filled blue pill. Back discards.
+            Box(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 24.dp), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .width(160.dp)
+                        .height(52.dp)
+                        .clip(RoundedCornerShape(26.dp))
+                        .background(Color(0xFF377AFF))
+                        .clickable { onApply(barSel, bgSel) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(L10n.t(S.Apply), color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -189,8 +185,7 @@ class WidgetConfigActivity : ComponentActivity() {
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
                         finish()
-                    },
-                    onCancel = { finish() }
+                    }
                 )
             }
         }
