@@ -23,33 +23,44 @@ adb shell pm grant $P android.permission.ACCESS_FINE_LOCATION
 adb emu geo fix 31.2001 29.9187 >/dev/null 2>&1
 adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6; adb shell am force-stop $P
 UIDN=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
-N=yes
+for N in yes no; do
 adb shell cmd uimode night $N
 adb shell am force-stop $P
 adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string><int name=\\\"perm_stage\\\" value=\\\"3\\\" /><boolean name=\\\"perm_flow_done\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/app_prefs.xml; chown $UIDN:$UIDN /data/data/$P/shared_prefs/app_prefs.xml; chmod 660 /data/data/$P/shared_prefs/app_prefs.xml; restorecon /data/data/$P/shared_prefs/app_prefs.xml"
 adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 8
-shot prayer
-tap_text "التذكيرات"; sleep 3; shot reminders
-tap_text "حصن المسلم"; sleep 3; shot hisn
-adb shell input tap 540 885; sleep 3; shot hisn_chapter
+shot prayer_$N
+tap_text "التذكيرات"; sleep 3; shot reminders_$N
+tap_text "حصن المسلم"; sleep 3; shot hisn_$N
+adb shell input tap 540 885; sleep 3; shot hisn_chapter_$N
 adb shell input keyevent 4; sleep 1
-tap_text "التقويم"; sleep 3; shot calendar
-tap_text "الإعدادات"; sleep 3; shot settings
+tap_text "التقويم"; sleep 3; shot calendar_$N
+tap_text "الإعدادات"; sleep 3; shot settings_$N
 for G in qibla fajr_alarm hijri_converter; do
   adb shell am force-stop $P
   adb shell am start -W -a android.intent.action.VIEW -d "wathakker://open?go=$G" -n $P/com.example.MainActivity >/dev/null; sleep 6
-  shot $G
+  shot ${G}_$N
 done
-adb shell input tap 540 1267; sleep 2; shot hijri_converter_today
-tap_text "من هجري إلى ميلادي"; sleep 2; shot hijri_converter_h2g
-tap_text "من ميلادي إلى هجري"; sleep 2; shot hijri_converter_g2h
+adb shell uiautomator dump /sdcard/u4.xml >/dev/null 2>&1; adb pull /sdcard/u4.xml "$OUT/conv_$N.xml" >/dev/null 2>&1
+python3 - "$OUT/conv_$N.xml" <<'PY' | { read x y; [ -n "$x" ] && adb shell input tap $x $y; }
+import sys,re,xml.etree.ElementTree as ET
+best=None
+for n in ET.parse(sys.argv[1]).iter('node'):
+    if (n.get('text') or '')=='اليوم' and n.get('clickable')=='true':
+        b=list(map(int,re.findall(r'\d+',n.get('bounds'))));best=((b[0]+b[2])//2,(b[1]+b[3])//2)
+if best: print(*best)
+PY
+sleep 2; shot hijri_converter_today_$N
+adb shell input tap 700 1030; sleep 2; shot hijri_converter_month_g_$N
+adb shell input keyevent 4; sleep 1
+tap_text "من هجري إلى ميلادي"; sleep 2; shot hijri_converter_h2g_$N
+tap_text "من ميلادي إلى هجري"; sleep 2; shot hijri_converter_g2h_$N
 
 # time picker dialog (Reminders > card menu > alert times > a time row)
 adb shell am force-stop $P
 adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
 tap_text "التذكيرات"; sleep 3
-tap_text "خيارات"; sleep 2; shot picker_step1
-tap_text "أوقات التنبيه"; sleep 2; shot picker_step2
+tap_text "خيارات"; sleep 2; shot picker_step1_$N
+tap_text "أوقات التنبيه"; sleep 2; shot picker_step2_$N
 adb shell uiautomator dump /sdcard/u2.xml >/dev/null 2>&1; adb pull /sdcard/u2.xml "$OUT/step2.xml" >/dev/null 2>&1
 python3 - "$OUT/step2.xml" <<'PY' | { read x y; [ -n "$x" ] && adb shell input tap $x $y; }
 import sys,re,xml.etree.ElementTree as ET
@@ -58,5 +69,6 @@ for n in ET.parse(sys.argv[1]).iter('node'):
     if re.match(r'^\d\d:\d\d [صم]$',t):
         b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
 PY
-sleep 2; shot picker_step3
+sleep 2; shot picker_step3_$N
+done
 echo done > "$OUT/done.txt"
