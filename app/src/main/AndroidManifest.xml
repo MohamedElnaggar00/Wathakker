@@ -82,7 +82,7 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_oneui_info" />
         </receiver>
-        <receiver android:exported="false" android:label="تقدم الصلاة 4×1" android:name="com.example.widget.HeroWidgetProvider">
+        <receiver android:exported="false" android:label="تقدم الصلاة" android:name="com.example.widget.HeroWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -195,7 +195,7 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/lock_prayer_countdown_clean_info" />
         </receiver>
-        <receiver android:exported="false" android:label="تقدم الصلاة 2×4" android:name="com.example.widget.HeroLargeWidgetProvider">
+        <receiver android:exported="false" android:label="تقدم الصلاة - كبير" android:name="com.example.widget.HeroLargeWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
