@@ -72,6 +72,7 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         if (isEarly && at <= now) return // too late to count down to anything; the adhan notification covers it
         val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_stat_prayer)
+            .setLargeIcon(android.graphics.BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
             .setContentTitle(prayerName)
             .setContentText(text)
             .setPriority(if (isIqama) NotificationCompat.PRIORITY_DEFAULT else NotificationCompat.PRIORITY_HIGH)

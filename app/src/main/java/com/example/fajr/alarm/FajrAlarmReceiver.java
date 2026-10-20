@@ -60,7 +60,7 @@ public final class FajrAlarmReceiver extends BroadcastReceiver {
                 channel.setShowBadge(true);
                 notificationManager.createNotificationChannel(channel);
             }
-            Notification notification = new NotificationCompat.Builder(context, "fajr_alarm_channel").setSmallIcon(R.drawable.ic_stat_prayer).setContentTitle(L10n.INSTANCE.t(S.FajrPrayer)).setContentText(L10n.INSTANCE.t(S.FajrNow)).setPriority(2).setCategory(NotificationCompat.CATEGORY_ALARM).setFullScreenIntent(fullScreenPendingIntent, true).setAutoCancel(true).build();
+            Notification notification = new NotificationCompat.Builder(context, "fajr_alarm_channel").setSmallIcon(R.drawable.ic_stat_prayer).setLargeIcon(android.graphics.BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher)).setContentTitle(L10n.INSTANCE.t(S.FajrPrayer)).setContentText(L10n.INSTANCE.t(S.FajrNow)).setPriority(2).setCategory(NotificationCompat.CATEGORY_ALARM).setFullScreenIntent(fullScreenPendingIntent, true).setAutoCancel(true).build();
             Intrinsics.checkNotNullExpressionValue(notification, "build(...)");
             notificationManager.notify(FajrAlarmScheduler.ALARM_REQUEST_CODE, notification);
             try {
