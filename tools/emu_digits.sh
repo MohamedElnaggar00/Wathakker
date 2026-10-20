@@ -16,6 +16,15 @@ for n in ET.parse('/tmp/u.xml').iter('node'):
         b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
 PY
 }
+tap_sub() { adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml /tmp/u.xml >/dev/null 2>&1
+  python3 - "$1" <<'PY' | { read x y; [ -n "$x" ] && adb shell input tap $x $y && echo "tapped $1" || echo "NOT FOUND $1"; }
+import sys,re,xml.etree.ElementTree as ET
+t=sys.argv[1]
+for n in ET.parse('/tmp/u.xml').iter('node'):
+    if t in (n.get('text') or ''):
+        b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
+PY
+}
 adb shell cmd role add-role-holder android.app.role.HOME com.android.launcher3 >/dev/null 2>&1
 adb install -g -r "$APK" >/dev/null 2>&1
 adb shell pm grant $P android.permission.POST_NOTIFICATIONS
@@ -35,6 +44,8 @@ adb shell input tap 540 885; sleep 3; shot hisn_chapter_$N
 adb shell input keyevent 4; sleep 1
 tap_text "التقويم"; sleep 3; shot calendar_$N
 tap_text "الإعدادات"; sleep 3; shot settings_$N
+adb shell input swipe 540 1900 540 700 300; sleep 2; shot settings_scrolled_$N
+adb shell input keyevent 4; sleep 1
 for G in qibla fajr_alarm hijri_converter; do
   adb shell am force-stop $P
   adb shell am start -W -a android.intent.action.VIEW -d "wathakker://open?go=$G" -n $P/com.example.MainActivity >/dev/null; sleep 6
@@ -70,6 +81,19 @@ for n in ET.parse(sys.argv[1]).iter('node'):
         b=list(map(int,re.findall(r'\d+',n.get('bounds'))));print((b[0]+b[2])//2,(b[1]+b[3])//2);break
 PY
 sleep 2; shot picker_step3_$N
+if [ "$DIG" = latin ] && [ "$N" = no ]; then
+  adb shell am force-stop $P
+  adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+  tap_text "التقويم"; sleep 2; shot live_0_calendar_latin_$N
+  tap_text "الإعدادات"; sleep 3
+  adb shell input swipe 540 1900 540 700 300; sleep 2
+  tap_sub "أرقام هندية"; sleep 2; shot live_1_settings_after_tap_$N
+  adb shell input keyevent 4; sleep 2; shot live_2_calendar_after_$N
+  tap_text "الإعدادات"; sleep 3
+  adb shell input swipe 540 1900 540 700 300; sleep 2
+  tap_sub "أرقام عربية"; sleep 2
+  adb shell input keyevent 4; sleep 2; shot live_3_calendar_back_to_latin_$N
+fi
 done
 done
 # real widget renders with each setting

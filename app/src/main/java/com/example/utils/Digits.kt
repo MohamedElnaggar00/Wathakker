@@ -24,7 +24,8 @@ object Digits {
 
     private var hindiPref by mutableStateOf(false)
 
-    /** Last value read for non-Compose callers (widgets). */
+    /** Last values read for non-Compose callers (widgets): Arabic UI, and the digit choice. */
+    @Volatile private var widgetArabic = false
     @Volatile private var widgetHindi = false
 
     fun init(context: Context) {
@@ -39,42 +40,50 @@ object Digits {
     /** True when the choice is Hindi digits (regardless of language, for the setting UI). */
     val isHindiChoice: Boolean get() = hindiPref
 
-    /** Active in Compose: Hindi digits chosen and app language is Arabic. */
-    val active: Boolean get() = hindiPref && com.example.ui.i18n.L10n.lang == com.example.ui.i18n.Lang.AR
+    /** The numbers setting applies only while the app language is Arabic. */
+    val active: Boolean get() = com.example.ui.i18n.L10n.lang == com.example.ui.i18n.Lang.AR
 
     /** Re-read the setting for drawing code outside Compose (widgets, previews). Call at the start of a render batch. */
     @JvmStatic
     fun refresh(context: Context) {
         val p = context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val lang = p.getString("language", "ar") ?: "ar"
-        widgetHindi = lang.startsWith("ar") && p.getString(KEY, LATIN) == HINDI
+        widgetArabic = lang.startsWith("ar")
+        widgetHindi = p.getString(KEY, LATIN) == HINDI
     }
 
     @JvmStatic
-    fun map(s: String): String = convert(s)
+    fun map(s: String): String = if (!widgetArabic) s else convert(s, widgetHindi)
 
     /** For widgets and previews, after refresh(). */
     @JvmStatic
-    fun forWidget(s: String?): String? = if (s == null || !widgetHindi) s else convert(s)
+    fun forWidget(s: String?): String? = if (s == null || !widgetArabic) s else convert(s, widgetHindi)
 
     @JvmStatic
-    fun forWidget(s: CharSequence): CharSequence = if (!widgetHindi) s else convert(s.toString())
+    fun forWidget(s: CharSequence): CharSequence = if (!widgetArabic) s else convert(s.toString(), widgetHindi)
 
-    /** For Compose text. */
-    fun ui(s: String): String = if (active) convert(s) else s
+    /** For Compose text. In Arabic the chosen style is applied to every digit, so Latin and Hindi never mix. */
+    fun ui(s: String): String = if (active) convert(s, hindiPref) else s
 
     fun ui(s: AnnotatedString): AnnotatedString {
         if (!active) return s
-        val t = convert(s.text)
-        return AnnotatedString(t, s.spanStyles, s.paragraphStyles)
+        val t = convert(s.text, hindiPref)
+        return if (t == s.text) s else AnnotatedString(t, s.spanStyles, s.paragraphStyles)
     }
 
-    private fun convert(s: String): String {
+    /** One place that rewrites digits (1:1 characters): Latin 0-9 and Hindi-Indic U+0660..0669 (Persian/Urdu forms untouched). */
+    private fun convert(s: String, hindi: Boolean): String {
         var needs = false
-        for (c in s) if (c in '0'..'9') { needs = true; break }
+        for (c in s) if ((c in '0'..'9') || (c in '\u0660'..'\u0669')) { needs = true; break }
         if (!needs) return s
         val sb = StringBuilder(s.length)
-        for (c in s) sb.append(if (c in '0'..'9') ('\u0660' + (c - '0')) else c)
+        for (c in s) {
+            sb.append(
+                if (hindi && c in '0'..'9') ('\u0660' + (c - '0'))
+                else if (!hindi && c in '\u0660'..'\u0669') ('0' + (c - '\u0660'))
+                else c
+            )
+        }
         return sb.toString()
     }
 
