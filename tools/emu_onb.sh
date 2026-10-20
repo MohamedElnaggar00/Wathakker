@@ -95,3 +95,13 @@ adb shell input keyevent 4; sleep 2
 adb shell input tap 540 650; sleep 3
 for i in 1 2 3 4 5 6 7 8; do adb shell input swipe 540 1900 540 400 150; done; sleep 1
 shot addbtn_after_return
+# dialogs (language picker via settings is hard blind; edit dialog via popup menu)
+for N in yes no; do
+  adb shell cmd uimode night $N
+  adb shell am force-stop $P; adb shell am start -W -n $P/com.example.MainActivity >/dev/null; sleep 6
+  tap_text "التذكيرات"; sleep 3
+  tap_text "خيارات"; sleep 2
+  tap_text "تعديل الذكر والتصنيفات"; sleep 2
+  shot dialog_edit_$N
+  adb shell input keyevent 4; sleep 1
+done

@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.DialogWindowProvider
@@ -50,8 +51,10 @@ fun BlurBehindDialogWindow(radiusDp: Int = 28) {
             attrs.blurBehindRadius = with(density) { radiusDp.dp.roundToPx() }
             window.attributes = attrs
             window.setDimAmount(0.28f)
+            window.setGravity(android.view.Gravity.BOTTOM)
         } else {
             window.setDimAmount(0.5f)
+            window.setGravity(android.view.Gravity.BOTTOM)
         }
     }
 }
@@ -74,14 +77,16 @@ fun OneUIDialogSurface(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(cs.surface)
+                    .clip(RoundedCornerShape(28.dp))
+                    .background(oneUiMenuColor())
             ) {
                 Text(
                     title,
                     modifier = Modifier.fillMaxWidth().padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 12.dp),
                     color = cs.onSurface,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Start,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                    fontSize = 20.sp,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Column(
@@ -93,37 +98,35 @@ fun OneUIDialogSurface(
                     content()
                     Spacer(modifier = Modifier.height(8.dp))
                 }
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-                        .height(56.dp)
-                        .clip(RoundedCornerShape(28.dp))
-                        .background(cs.surfaceContainerHighest),
+                        .height(56.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
                         modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onDismiss),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(dismissText, color = cs.primary, style = MaterialTheme.typography.labelLarge)
+                        Text(dismissText, color = cs.onSurface, fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 17.sp, style = MaterialTheme.typography.labelLarge)
                     }
                     if (onConfirm != null) {
-                        Box(modifier = Modifier.width(0.5.dp).fillMaxHeight().background(cs.outline))
+                        Box(modifier = Modifier.width(1.dp).height(24.dp).background(cs.onSurface.copy(alpha = 0.18f)))
                         Box(
                             modifier = Modifier.weight(1f).fillMaxHeight().clickable(enabled = confirmEnabled, onClick = onConfirm),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 confirmText,
-                                color = if (confirmEnabled) cs.primary else cs.onSurfaceVariant,
+                                color = if (confirmEnabled) cs.onSurface else cs.onSurface.copy(alpha = 0.38f),
+                                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold, fontSize = 17.sp,
                                 style = MaterialTheme.typography.labelLarge
                             )
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }
@@ -149,7 +152,7 @@ fun OneUIDialog(
             title = title,
             onDismiss = onDismiss,
             onConfirm = onConfirm,
-            modifier = Modifier.padding(horizontal = 24.dp).heightIn(max = maxDialogHeight),
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp).heightIn(max = maxDialogHeight),
             confirmText = confirmText,
             dismissText = dismissText,
             confirmEnabled = confirmEnabled,
