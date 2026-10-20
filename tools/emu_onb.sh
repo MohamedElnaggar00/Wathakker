@@ -44,6 +44,8 @@ flow ar yes "التالي" "رجوع" "تحديد الموقع (GPS)" "إنها�
 adb logcat -d -v threadtime | grep -E "FATAL EXCEPTION|AndroidRuntime" | head -20 > "$OUT/crashes.txt"
 # ---- launcher long-press shortcuts
 adb shell pm clear $P >/dev/null
+adb shell pm grant $P android.permission.POST_NOTIFICATIONS
+adb shell pm grant $P android.permission.ACCESS_FINE_LOCATION
 adb shell "mkdir -p /data/data/$P/shared_prefs"
 UID_=$(adb shell stat -c %u /data/data/$P | tr -d '\r')
 adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string><int name=\\\"perm_stage\\\" value=\\\"3\\\" /><boolean name=\\\"perm_flow_done\\\" value=\\\"true\\\" /></map>\" > /data/data/$P/shared_prefs/app_prefs.xml; chown $UID_:$UID_ /data/data/$P/shared_prefs/app_prefs.xml; chmod 660 /data/data/$P/shared_prefs/app_prefs.xml; restorecon -R /data/data/$P/shared_prefs"
