@@ -69,9 +69,16 @@ public final class WidgetPreviews {
             for (String kind : kinds) {
                 try {
                     boolean one = kind.equals("OneUI");
-                    int wd = kind.startsWith("Hero") || kind.equals("Schedule") || one ? 330 : kind.equals("Clock") ? 250 : kind.equals("Hijri") || kind.equals("Gregorian") ? 90 : 110;
-                    int ht = kind.equals("HeroLarge") ? 160 : kind.equals("Hero") ? 90 : 90;
-                    RemoteViews v = new RemoteViews(c.getPackageName(), res(c, "layout", one ? "home_prayer_art_fit" : "home_prayer_art"));
+                    // Sizes follow each widget's target cell span (cell ~80x90dp) so the preview has the same aspect as the picker box and is never stretched.
+                    int wd, ht;
+                    switch (kind) {
+                        case "HeroLarge": wd = 330; ht = 185; break;
+                        case "Hero": case "Schedule": case "OneUI": wd = 330; ht = 90; break;
+                        case "Clock": wd = 240; ht = 90; break;
+                        case "Hijri": case "Gregorian": case "NextPrayer": wd = 82; ht = 90; break;
+                        default: wd = 160; ht = 82; break; // 2x1: PrayerBar, DayPrayer, Pill
+                    }
+                    RemoteViews v = new RemoteViews(c.getPackageName(), res(c, "layout", "home_prayer_art_fit"));
                     HomeWidgets.ovBegin();
                     Bitmap b = HomeWidgets.renderKind(c, kind.equals("HeroLarge") ? "Hero" : kind, wd, ht, 0);
                     v.setImageViewBitmap(res(c, "id", "home_prayer_image"), b);

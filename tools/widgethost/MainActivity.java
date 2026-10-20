@@ -51,13 +51,14 @@ public class MainActivity extends Activity {
         sv.addView(col);
         String mode=getIntent().getStringExtra("mode");
         if ("previews".equals(mode)) {
-            String[] cls = {"com.example.widget.HeroWidgetProvider","com.example.widget.HeroLargeWidgetProvider","com.example.widget.PrayerBarWidgetProvider","com.example.widget.NextPrayerWidgetProvider","com.example.widget.OneUIWidgetProvider","com.example.widget.ClockWidgetProvider","com.example.lockwidgets.LockWidgets$Bar","com.example.lockwidgets.LockWidgets$Countdown","com.example.lockwidgets.LockWidgets$CountdownClean","com.example.lockwidgets.LockWidgets$Next"};
+            String[] cls = {"com.example.widget.HeroWidgetProvider","com.example.widget.HeroLargeWidgetProvider","com.example.widget.PrayerBarWidgetProvider","com.example.widget.DayPrayerWidgetProvider","com.example.widget.PillWidgetProvider","com.example.widget.NextPrayerWidgetProvider","com.example.widget.HijriWidgetProvider","com.example.widget.OneUIWidgetProvider","com.example.widget.ClockWidgetProvider","com.example.lockwidgets.LockWidgets$Bar","com.example.lockwidgets.LockWidgets$Countdown","com.example.lockwidgets.LockWidgets$CountdownClean","com.example.lockwidgets.LockWidgets$Next"};
             for (String k : cls) {
                 TextView label = new TextView(this);
                 ComponentName cn = new ComponentName(PKG, k);
                 android.widget.RemoteViews rv = null; int usedCat = 0;
                 try {
-                    for (int cat : new int[]{1, 2}) {
+                    for (int cat : new int[]{1, 2, 3}) {
+                        if (rv == null) { rv = awm.getWidgetPreview(cn, android.os.Process.myUserHandle(), cat); usedCat = cat; }
                         if (rv == null) { rv = awm.getWidgetPreview(cn, null, cat); usedCat = cat; }
                     }
                 } catch (Throwable t) { Log.i("WidgetHost", "getWidgetPreview error " + k + " " + t); }
@@ -66,8 +67,13 @@ public class MainActivity extends Activity {
                 col.addView(label);
                 if (rv != null) {
                     try {
-                        android.view.View pv = rv.apply(getApplicationContext(), col);
-                        col.addView(pv, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        android.widget.FrameLayout box = new android.widget.FrameLayout(this);
+                        box.setBackgroundColor(0x33888888);
+                        int cols = k.contains("HeroLarge")||k.contains("Hero")||k.contains("OneUI") ? 4 : k.contains("Clock") ? 3 : (k.contains("PrayerBar")||k.contains("DayPrayer")||k.contains("Pill")) ? 2 : 1;
+                        int rows = k.contains("HeroLarge") ? 2 : 1;
+                        android.view.View pv = rv.apply(getApplicationContext(), box);
+                        box.addView(pv, new android.widget.FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        col.addView(box, new LinearLayout.LayoutParams((int)(cols*80*d), (int)(rows*90*d)));
                     } catch (Throwable t) { Log.i("WidgetHost", "apply error " + k + " " + t); }
                 }
             }
