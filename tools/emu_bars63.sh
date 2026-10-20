@@ -86,3 +86,14 @@ tap_text "أخضر"; sleep 1
 adb shell input keyevent KEYCODE_BACK; sleep 2
 adb shell cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml | grep -E '_99[89]' > "$OUT/back_prefs.txt"
 adb logcat -d -v threadtime | grep -E 'WidgetConfig' > "$OUT/back_log.txt"
+# background options over a colourful backdrop: auto / glass / wallblur, light and dark
+adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost >/dev/null 2>&1
+for NIGHT in no yes; do
+  adb shell cmd uimode night $NIGHT; sleep 2
+  for BG in auto glass wallblur; do
+    adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"widget_bg_color\\\">$BG</string></map>\" > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
+    adb shell am force-stop com.wathakker.app; adb shell am force-stop com.example.widgethost
+    adb shell am start -W -n com.example.widgethost/.MainActivity --es mode frost; sleep 12
+    adb exec-out screencap -p > "$OUT/frost_${NIGHT}_${BG}.png"
+  done
+done

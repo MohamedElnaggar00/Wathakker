@@ -40,20 +40,49 @@ public final class HomeWidgets {
  static State state(Context c)throws Exception{State s=new State();s.code=lang(c);s.rtl=rtl(c);com.example.ui.i18n.L10n.INSTANCE.init(c);Locale l=new Locale(s.code);Calendar day=Calendar.getInstance();s.ts=times(c,day);com.example.ui.i18n.L10n lx=com.example.ui.i18n.L10n.INSTANCE;s.names=new String[]{lx.t(com.example.ui.i18n.S.PrayerFajr),lx.t(com.example.ui.i18n.S.PrayerShuruq),lx.t(com.example.ui.i18n.S.PrayerDhuhr),lx.t(com.example.ui.i18n.S.PrayerAsr),lx.t(com.example.ui.i18n.S.PrayerMaghrib),lx.t(com.example.ui.i18n.S.PrayerIsha)};s.next=-1;for(int i=0;i<6;i++)if(i!=1&&s.ts[i]>s.now){s.next=i;break;}if(s.next<0){Calendar t=(Calendar)day.clone();t.add(Calendar.DATE,1);s.at=times(c,t)[0];s.next=0;s.prev=s.ts[5];s.previous=5;}else{s.at=s.ts[s.next];s.previous=s.next==2?0:s.next-1;if(s.next==0){Calendar y=(Calendar)day.clone();y.add(Calendar.DATE,-1);s.prev=times(c,y)[5];s.previous=5;}else s.prev=s.ts[s.previous];}Calendar yd=(Calendar)day.clone();yd.add(Calendar.DATE,-1);Calendar td=(Calendar)day.clone();td.add(Calendar.DATE,1);PrayerPhase phase=PrayerPhase.resolve(s.ts,times(c,yd),times(c,td),s.now,day.get(Calendar.DAY_OF_WEEK)==Calendar.FRIDAY,false);s.next=phase.targetIndex;s.previous=phase.previousIndex;s.at=phase.target;s.prev=phase.start;s.iqama=phase.iqama;s.targetName=phase.label(s.names,s.code);s.city=(String)Class.forName("com.example.fajr.data.FajrPreferences").getMethod("getCityNameLocalized",String.class).invoke(Class.forName("com.example.fajr.data.FajrPreferences").getConstructor(Context.class).newInstance(c),s.code);s.day=new SimpleDateFormat("EEEE",l).format(new Date());android.icu.util.IslamicCalendar h=new android.icu.util.IslamicCalendar();h.setCalculationType(android.icu.util.IslamicCalendar.CalculationType.ISLAMIC_UMALQURA);int hoff=c.getSharedPreferences("fajr_prefs",0).getInt("hijri_offset",0);if(hoff!=0)h.add(Calendar.DATE,hoff);s.hday=""+h.get(Calendar.DATE);s.hyear=""+h.get(Calendar.YEAR);s.hmonth=com.example.prayer.HijriDate.INSTANCE.monthName(h.get(Calendar.MONTH)+1,s.code);s.hijri=s.hday+" "+s.hmonth;s.greg=new SimpleDateFormat("d MMMM",l).format(new Date());s.gday=new SimpleDateFormat("d",Locale.ENGLISH).format(new Date());s.gmonth=new SimpleDateFormat("MMMM",l).format(new Date());s.gyear=""+day.get(Calendar.YEAR);return s;}
   static int[] barFillColors(Context c,int id){String k=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bar_color_"+id,null):null;if(k==null)k=c.getSharedPreferences("fajr_prefs",0).getString("widget_bar_color","auto");if("amber".equals(k))return new int[]{0xFFE5B455,0xFFE5B455};if("blue".equals(k))return new int[]{0xFF41A0FF,0xFF3B83FE};if("green".equals(k))return new int[]{0xFF5BC950,0xFF24C55E};if("purple".equals(k))return new int[]{0xFF9747FF,0xFF9747FF};int autoCol=isLight(bgColor(c,id))?0xFF000000:0xFFFFFFFF;return new int[]{autoCol,autoCol};}
  static int wpId=-9;static android.graphics.Bitmap wpBlur=null;
+ static boolean nightMode(Context c){return (c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;}
+ /** Translucent tint laid over the blurred wallpaper so text stays readable: dark smoke at night, milky white by day. */
+ static int frostTint(boolean night){return night?0x70101418:0x80FFFFFF;}
+ static int blendOver(int base,int tint){int a=(tint>>>24),r=(((base>>16)&255)*(255-a)+((tint>>16)&255)*a)/255,g=(((base>>8)&255)*(255-a)+((tint>>8)&255)*a)/255,b=((base&255)*(255-a)+(tint&255)*a)/255;return (r<<16)|(g<<8)|b;}
  static android.graphics.Bitmap wallBlur(Context c){
+  android.app.WallpaperManager wm=android.app.WallpaperManager.getInstance(c);
+  int id=-1;try{id=wm.getWallpaperId(android.app.WallpaperManager.FLAG_SYSTEM);}catch(Throwable t){}
+  if(wpBlur!=null&&id==wpId)return wpBlur;
+  android.graphics.Bitmap small=null;
+  // 1) the real wallpaper, when the system lets this app read it
   try{
-   android.app.WallpaperManager wm=android.app.WallpaperManager.getInstance(c);
-   int id=wm.getWallpaperId(android.app.WallpaperManager.FLAG_SYSTEM);
-   if(wpBlur!=null&&id==wpId)return wpBlur;
-   android.graphics.drawable.Drawable d=wm.getDrawable();if(d==null)return null;
-   int w=d.getIntrinsicWidth(),h=d.getIntrinsicHeight();if(w<=0||h<=0){w=720;h=1280;}
-   int sw=48,sh=Math.max(1,48*h/w);
-   android.graphics.Bitmap small=android.graphics.Bitmap.createBitmap(sw,sh,android.graphics.Bitmap.Config.ARGB_8888);
-   android.graphics.Canvas cv=new android.graphics.Canvas(small);d.setBounds(0,0,sw,sh);d.draw(cv);
-   // heavy blur: two box passes over the tiny bitmap, then it is scaled up at draw time
-   boxBlur(small,3);boxBlur(small,3);
-   wpBlur=small;wpId=id;return wpBlur;
-  }catch(Throwable t){return null;}
+   android.graphics.drawable.Drawable d=wm.getDrawable();
+   if(d!=null){
+    int w=d.getIntrinsicWidth(),h=d.getIntrinsicHeight();if(w<=0||h<=0){w=720;h=1280;}
+    int sw=48,sh=Math.max(1,48*h/w);
+    small=android.graphics.Bitmap.createBitmap(sw,sh,android.graphics.Bitmap.Config.ARGB_8888);
+    android.graphics.Canvas cv=new android.graphics.Canvas(small);d.setBounds(0,0,sw,sh);d.draw(cv);
+   }
+  }catch(Throwable t){small=null;}
+  // 2) no wallpaper access (Android 13+ without storage permission): paint soft blobs from the wallpaper's own colours
+  if(small==null){
+   try{
+    int c1=0xFF5B6FA6,c2=0xFF8E6BB0,c3=0xFF4FA0C0;
+    if(android.os.Build.VERSION.SDK_INT>=27){android.app.WallpaperColors wc=wm.getWallpaperColors(android.app.WallpaperManager.FLAG_SYSTEM);if(wc!=null){c1=wc.getPrimaryColor().toArgb();if(wc.getSecondaryColor()!=null)c2=wc.getSecondaryColor().toArgb();else c2=c1;if(wc.getTertiaryColor()!=null)c3=wc.getTertiaryColor().toArgb();else c3=c2;}}
+    int sw=48,sh=32;small=android.graphics.Bitmap.createBitmap(sw,sh,android.graphics.Bitmap.Config.ARGB_8888);
+    android.graphics.Canvas cv=new android.graphics.Canvas(small);cv.drawColor(0xFF000000|c1);
+    android.graphics.Paint p=new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+    p.setShader(new android.graphics.RadialGradient(sw*.12f,sh*.15f,sw*.62f,0xFF000000|c2,c2&0xFFFFFF,android.graphics.Shader.TileMode.CLAMP));cv.drawRect(0,0,sw,sh,p);
+    p.setShader(new android.graphics.RadialGradient(sw*.88f,sh*.9f,sw*.6f,0xFF000000|c3,c3&0xFFFFFF,android.graphics.Shader.TileMode.CLAMP));cv.drawRect(0,0,sw,sh,p);
+   }catch(Throwable t){return null;}
+  }
+  // heavy blur: two box passes over the tiny bitmap, then it is scaled up at draw time
+  boxBlur(small,3);boxBlur(small,3);
+  wpBlur=small;wpId=id;return wpBlur;
+ }
+ static android.graphics.Bitmap frostGrain;
+ /** Soft top highlight + fine grain on top of the blurred fill: reads as frosted glass instead of a flat colour. */
+ static void frostOverlay(Canvas cv,float w,float h,float rad,boolean night){
+  Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);RectF r=new RectF(0,0,w,h);
+  p.setColor(frostTint(night));cv.drawRoundRect(r,rad,rad,p);
+  p.setColor(0xFFFFFFFF);p.setShader(new LinearGradient(0,0,0,h*.55f,night?0x30FFFFFF:0x60FFFFFF,0x00FFFFFF,Shader.TileMode.CLAMP));cv.drawRoundRect(r,rad,rad,p);
+  if(frostGrain==null){android.graphics.Bitmap g=android.graphics.Bitmap.createBitmap(64,64,android.graphics.Bitmap.Config.ARGB_8888);java.util.Random rnd=new java.util.Random(7);for(int y=0;y<64;y++)for(int x=0;x<64;x++){int a=rnd.nextInt(26);g.setPixel(x,y,(a<<24)|(rnd.nextBoolean()?0xFFFFFF:0x000000));}frostGrain=g;}
+  Paint gp=new Paint(Paint.ANTI_ALIAS_FLAG);gp.setShader(new android.graphics.BitmapShader(frostGrain,Shader.TileMode.REPEAT,Shader.TileMode.REPEAT));cv.drawRoundRect(r,rad,rad,gp);
  }
  static void boxBlur(android.graphics.Bitmap b,int r){
   int w=b.getWidth(),h=b.getHeight();int[] px=new int[w*h];b.getPixels(px,0,w,0,0,w,h);int[] out=new int[w*h];
@@ -75,7 +104,7 @@ static int avgColor(android.graphics.Bitmap b){
   for(int y=0;y<h;y+=2)for(int x=0;x<w;x+=2){int p=b.getPixel(x,y);r+=(p>>16)&255;g+=(p>>8)&255;bb+=p&255;n++;}
   return (int)(r/n)<<16|(int)(g/n)<<8|(int)(bb/n);
  }
- static int bgColor(Context c,int id){String k=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color_"+id,null):null;if(k==null)k=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");int rgb;if("black".equals(k))rgb=0x000000;else if("gray".equals(k))rgb=0x2b2b2b;else if("white".equals(k))rgb=0xf6f6f6;else{boolean night=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;rgb=night?0x171719:0xf6f6f6;}if("glass".equals(k)){boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return ng?0x94141A22:0xB3F2F2F7;}if("wallblur".equals(k)){android.graphics.Bitmap wb=wallBlur(c);if(wb!=null)return 0xFF000000|avgColor(wb);boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return 0xD9000000|(ng?0x171719:0xf6f6f6);}return 0xD9000000|rgb;}
+ static int bgColor(Context c,int id){String k=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color_"+id,null):null;if(k==null)k=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");int rgb;if("black".equals(k))rgb=0x000000;else if("gray".equals(k))rgb=0x2b2b2b;else if("white".equals(k))rgb=0xf6f6f6;else{boolean night=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;rgb=night?0x171719:0xf6f6f6;}if("glass".equals(k)){boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return ng?0x94141A22:0xB3F2F2F7;}if("wallblur".equals(k)){android.graphics.Bitmap wb=wallBlur(c);if(wb!=null)return 0xFF000000|blendOver(avgColor(wb),frostTint(nightMode(c)));boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return 0xD9000000|(ng?0x171719:0xf6f6f6);}return 0xD9000000|rgb;}
  static boolean isLight(int bg){int r=(bg>>16)&255,g=(bg>>8)&255,b=bg&255;return 0.299*r+0.587*g+0.114*b>170;}
  static void bar(Canvas cv,Paint p,float pad,float y,float wd,float bh,float fraction,float d,int[] fill,int track){p.setShader(null);p.setColor(track);cv.drawRoundRect(new RectF(pad*d,y*d,(wd-pad)*d,(y+bh)*d),bh*d/2,bh*d/2,p);float fw=Math.max(bh,(wd-2*pad)*Math.max(0,Math.min(1,fraction)));float x0=pad*d,x1=(pad+fw)*d;if(fill[0]!=fill[1])p.setShader(new LinearGradient(x0,0f,x1,0f,fill[0],fill[1],Shader.TileMode.CLAMP));else p.setColor(fill[0]);cv.drawRoundRect(new RectF(x0,y*d,x1,(y+bh)*d),bh*d/2,bh*d/2,p);p.setShader(null);}
  public static Bitmap render(Context c,int wd,int ht){return renderKind(c,"Hero",wd,ht,0);}
@@ -89,6 +118,7 @@ if(wbm!=null){
  Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);
  bp.setShader(new android.graphics.BitmapShader(scaled,android.graphics.Shader.TileMode.CLAMP,android.graphics.Shader.TileMode.CLAMP));
  cv.drawRoundRect(new RectF(0,0,wd*d,ht*d),rad,rad,bp);
+ frostOverlay(cv,wd*d,ht*d,rad,nightMode(c));
 }else{
  p.setColor(bg);cv.drawRoundRect(new RectF(0,0,wd*d,ht*d),rad,rad,p);
 }
