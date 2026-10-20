@@ -813,12 +813,12 @@ fun OneUIDrawer(
                 modifier = Modifier
                     .padding(start = 11.dp, top = statusTop + 14.dp, bottom = 40.dp)
                     .fillMaxWidth(0.78f)
-                    .wrapContentHeight()
+                    .fillMaxHeight()
                     .then(Modifier.oneUIFrosted(RoundedCornerShape(26.dp), drawerFrost, 48))
-                    .then(Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState()))
                     .padding(vertical = 18.dp)
             ) {
                 DrawerHeader()
+                Column(modifier = Modifier.weight(1f).verticalScroll(androidx.compose.foundation.rememberScrollState())) {
                 items.forEach { item ->
                     if (item.route == "settings") DottedDivider()
                     val selected = item.route == currentRoute
@@ -837,7 +837,8 @@ fun OneUIDrawer(
                         Text(item.label, color = cs.onSurface, style = MaterialTheme.typography.bodyLarge)
                     }
                 }
-                Spacer(modifier = Modifier.height(56.dp))
+                }
+                Spacer(modifier = Modifier.height(8.dp))
                 if (footer != null) {
                     Box(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
