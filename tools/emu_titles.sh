@@ -45,7 +45,7 @@ python3 - "$OUT/conv_$N.xml" <<'PY' | { read x y; [ -n "$x" ] && adb shell input
 import sys,re,xml.etree.ElementTree as ET
 best=None
 for n in ET.parse(sys.argv[1]).iter('node'):
-    if (n.get('text') or '')=='اليوم' and n.get('clickable')=='true':
+    if (n.get('text') or '')=='اليوم':
         b=list(map(int,re.findall(r'\d+',n.get('bounds'))));best=((b[0]+b[2])//2,(b[1]+b[3])//2)
 if best: print(*best)
 PY
