@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LocationSync.refresh(this)
-        val page = intent.getIntExtra("page", if (intent.getBooleanExtra("circles", false)) 3 else 0)
+        val page = intent.getIntExtra("page", 0)
         setContent { WearApp(page) }
     }
 
@@ -119,13 +119,12 @@ fun WearApp(startPage: Int) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         BoxWithConstraints(Modifier.fillMaxSize().background(Color.Black)) {
             val w = maxWidth.value
-            val pager = rememberPagerState(initialPage = startPage) { 5 }
+            val pager = rememberPagerState(initialPage = startPage) { 4 }
             HorizontalPager(pager, Modifier.fillMaxSize()) { page ->
                 when (page) {
                     0 -> MainPage(state, now, w)
                     1 -> ListPage(state, w)
                     2 -> QiblaPage(w)
-                    3 -> CirclesPage(state, now, w, pager.currentPage == 3)
                     else -> PhonePage(w)
                 }
             }
@@ -133,7 +132,7 @@ fun WearApp(startPage: Int) {
                 Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.045f).dp),
                 horizontalArrangement = Arrangement.spacedBy((w * 0.018f).dp)
             ) {
-                for (i in 0 until 5) {
+                for (i in 0 until 4) {
                     val on = i == pager.currentPage
                     Box(
                         Modifier.width(((if (on) 0.07f else 0.022f) * w).dp).height((w * 0.022f).dp)
