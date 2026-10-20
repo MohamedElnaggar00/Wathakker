@@ -236,7 +236,6 @@ fontshot() { # $1=font id $2=scale $3=name
   adb exec-out screencap -p > "$OUT/font_$3_home.png"
   tap_text "القائمة"; sleep 2
   adb exec-out screencap -p > "$OUT/drawer_$3.png"
-  adb shell input keyevent KEYCODE_BACK; sleep 1
   tap_text "الإعدادات"; sleep 2
   adb shell input swipe 360 1300 360 500 300; sleep 1
   adb exec-out screencap -p > "$OUT/font_$3.png"
