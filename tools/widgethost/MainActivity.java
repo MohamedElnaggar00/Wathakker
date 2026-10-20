@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
             setContentView(sv);
             return;
         }
+        if ("barsB".equals(mode)) sv.setBackgroundColor(0xFFC8C8C8);
         if ("frost".equals(mode)) sv.setBackground(new android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TL_BR, new int[]{0xFF1E88E5,0xFFE91E63,0xFFFFB300}));
         String[][] selected="frost".equals(mode)?new String[][]{{"Hero","330","90"},{"NextPrayer","110","90"},{"PrayerBar","250","60"},{"Clock","250","90"}}:"barsA".equals(mode)?new String[][]{{"Hero","330","90"},{"HeroLarge","330","160"},{"NextPrayer","110","90"},{"PrayerBar","250","60"},{"WideBar","330","90"},{"OneUI","330","90"}}:"barsB".equals(mode)?new String[][]{{"Iqama","330","90"},{"IqamaSmall","110","90"},{"Lock:Countdown","123","54"},{"Lock:CountdownClean","123","54"},{"Lock:Bar","123","54"},{"Lock:Next","123","54"}}:"oneui".equals(mode)?new String[][]{{"OneUI","330","90"},{"OneUI","330","180"}}:"iqama".equals(mode)?new String[][]{{"Hero","330","90"},{"Lock:CountdownClean","123","54"},{"Lock:Countdown","123","54"},{"Lock:Bar","123","54"},{"Lock:Next","123","54"},{"Clock","250","90"}}:WIDGETS;
         for (String[] w : selected) {
