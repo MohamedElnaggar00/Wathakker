@@ -150,6 +150,7 @@ adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity 
 adb shell input swipe 360 1300 360 400 300; sleep 1
 adb exec-out screencap -p > "$OUT/cfg_bg_options_caption.png"
 # --- first-launch permission flow: allow path and decline path
+adb shell appops reset com.wathakker.app
 adb shell pm clear com.wathakker.app >/dev/null
 adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
 adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
@@ -184,6 +185,7 @@ for NIGHT in no yes; do
 done
 adb shell cmd uimode night no
 # --- files dialog in isolation: location already granted -> the files step must show straight away
+adb shell appops reset com.wathakker.app
 adb shell pm clear com.wathakker.app >/dev/null
 adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
 adb shell pm grant com.wathakker.app android.permission.ACCESS_FINE_LOCATION
