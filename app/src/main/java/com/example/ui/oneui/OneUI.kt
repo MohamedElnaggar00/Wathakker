@@ -751,7 +751,7 @@ class OneUIDrawerItem(
 fun DrawerHeader() {
     Text(
         "وَذكّر",
-        color = Color(4293783021L),
+        color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier.padding(horizontal = 48.dp),
         style = MaterialTheme.typography.headlineMedium
     )
