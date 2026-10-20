@@ -27,3 +27,18 @@ for LANG in ar en; do
   done
 done
 adb logcat -d -v threadtime | grep -E 'WidgetHost|WathakkerHome|WathakkerLock|AndroidRuntime|WidgetPix' | tail -80 > "$OUT/log_summary.txt"
+# --- Android 15+ generated previews: read back what the system stored and render it
+adb shell am force-stop com.wathakker.app
+adb shell am start -n com.wathakker.app/com.example.MainActivity; sleep 25
+adb logcat -d -v threadtime | grep -E 'WidgetPreviews' > "$OUT/previews_gen_log.txt"
+adb shell am force-stop com.example.widgethost
+adb shell am start -W -n com.example.widgethost/.MainActivity --es mode previews
+sleep 8
+adb exec-out screencap -p > "$OUT/live_previews.png"
+adb logcat -d -v threadtime | grep -E 'WidgetHost' | grep -i preview > "$OUT/previews_host_log.txt"
+# best effort: the real launcher widget picker
+adb shell cmd role add-role-holder android.app.role.HOME com.android.launcher3 >/dev/null 2>&1
+adb shell input keyevent KEYCODE_HOME; sleep 3
+adb shell input swipe 540 1200 540 1200 1500; sleep 2
+adb exec-out screencap -p > "$OUT/picker_0_longpress.png"
+adb shell uiautomator dump /sdcard/u.xml >/dev/null 2>&1; adb pull /sdcard/u.xml "$OUT/picker_0.xml" >/dev/null 2>&1

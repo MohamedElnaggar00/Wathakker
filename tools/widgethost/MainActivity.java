@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -49,6 +50,30 @@ public class MainActivity extends Activity {
         col.setOrientation(LinearLayout.VERTICAL);
         sv.addView(col);
         String mode=getIntent().getStringExtra("mode");
+        if ("previews".equals(mode)) {
+            String[] cls = {"com.example.widget.HeroWidgetProvider","com.example.widget.HeroLargeWidgetProvider","com.example.widget.PrayerBarWidgetProvider","com.example.widget.NextPrayerWidgetProvider","com.example.widget.OneUIWidgetProvider","com.example.widget.ClockWidgetProvider","com.example.lockwidgets.LockWidgets$Bar","com.example.lockwidgets.LockWidgets$Countdown","com.example.lockwidgets.LockWidgets$CountdownClean","com.example.lockwidgets.LockWidgets$Next"};
+            for (String k : cls) {
+                TextView label = new TextView(this);
+                ComponentName cn = new ComponentName(PKG, k);
+                android.widget.RemoteViews rv = null; int usedCat = 0;
+                try {
+                    for (int cat : new int[]{1, 2}) {
+                        if (rv == null) { rv = awm.getWidgetPreview(cn, null, cat); usedCat = cat; }
+                    }
+                } catch (Throwable t) { Log.i("WidgetHost", "getWidgetPreview error " + k + " " + t); }
+                label.setText(k.substring(k.lastIndexOf('.') + 1) + " generatedPreview=" + (rv != null) + " cat=" + usedCat);
+                Log.i("WidgetHost", "preview " + k + " -> " + (rv != null));
+                col.addView(label);
+                if (rv != null) {
+                    try {
+                        android.view.View pv = rv.apply(getApplicationContext(), col);
+                        col.addView(pv, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    } catch (Throwable t) { Log.i("WidgetHost", "apply error " + k + " " + t); }
+                }
+            }
+            setContentView(sv);
+            return;
+        }
         String[][] selected="barsA".equals(mode)?new String[][]{{"Hero","330","90"},{"HeroLarge","330","160"},{"NextPrayer","110","90"},{"PrayerBar","250","60"},{"WideBar","330","90"},{"OneUI","330","90"}}:"barsB".equals(mode)?new String[][]{{"Iqama","330","90"},{"IqamaSmall","110","90"},{"Lock:Countdown","123","54"},{"Lock:CountdownClean","123","54"},{"Lock:Bar","123","54"},{"Lock:Next","123","54"}}:"oneui".equals(mode)?new String[][]{{"OneUI","330","90"},{"OneUI","330","180"}}:"iqama".equals(mode)?new String[][]{{"Hero","330","90"},{"Lock:CountdownClean","123","54"},{"Lock:Countdown","123","54"},{"Lock:Bar","123","54"},{"Lock:Next","123","54"},{"Clock","250","90"}}:WIDGETS;
         for (String[] w : selected) {
             String kind = w[0];
