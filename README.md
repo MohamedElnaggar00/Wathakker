@@ -5,7 +5,7 @@
   <p>مواقيت دقيقة بحسب موقعك، تنبيهات أذان وإقامة لكل صلاة، بوصلة قبلة، محوّل تاريخ هجري، ومكتبة أذكار مع إحصائيات تتابع التزامك اليومي — بواجهة عصرية مستوحاة من One UI.</p>
 
   <p>
-    <a href="https://github.com/MohamedElnaggar00/Wathakker/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathakker/actions/workflows/build-apk.yml/badge.svg" alt="حالة البناء"></a>
+    <a href="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml/badge.svg" alt="حالة البناء"></a>
     <img src="https://img.shields.io/badge/version-3.1.0-blue" alt="الإصدار 3.1.0">
     <img src="https://img.shields.io/badge/platform-Android-green?logo=android" alt="Android">
     <img src="https://img.shields.io/badge/language-Kotlin-purple?logo=kotlin" alt="Kotlin">
@@ -127,8 +127,8 @@
 ## 🔨 البناء من المصدر
 
 ```bash
-git clone https://github.com/MohamedElnaggar00/Wathakker.git
-cd Wathakker
+git clone https://github.com/MohamedElnaggar00/Wathkkir.git
+cd Wathkkir
 ./gradlew assembleDebug
 ```
 
@@ -136,7 +136,7 @@ cd Wathakker
 
 ## 📥 التحميل
 
-أحدث النسخ التجريبية والمستقرة متاحة في صفحة [الإصدارات](https://github.com/MohamedElnaggar00/Wathakker/releases).
+أحدث النسخ التجريبية والمستقرة متاحة في صفحة [الإصدارات](https://github.com/MohamedElnaggar00/Wathkkir/releases).
 
 ---
 

@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-private const val WATCH_RELEASE_URL = "https://github.com/MohamedElnaggar00/Wathakker/releases/tag/v3.3.0"
+private const val WATCH_RELEASE_URL = "https://github.com/MohamedElnaggar00/Wathkkir/releases/tag/v3.3.0"
 
 private fun w(ar: String, en: String) = if (L10n.lang == Lang.AR) ar else en
 
@@ -59,7 +59,7 @@ fun WatchSettingsScreen(onBack: () -> Unit) {
                     title = w("ملاحظة", "Note"),
                     summary = w(
                         "تطبيق وَذكِّر للساعة مستقل عن تطبيق الهاتف، ويُثبَّت على الساعة بشكل منفصل. يعمل على ساعات Wear OS، ويظهر بالوضع الداكن فقط.",
-                        "The Wathakker watch app is separate from the phone app and is installed on the watch on its own. It runs on Wear OS watches and uses the dark theme only."
+                        "The Wathkkir watch app is separate from the phone app and is installed on the watch on its own. It runs on Wear OS watches and uses the dark theme only."
                     ),
                     leading = { OneUIIconBadge(Icons.Outlined.Watch) }
                 )

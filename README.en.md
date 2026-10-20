@@ -1,11 +1,11 @@
 <div align="center">
   <img src="docs/icon.png" width="120" height="120" alt="App icon">
-  <h1>Wathakker (وذكر)</h1>
+  <h1>Wathkkir (وذكر)</h1>
   <p><b>An app that reminds you of prayer times and dhikr through your day and your night.</b></p>
   <p>Accurate prayer times for your location, per-prayer adhan and iqama alerts, a Qibla compass, a Hijri date converter, and an azkar library with statistics that track your daily commitment — in a modern One UI-inspired design.</p>
 
   <p>
-    <a href="https://github.com/MohamedElnaggar00/Wathakker/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathakker/actions/workflows/build-apk.yml/badge.svg" alt="Build status"></a>
+    <a href="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml/badge.svg" alt="Build status"></a>
     <img src="https://img.shields.io/badge/version-3.1.0-blue" alt="Version 3.1.0">
     <img src="https://img.shields.io/badge/platform-Android-green?logo=android" alt="Android">
     <img src="https://img.shields.io/badge/language-Kotlin-purple?logo=kotlin" alt="Kotlin">
@@ -32,7 +32,7 @@
 
 ## 🌙 Overview
 
-Wathakker is an open-source Android app that brings the everyday tools a Muslim needs into one place: astronomically accurate prayer times, fully customizable per-prayer alerts, morning and evening azkar with Hisn al-Muslim, a digital tasbeeh counter, and a Qibla compass — all with full right-to-left support and an interface translated into eleven languages.
+Wathkkir is an open-source Android app that brings the everyday tools a Muslim needs into one place: astronomically accurate prayer times, fully customizable per-prayer alerts, morning and evening azkar with Hisn al-Muslim, a digital tasbeeh counter, and a Qibla compass — all with full right-to-left support and an interface translated into eleven languages.
 
 ## ✨ Key features
 
@@ -128,8 +128,8 @@ Wathakker is an open-source Android app that brings the everyday tools a Muslim 
 ## 🔨 Build from source
 
 ```bash
-git clone https://github.com/MohamedElnaggar00/Wathakker.git
-cd Wathakker
+git clone https://github.com/MohamedElnaggar00/Wathkkir.git
+cd Wathkkir
 ./gradlew assembleDebug
 ```
 
@@ -137,7 +137,7 @@ The APK is produced in `app/build/outputs/apk/debug/`. Building requires JDK 17 
 
 ## 📥 Download
 
-The latest stable and preview builds are available on the [Releases](https://github.com/MohamedElnaggar00/Wathakker/releases) page.
+The latest stable and preview builds are available on the [Releases](https://github.com/MohamedElnaggar00/Wathkkir/releases) page.
 
 ---
 
