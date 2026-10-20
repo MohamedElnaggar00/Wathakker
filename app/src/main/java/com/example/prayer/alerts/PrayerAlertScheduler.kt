@@ -17,6 +17,7 @@ import java.util.Calendar
 object PrayerAlertScheduler {
     const val EXTRA_PRAYER = "prayer_index"
     const val EXTRA_KIND = "alert_kind"
+    const val EXTRA_AT = "prayer_at"
     const val KIND_ADHAN = 0
     const val KIND_IQAMA = 1
     const val KIND_DND_OFF = 2
@@ -67,7 +68,7 @@ object PrayerAlertScheduler {
         // Additional early reminder: fires IN ADDITION to the adhan-time notification.
         val leadMs = PrayerAlertStore.offsetMinutes(context, prayer) * 60000L
         if (leadMs > 0 && adhanTrigger - leadMs > now) {
-            setExact(am, adhanTrigger - leadMs, pending(context, prayer, KIND_EARLY))
+            setExact(am, adhanTrigger - leadMs, pending(context, prayer, KIND_EARLY, adhanTrigger))
         }
         val iqamaAt = adhanTrigger + IQAMA_OFFSETS[prayer] * 60000L
         if (PrayerAlertStore.iqamaReminder(context, prayer) && IQAMA_OFFSETS[prayer] > 0) {
@@ -89,10 +90,11 @@ object PrayerAlertScheduler {
         } catch (_: Exception) {}
     }
 
-    private fun pending(context: Context, prayer: Int, kind: Int): PendingIntent {
+    private fun pending(context: Context, prayer: Int, kind: Int, at: Long = 0L): PendingIntent {
         val intent = Intent(context, PrayerAlertReceiver::class.java)
             .putExtra(EXTRA_PRAYER, prayer)
             .putExtra(EXTRA_KIND, kind)
+            .putExtra(EXTRA_AT, at)
         return PendingIntent.getBroadcast(
             context, if (kind == KIND_ADHAN) 100 + prayer else if (kind == KIND_IQAMA) 200 + prayer else if (kind == KIND_DND_OFF) 300 + prayer else 400 + prayer,
             intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

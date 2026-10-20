@@ -64,7 +64,7 @@ internal val AR = mapOf(
     S.SearchCityHint to "بحث عن مدينة أو دولة...",
     S.NoSearchResults to "لم يتم العثور على نتائج للبحث",
     S.FajrPrayer to "صلاة الفجر",
-    S.FajrNow to "حان الآن موعد صلاة الفجر",
+    S.FajrNow to "حان الآن وقت أذان الفجر",
     S.Snooze to "غفوة",
     S.StopAlarm to "إيقاف المنبه",
     S.ChooseSnooze to "اختر مدة الغفوة:",
@@ -128,8 +128,8 @@ internal val AR = mapOf(
     S.AdjHijri to "تعديل التاريخ الهجري", S.AdjMinShort to "د", S.AdjDayShort to "يوم",
     S.AlertTiming to "وقت التنبيه", S.AtAdhanTime to "وقت الأذان", S.AtAdhanRow to "عند الأذان", S.AtAdhanRowSub to "الإشعار الأساسي عند حلول وقت الصلاة", S.BeforeAdhanRow to "تنبيه قبل الأذان", S.BeforeAdhanHelper to "تنبيه إضافي — إشعار وقت الأذان يصل دائمًا", S.MinBeforeFmt to "قبل الأذان بـ %1\$d دقيقة",
     S.AdhanReminder to "تنبيه الأذان", S.IqamaReminder to "تنبيه الإقامة", S.IqamaReminderSub to "إشعار عند وقت الإقامة",
-    S.PrayerNowFmt to "حان الآن وقت %1\$s", S.PrayerApproachingFmt to "تقترب %1\$s (بعد %2\$d دقيقة)",
-    S.IqamaNowFmt to "إقامة %1\$s الآن", S.SharedAlertSettings to "إعدادات مشتركة لكل التنبيهات",
+    S.PrayerNowFmt to "حان الآن وقت أذان %1\$s", S.PrayerApproachingFmt to "اقترب أذان %1\$s", S.ShuruqNow to "حان الآن وقت الشروق", S.ShuruqApproaching to "اقترب وقت الشروق",
+    S.IqamaNowFmt to "حانت الآن إقامة %1\$s", S.SharedAlertSettings to "إعدادات مشتركة لكل التنبيهات",
 
 )
 
@@ -190,7 +190,7 @@ internal val EN = mapOf(
     S.SearchCityHint to "Search for a city or country...",
     S.NoSearchResults to "No results found",
     S.FajrPrayer to "Fajr prayer",
-    S.FajrNow to "It is now time for Fajr prayer",
+    S.FajrNow to "It is now time for Fajr adhan",
     S.Snooze to "Snooze",
     S.StopAlarm to "Stop alarm",
     S.ChooseSnooze to "Choose snooze duration:",
@@ -254,8 +254,8 @@ internal val EN = mapOf(
     S.AdjHijri to "Hijri date adjustment", S.AdjMinShort to "min", S.AdjDayShort to "days",
     S.AlertTiming to "Alert timing", S.AtAdhanTime to "At adhan", S.AtAdhanRow to "At adhan time", S.AtAdhanRowSub to "The base notification when the prayer time arrives", S.BeforeAdhanRow to "Early reminder", S.BeforeAdhanHelper to "An extra reminder - the adhan-time notification still arrives", S.MinBeforeFmt to "%1\$d min before adhan",
     S.AdhanReminder to "Adhan reminder", S.IqamaReminder to "Iqama reminder", S.IqamaReminderSub to "Notification at iqama time",
-    S.PrayerNowFmt to "It's now time for %1\$s", S.PrayerApproachingFmt to "%1\$s in %2\$d min",
-    S.IqamaNowFmt to "%1\$s iqama now", S.SharedAlertSettings to "Shared settings for all alerts",
+    S.PrayerNowFmt to "It's now time for %1\$s adhan", S.PrayerApproachingFmt to "%1\$s adhan is approaching", S.ShuruqNow to "It's now sunrise", S.ShuruqApproaching to "Sunrise is approaching",
+    S.IqamaNowFmt to "It's now time for %1\$s iqama", S.SharedAlertSettings to "Shared settings for all alerts",
 
 )
 

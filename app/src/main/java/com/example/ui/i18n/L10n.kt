@@ -44,7 +44,7 @@ enum class S {
     LocCalcTitle, LocCalcSubtitle, QiblaTitle, QiblaNorthFmt, QiblaSetLocation, QiblaNoSensor, QiblaCalibrate, QiblaAligned, QiblaCityFmt, DirN, DirNE, DirE, DirSE, DirS, DirSW, DirW, DirNW, CalendarTab, CalEvents, CalNoEvents, CalMonthEvents, CalReminderOn, CalReminderOff, WdSun, WdMon, WdTue, WdWed, WdThu, WdFri, WdSat, AutoDnd, AutoDndSub, OptTimesTitle, OptTimesSub, Imsak, Duha, Midnight, Qiyam, LocSection, CalcSection, AsrJuristic, AsrShafii, AsrHanafi,
     HighLatRule, HighLatNone, HighLatMiddle, HighLatSeventh, HighLatAngle,
     AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort, AlertTiming, AtAdhanTime, MinBeforeFmt,
-    AdhanReminder, IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, IqamaNowFmt, SharedAlertSettings,
+    AdhanReminder, IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, ShuruqNow, ShuruqApproaching, IqamaNowFmt, SharedAlertSettings,
     HijriConvTitle, HijriConvSub, GregToHijri, HijriToGreg, DayLabel, MonthLabel, YearLabel, Back, AtAdhanRow, AtAdhanRowSub, BeforeAdhanRow, BeforeAdhanHelper
 }
 

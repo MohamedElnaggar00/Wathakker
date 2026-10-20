@@ -59,22 +59,33 @@ class PrayerAlertReceiver : BroadcastReceiver() {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val shuruq = prayer == 1
+        val at = intent.getLongExtra(PrayerAlertScheduler.EXTRA_AT, 0L)
+        val now = System.currentTimeMillis()
         val text = if (isIqama) {
             L10n.t(S.IqamaNowFmt).format(prayerName)
         } else if (isEarly) {
-            L10n.t(S.PrayerApproachingFmt).format(prayerName, PrayerAlertStore.offsetMinutes(context, prayer))
+            if (shuruq) L10n.t(S.ShuruqApproaching) else L10n.t(S.PrayerApproachingFmt).format(prayerName)
         } else {
-            L10n.t(S.PrayerNowFmt).format(prayerName)
+            if (shuruq) L10n.t(S.ShuruqNow) else L10n.t(S.PrayerNowFmt).format(prayerName)
         }
-        val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
+        if (isEarly && at <= now) return // too late to count down to anything; the adhan notification covers it
+        val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.ic_stat_prayer)
             .setContentTitle(prayerName)
             .setContentText(text)
             .setPriority(if (isIqama) NotificationCompat.PRIORITY_DEFAULT else NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setContentIntent(openIntent)
             .setAutoCancel(true)
-            .build()
+        if (isEarly) {
+            // Native live countdown to the prayer; the notification removes itself at that moment
+            // and the adhan notification (or nothing, if that bell is off) takes over.
+            builder.setShowWhen(true).setWhen(at).setUsesChronometer(true).setChronometerCountDown(true)
+                .setTimeoutAfter(at - now)
+        }
+        val notification = builder.build()
+        if (kind == PrayerAlertScheduler.KIND_ADHAN) nm.cancel(400 + prayer + PrayerAlertScheduler.KIND_EARLY * 10)
         nm.notify(400 + prayer + kind * 10, notification)
 
         if (kind == PrayerAlertScheduler.KIND_ADHAN && PrayerAlertStore.autoDnd(context, prayer)) {

@@ -97,3 +97,30 @@ for NIGHT in no yes; do
     adb exec-out screencap -p > "$OUT/frost_${NIGHT}_${BG}.png"
   done
 done
+# --- prayer notifications: early (native live countdown), adhan, iqama; icons
+adb shell cmd uimode night yes
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"language\\\">ar</string></map>\" > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/app_prefs.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
+adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
+adb shell am force-stop com.wathakker.app
+adb shell input keyevent KEYCODE_HOME
+adb shell cmd notification allow_listener x >/dev/null 2>&1
+AT=$(( $(date +%s) * 1000 + 100000 ))
+adb shell am broadcast -n com.wathakker.app/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 0 --ei alert_kind 3 --el prayer_at $AT > "$OUT/notif_early_broadcast.txt" 2>&1
+sleep 4
+adb exec-out screencap -p > "$OUT/notif_1_early_heads_up.png"
+adb shell cmd statusbar expand-notifications; sleep 2
+adb exec-out screencap -p > "$OUT/notif_2_early_shade_t4.png"
+sleep 30
+adb exec-out screencap -p > "$OUT/notif_3_early_shade_t36.png"
+adb shell dumpsys notification --noredact | grep -E "pkg=com.wathakker.app|usesChronometer|chronometerCountdown|android.title|android.text|tickerText|when=|timeout" > "$OUT/notif_early_dump.txt"
+sleep 75
+adb shell dumpsys notification --noredact | grep -E "pkg=com.wathakker.app" > "$OUT/notif_after_deadline_dump.txt"
+adb exec-out screencap -p > "$OUT/notif_4_after_deadline.png"
+adb shell cmd statusbar collapse
+adb shell am broadcast -n com.wathakker.app/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 0 --ei alert_kind 0 > "$OUT/notif_adhan_broadcast.txt" 2>&1
+sleep 3
+adb shell am broadcast -n com.wathakker.app/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 2 --ei alert_kind 1 > /dev/null 2>&1
+sleep 2
+adb shell cmd statusbar expand-notifications; sleep 2
+adb exec-out screencap -p > "$OUT/notif_5_adhan_and_iqama.png"
+adb shell dumpsys notification --noredact | grep -E "android.title|android.text|icon=" | head -20 > "$OUT/notif_adhan_dump.txt"
