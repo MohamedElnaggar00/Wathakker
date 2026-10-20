@@ -30,7 +30,7 @@ public class LockWidgets extends AppWidgetProvider {
     private static boolean rtl(Context c){String x=lang(c);return x.startsWith("ar")||x.startsWith("ur");}
     private static boolean arabic(Context c){return lang(c).startsWith("ar");}
     private static SharedPreferences.OnSharedPreferenceChangeListener languageListener;
-    private static void watchLanguage(Context c){if(languageListener==null){Context app=c.getApplicationContext();languageListener=(prefs,key)->{if("language".equals(key))updateAll(app);};app.getSharedPreferences("app_prefs",0).registerOnSharedPreferenceChangeListener(languageListener);}}
+    private static void watchLanguage(Context c){if(languageListener==null){Context app=c.getApplicationContext();languageListener=(prefs,key)->{if("language".equals(key))updateAll(app);else if("digits_style".equals(key)){updateAll(app);HomeWidgets.updateAll(app);}};app.getSharedPreferences("app_prefs",0).registerOnSharedPreferenceChangeListener(languageListener);}}
     private static Locale locale(Context c){return new Locale(lang(c));}
     private static PendingIntent pulse(Context c){return PendingIntent.getBroadcast(c,700001,new Intent(c,LockWidgets.class).setAction(action(c,"TICK")),PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_IMMUTABLE);}
     private static boolean active(Context c){AppWidgetManager m=AppWidgetManager.getInstance(c);for(Class<?> t:TYPES)if(m.getAppWidgetIds(new ComponentName(c,t)).length>0)return true;return false;}
@@ -61,8 +61,8 @@ public class LockWidgets extends AppWidgetProvider {
         }
         super.onReceive(c,in);
     }
-    public static void updateAll(Context c){watchLanguage(c);AppWidgetManager m=AppWidgetManager.getInstance(c);for(Class<?> t:TYPES)for(int id:m.getAppWidgetIds(new ComponentName(c,t)))update(c,m,id,t);}
-    private static void update(Context c,AppWidgetManager m,int id,Class<?> type){
+    public static void updateAll(Context c){com.example.utils.Digits.refresh(c);watchLanguage(c);AppWidgetManager m=AppWidgetManager.getInstance(c);for(Class<?> t:TYPES)for(int id:m.getAppWidgetIds(new ComponentName(c,t)))update(c,m,id,t);}
+    private static void update(Context c,AppWidgetManager m,int id,Class<?> type){com.example.utils.Digits.refresh(c);
         RemoteViews v=new RemoteViews(c.getPackageName(),res(c,"layout","lock_widget_image"));
         Bundle opts=m.getAppWidgetOptions(id);int min=opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,123),max=opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,min);boolean tiny=min>0&&max<=80&&(type==Hijri.class||type==Gregorian.class||type==Next.class);HomeWidgets.ovBegin();Bitmap bmp=renderSize(c,type,id,tiny);
         v.setImageViewBitmap(res(c,"id","lock_widget_art"),bmp);HomeWidgets.ovApply(c,v,bmp.getWidth(),bmp.getHeight());
@@ -89,12 +89,13 @@ public class LockWidgets extends AppWidgetProvider {
     private static TextPaint paint(Typeface font,float size,float d,int color){TextPaint p=new TextPaint(Paint.ANTI_ALIAS_FLAG);p.setTypeface(font);p.setTextSize(size*d);p.setColor(color);int shadow=(Color.red(color)+Color.green(color)+Color.blue(color)>384)?0x66000000:0x66FFFFFF;p.setShadowLayer(3*d,0,d,shadow);return p;}
     private static void lines(Canvas canvas,int w,int h,float d,String[] text,float[] sizes,Typeface[] fonts,int INK,int SOFT){
         StaticLayout[] ls=new StaticLayout[text.length];float total=0;
-        for(int i=0;i<text.length;i++){TextPaint lp=paint(fonts[i],sizes[i],d,i==0?INK:SOFT);float measured=lp.measureText(text[i]);if(measured>w-4*d)lp.setTextSize(lp.getTextSize()*(w-4*d)/measured);ls[i]=StaticLayout.Builder.obtain(text[i],0,text[i].length(),lp,w).setAlignment(Layout.Alignment.ALIGN_CENTER).setIncludePad(false).build();total+=ls[i].getHeight();}
+        String[] shown=new String[text.length];for(int i=0;i<text.length;i++)shown[i]=com.example.utils.Digits.forWidget(text[i]);
+        for(int i=0;i<text.length;i++){TextPaint lp=paint(fonts[i],sizes[i],d,i==0?INK:SOFT);float measured=lp.measureText(shown[i]);if(measured>w-4*d)lp.setTextSize(lp.getTextSize()*(w-4*d)/measured);ls[i]=StaticLayout.Builder.obtain(shown[i],0,shown[i].length(),lp,w).setAlignment(Layout.Alignment.ALIGN_CENTER).setIncludePad(false).build();total+=ls[i].getHeight();}
         total+=(text.length-1)*2*d;float y=Math.max(0,(h-total)/2);
         for(int li=0;li<ls.length;li++){StaticLayout l=ls[li];if(!HomeWidgets.capture(text[li],w/2f,y+l.getHeight()/2f,w-4*d,sizes[li]*d,li==0?INK:SOFT)){canvas.save();canvas.translate(0,y);l.draw(canvas);canvas.restore();}y+=l.getHeight()+2*d;}
     }
     public static Bitmap render(Context c,Class<?> type,int id){return renderSize(c,type,id,false);}
-    private static void centered(Canvas cv,String text,float cx,float cy,TextPaint p,float max){if(HomeWidgets.capture(text,cx,cy,max,p.getTextSize(),p.getColor()))return;float width=p.measureText(text);if(width>max)p.setTextSize(p.getTextSize()*max/width);StaticLayout line=StaticLayout.Builder.obtain(text,0,text.length(),p,(int)max).setAlignment(Layout.Alignment.ALIGN_CENTER).setTextDirection(TextDirectionHeuristics.FIRSTSTRONG_LTR).setIncludePad(false).setMaxLines(1).setEllipsize(TextUtils.TruncateAt.END).build();cv.save();cv.translate(cx-max/2,cy-line.getHeight()/2f);line.draw(cv);cv.restore();}
+    private static void centered(Canvas cv,String text,float cx,float cy,TextPaint p,float max){if(HomeWidgets.capture(text,cx,cy,max,p.getTextSize(),p.getColor()))return;text=com.example.utils.Digits.forWidget(text);float width=p.measureText(text);if(width>max)p.setTextSize(p.getTextSize()*max/width);StaticLayout line=StaticLayout.Builder.obtain(text,0,text.length(),p,(int)max).setAlignment(Layout.Alignment.ALIGN_CENTER).setTextDirection(TextDirectionHeuristics.FIRSTSTRONG_LTR).setIncludePad(false).setMaxLines(1).setEllipsize(TextUtils.TruncateAt.END).build();cv.save();cv.translate(cx-max/2,cy-line.getHeight()/2f);line.draw(cv);cv.restore();}
     public static String errText(String code){if(code.startsWith("ar"))return "تعذر حساب الصلاة";if(code.startsWith("fr"))return "Heure de prière indisponible";if(code.startsWith("de"))return "Gebetszeit nicht verfügbar";if(code.startsWith("es"))return "Hora de oración no disponible";if(code.startsWith("it"))return "Ora della preghiera non disponibile";if(code.startsWith("tr"))return "Namaz vakti hesaplanamadı";if(code.startsWith("ur"))return "نماز کا وقت دستیاب نہیں";if(code.startsWith("id"))return "Waktu salat tidak tersedia";if(code.startsWith("ru"))return "Время молитвы недоступно";if(code.startsWith("pt"))return "Hora de oração indisponível";return "Prayer time unavailable";}
     public static long[] iqamaWindow(long[] today,long[] yesterday,long now){return PrayerPhase.window(today,yesterday,now,Calendar.getInstance().get(Calendar.DAY_OF_WEEK)==Calendar.FRIDAY);}
     public static Bitmap renderSize(Context c,Class<?> type,int id,boolean tiny){

@@ -7,7 +7,7 @@ import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import com.example.ui.oneui.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue

@@ -12,6 +12,8 @@ import java.io.FileOutputStream
 class WidgetRenderCheck : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        com.example.utils.Digits.refresh(this)
+        com.example.fajr.data.FajrPreferences(this).apply { latitude = 30.0444; longitude = 31.2357 }
         val sp = getSharedPreferences("fajr_prefs", 0)
         sp.edit()
             .putString("widget_bg_color_991", "white")
@@ -83,6 +85,15 @@ class WidgetRenderCheck : Activity() {
                 } catch (e: Exception) {
                     File(out, "widget_${tag}_${kind}.err").writeText(e.toString())
                 }
+            }
+        }
+        // 1x1 next-prayer cell at realistic sizes (spacing check)
+        for ((id, tag) in listOf(991 to "light", 992 to "dark")) {
+            for ((w, h) in listOf(70 to 70, 70 to 100, 74 to 90)) {
+                try {
+                    val bmp = HomeWidgets.renderKind(this, "NextPrayer", w, h, id)
+                    FileOutputStream(File(out, "widget_${tag}_NextPrayer_${w}x${h}.png")).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+                } catch (e: Exception) { File(out, "widget_${tag}_NextPrayer_${w}x${h}.err").writeText(e.toString()) }
             }
         }
         File(out, "widget_prefs.txt").writeText(sp.all.toSortedMap().toString())
