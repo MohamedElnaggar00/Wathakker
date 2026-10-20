@@ -31,7 +31,6 @@ say "iqama broadcast"
 adb shell am broadcast -n $P/com.example.prayer.alerts.PrayerAlertReceiver --ei prayer_index 3 --ei alert_kind 1 2>&1 | tee -a "$L"
 sleep 4
 dump notif_t0_iqama
-adb shell am force-stop $P
 sleep 260
 dump notif_t4_5
 sleep 70
