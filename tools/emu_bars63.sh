@@ -172,3 +172,13 @@ tap_text "ليس الآن"; sleep 2
 adb shell am force-stop com.wathakker.app; adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 5
 adb exec-out screencap -p > "$OUT/perm_d2_relaunch_no_dialog.png"
 adb shell dumpsys package com.wathakker.app | grep -E "ACCESS_FINE_LOCATION|MANAGE_EXTERNAL" > "$OUT/perm_final_state.txt"
+# --- bell colour: enabled bell must stay blue on the highlighted (next) prayer row, light and dark
+adb shell am force-stop com.wathakker.app
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><boolean name=\\\"migrated_v1\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_1\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_2\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_3\\\" value=\\\"true\\\" /><boolean name=\\\"enabled_4\\\" value=\\\"true\\\" /></map>\" > /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
+for NIGHT in no yes; do
+  adb shell cmd uimode night $NIGHT; sleep 2
+  adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
+  adb exec-out screencap -p > "$OUT/bell_${NIGHT}.png"
+  adb shell am force-stop com.wathakker.app
+done
+adb shell cmd uimode night no

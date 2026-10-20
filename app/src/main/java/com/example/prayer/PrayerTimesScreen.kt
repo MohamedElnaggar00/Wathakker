@@ -492,7 +492,7 @@ fun PrayerTimesContent(
                                     if (bellOn) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsOff,
                                     contentDescription = "bell_" + bellIndex,
                                     modifier = Modifier.size(19.dp),
-                                    tint = if (row.isNext) nextText.copy(alpha = if (bellOn) 1f else 0.75f) else if (bellOn) sc.accent else sc.textSecondary.copy(alpha = 0.45f)
+                                    tint = if (bellOn) sc.accent else if (row.isNext) nextText.copy(alpha = 0.75f) else sc.textSecondary.copy(alpha = 0.45f)
                                 )
                             }
                         }
