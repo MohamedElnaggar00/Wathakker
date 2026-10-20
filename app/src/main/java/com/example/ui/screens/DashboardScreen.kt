@@ -119,7 +119,7 @@ fun HomeContent(
     } else {
         L10n.remindersCount(activeCount)
     }
-    OneUIScreen(title = "وَذكِّر", subtitle = subtitle, onMenu = onMenu) {
+    OneUIScreen(title = "وذكّر", subtitle = subtitle, onMenu = onMenu) {
         item(key = "summary") {
             OneUICard {
                 Row(

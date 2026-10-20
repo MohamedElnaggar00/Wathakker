@@ -305,7 +305,7 @@ fun SettingsContent(
                 OneUICard {
                     OneUIRow(
                         title = if (L10n.lang == com.example.ui.i18n.Lang.AR) "إعدادات الساعة الذكية" else "Smartwatch settings",
-                        summary = if (L10n.lang == com.example.ui.i18n.Lang.AR) "الإعدادات الخاصة بتطبيق وَذكِّر للساعة" else "Settings for the Wathakker watch app",
+                        summary = if (L10n.lang == com.example.ui.i18n.Lang.AR) "الإعدادات الخاصة بتطبيق وذكّر للساعة" else "Settings for the Wathkkir watch app",
                         leading = { OneUIIconBadge(androidx.compose.material.icons.Icons.Outlined.Watch) },
                         trailing = { ChevronIcon() },
                         onClick = onWatch

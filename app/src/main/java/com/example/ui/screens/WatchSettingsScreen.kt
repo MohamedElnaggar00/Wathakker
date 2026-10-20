@@ -58,7 +58,7 @@ fun WatchSettingsScreen(onBack: () -> Unit) {
                 OneUIRow(
                     title = w("ملاحظة", "Note"),
                     summary = w(
-                        "تطبيق وَذكِّر للساعة مستقل عن تطبيق الهاتف، ويُثبَّت على الساعة بشكل منفصل. يعمل على ساعات Wear OS، ويظهر بالوضع الداكن فقط.",
+                        "تطبيق وذكّر للساعة مستقل عن تطبيق الهاتف، ويُثبَّت على الساعة بشكل منفصل. يعمل على ساعات Wear OS، ويظهر بالوضع الداكن فقط.",
                         "The Wathkkir watch app is separate from the phone app and is installed on the watch on its own. It runs on Wear OS watches and uses the dark theme only."
                     ),
                     leading = { OneUIIconBadge(Icons.Outlined.Watch) }

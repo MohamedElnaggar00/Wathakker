@@ -45,7 +45,7 @@ fun AboutScreen(onBack: () -> Unit) {
             ) {
                 AppIconBadge()
                 Spacer(modifier = Modifier.height(12.dp))
-                Text("وَذكِّر", color = cs.onBackground, style = MaterialTheme.typography.headlineMedium)
+                Text("وذكّر", color = cs.onBackground, style = MaterialTheme.typography.headlineMedium)
                 Text(
                     L10n.t(S.Tagline),
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
