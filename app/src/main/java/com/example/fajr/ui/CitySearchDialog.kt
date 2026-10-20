@@ -53,17 +53,16 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
         Surface(
             modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f),
             shape = RoundedCornerShape(28.dp),
-            color = cs.surface,
-            shadowElevation = 6.dp
+            color = com.example.ui.oneui.oneUiMenuColor(),
+            shadowElevation = 0.dp
         ) {
             Column(modifier = Modifier.fillMaxSize().padding(20.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(L10n.t(S.PickCountryCity), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                    IconButton(onClick = onDismiss) { Icon(Icons.Outlined.Close, "Close") }
                 }
                 Spacer(Modifier.height(12.dp))
                 OutlinedTextField(
@@ -97,6 +96,12 @@ fun CitySearchDialog(onDismiss: () -> Unit, onCitySelected: (CityItem) -> Unit) 
                             }
                         }
                     }
+                }
+                Box(
+                    modifier = Modifier.fillMaxWidth().height(56.dp).clickable(onClick = onDismiss),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(L10n.t(S.Back), color = cs.onSurface, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
