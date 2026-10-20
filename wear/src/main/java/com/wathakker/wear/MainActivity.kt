@@ -268,11 +268,11 @@ fun QiblaPage(w: Float) {
                 val c = center
                 drawCircle(Color(0xFF2B2B2E), radius = size.minDimension / 2 - 2f, style = Stroke(width = size.minDimension * 0.008f))
                 rotateScope(needle, c) {
-                    val len = size.minDimension * 0.33f; val half = size.minDimension * 0.055f
+                    val len = size.minDimension * 0.46f; val half = size.minDimension * 0.055f
                     val tip = Path().apply { moveTo(c.x, c.y - len); lineTo(c.x + half, c.y); lineTo(c.x - half, c.y); close() }
                     drawPath(tip, Gold)
                     // Kaaba above the arrow tip: black cube with a gold band and door
-                    val k = size.minDimension * 0.085f; val ky = c.y - len - k * 1.05f
+                    val k = size.minDimension * 0.034f; val ky = c.y - len - k * 1.15f
                     val cube = Path().apply { moveTo(c.x - k, ky - k * 0.9f); lineTo(c.x + k, ky - k * 0.9f); lineTo(c.x + k, ky + k * 0.9f); lineTo(c.x - k, ky + k * 0.9f); close() }
                     drawPath(cube, Color(0xFF141414)); drawPath(cube, Gold, style = Stroke(width = k * 0.14f))
                     drawRect(Gold, Offset(c.x - k, ky - k * 0.45f), Size(k * 2f, k * 0.32f))
