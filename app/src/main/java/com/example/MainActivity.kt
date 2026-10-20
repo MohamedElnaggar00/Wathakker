@@ -9,6 +9,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
@@ -42,8 +45,9 @@ class MainActivity : ComponentActivity() {
             val appFont by mainViewModel.appFont.collectAsState()
             val dark = ThemeSettings.isDark()
             val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
+            var onb by remember { mutableStateOf(com.example.ui.Onboarding.isPending(this@MainActivity)) }
             LaunchedEffect(Unit) {
-                if (Build.VERSION.SDK_INT >= 33) {
+                if (Build.VERSION.SDK_INT >= 33 && !onb) {
                     try {
                         launcher.launch("android.permission.POST_NOTIFICATIONS")
                     } catch (e: Exception) {
@@ -53,7 +57,7 @@ class MainActivity : ComponentActivity() {
             }
             MyApplicationTheme(fontChoice = appFont, darkTheme = dark, dynamicColor = false) {
                 MainScreen(mainViewModel)
-                com.example.ui.PermissionFlow.Host()
+                if (onb) com.example.ui.Onboarding.Host { onb = false } else com.example.ui.PermissionFlow.Host()
             }
         }
     }
