@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
             }
             MyApplicationTheme(fontChoice = appFont, darkTheme = dark, dynamicColor = false) {
                 MainScreen(mainViewModel)
+                com.example.ui.PermissionFlow.Host()
             }
         }
     }

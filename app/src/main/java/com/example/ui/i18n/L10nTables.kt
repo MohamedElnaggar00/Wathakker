@@ -128,7 +128,7 @@ internal val AR = mapOf(
     S.AdjHijri to "تعديل التاريخ الهجري", S.AdjMinShort to "د", S.AdjDayShort to "يوم",
     S.AlertTiming to "وقت التنبيه", S.AtAdhanTime to "وقت الأذان", S.AtAdhanRow to "عند الأذان", S.AtAdhanRowSub to "الإشعار الأساسي عند حلول وقت الصلاة", S.BeforeAdhanRow to "تنبيه قبل الأذان", S.BeforeAdhanHelper to "تنبيه إضافي — إشعار وقت الأذان يصل دائمًا", S.MinBeforeFmt to "قبل الأذان بـ %1\$d دقيقة",
     S.AdhanReminder to "تنبيه الأذان", S.IqamaReminder to "تنبيه الإقامة", S.IqamaReminderSub to "إشعار عند وقت الإقامة",
-    S.PrayerNowFmt to "حان الآن وقت أذان %1\$s", S.PrayerApproachingFmt to "اقترب أذان %1\$s", S.ShuruqNow to "حان الآن وقت الشروق", S.ShuruqApproaching to "اقترب وقت الشروق",
+    S.PrayerNowFmt to "حان الآن وقت أذان %1\$s", S.PrayerApproachingFmt to "اقترب أذان %1\$s", S.ShuruqNow to "حان الآن وقت الشروق", S.ShuruqApproaching to "اقترب وقت الشروق", S.BgFrosted to "زجاج ضبابي", S.NeedsFilesPerm to "تتطلب صلاحية للملفات", S.PermLocTitle to "الإذن بالوصول إلى الموقع", S.PermLocBody to "يحتاج التطبيق إلى موقعك الجغرافي لحساب مواقيت الصلاة بدقة بحسب مدينتك. يمكنك رفض الإذن وإدخال مدينتك يدويًا في أي وقت من شاشة الموقع والحساب.", S.PermFilesTitle to "الإذن بالوصول إلى الملفات", S.PermFilesBody to "يتيح هذا الإذن للتطبيق قراءة خلفية هاتفك لإظهار تأثير الضبابية الحقيقي في خلفية الويدجت. الإذن اختياري، وإن رفضته يظل خيار Frosted متاحًا دون الحاجة إليه.", S.PermAllow to "السماح", S.PermNotNow to "ليس الآن", S.PermOpenSettings to "فتح الإعدادات",
     S.IqamaNowFmt to "حانت الآن إقامة %1\$s", S.SharedAlertSettings to "إعدادات مشتركة لكل التنبيهات",
 
 )
@@ -254,7 +254,7 @@ internal val EN = mapOf(
     S.AdjHijri to "Hijri date adjustment", S.AdjMinShort to "min", S.AdjDayShort to "days",
     S.AlertTiming to "Alert timing", S.AtAdhanTime to "At adhan", S.AtAdhanRow to "At adhan time", S.AtAdhanRowSub to "The base notification when the prayer time arrives", S.BeforeAdhanRow to "Early reminder", S.BeforeAdhanHelper to "An extra reminder - the adhan-time notification still arrives", S.MinBeforeFmt to "%1\$d min before adhan",
     S.AdhanReminder to "Adhan reminder", S.IqamaReminder to "Iqama reminder", S.IqamaReminderSub to "Notification at iqama time",
-    S.PrayerNowFmt to "It's now time for %1\$s adhan", S.PrayerApproachingFmt to "%1\$s adhan is approaching", S.ShuruqNow to "It's now sunrise", S.ShuruqApproaching to "Sunrise is approaching",
+    S.PrayerNowFmt to "It's now time for %1\$s adhan", S.PrayerApproachingFmt to "%1\$s adhan is approaching", S.ShuruqNow to "It's now sunrise", S.ShuruqApproaching to "Sunrise is approaching", S.BgFrosted to "Frosted", S.NeedsFilesPerm to "Requires files permission", S.PermLocTitle to "Location permission", S.PermLocBody to "The app uses your location to calculate accurate prayer times for your city. You can decline and enter your city manually at any time.", S.PermFilesTitle to "Files access", S.PermFilesBody to "This lets the app read your wallpaper to show a true blur behind the widget. It is optional; the Frosted option works without it.", S.PermAllow to "Allow", S.PermNotNow to "Not now", S.PermOpenSettings to "Open settings",
     S.IqamaNowFmt to "It's now time for %1\$s iqama", S.SharedAlertSettings to "Shared settings for all alerts",
 
 )

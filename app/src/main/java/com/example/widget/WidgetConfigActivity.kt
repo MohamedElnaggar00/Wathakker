@@ -60,11 +60,12 @@ private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
     "white" to (L10n.t(S.ColorWhite) to Color(0xFFF6F6F6)),
     // v3.2.0 (his additions 1 & 2): frosted glass + blurred-wallpaper backgrounds.
     "glass" to (L10n.t(S.BgGlass) to Color(0xB3F2F2F7)),
+    "frosted" to (L10n.t(S.BgFrosted) to Color(0xFF9AA7C7)),
     "wallblur" to (L10n.t(S.BgWallBlur) to Color(0xFF7E7EAA))
 )
 
 @Composable
-fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>, current: String, onPick: (String) -> Unit, splitAutoSwatch: Boolean = false) {
+fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>, current: String, onPick: (String) -> Unit, splitAutoSwatch: Boolean = false, captions: Map<String, String> = emptyMap()) {
     val cs = MaterialTheme.colorScheme
     Text(title, color = cs.onSurfaceVariant, fontSize = 13.sp)
     Spacer(Modifier.height(8.dp))
@@ -108,12 +109,13 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
                 fontSize = 15.sp,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
             )
+            captions[key]?.let { Text(it, color = cs.onSurfaceVariant, fontSize = 11.sp) }
         }
     }
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -> Unit) {
+fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
     val cs = MaterialTheme.colorScheme
     // Taps only select; nothing is saved or closed until Apply (One UI style).
     var barSel by remember { mutableStateOf(current) }
@@ -138,7 +140,7 @@ fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -
                 Spacer(Modifier.height(12.dp))
                 ColorSection(L10n.t(S.BarColor), options, barSel, { barSel = it }, splitAutoSwatch = true)
                 Spacer(Modifier.height(16.dp))
-                ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it })
+                ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it; if (it == "wallblur") onNeedFilesPermission() }, captions = mapOf("wallblur" to L10n.t(S.NeedsFilesPerm)))
             }
             // One UI "Scan phone" style: one centered filled blue pill. Back discards.
             Box(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 24.dp), contentAlignment = Alignment.Center) {
@@ -192,6 +194,7 @@ class WidgetConfigActivity : ComponentActivity() {
                 ConfigScreen(
                     current = curBar,
                     currentBg = curBg,
+                    onNeedFilesPermission = { com.example.ui.PermissionFlow.requestFilesIfNeeded(this@WidgetConfigActivity) },
                     onApply = { bar, bg ->
                         sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)

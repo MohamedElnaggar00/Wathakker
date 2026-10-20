@@ -90,7 +90,7 @@ adb logcat -d -v threadtime | grep -E 'WidgetConfig' > "$OUT/back_log.txt"
 adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost >/dev/null 2>&1
 for NIGHT in no yes; do
   adb shell cmd uimode night $NIGHT; sleep 2
-  for BG in auto glass wallblur; do
+  for BG in auto glass frosted wallblur; do
     adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"widget_bg_color\\\">$BG</string></map>\" > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
     adb shell am force-stop com.wathakker.app; adb shell am force-stop com.example.widgethost
     adb shell am start -W -n com.example.widgethost/.MainActivity --es mode frost; sleep 12
@@ -124,3 +124,42 @@ sleep 2
 adb shell cmd statusbar expand-notifications; sleep 2
 adb exec-out screencap -p > "$OUT/notif_5_adhan_and_iqama.png"
 adb shell dumpsys notification --noredact | grep -E "android.title|android.text|icon=" | head -20 > "$OUT/notif_adhan_dump.txt"
+# --- real wallpaper blur: after granting All files access the "wallblur" option must use the wallpaper image
+adb shell cmd uimode night no; sleep 2
+adb shell cmd role add-role-holder android.app.role.HOME com.example.widgethost >/dev/null 2>&1
+adb logcat -c
+adb shell appops set --uid com.wathakker.app MANAGE_EXTERNAL_STORAGE allow
+adb shell appops get com.wathakker.app MANAGE_EXTERNAL_STORAGE > "$OUT/files_perm_state.txt" 2>&1
+adb shell "printf '%s' \"<?xml version='1.0' encoding='utf-8' standalone='yes' ?><map><string name=\\\"widget_bg_color\\\">wallblur</string></map>\" > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml; chown $UID_:$UID_ /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml; restorecon -R /data/data/com.wathakker.app/shared_prefs"
+adb shell am force-stop com.wathakker.app; adb shell am force-stop com.example.widgethost
+adb shell am start -W -n com.example.widgethost/.MainActivity --es mode frost; sleep 12
+adb exec-out screencap -p > "$OUT/frost_no_wallblur_GRANTED.png"
+adb logcat -d -v threadtime | grep -E 'WallBlur' > "$OUT/wallblur_source_log.txt"
+# settings screen with the two options and the caption
+adb shell cmd role add-role-holder android.app.role.HOME com.android.launcher3 >/dev/null 2>&1
+adb shell am start -n com.wathakker.app/com.example.widget.WidgetConfigActivity --ei appWidgetId 0; sleep 3
+adb shell input swipe 360 1300 360 400 300; sleep 1
+adb exec-out screencap -p > "$OUT/cfg_bg_options_caption.png"
+# --- first-launch permission flow: allow path and decline path
+adb shell pm clear com.wathakker.app >/dev/null
+adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
+adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
+adb exec-out screencap -p > "$OUT/perm_a1_location_dialog.png"
+tap_text "السماح"; sleep 2
+adb exec-out screencap -p > "$OUT/perm_a2_system_location.png"
+tap_text "While using the app"; sleep 2
+adb exec-out screencap -p > "$OUT/perm_a3_files_dialog.png"
+tap_text "فتح الإعدادات"; sleep 3
+adb exec-out screencap -p > "$OUT/perm_a4_all_files_settings.png"
+adb shell input keyevent KEYCODE_BACK; sleep 1
+adb shell am force-stop com.wathakker.app; adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 5
+adb exec-out screencap -p > "$OUT/perm_a5_relaunch_no_dialog.png"
+adb shell pm clear com.wathakker.app >/dev/null
+adb shell pm grant com.wathakker.app android.permission.POST_NOTIFICATIONS
+adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 6
+tap_text "ليس الآن"; sleep 2
+adb exec-out screencap -p > "$OUT/perm_d1_files_dialog_after_decline.png"
+tap_text "ليس الآن"; sleep 2
+adb shell am force-stop com.wathakker.app; adb shell am start -W -n com.wathakker.app/com.example.MainActivity; sleep 5
+adb exec-out screencap -p > "$OUT/perm_d2_relaunch_no_dialog.png"
+adb shell dumpsys package com.wathakker.app | grep -E "ACCESS_FINE_LOCATION|MANAGE_EXTERNAL" > "$OUT/perm_final_state.txt"

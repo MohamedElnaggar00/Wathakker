@@ -44,19 +44,24 @@ public final class HomeWidgets {
  /** Translucent tint laid over the blurred wallpaper so text stays readable: dark smoke at night, milky white by day. */
  static int frostTint(boolean night){return night?0x70101418:0x80FFFFFF;}
  static int blendOver(int base,int tint){int a=(tint>>>24),r=(((base>>16)&255)*(255-a)+((tint>>16)&255)*a)/255,g=(((base>>8)&255)*(255-a)+((tint>>8)&255)*a)/255,b=((base&255)*(255-a)+(tint&255)*a)/255;return (r<<16)|(g<<8)|b;}
- static android.graphics.Bitmap wallBlur(Context c){
+ static android.graphics.Bitmap wallBlur(Context c){return wallBlur(c,false);}
+ static android.graphics.Bitmap wpMesh,wpReal;static int wpMeshId=-2,wpRealId=-2;
+ /** real=true: the actual wallpaper image (needs the files permission), falling back to the colour mesh until it is granted. real=false: the frosted colour mesh only. */
+ static android.graphics.Bitmap wallBlur(Context c,boolean real){
   android.app.WallpaperManager wm=android.app.WallpaperManager.getInstance(c);
   int id=-1;try{id=wm.getWallpaperId(android.app.WallpaperManager.FLAG_SYSTEM);}catch(Throwable t){}
-  if(wpBlur!=null&&id==wpId)return wpBlur;
+  if(real&&wpReal!=null&&id==wpRealId)return wpReal;
+  if(!real&&wpMesh!=null&&id==wpMeshId)return wpMesh;
   android.graphics.Bitmap small=null;
-  // 1) the real wallpaper, when the system lets this app read it
-  try{
+  boolean fromImage=false;
+  // 1) the real wallpaper, when asked for and the system lets this app read it
+  if(real)try{
    android.graphics.drawable.Drawable d=wm.getDrawable();
    if(d!=null){
     int w=d.getIntrinsicWidth(),h=d.getIntrinsicHeight();if(w<=0||h<=0){w=720;h=1280;}
     int sw=48,sh=Math.max(1,48*h/w);
     small=android.graphics.Bitmap.createBitmap(sw,sh,android.graphics.Bitmap.Config.ARGB_8888);
-    android.graphics.Canvas cv=new android.graphics.Canvas(small);d.setBounds(0,0,sw,sh);d.draw(cv);
+    android.graphics.Canvas cv=new android.graphics.Canvas(small);d.setBounds(0,0,sw,sh);d.draw(cv);fromImage=true;
    }
   }catch(Throwable t){small=null;}
   // 2) no wallpaper access (Android 13+ without storage permission): paint soft blobs from the wallpaper's own colours
@@ -73,7 +78,9 @@ public final class HomeWidgets {
   }
   // heavy blur: two box passes over the tiny bitmap, then it is scaled up at draw time
   boxBlur(small,3);boxBlur(small,3);
-  wpBlur=small;wpId=id;return wpBlur;
+  android.util.Log.i("WallBlur","real="+real+" source="+(fromImage?"wallpaper-image":"wallpaper-colours"));
+  if(fromImage){wpReal=small;wpRealId=id;}else if(!real){wpMesh=small;wpMeshId=id;}
+  return small;
  }
  static android.graphics.Bitmap frostGrain;
  /** Soft top highlight + fine grain on top of the blurred fill: reads as frosted glass instead of a flat colour. */
@@ -104,7 +111,7 @@ static int avgColor(android.graphics.Bitmap b){
   for(int y=0;y<h;y+=2)for(int x=0;x<w;x+=2){int p=b.getPixel(x,y);r+=(p>>16)&255;g+=(p>>8)&255;bb+=p&255;n++;}
   return (int)(r/n)<<16|(int)(g/n)<<8|(int)(bb/n);
  }
- static int bgColor(Context c,int id){String k=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color_"+id,null):null;if(k==null)k=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");int rgb;if("black".equals(k))rgb=0x000000;else if("gray".equals(k))rgb=0x2b2b2b;else if("white".equals(k))rgb=0xf6f6f6;else{boolean night=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;rgb=night?0x171719:0xf6f6f6;}if("glass".equals(k)){boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return ng?0x94141A22:0xB3F2F2F7;}if("wallblur".equals(k)){android.graphics.Bitmap wb=wallBlur(c);if(wb!=null)return 0xFF000000|blendOver(avgColor(wb),frostTint(nightMode(c)));boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return 0xD9000000|(ng?0x171719:0xf6f6f6);}return 0xD9000000|rgb;}
+ static int bgColor(Context c,int id){String k=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color_"+id,null):null;if(k==null)k=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");int rgb;if("black".equals(k))rgb=0x000000;else if("gray".equals(k))rgb=0x2b2b2b;else if("white".equals(k))rgb=0xf6f6f6;else{boolean night=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;rgb=night?0x171719:0xf6f6f6;}if("glass".equals(k)){boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return ng?0x94141A22:0xB3F2F2F7;}if("wallblur".equals(k)||"frosted".equals(k)){android.graphics.Bitmap wb=wallBlur(c,"wallblur".equals(k));if(wb!=null)return 0xFF000000|blendOver(avgColor(wb),frostTint(nightMode(c)));boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return 0xD9000000|(ng?0x171719:0xf6f6f6);}return 0xD9000000|rgb;}
  static boolean isLight(int bg){int r=(bg>>16)&255,g=(bg>>8)&255,b=bg&255;return 0.299*r+0.587*g+0.114*b>170;}
  static void bar(Canvas cv,Paint p,float pad,float y,float wd,float bh,float fraction,float d,int[] fill,int track){p.setShader(null);p.setColor(track);cv.drawRoundRect(new RectF(pad*d,y*d,(wd-pad)*d,(y+bh)*d),bh*d/2,bh*d/2,p);float fw=Math.max(bh,(wd-2*pad)*Math.max(0,Math.min(1,fraction)));float x0=pad*d,x1=(pad+fw)*d;if(fill[0]!=fill[1])p.setShader(new LinearGradient(x0,0f,x1,0f,fill[0],fill[1],Shader.TileMode.CLAMP));else p.setColor(fill[0]);cv.drawRoundRect(new RectF(x0,y*d,x1,(y+bh)*d),bh*d/2,bh*d/2,p);p.setShader(null);}
  public static Bitmap render(Context c,int wd,int ht){return renderKind(c,"Hero",wd,ht,0);}
@@ -112,7 +119,7 @@ static int avgColor(android.graphics.Bitmap b){
 String bgKey=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color_"+id,null):null;
 if(bgKey==null)bgKey=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");
 float rad=Math.min(24,ht/4f)*d;
-android.graphics.Bitmap wbm="wallblur".equals(bgKey)?wallBlur(c):null;
+android.graphics.Bitmap wbm=("wallblur".equals(bgKey)||"frosted".equals(bgKey))?wallBlur(c,"wallblur".equals(bgKey)):null;
 if(wbm!=null){
  android.graphics.Bitmap scaled=centerCrop(wbm,Math.max(1,(int)(wd*d)),Math.max(1,(int)(ht*d)));
  Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);
