@@ -48,6 +48,7 @@ dependencies {
   implementation(libs.androidx.activity.compose)
   implementation("androidx.compose.ui:ui")
   implementation("androidx.compose.foundation:foundation")
+  implementation("androidx.wear.compose:compose-foundation:1.5.0")
   implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.2.1")
   implementation("androidx.wear.tiles:tiles:1.4.1")
   implementation("androidx.wear.protolayout:protolayout:1.2.1")

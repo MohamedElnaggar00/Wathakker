@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -183,13 +184,12 @@ fun MainPage(s: PrayerState, now: Long, w: Float) {
         StarField(Modifier.fillMaxSize())
         Text1(Prayer.weekday(now), tx(w * 0.062f, SoftGrey), Modifier.align(Alignment.TopStart).padding(start = (w * 0.24f).dp, top = (w * 0.12f).dp))
         Text1(Prayer.gregDate(now), tx(w * 0.062f, SoftGrey), Modifier.align(Alignment.TopEnd).padding(end = (w * 0.24f).dp, top = (w * 0.12f).dp))
-        Column(Modifier.align(Alignment.Center).padding(top = (w * 0.07f).dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text1(Prayer.hijri(now), tx(w * 0.055f, SoftGrey), Modifier.align(Alignment.TopCenter).padding(top = (w * 0.205f).dp))
+        Column(Modifier.align(Alignment.Center).padding(top = (w * 0.13f).dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text1(s.next.name, tx(w * 0.15f, Color.White, true))
             Text1(Prayer.time12(s.next.at), tx(w * 0.095f, Color.White))
             Spacer(Modifier.height((w * 0.035f).dp))
             Text1("متبقي " + Prayer.remainingText(s.next.at - now), tx(w * 0.062f, Gold))
-            Spacer(Modifier.height((w * 0.02f).dp))
-            Text1(Prayer.hijri(now), tx(w * 0.055f, SoftGrey))
         }
     }
 }
@@ -201,32 +201,27 @@ fun Text1(t: String, style: TextStyle, modifier: Modifier = Modifier) {
 
 @Composable
 fun ListPage(s: PrayerState, w: Float) {
-    val scroll = rememberScrollState()
-    val pitch = w * 0.215f
     val nextIdx = s.today.indexOfFirst { it.at == s.next.at }.let { if (it < 0) 0 else it }
-    val pitchPx = with(androidx.compose.ui.platform.LocalDensity.current) { pitch.dp.toPx() }
-    LaunchedEffect(nextIdx) { scroll.scrollTo(max(0f, (nextIdx - 1.9f) * pitchPx).roundToInt()) }
+    // item 0 is the title, prayers are items 1..6
+    val listState = androidx.wear.compose.foundation.lazy.rememberScalingLazyListState(initialCenterItemIndex = nextIdx + 1)
     Box(Modifier.fillMaxSize().background(Color.Black)) {
-        Column(Modifier.fillMaxSize().verticalScroll(scroll).padding(horizontal = (w * 0.115f).dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Spacer(Modifier.height((w * 0.12f).dp))
-            Text1("مواقيت الصلاة", tx(w * 0.07f, Color(0xFFB9B9BE)))
-            Spacer(Modifier.height((w * 0.025f).dp))
-            for (slot in s.today) {
+        androidx.wear.compose.foundation.lazy.ScalingLazyColumn(Modifier.fillMaxSize(), state = listState) {
+            item { Text1("مواقيت الصلاة", tx(w * 0.07f, Color(0xFFB9B9BE))) }
+            items(s.today.size) { i ->
+                val slot = s.today[i]
                 val isNext = slot.at == s.next.at
                 val past = slot.at <= s.now
                 Row(
                     Modifier.fillMaxWidth().height((w * 0.19f).dp).clip(RoundedCornerShape(50)).background(if (isNext) Gold else Pill)
-                        .padding(horizontal = (w * 0.075f).dp),
+                        .padding(horizontal = (w * 0.065f).dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val c = if (isNext) Ink else if (past) SoftGrey else Color.White
-                    Text1(slot.name, tx(w * 0.075f, c, isNext))
-                    Spacer(Modifier.weight(1f))
-                    Text1(Prayer.time12(slot.at), tx(w * 0.07f, c, isNext))
+                    Text1(slot.name, tx(w * 0.07f, c, isNext))
+                    Spacer(Modifier.weight(1f).widthIn(min = (w * 0.07f).dp))
+                    Text1(Prayer.time12(slot.at), tx(w * 0.066f, c, isNext))
                 }
-                Spacer(Modifier.height((w * 0.025f).dp))
             }
-            Spacer(Modifier.height((w * 0.42f).dp))
         }
     }
 }
@@ -267,12 +262,14 @@ fun QiblaPage(w: Float) {
                 drawCircle(Color.Black, radius = size.minDimension * 0.045f)
                 drawCircle(Gold, radius = size.minDimension * 0.045f, style = Stroke(width = size.minDimension * 0.016f))
             }
-            val ls = tx(w * 0.06f, SoftGrey)
-            Box(Modifier.fillMaxSize().rotate(-heading)) {
-                Text1("ش", tx(w * 0.065f, Gold), Modifier.align(Alignment.TopCenter).padding(top = (w * 0.012f).dp).rotate(heading))
-                Text1("شر", ls, Modifier.align(Alignment.CenterEnd).padding(end = (w * 0.012f).dp).rotate(heading))
-                Text1("غ", ls, Modifier.align(Alignment.CenterStart).padding(start = (w * 0.012f).dp).rotate(heading))
-                Text1("ج", ls, Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.012f).dp).rotate(heading))
+            val ls = tx(w * 0.062f, Color(0xFFD0D0D4), true)
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                Box(Modifier.fillMaxSize().rotate(-heading)) {
+                    Text1("N", tx(w * 0.07f, Gold, true), Modifier.align(Alignment.TopCenter).padding(top = (w * 0.035f).dp).rotate(heading))
+                    Text1("E", ls, Modifier.align(Alignment.CenterEnd).padding(end = (w * 0.04f).dp).rotate(heading))
+                    Text1("W", ls, Modifier.align(Alignment.CenterStart).padding(start = (w * 0.04f).dp).rotate(heading))
+                    Text1("S", ls, Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.035f).dp).rotate(heading))
+                }
             }
         }
         Row(Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.115f).dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy((w * 0.03f).dp)) {

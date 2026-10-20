@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.CountDownTimeReference
+import android.graphics.drawable.Icon
+import androidx.wear.watchface.complications.data.MonochromaticImage
 import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
@@ -29,15 +31,16 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
             .build()
         val title = PlainComplicationText.Builder(s.next.name).build()
         val desc = PlainComplicationText.Builder("الوقت المتبقي لصلاة " + s.next.name).build()
+        val icon = MonochromaticImage.Builder(Icon.createWithResource(this, R.drawable.ic_complication_mono)).build()
         return when (type) {
             ComplicationType.RANGED_VALUE -> {
                 val total = ((s.next.at - s.prev.at) / 60000f).coerceAtLeast(1f)
                 val elapsed = ((s.now - s.prev.at) / 60000f).coerceIn(0f, total)
                 RangedValueComplicationData.Builder(elapsed, 0f, total, desc)
-                    .setText(countdown).setTitle(title).setTapAction(tap()).build()
+                    .setText(countdown).setTitle(title).setMonochromaticImage(icon).setTapAction(tap()).build()
             }
             ComplicationType.SHORT_TEXT ->
-                ShortTextComplicationData.Builder(countdown, desc).setTitle(title).setTapAction(tap()).build()
+                ShortTextComplicationData.Builder(countdown, desc).setTitle(title).setMonochromaticImage(icon).setTapAction(tap()).build()
             else -> null
         }
     }

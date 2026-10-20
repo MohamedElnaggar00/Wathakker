@@ -186,6 +186,17 @@ public final class PrayerTimesCalculator {
         return 22.5d;
     }
 
+    /** Starting times (Fajr, Dhuhr, Asr, Maghrib, Isha) round UP to the next whole minute, the standard
+     *  precaution used by timetables, so the app never shows a time before the real one. */
+    private static long ceilMinute(long millis) {
+        return ((millis + 59999L) / 60000L) * 60000L;
+    }
+
+    /** Sunrise (end of Fajr, start of Duha) rounds DOWN, so it is never shown after the real sunrise. */
+    private static long floorMinute(long millis) {
+        return (millis / 60000L) * 60000L;
+    }
+
     private final long hoursToMillis(Calendar calendar, double utcHours) {
         Object clone = calendar.clone();
         Intrinsics.checkNotNull(clone, "null cannot be cast to non-null type java.util.Calendar");
@@ -218,7 +229,7 @@ public final class PrayerTimesCalculator {
         double transit = solarParams.getTransit();
         double declination = solarParams.getDeclination();
         double h = hourAngleBelowHorizon(method.getFajrAngle(), latitude, declination);
-        return hoursToMillis(calendar, transit - (h / 15.0d));
+        return ceilMinute(hoursToMillis(calendar, transit - (h / 15.0d)));
     }
 
     public static /* synthetic */ DayPrayerTimes calculateAll$default(PrayerTimesCalculator prayerTimesCalculator, Calendar calendar, double d, double d2, CalculationMethod calculationMethod, int i, Object obj) {
@@ -242,15 +253,15 @@ public final class PrayerTimesCalculator {
         double sunH = hourAngleBelowHorizon(0.833d, latitude, declination);
         double asrAltitude = Math.toDegrees(Math.atan(1.0d / (Math.tan(Math.toRadians(Math.abs(latitude - declination))) + 1.0d)));
         double asrH = hourAngleAboveHorizon(asrAltitude, latitude, declination);
-        long maghrib = hoursToMillis(calendar, (sunH / 15.0d) + transit);
+        long maghrib = ceilMinute(hoursToMillis(calendar, (sunH / 15.0d) + transit));
         if (method.getIshaMinutesAfterMaghrib() != null) {
             isha = maghrib + (method.getIshaMinutesAfterMaghrib().intValue() * 60000);
         } else {
             Double ishaAngle = method.getIshaAngle();
             double ishaH = hourAngleBelowHorizon(ishaAngle != null ? ishaAngle.doubleValue() : 17.0d, latitude, declination);
-            isha = hoursToMillis(calendar, (ishaH / 15.0d) + transit);
+            isha = ceilMinute(hoursToMillis(calendar, (ishaH / 15.0d) + transit));
         }
-        return new DayPrayerTimes(hoursToMillis(calendar, transit - (fajrH / 15.0d)), hoursToMillis(calendar, transit - (sunH / 15.0d)), hoursToMillis(calendar, transit), hoursToMillis(calendar, (asrH / 15.0d) + transit), maghrib, isha);
+        return new DayPrayerTimes(ceilMinute(hoursToMillis(calendar, transit - (fajrH / 15.0d))), floorMinute(hoursToMillis(calendar, transit - (sunH / 15.0d))), ceilMinute(hoursToMillis(calendar, transit)), ceilMinute(hoursToMillis(calendar, (asrH / 15.0d) + transit)), maghrib, isha);
     }
 
     public final DayPrayerTimes calculateAll(Calendar calendar, double latitude, double longitude, CalculationMethod method, int asrFactor, int highLatRule, int[] adjustments) {
@@ -265,28 +276,28 @@ public final class PrayerTimesCalculator {
         double nightHours = 24.0d - (maghribUtc - sunriseUtc);
         double asrAltitude = Math.toDegrees(Math.atan(1.0d / (Math.tan(Math.toRadians(Math.abs(latitude - declination))) + (double) asrFactor)));
         double asrH = hourAngleAboveHorizon(asrAltitude, latitude, declination);
-        long maghrib = hoursToMillis(calendar, maghribUtc);
+        long maghrib = ceilMinute(hoursToMillis(calendar, maghribUtc));
         Double ishaAngleObj = method.getIshaAngle();
         double ishaAngle = ishaAngleObj != null ? ishaAngleObj.doubleValue() : 17.0d;
         long isha;
         if (method.getIshaMinutesAfterMaghrib() != null) {
             isha = maghrib + (method.getIshaMinutesAfterMaghrib().intValue() * 60000);
         } else if (invalidBelowHorizon(ishaAngle, latitude, declination) && highLatRule > 0) {
-            isha = hoursToMillis(calendar, highLatNightTime(maghribUtc, nightHours, ishaAngle, highLatRule, true));
+            isha = ceilMinute(hoursToMillis(calendar, highLatNightTime(maghribUtc, nightHours, ishaAngle, highLatRule, true)));
         } else {
             double ishaH = hourAngleBelowHorizon(ishaAngle, latitude, declination);
-            isha = hoursToMillis(calendar, (ishaH / 15.0d) + transit);
+            isha = ceilMinute(hoursToMillis(calendar, (ishaH / 15.0d) + transit));
         }
         long fajr;
         if (invalidBelowHorizon(method.getFajrAngle(), latitude, declination) && highLatRule > 0) {
-            fajr = hoursToMillis(calendar, highLatNightTime(sunriseUtc, nightHours, method.getFajrAngle(), highLatRule, false));
+            fajr = ceilMinute(hoursToMillis(calendar, highLatNightTime(sunriseUtc, nightHours, method.getFajrAngle(), highLatRule, false)));
         } else {
             double fajrH = hourAngleBelowHorizon(method.getFajrAngle(), latitude, declination);
-            fajr = hoursToMillis(calendar, transit - (fajrH / 15.0d));
+            fajr = ceilMinute(hoursToMillis(calendar, transit - (fajrH / 15.0d)));
         }
-        long sunrise = hoursToMillis(calendar, sunriseUtc);
-        long dhuhr = hoursToMillis(calendar, transit);
-        long asr = hoursToMillis(calendar, (asrH / 15.0d) + transit);
+        long sunrise = floorMinute(hoursToMillis(calendar, sunriseUtc));
+        long dhuhr = ceilMinute(hoursToMillis(calendar, transit));
+        long asr = ceilMinute(hoursToMillis(calendar, (asrH / 15.0d) + transit));
         if (adjustments != null && adjustments.length >= 6) {
             fajr += adjustments[0] * 60000L;
             sunrise += adjustments[1] * 60000L;

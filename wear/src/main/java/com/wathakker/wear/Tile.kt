@@ -42,6 +42,7 @@ open class PrayerTileService : TileService() {
             .addContent(text(Prayer.time12(s.next.at), 26f, 0xFFFFFFFF.toInt(), false))
             .addContent(text(s.next.name, 20f, 0xFFFFFFFF.toInt(), true))
             .addContent(text(Prayer.remainingText(s.next.at - s.now), 12f, 0xFFD6B64A.toInt(), false))
+            .addContent(text(Prayer.hijri(s.now), 11f, 0xFF9D9DA2.toInt(), false))
             .build()
 
         val click = ModifiersBuilders.Clickable.Builder()
