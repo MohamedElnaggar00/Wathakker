@@ -2,7 +2,11 @@ package com.example.prayer
 
 import android.icu.util.IslamicCalendar
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.widthIn
+import com.example.utils.plainClickable
+import com.example.ui.oneui.OneUIButton
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -210,6 +214,7 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
     val langCode = L10n.lang.code
     val locale = remember(langCode) { Locale(langCode) }
 
+    var hijriToG by remember { mutableStateOf(false) }
     var gDay by remember { mutableStateOf("") }
     var gMonth by remember { mutableStateOf<Int?>(null) }
     var gYear by remember { mutableStateOf("") }
@@ -247,48 +252,77 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
         }
-        item(key = "g2h-label") { SectionLabel(L10n.t(S.GregToHijri)) }
-        item(key = "g2h") {
-            OneUICard {
-                Column(Modifier.fillMaxWidth().padding(16.dp)) {
-                    Row(Modifier.fillMaxWidth()) {
-                        DateField(gDay, { gDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
-                        Spacer(Modifier.width(10.dp))
-                        MonthField(gMonth, { gMonth = it }, L10n.t(S.MonthLabel), gMonths, Modifier.weight(1.4f))
-                        Spacer(Modifier.width(10.dp))
-                        DateField(gYear, { gYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
-                    }
-                    if (resultHijriCal != null) {
-                        ConverterResult(
-                            weekdayOf(resultHijriCal, locale),
-                            HijriDate.INSTANCE.format(resultHijriCal, langCode)
+        item(key = "direction") {
+            // One UI segmented control (same pill as the Calendar / Events switch): two
+            // exclusive directions, the box below shows the matching fields and month list.
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 6.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(cs.surfaceVariant.copy(alpha = 0.55f))
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                listOf(false to L10n.t(S.GregToHijri), true to L10n.t(S.HijriToGreg)).forEach { (dir, label) ->
+                    val active = hijriToG == dir
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(if (active) cs.surface else Color.Transparent)
+                            .plainClickable { hijriToG = dir }
+                            .padding(vertical = 9.dp, horizontal = 6.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            label,
+                            color = if (active) cs.onSurface else cs.onSurfaceVariant,
+                            fontSize = 14.sp, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                            textAlign = TextAlign.Center, maxLines = 2
                         )
                     }
                 }
             }
         }
-        item(key = "h2g-label") { SectionLabel(L10n.t(S.HijriToGreg)) }
-        item(key = "h2g") {
+        item(key = "box") {
             OneUICard {
                 Column(Modifier.fillMaxWidth().padding(16.dp)) {
-                    Row(Modifier.fillMaxWidth()) {
-                        DateField(hDay, { hDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
-                        Spacer(Modifier.width(10.dp))
-                        MonthField(hMonth, { hMonth = it }, L10n.t(S.MonthLabel), hMonths, Modifier.weight(1.4f))
-                        Spacer(Modifier.width(10.dp))
-                        DateField(hYear, { hYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
-                    }
-                    if (resultGregCal != null) {
-                        ConverterResult(weekdayOf(resultGregCal, locale), gregorianText(resultGregCal, locale))
+                    if (!hijriToG) {
+                        Row(Modifier.fillMaxWidth()) {
+                            DateField(gDay, { gDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
+                            Spacer(Modifier.width(10.dp))
+                            MonthField(gMonth, { gMonth = it }, L10n.t(S.MonthLabel), gMonths, Modifier.weight(1.4f))
+                            Spacer(Modifier.width(10.dp))
+                            DateField(gYear, { gYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
+                        }
+                        if (resultHijriCal != null) {
+                            ConverterResult(
+                                weekdayOf(resultHijriCal, locale),
+                                HijriDate.INSTANCE.format(resultHijriCal, langCode)
+                            )
+                        }
+                    } else {
+                        Row(Modifier.fillMaxWidth()) {
+                            DateField(hDay, { hDay = it.filter { ch -> ch.isDigit() }.take(2) }, L10n.t(S.DayLabel), Modifier.weight(1f))
+                            Spacer(Modifier.width(10.dp))
+                            MonthField(hMonth, { hMonth = it }, L10n.t(S.MonthLabel), hMonths, Modifier.weight(1.4f))
+                            Spacer(Modifier.width(10.dp))
+                            DateField(hYear, { hYear = it.filter { ch -> ch.isDigit() }.take(4) }, L10n.t(S.YearLabel), Modifier.weight(1f))
+                        }
+                        if (resultGregCal != null) {
+                            ConverterResult(weekdayOf(resultGregCal, locale), gregorianText(resultGregCal, locale))
+                        }
                     }
                 }
             }
         }
-        item(key = "reset") {
-            OneUICard {
-                OneUIRow(
-                    title = L10n.t(S.Today),
-                    leading = { OneUIIconBadge(Icons.Outlined.RestartAlt) },
+        item(key = "today") {
+            Box(Modifier.fillMaxWidth().padding(top = 4.dp), contentAlignment = Alignment.Center) {
+                OneUIButton(
+                    text = L10n.t(S.Today),
+                    filled = false,
+                    modifier = Modifier.widthIn(min = 140.dp),
                     onClick = {
                         val now = Calendar.getInstance()
                         gDay = now.get(Calendar.DAY_OF_MONTH).toString()
