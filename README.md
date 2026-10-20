@@ -1,12 +1,12 @@
 <div align="center">
   <img src="docs/icon.png" width="120" height="120" alt="أيقونة التطبيق">
-  <h1>وذكر</h1>
+  <h1>وذكّر <sub>Wathkkir</sub></h1>
   <p><b>تطبيق يذكرك بمواقيت الصلاة والذكر في يومك وليلتك</b></p>
   <p>مواقيت دقيقة بحسب موقعك، تنبيهات أذان وإقامة لكل صلاة، بوصلة قبلة، محوّل تاريخ هجري، ومكتبة أذكار مع إحصائيات تتابع التزامك اليومي — بواجهة عصرية مستوحاة من One UI.</p>
 
   <p>
     <a href="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml/badge.svg" alt="حالة البناء"></a>
-    <img src="https://img.shields.io/badge/version-3.1.0-blue" alt="الإصدار 3.1.0">
+    <img src="https://img.shields.io/badge/version-3.3.0-blue" alt="الإصدار 3.3.0">
     <img src="https://img.shields.io/badge/platform-Android-green?logo=android" alt="Android">
     <img src="https://img.shields.io/badge/language-Kotlin-purple?logo=kotlin" alt="Kotlin">
     <img src="https://img.shields.io/badge/UI%20languages-11-orange" alt="11 لغة">
@@ -21,8 +21,9 @@
 
 - [نظرة عامة](#-نظرة-عامة)
 - [الميزات الرئيسية](#-الميزات-الرئيسية)
-- [ما الجديد في الإصدار 3.1.0](#-ما-الجديد-في-الإصدار-310)
+- [ما الجديد في الإصدار 3.3.0](#-ما-الجديد-في-الإصدار-330)
 - [لقطات الشاشة](#-لقطات-الشاشة)
+- [تطبيق Wear OS](#-تطبيق-wear-os-قيد-التطوير)
 - [اللغات المدعومة](#-اللغات-المدعومة)
 - [التقنيات المستخدمة](#-التقنيات-المستخدمة)
 - [البناء من المصدر](#-البناء-من-المصدر)
@@ -32,7 +33,7 @@
 
 ## 🌙 نظرة عامة
 
-«وذكر» تطبيق أندرويد مفتوح المصدر يجمع بين أدوات المسلم اليومية في مكان واحد: مواقيت الصلاة بدقة حسابية عالية، تنبيهات قابلة للتخصيص لكل صلاة على حدة، أذكار الصباح والمساء وحصن المسلم، مسبحة إلكترونية، وبوصلة قبلة — كل ذلك بتصميم عربي أصيل يدعم الكتابة من اليمين إلى اليسار بشكل كامل، وبإحدى عشرة لغة للواجهة.
+«وذكّر» تطبيق أندرويد مفتوح المصدر يجمع بين أدوات المسلم اليومية في مكان واحد: مواقيت الصلاة بدقة حسابية عالية، تنبيهات قابلة للتخصيص لكل صلاة على حدة، أذكار الصباح والمساء وحصن المسلم، مسبحة إلكترونية، وبوصلة قبلة — كل ذلك بتصميم عربي أصيل يدعم الكتابة من اليمين إلى اليسار بشكل كامل، وبإحدى عشرة لغة للواجهة.
 
 ## ✨ الميزات الرئيسية
 
@@ -58,36 +59,29 @@
 
 </details>
 
-## 🆕 ما الجديد في الإصدار 3.1.0
+## 🆕 ما الجديد في الإصدار 3.3.0
 
-- دمج كامل لنظام التنبيهات: أجراس على الصلوات الست مع تذكير الإقامة وعدم الإزعاج التلقائي.
-- شاشة «الموقع والحساب» الجديدة: الموقع، طريقة الحساب، المذهب، وتعديلات الدقائق في مكان واحد مع إعادة حساب فورية.
-- بوصلة القبلة بتصميم جديد كليًا.
-- المواقيت الإضافية: الإمساك والضحى ومنتصف الليل وقيام الليل.
-- محوّل التاريخ الهجري ↔ الميلادي.
-- مراجعة لغوية كاملة للواجهة الإنجليزية وتعريب عناصر الودجت.
+- **منبه صلاة الفجر** بشاشة كاملة وصفحة إعدادات خاصة: نغمة أو ملف صوتي، مستوى الصوت، الاهتزاز، الرنين قبل الأذان و/أو بعده، مدة الرنين، مدة الغفوة، وزر تجربة.
+- **قوائم ونوافذ بأسلوب One UI** في كل التطبيق، وأزرار «تطبيق» و«إلغاء» في المنتقيات، وهي الآن تتبع حجم الخط الذي تختاره.
+- **حجم الخط** بمنزلق من تسع درجات في الإعدادات ثم المظهر.
+- **حصن المسلم**: بحث، زر «تمت القراءة»، ملاحظات، ألوان للعدّاد، مفضلة افتراضية، وزر إضافة إلى أذكاري.
+- **نغمة واهتزاز مستقلان لكل صلاة**، مع اهتزاز لمس على عناصر التحكم التي تغيّر حالة فقط، ويتبع إعداد الاهتزاز.
+- **ودجتات** بخلفيات ضبابية، ومعاينة حية في المنتقي على أندرويد 15 فأعلى، وودجت تقدّم بأسلوب One UI.
+- بداية استخدام جديدة، وأيقونة جديدة، والاسم وذكّر في كل اللغات.
+- **إصلاحات**: تقريب المواقيت كما في التقاويم الورقية، وإغلاق إشعارات الأذان والإقامة تلقائيًا بعد خمس دقائق، وعرض الخطوط العربية بشكل صحيح، وتنبيهات بمنبّهات دقيقة بلا تأخير.
+
+الإصدار 3.3.0 يُحدَّث فوق 3.2.3 مباشرة لأنه موقّع بالمفتاح نفسه.
 
 ## 📸 لقطات الشاشة
 
-<p align="center"><i>لقطات حقيقية من أحدث اختبار آلي للإصدار 3.1.0 على المحاكي.</i></p>
+<p align="center"><i>لقطات حقيقية من محاكي أندرويد 35 على الإصدار 3.3.0.</i></p>
 
 <div align="center">
   <table>
-    <tr>
-      <td align="center"><img src="Screenshot/00-prayer.png" width="220" alt="شاشة الصلاة"><br><sub>شاشة الصلاة والأجراس</sub></td>
-      <td align="center"><img src="Screenshot/02-alert-dialog.png" width="220" alt="نافذة تنبيه الصلاة"><br><sub>تنبيه كل صلاة: عند الأذان + قبل الأذان</sub></td>
-      <td align="center"><img src="Screenshot/02f-early-reminder-on.png" width="220" alt="تنبيه قبل الأذان"><br><sub>تنبيه قبل الأذان بدقة الدقائق</sub></td>
-    </tr>
-    <tr>
-      <td align="center"><img src="Screenshot/02b-qibla-dark.png" width="220" alt="بوصلة القبلة"><br><sub>بوصلة القبلة</sub></td>
-      <td align="center"><img src="Screenshot/04-location-screen.png" width="220" alt="الموقع والحساب"><br><sub>الموقع والحساب</sub></td>
-      <td align="center"><img src="Screenshot/03-settings.png" width="220" alt="الإعدادات"><br><sub>الإعدادات</sub></td>
-    </tr>
-    <tr>
-      <td align="center"><img src="Screenshot/06-landscape.png" width="220" alt="الوضع الأفقي"><br><sub>الوضع الأفقي</sub></td>
-      <td align="center"><img src="Screenshot/05-english.png" width="220" alt="الواجهة الإنجليزية"><br><sub>الواجهة الإنجليزية</sub></td>
-      <td align="center"><img src="Screenshot/03f-qibla-from-drawer.png" width="220" alt="القبلة من القائمة"><br><sub>القبلة من القائمة الجانبية</sub></td>
-    </tr>
+    <tr><td align="center"><img src="docs/screenshots/04-prayer.png" width="200" alt="شاشة الصلاة"><br><sub>شاشة الصلاة</sub></td><td align="center"><img src="docs/screenshots/05-fajr-alarm.png" width="200" alt="منبه صلاة الفجر"><br><sub>منبه صلاة الفجر</sub></td><td align="center"><img src="docs/screenshots/06-hisn.png" width="200" alt="حصن المسلم"><br><sub>حصن المسلم</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/07-reminders.png" width="200" alt="التذكيرات"><br><sub>التذكيرات</sub></td><td align="center"><img src="docs/screenshots/08-calendar.png" width="200" alt="التقويم"><br><sub>التقويم</sub></td><td align="center"><img src="docs/screenshots/09-qibla.png" width="200" alt="القبلة"><br><sub>القبلة</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/10-menu.png" width="200" alt="قوائم بأسلوب One UI"><br><sub>قوائم بأسلوب One UI</sub></td><td align="center"><img src="docs/screenshots/11-dialog.png" width="200" alt="نوافذ الحوار"><br><sub>نوافذ الحوار</sub></td><td align="center"><img src="docs/screenshots/01-language.png" width="200" alt="بداية الاستخدام: اللغة"><br><sub>بداية الاستخدام: اللغة</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/02-calculation.png" width="200" alt="طريقة الحساب"><br><sub>طريقة الحساب</sub></td><td align="center"><img src="docs/screenshots/03-alerts.png" width="200" alt="تفعيل التنبيهات"><br><sub>تفعيل التنبيهات</sub></td></tr>
   </table>
 </div>
 
@@ -110,6 +104,10 @@
   </table>
   <p><sub>منتقي الودجت في النظام يعرض معاينة حية بألوان المظهر (أندرويد 12+)؛ على الأنظمة الأقدم تظهر صورة ثابتة.</sub></p>
 </div>
+
+## ⌚ تطبيق Wear OS (قيد التطوير)
+
+تطبيق الساعة غير مكتمل بعد، ويُنشر كملف APK منفصل للتجربة فقط (Wear OS 3 فأعلى). الموجود حاليًا: مواقيت الصلاة، القبلة، بلاطة وقطعة للصلاة القادمة، خيار ٢٤ ساعة، وصفحة إعدادات في تطبيق الهاتف مع مزامنة. لم يُختبر على ساعة حقيقية، وسيُعاد تسميته وإصلاح أخطائه في إصدار لاحق.
 
 ## 🌍 اللغات المدعومة
 
@@ -136,7 +134,8 @@ cd Wathkkir
 
 ## 📥 التحميل
 
-أحدث النسخ التجريبية والمستقرة متاحة في صفحة [الإصدارات](https://github.com/MohamedElnaggar00/Wathkkir/releases).
+- **[Wathkkir 3.3.0 (أحدث إصدار)](https://github.com/MohamedElnaggar00/Wathkkir/releases/tag/v3.3.0)**: ملف الهاتف `Wathkkir-3.3.0.apk` وملف الساعة التجريبي `Wathkkir-Wear-3.3.0.apk`، ومعهما قيم sha256 للتحقق.
+- كل الإصدارات: [صفحة الإصدارات](https://github.com/MohamedElnaggar00/Wathkkir/releases).
 
 ---
 

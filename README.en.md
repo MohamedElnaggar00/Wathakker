@@ -1,12 +1,12 @@
 <div align="center">
   <img src="docs/icon.png" width="120" height="120" alt="App icon">
-  <h1>Wathkkir (وذكر)</h1>
+  <h1>Wathkkir (وذكّر)</h1>
   <p><b>An app that reminds you of prayer times and dhikr through your day and your night.</b></p>
   <p>Accurate prayer times for your location, per-prayer adhan and iqama alerts, a Qibla compass, a Hijri date converter, and an azkar library with statistics that track your daily commitment — in a modern One UI-inspired design.</p>
 
   <p>
     <a href="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml/badge.svg" alt="Build status"></a>
-    <img src="https://img.shields.io/badge/version-3.1.0-blue" alt="Version 3.1.0">
+    <img src="https://img.shields.io/badge/version-3.3.0-blue" alt="Version 3.3.0">
     <img src="https://img.shields.io/badge/platform-Android-green?logo=android" alt="Android">
     <img src="https://img.shields.io/badge/language-Kotlin-purple?logo=kotlin" alt="Kotlin">
     <img src="https://img.shields.io/badge/UI%20languages-11-orange" alt="11 languages">
@@ -21,8 +21,9 @@
 
 - [Overview](#-overview)
 - [Key features](#-key-features)
-- [What's new in 3.1.0](#-whats-new-in-310)
+- [What's new in 3.3.0](#-whats-new-in-330)
 - [Screenshots](#-screenshots)
+- [Wear OS app](#-wear-os-app-in-development)
 - [Supported languages](#-supported-languages)
 - [Tech stack](#-tech-stack)
 - [Build from source](#-build-from-source)
@@ -59,36 +60,29 @@ Wathkkir is an open-source Android app that brings the everyday tools a Muslim n
 
 </details>
 
-## 🆕 What's new in 3.1.0
+## 🆕 What's new in 3.3.0
 
-- A fully merged alert system: bells on all six prayer rows with iqama reminders and automatic DND.
-- A new "Location & calculation" screen: location, calculation method, juristic school, and minute adjustments in one place with instant recalculation.
-- A completely redesigned Qibla compass.
-- Optional times: Imsak, Duha, Midnight, and Qiyam.
-- A Hijri ↔ Gregorian date converter.
-- A full English UI audit and localized widgets.
+- **Fajr full-screen alarm** with its own settings page: tone or audio file, volume, vibration, ring before and/or after the adhan, ring duration, snooze length, test button.
+- **One UI style menus and dialogs** everywhere, with Apply and Cancel on pickers. They now follow the app font size.
+- **Font size**: a 9-step slider in Settings > Appearance.
+- **Hisn Al-Muslim**: search, "done reading" button, notes, counter colours, default favorites, add to my adhkar.
+- **Per-prayer tone and vibration**, plus touch feedback only on controls that change state, following the haptics setting.
+- **Widgets**: frosted backgrounds, live previews in the picker on Android 15+, One UI progress widget.
+- New onboarding, new icon, and the name Wathkkir (وذكّر) in every language.
+- **Fixes**: prayer times round like printed timetables, adhan and iqama notifications close after 5 minutes, Arabic fonts render correctly, exact alarms so the adhan is not late.
+
+3.3.0 updates in place over 3.2.3 (same signing key).
 
 ## 📸 Screenshots
 
-<p align="center"><i>Real captures from the latest automated 3.1.0 emulator verification.</i></p>
+<p align="center"><i>Real captures from an Android 35 emulator running 3.3.0.</i></p>
 
 <div align="center">
   <table>
-    <tr>
-      <td align="center"><img src="Screenshot/00-prayer.png" width="220" alt="Prayer screen"><br><sub>Prayer screen with bells</sub></td>
-      <td align="center"><img src="Screenshot/02-alert-dialog.png" width="220" alt="Prayer alert sheet"><br><sub>Per-prayer alerts: at adhan + early reminder</sub></td>
-      <td align="center"><img src="Screenshot/02f-early-reminder-on.png" width="220" alt="Early reminder"><br><sub>Early reminder with exact minutes</sub></td>
-    </tr>
-    <tr>
-      <td align="center"><img src="Screenshot/02b-qibla-dark.png" width="220" alt="Qibla compass"><br><sub>Qibla compass</sub></td>
-      <td align="center"><img src="Screenshot/04-location-screen.png" width="220" alt="Location and calculation"><br><sub>Location & calculation</sub></td>
-      <td align="center"><img src="Screenshot/03-settings.png" width="220" alt="Settings"><br><sub>Settings</sub></td>
-    </tr>
-    <tr>
-      <td align="center"><img src="Screenshot/06-landscape.png" width="220" alt="Landscape"><br><sub>Landscape</sub></td>
-      <td align="center"><img src="Screenshot/05-english.png" width="220" alt="English UI"><br><sub>English UI</sub></td>
-      <td align="center"><img src="Screenshot/03f-qibla-from-drawer.png" width="220" alt="Qibla from drawer"><br><sub>Qibla from the side drawer</sub></td>
-    </tr>
+    <tr><td align="center"><img src="docs/screenshots/04-prayer.png" width="200" alt="Prayer screen"><br><sub>Prayer screen</sub></td><td align="center"><img src="docs/screenshots/05-fajr-alarm.png" width="200" alt="Fajr alarm"><br><sub>Fajr alarm</sub></td><td align="center"><img src="docs/screenshots/06-hisn.png" width="200" alt="Hisn Al-Muslim"><br><sub>Hisn Al-Muslim</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/07-reminders.png" width="200" alt="Reminders"><br><sub>Reminders</sub></td><td align="center"><img src="docs/screenshots/08-calendar.png" width="200" alt="Calendar"><br><sub>Calendar</sub></td><td align="center"><img src="docs/screenshots/09-qibla.png" width="200" alt="Qibla"><br><sub>Qibla</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/10-menu.png" width="200" alt="One UI style menus"><br><sub>One UI style menus</sub></td><td align="center"><img src="docs/screenshots/11-dialog.png" width="200" alt="Dialogs"><br><sub>Dialogs</sub></td><td align="center"><img src="docs/screenshots/01-language.png" width="200" alt="Onboarding: language"><br><sub>Onboarding: language</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/02-calculation.png" width="200" alt="Calculation method"><br><sub>Calculation method</sub></td><td align="center"><img src="docs/screenshots/03-alerts.png" width="200" alt="Enable alerts"><br><sub>Enable alerts</sub></td></tr>
   </table>
 </div>
 
@@ -111,6 +105,10 @@ Wathkkir is an open-source Android app that brings the everyday tools a Muslim n
   </table>
   <p><sub>The system widget picker shows a live theme-aware preview (Android 12+); older versions show a static image.</sub></p>
 </div>
+
+## ⌚ Wear OS app (in development)
+
+The watch app is not finished. It ships as a separate APK for testing only (Wear OS 3+). What exists today: prayer times, qibla, a next-prayer tile and complication, a 24-hour option, and a settings page in the phone app with sync. It has not been tested on a real watch, and it will be renamed and its bugs fixed in a later release.
 
 ## 🌍 Supported languages
 
@@ -137,7 +135,8 @@ The APK is produced in `app/build/outputs/apk/debug/`. Building requires JDK 17 
 
 ## 📥 Download
 
-The latest stable and preview builds are available on the [Releases](https://github.com/MohamedElnaggar00/Wathkkir/releases) page.
+- **[Wathkkir 3.3.0 (latest)](https://github.com/MohamedElnaggar00/Wathkkir/releases/tag/v3.3.0)**: phone app `Wathkkir-3.3.0.apk` and the test watch app `Wathkkir-Wear-3.3.0.apk`, with sha256 values for checking.
+- All versions: [Releases page](https://github.com/MohamedElnaggar00/Wathkkir/releases).
 
 ---
 
