@@ -98,6 +98,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LocationSync.refresh(this)
+        starPattern = intent.getIntExtra("pat", 1)
         val page = intent.getIntExtra("page", 0)
         setContent { WearApp(page) }
     }
@@ -144,10 +145,14 @@ fun WearApp(startPage: Int) {
     }
 }
 
+/** Pattern chosen for the main page background: 1 = Rub el Hizb stars touching tip to tip, 2 = 12-fold interlaced rosette. */
+var starPattern = 1
+
+/** Rub el Hizb (eight-pointed Islamic star, two overlaid squares) as a 16-vertex outline. */
 private fun starPath(cx: Float, cy: Float, r: Float): Path {
-    val p = Path(); val inner = r * 0.45f
-    for (i in 0 until 10) {
-        val a = -Math.PI / 2 + i * Math.PI / 5
+    val p = Path(); val inner = r * 0.7654f
+    for (i in 0 until 16) {
+        val a = -Math.PI / 2 + i * Math.PI / 8
         val rr = if (i % 2 == 0) r else inner
         val x = cx + cos(a).toFloat() * rr; val y = cy + sin(a).toFloat() * rr
         if (i == 0) p.moveTo(x, y) else p.lineTo(x, y)
@@ -155,24 +160,35 @@ private fun starPath(cx: Float, cy: Float, r: Float): Path {
     p.close(); return p
 }
 
-/** Star pattern that emerges from the bottom-left corner and fades out, as on the phone widget. */
+private fun diamondPath(cx: Float, cy: Float, r: Float): Path {
+    val p = Path(); p.moveTo(cx, cy - r); p.lineTo(cx + r, cy); p.lineTo(cx, cy + r); p.lineTo(cx - r, cy); p.close(); return p
+}
+
+/** Regular square-grid Islamic star pattern that emerges from the bottom-left corner and fades out. */
 @Composable
 fun StarField(modifier: Modifier) {
+    val pat = starPattern
     Canvas(modifier) {
-        val r = size.minDimension * 0.075f
-        val step = r * 1.7f
-        val maxD = hypot(size.width, size.height) * 0.9f
-        var row = 0
-        var cy = size.height + r * 0.2f
-        while (cy > -r) {
-            var cx = if (row % 2 == 0) 0f else step / 2
-            while (cx < size.width + r) {
-                val d = hypot(cx, size.height - cy)
-                val a = (1f - d / maxD).coerceIn(0f, 1f)
-                if (a > 0.03f) drawPath(starPath(cx, cy, r), Color.White.copy(alpha = 0.30f * a.pow(1.4f)), style = Stroke(width = size.minDimension * 0.003f))
-                cx += step
+        val r = size.minDimension * 0.085f
+        val step = if (pat == 2) r * 2.36f else r * 2f
+        val maxD = hypot(size.width, size.height) * 0.95f
+        val sw = size.minDimension * 0.003f
+        val cols = (size.width / step).toInt() + 2; val rows = (size.height / step).toInt() + 2
+        for (row in 0..rows) for (col in 0..cols) {
+            val cx = col * step; val cy = size.height - row * step
+            val a = (1f - hypot(cx, size.height - cy) / maxD).coerceIn(0f, 1f)
+            if (a > 0.03f) {
+                val al = 0.34f * a
+                if (pat == 2) {
+                    // 12-fold rosette: the {12/5} star polygon (12 interlacing chords) inside its dodecagon
+                    val rr = r * 1.18f
+                    fun pt(i: Int, k: Float) = Offset(cx + cos(-Math.PI / 2 + i * Math.PI / 6).toFloat() * rr * k, cy + sin(-Math.PI / 2 + i * Math.PI / 6).toFloat() * rr * k)
+                    for (i in 0 until 12) {
+                        drawLine(Color.White.copy(alpha = al), pt(i, 1f), pt((i + 5) % 12, 1f), strokeWidth = sw)
+                        drawLine(Color.White.copy(alpha = al * 0.6f), pt(i, 1f), pt((i + 1) % 12, 1f), strokeWidth = sw)
+                    }
+                } else drawPath(starPath(cx, cy, r), Color.White.copy(alpha = al), style = Stroke(width = sw))
             }
-            cy -= step * 0.78f; row++
         }
     }
 }
