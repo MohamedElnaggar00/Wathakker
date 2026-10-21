@@ -104,6 +104,11 @@ adb shell input keyevent KEYCODE_HOME; sleep 3
 adb shell input swipe 227 380 227 80 400; sleep 3
 shot 41_notification_stream
 adb shell dumpsys notification > "$OUT/notif2.txt" 2>&1
+# normal tile (comparison reference, same renderer + locale)
+adb shell am force-stop $PKG
+adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode tile >/dev/null 2>&1
+sleep 6
+shot 50b_tile_normal
 # iqama counter demo (dev-only PreviewActivity with a fake "now" inside the iqama window)
 adb shell am force-stop $PKG
 adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode tile --ez iqama_demo true >/dev/null 2>&1

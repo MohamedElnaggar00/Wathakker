@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -158,7 +159,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                     OneUiRadio(opt.selected, w)
                     Spacer(Modifier.width((w * 0.05f).dp))
                     if (opt.lead != null) { opt.lead(); Spacer(Modifier.width((w * 0.05f).dp)) }
-                    Text1(opt.label, tx(w * 0.073f, Color.White), maxLines = 2)
+                    Text1(opt.label, tx(w * 0.073f, Color.White, align = TextAlign.Start), maxLines = 2)
                 }
             }
         }
@@ -170,8 +171,8 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
     fun OneUiRow(w: Float, title: String, value: String?, onClick: () -> Unit, trail: (@Composable () -> Unit)? = null) {
         Row(Modifier.fillMaxWidth().heightIn(min = (w * 0.267f).dp).clickable { onClick() }.padding(horizontal = (w * 0.08f).dp, vertical = (w * 0.03f).dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text1(title, tx(w * 0.076f, Color.White), maxLines = 2)
-                if (value != null) Text1(value, tx(w * 0.058f, Gold), maxLines = 2)
+                Text1(title, tx(w * 0.076f, Color.White, align = TextAlign.Start), maxLines = 2)
+                if (value != null) Text1(value, tx(w * 0.058f, Gold, align = TextAlign.Start), maxLines = 2)
             }
             if (trail != null) trail()
         }
