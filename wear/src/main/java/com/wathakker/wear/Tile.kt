@@ -47,21 +47,21 @@ open class PrayerTileService : TileService() {
 
         fun gap(h: Float) = LayoutElementBuilders.Spacer.Builder().setHeight(dp(h)).build()
         // Layout measured against the reference gold widget ON THE REAL WATCH (Samsung font renders
-        // ~1.4x taller than the emulator, so constants are scaled down 0.776x to land on the reference
+        // ~1.4x taller than the emulator, so constants are scaled down 0.892x (0.776 * 1.15) to land on the reference
         // spacing on the actual device; the 454px emulator shows it proportionally smaller).
         val center = LayoutElementBuilders.Column.Builder()
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
             .setModifiers(ModifiersBuilders.Modifiers.Builder()
                 .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(16.5f)).build()).build())
-            .addContent(text(Prayer.time12(s.next.at), 17f, 0xFFFFFFFF.toInt(), false))
+            .addContent(text(Prayer.time12(s.next.at), 19.5f, 0xFFFFFFFF.toInt(), false))
             .addContent(gap(5f))
-            .addContent(text(s.next.name, 13f, 0xFFFFFFFF.toInt(), false))
+            .addContent(text(s.next.name, 15f, 0xFFFFFFFF.toInt(), false))
             .addContent(gap(9.7f))
-            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 9.5f, tc.main, true))
+            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 11f, tc.main, true))
             .addContent(gap(8f))
-            .addContent(text(Prayer.hijriDay(s.now), 20f, 0xFFFFFFFF.toInt(), true))
+            .addContent(text(Prayer.hijriDay(s.now), 23f, 0xFFFFFFFF.toInt(), true))
             .addContent(gap(3.3f))
-            .addContent(text(Prayer.hijriMonth(s.now), 9.5f, 0xFF9D9DA2.toInt(), false))
+            .addContent(text(Prayer.hijriMonth(s.now), 11f, 0xFF9D9DA2.toInt(), false))
             .build()
 
         val click = ModifiersBuilders.Clickable.Builder()

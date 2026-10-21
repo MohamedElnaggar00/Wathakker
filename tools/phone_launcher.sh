@@ -61,8 +61,19 @@ add_widget(){
     XY=$(findany "$LABEL")
   done
   if [ -z "$XY" ]; then echo "WIDGET_NOT_FOUND $TAG $LABEL" >> "$OUT/SUMMARY.txt"; return 1; fi
+  # ensure the row is well inside the visible area before dragging
+  for i in 1 2 3 4; do
+    CY=$(echo $XY | awk '{print $2}')
+    [ "$CY" -lt 1900 ] && break
+    adb shell input swipe 540 1500 540 1100 300; sleep 2
+    CUR=wlist_${TAG}_c$i; dump $CUR
+    XY=$(findany "$LABEL")
+    [ -z "$XY" ] && break
+  done
   LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
   [ -n "$LXY" ] && XY=$LXY
+  CY=$(echo $XY | awk '{print $2}')
+  if [ "$CY" -gt 1900 ]; then echo "ROW_TOO_LOW $TAG y=$CY" >> "$OUT/SUMMARY.txt"; return 1; fi
   for TRY in 1 2 3; do
     adb shell input draganddrop $XY $TX $TY 2200; sleep 6
     shot 13_after_drag_${TAG}_$TRY
