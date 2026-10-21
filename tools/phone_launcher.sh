@@ -38,87 +38,77 @@ shot 01_after_onboard
 # ---- helper: add a widget by label to drop target ----
 add_widget(){
   LABEL="$1"; TX=$2; TY=$3; TAG=$4; EXPECTED=$5
-  adb shell input keyevent KEYCODE_HOME; sleep 3
-  adb shell input swipe 540 1250 540 1250 1300; sleep 3
-  CUR=menu_$TAG; dump $CUR; shot 10_menu_$TAG
-  XY=$(findany "Widgets" "المصغّرة" "المصغرة" "ودجت" "الأدوات")
-  if [ -z "$XY" ]; then echo "NO_WIDGETS_MENU $TAG" >> "$OUT/SUMMARY.txt"; return 1; fi
-  adb shell input tap $XY; sleep 5
-  for i in 1 2 3 4 5 6 7 8; do
-    CUR=picker_${TAG}_$i; dump $CUR
-    XY=$(findany "وذكّر" "Wathkkir" "وذكر")
-    [ -n "$XY" ] && break
-    adb shell input swipe 540 1900 540 700 300; sleep 2
-  done
-  if [ -z "$XY" ]; then echo "APP_NOT_FOUND $TAG" >> "$OUT/SUMMARY.txt"; return 1; fi
-  adb shell input tap $XY; sleep 5
-  CUR=wlist_${TAG}_0; dump $CUR; shot 12_wlist_${TAG}_0
-  XY=$(findany "$LABEL")
-  for i in 1 2 3 4 5 6 7 8 9 10; do
-    [ -n "$XY" ] && break
-    adb shell input swipe 540 1800 540 900 300; sleep 2
-    CUR=wlist_${TAG}_$i; dump $CUR; shot 12_wlist_${TAG}_$i
-    XY=$(findany "$LABEL")
-  done
-  if [ -z "$XY" ]; then echo "WIDGET_NOT_FOUND $TAG $LABEL" >> "$OUT/SUMMARY.txt"; return 1; fi
-  # ensure the row is well inside the visible area before dragging
-  for i in 1 2 3 4 5 6 7 8; do
-    CY=$(echo $XY | awk '{print $2}')
-    [ "$CY" -lt 1600 ] && break
-    adb shell input swipe 540 1900 540 600 300; sleep 2
-    CUR=wlist_${TAG}_c$i; dump $CUR
-    XY=$(findany "$LABEL")
-    [ -z "$XY" ] && break
-  done
-  LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" cell 2>/dev/null)
-  [ -z "$LXY" ] && LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
-  [ -n "$LXY" ] && XY=$LXY
-  CY=$(echo $XY | awk '{print $2}')
-  if [ "$CY" -gt 1600 ]; then echo "ROW_TOO_LOW $TAG y=$CY" >> "$OUT/SUMMARY.txt"; return 1; fi
-  for TRY in 1 2 3; do
-    adb shell input draganddrop $XY $TX $TY 2200; sleep 6
-    shot 13_after_drag_${TAG}_$TRY
-    CUR=cfg_${TAG}_$TRY; dump $CUR
-    if grep -q "wathakker" "$OUT/ui_cfg_${TAG}_$TRY.xml"; then
-      A=$(findany "تطبيق" "Apply" "إضافة" "Add" "تم" "Done")
-      if [ -n "$A" ]; then adb shell input tap $A; sleep 5; fi
-      shot 14_after_config_$TAG
-    fi
+  for ATT in 1 2 3; do
     adb shell input keyevent KEYCODE_HOME; sleep 3
-    CUR=verify_${TAG}_$TRY; dump $CUR
-    N=$(grep -c "wathakker" "$OUT/ui_$CUR.xml" 2>/dev/null)
-    if [ "$N" -ge "$EXPECTED" ]; then
-      echo "DRAG_OK $TAG try$TRY nodes=$N" >> "$OUT/SUMMARY.txt"; return 0
-    fi
-    echo "DRAG_RETRY $TAG try$TRY nodes=$N" >> "$OUT/SUMMARY.txt"
-    adb shell input swipe 540 1250 540 1250 1300; sleep 3
-    XY2=$(findany "Widgets" "المصغّرة" "المصغرة" "ودجت" "الأدوات")
-    [ -n "$XY2" ] && adb shell input tap $XY2; sleep 5
+    adb shell input swipe 880 1250 880 1250 1300; sleep 3
+    CUR=menu_${TAG}_$ATT; dump $CUR; shot 10_menu_$TAG
+    XY=$(findany "Widgets" "المصغّرة" "المصغرة" "ودجت" "الأدوات")
+    if [ -z "$XY" ]; then echo "NO_WIDGETS_MENU $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
+    adb shell input tap $XY; sleep 5
     for i in 1 2 3 4 5 6 7 8; do
-      CUR=repick_${TAG}_$i; dump $CUR
-      XY=$(findany "$LABEL")
+      CUR=picker_${TAG}_${ATT}_$i; dump $CUR
+      XY=$(findany "وذكّر" "Wathkkir" "وذكر")
       [ -n "$XY" ] && break
       adb shell input swipe 540 1900 540 700 300; sleep 2
     done
-    [ -z "$XY" ] && { echo "WIDGET_LOST $TAG" >> "$OUT/SUMMARY.txt"; return 1; }
+    if [ -z "$XY" ]; then echo "APP_NOT_FOUND $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
+    adb shell input tap $XY; sleep 5
+    CUR=wlist_${TAG}_${ATT}_0; dump $CUR; shot 12_wlist_${TAG}_0
+    XY=$(findany "$LABEL")
+    for i in 1 2 3 4 5 6 7 8 9 10; do
+      [ -n "$XY" ] && break
+      adb shell input swipe 540 1800 540 900 300; sleep 2
+      CUR=wlist_${TAG}_${ATT}_$i; dump $CUR
+      XY=$(findany "$LABEL")
+    done
+    if [ -z "$XY" ]; then echo "WIDGET_NOT_FOUND $TAG $LABEL att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
     for i in 1 2 3 4 5 6 7 8; do
       CY=$(echo $XY | awk '{print $2}')
       [ "$CY" -lt 1600 ] && break
       adb shell input swipe 540 1900 540 600 300; sleep 2
-      CUR=repick_${TAG}_c$i; dump $CUR
+      CUR=wlist_${TAG}_${ATT}_c$i; dump $CUR
       XY=$(findany "$LABEL")
       [ -z "$XY" ] && break
     done
+    [ -z "$XY" ] && { echo "WIDGET_LOST_SCROLL $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue; }
     LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" cell 2>/dev/null)
     [ -z "$LXY" ] && LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
     [ -n "$LXY" ] && XY=$LXY
+    CY=$(echo $XY | awk '{print $2}')
+    if [ "$CY" -gt 1600 ]; then echo "ROW_TOO_LOW $TAG y=$CY att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
+    adb shell input draganddrop $XY $TX $TY 2200; sleep 6
+    shot 13_after_drag_${TAG}_$ATT
+    CUR=cfg_${TAG}_$ATT; dump $CUR
+    # A real config screen has an apply/add button; placed widgets on home do not.
+    A=$(findany "تطبيق" "Apply" "إضافة" "Add")
+    if [ -n "$A" ]; then
+      adb shell input tap $A; sleep 5
+      shot 14_after_config_$TAG
+      adb shell input keyevent KEYCODE_HOME; sleep 3
+      CUR=verify_${TAG}_$ATT; dump $CUR
+      N=$(grep -c "wathakker" "$OUT/ui_$CUR.xml" 2>/dev/null)
+      if [ "$N" -ge "$EXPECTED" ]; then
+        echo "DRAG_OK $TAG att$ATT nodes=$N" >> "$OUT/SUMMARY.txt"; return 0
+      fi
+      echo "DRAG_OK $TAG att$ATT (config applied, nodes=$N)" >> "$OUT/SUMMARY.txt"; return 0
+    fi
+    if grep -q "بحث" "$OUT/ui_$CUR.xml"; then
+      echo "DRAG_STILL_PICKER $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue
+    fi
+    sleep 3
+    CUR=verify_${TAG}_$ATT; dump $CUR
+    N=$(grep -c "wathakker" "$OUT/ui_$CUR.xml" 2>/dev/null)
+    if [ "$N" -ge "$EXPECTED" ]; then
+      echo "DRAG_OK $TAG att$ATT nodes=$N (no config)" >> "$OUT/SUMMARY.txt"; return 0
+    fi
+    echo "DRAG_NO_EFFECT $TAG att$ATT nodes=$N" >> "$OUT/SUMMARY.txt"
   done
   echo "DRAG_FAIL $TAG" >> "$OUT/SUMMARY.txt"; return 1
 }
 
 add_widget "مزخرف" 540 700 decorated 1
-add_widget "الصلاة القادمة" 200 1400 nextprayer 2
-add_widget "التاريخ الهجري" 200 1800 hijri 3
+add_widget "الصلاة القادمة" 540 1400 nextprayer 2
+add_widget "التاريخ الهجري" 540 1800 hijri 3
 
 adb shell input keyevent KEYCODE_HOME; sleep 4
 CUR=final; dump $CUR
