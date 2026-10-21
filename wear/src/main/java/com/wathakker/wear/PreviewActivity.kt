@@ -35,7 +35,13 @@ class PreviewActivity : Activity() {
         if (mode == "tile") {
             val layout = LayoutElementBuilders.Layout.Builder().setRoot(PreviewTile(this).layout(s, iq)).build()
             val res = ResourceBuilders.Resources.Builder().setVersion("1").build()
-            val r = TileRenderer(this, ContextCompat.getMainExecutor(this)) { }
+            // The real watch (sysui renderer) draws the arc clockwise from the anchor in any locale.
+            // The bundled TileRenderer mirrors the whole layout in RTL locales, which flipped the arc in
+            // Arabic previews (evidence must match the watch), so render the preview in an LTR context.
+            val cfg = android.content.res.Configuration(resources.configuration)
+            cfg.setLocale(java.util.Locale.US)
+            cfg.setLayoutDirection(android.view.View.LAYOUT_DIRECTION_LTR)
+            val r = TileRenderer(createConfigurationContext(cfg), ContextCompat.getMainExecutor(this)) { }
             r.inflateAsync(layout, res, root)
         } else {
             val k = intent.getIntExtra("kind", 0)
@@ -49,7 +55,7 @@ class PreviewActivity : Activity() {
             cd.setComplicationData(data, true)
             root.addView(object : View(this) {
                 override fun onDraw(canvas: Canvas) {
-                    val sz = (width * 0.30f).toInt(); val cx = width / 2; val cy = height / 2
+                    val sz = (width * 0.40f).toInt(); val cx = width / 2; val cy = height / 2
                     cd.bounds = Rect(cx - sz / 2, cy - sz / 2, cx + sz / 2, cy + sz / 2)
                     cd.currentTime = java.time.Instant.now()
                     cd.draw(canvas)
