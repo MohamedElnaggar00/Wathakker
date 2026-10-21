@@ -8,3 +8,5 @@ for S in 0 1 2; do adb shell am start -S -W -n $PKG/com.example.PatternRenderChe
 adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8; adb exec-out screencap -p > "$OUT/config.png"
 adb shell input swipe 540 1900 540 500 300; sleep 2; adb exec-out screencap -p > "$OUT/config_scrolled.png"
 adb logcat -d | grep -i "AndroidRuntime\|WathakkerHome\|FATAL" | head -20 > "$OUT/errors.txt"
+adb shell am start -S -W -n $PKG/com.example.ColorRenderCheck >/dev/null 2>&1; sleep 8; adb exec-out screencap -p > "$OUT/widget_colors.png"
+adb logcat -d | grep ColorCheck > "$OUT/color_check.txt"
