@@ -70,7 +70,8 @@ add_widget(){
     XY=$(findany "$LABEL")
     [ -z "$XY" ] && break
   done
-  LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
+  LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" cell 2>/dev/null)
+  [ -z "$LXY" ] && LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
   [ -n "$LXY" ] && XY=$LXY
   CY=$(echo $XY | awk '{print $2}')
   if [ "$CY" -gt 1900 ]; then echo "ROW_TOO_LOW $TAG y=$CY" >> "$OUT/SUMMARY.txt"; return 1; fi

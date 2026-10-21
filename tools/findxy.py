@@ -20,7 +20,12 @@ for node in root.iter('node'):
         v = node.get(attr) or ''
         if needle in v:
             n = node
-            if mode == 'long':
+            if mode == 'cell':
+                m = n
+                while m is not None and 'WidgetCell' not in (m.get('class') or ''):
+                    m = parent.get(m)
+                if m is not None: n = m
+            elif mode == 'long':
                 while n is not None and n.get('long-clickable') != 'true':
                     n = parent.get(n)
             else:
