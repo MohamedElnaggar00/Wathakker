@@ -28,13 +28,15 @@ open class PrayerTileService : TileService() {
         return TC(m, androidx.core.graphics.ColorUtils.blendARGB(0xFF000000.toInt(), m, 0.22f))
     }
 
+    // Custom typefaces are not allowed inside tiles (platform restriction), so the font choice reaches
+    // the tile as size scale + bold weight only; the typeface stays the system font.
     private fun text(t: String, size: Float, color: Int, bold: Boolean) =
         LayoutElementBuilders.Text.Builder()
             .setText(t)
             .setFontStyle(
                 LayoutElementBuilders.FontStyle.Builder()
-                    .setSize(sp(size)).setColor(argb(color))
-                    .setWeight(if (bold) LayoutElementBuilders.FONT_WEIGHT_BOLD else LayoutElementBuilders.FONT_WEIGHT_NORMAL)
+                    .setSize(sp(size * WFonts.scale)).setColor(argb(color))
+                    .setWeight(if (bold || WFonts.bold) LayoutElementBuilders.FONT_WEIGHT_BOLD else LayoutElementBuilders.FONT_WEIGHT_NORMAL)
                     .build()
             ).build()
 
@@ -80,6 +82,7 @@ open class PrayerTileService : TileService() {
     }
 
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> {
+        WFonts.load(this)
         val s = Prayer.compute(this)
         val iq = Prayer.iqamaNow(this)
         val tile = TileBuilders.Tile.Builder()

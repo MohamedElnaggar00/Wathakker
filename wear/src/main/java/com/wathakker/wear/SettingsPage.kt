@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -146,7 +147,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         Box(Modifier.fillMaxWidth().padding(horizontal = (w * 0.08f).dp).height(1.dp).background(Color(0xFF3A3A3E)))
     }
 
-    class RadioOpt(val label: String, val selected: Boolean, val onClick: () -> Unit, val lead: (@Composable () -> Unit)? = null)
+    class RadioOpt(val label: String, val selected: Boolean, val onClick: () -> Unit, val lead: (@Composable () -> Unit)? = null, val labelStyle: (TextStyle) -> TextStyle = { it })
 
     // One UI Watch radio-list card in app colors: dark rounded card, dividers, accent radio rings.
     // Row geometry measured from the owner's watch: row ~110px and label ~34px on a 450px screen.
@@ -159,7 +160,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                     OneUiRadio(opt.selected, w)
                     Spacer(Modifier.width((w * 0.05f).dp))
                     if (opt.lead != null) { opt.lead(); Spacer(Modifier.width((w * 0.05f).dp)) }
-                    Text1(opt.label, tx(w * 0.073f, Color.White, align = TextAlign.Start), maxLines = 2)
+                    Text1(opt.label, opt.labelStyle(tx(w * 0.073f, Color.White, align = TextAlign.Start)), maxLines = 2)
                 }
             }
         }
@@ -184,7 +185,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         Box(Modifier.padding(horizontal = (w * 0.04f).dp).width(1.dp).height((w * 0.11f).dp).background(Color(0xFF3A3A3E)))
     }
 
-    val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); else -> T("الإعدادات", "Settings") }
+    val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); 7 -> T("نوع الخط", "Font style"); 8 -> T("حجم الخط", "Font size"); else -> T("الإعدادات", "Settings") }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         ScalingLazyColumn(Modifier.fillMaxSize()) {
             item { Text1(title, tx(w * 0.08f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.05f).dp)) }
@@ -212,6 +213,64 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                             OneUiRow(w, T("الأذونات", "Permissions"), null, { go(4) })
                             OneUiDivider(w)
                             OneUiRow(w, T("فتح في الجهاز", "Open on phone"), null, { openOnPhone(ctx) {} }, trail = { ExternalIcon(w, SoftGrey) })
+                        }
+                    }
+                    item { Text1(T("الخط", "Font"), tx(w * 0.062f, SoftGrey, align = TextAlign.Start), Modifier.fillMaxWidth().padding(horizontal = (w * 0.07f).dp).padding(top = (w * 0.04f).dp, bottom = (w * 0.025f).dp)) }
+                    item {
+                        Column(Modifier.fillMaxWidth().padding(horizontal = (w * 0.027f).dp).clip(RoundedCornerShape((w * 0.09f).dp)).background(Color(0xFF26262B))) {
+                            OneUiRow(w, T("نوع الخط", "Font style"), WFonts.cur.label, { go(7) })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("خط عريض", "Bold font"), null, { WFonts.saveBold(ctx, !WFonts.bold) }, trail = {
+                                OneUiSwitch(WFonts.bold, { v -> WFonts.saveBold(ctx, v) }, w)
+                            })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("حجم الخط", "Font size"), null, { go(8) })
+                        }
+                    }
+                    item { Spacer(Modifier.height((w * 0.12f).dp)) }
+                }
+                7 -> {
+                    item {
+                        // Same 8 options as the phone, each label rendered in its own font (live preview).
+                        OneUiRadioCard(w, WFonts.choices.mapIndexed { i, ch ->
+                            RadioOpt(ch.label, WFonts.idx == i, { WFonts.saveChoice(ctx, i) }, labelStyle = { st -> st.copy(fontFamily = ch.family) })
+                        })
+                    }
+                    item { Spacer(Modifier.height((w * 0.12f).dp)) }
+                }
+                8 -> {
+                    item {
+                        // One UI Watch font-size page (owner reference): preview text, dots slider, -/+ buttons in app accent.
+                        var step by remember { mutableIntStateOf(WFonts.stepIdx) }
+                        fun applyStep(i: Int) { step = i.coerceIn(0, WFonts.STEPS.size - 1); WFonts.saveScale(ctx, WFonts.STEPS[step]) }
+                        @Composable
+                        fun sizeBtn(minus: Boolean) {
+                            Box(Modifier.size((w * 0.22f).dp).clip(CircleShape).background(Color(0xFF3A3A3E)).clickable { applyStep(step + if (minus) -1 else 1) }, contentAlignment = Alignment.Center) {
+                                Canvas(Modifier.size((w * 0.07f).dp)) {
+                                    val sw = size.minDimension * 0.16f
+                                    drawLine(Color.White, Offset(0f, size.height / 2f), Offset(size.width, size.height / 2f), strokeWidth = sw, cap = StrokeCap.Round)
+                                    if (!minus) drawLine(Color.White, Offset(size.width / 2f, 0f), Offset(size.width / 2f, size.height), strokeWidth = sw, cap = StrokeCap.Round)
+                                }
+                            }
+                        }
+                        Column(Modifier.fillMaxWidth().padding(horizontal = (w * 0.05f).dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text1(T("هكذا سيبدو النص الرئيسي.", "Main text will look like this."), tx(w * 0.07f, Color.White), maxLines = 2)
+                            Spacer(Modifier.height((w * 0.02f).dp))
+                            Text1(WFonts.scaleLabel(WFonts.STEPS[step]), tx(w * 0.05f, Gold))
+                            Spacer(Modifier.height((w * 0.05f).dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                WFonts.STEPS.indices.forEach { i ->
+                                    val sel = i == step
+                                    Box(Modifier.size(if (sel) (w * 0.042f).dp else (w * 0.024f).dp).clip(CircleShape).background(if (sel) Gold else Color(0xFF5A5A60)))
+                                    if (i < WFonts.STEPS.size - 1) Spacer(Modifier.width((w * 0.032f).dp))
+                                }
+                            }
+                            Spacer(Modifier.height((w * 0.06f).dp))
+                            Row {
+                                sizeBtn(true)
+                                Spacer(Modifier.width((w * 0.14f).dp))
+                                sizeBtn(false)
+                            }
                         }
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }

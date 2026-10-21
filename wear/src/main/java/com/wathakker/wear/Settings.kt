@@ -36,6 +36,7 @@ object Settings {
         Loc.refresh(c)
         starPattern = p.getInt("pat", 1).let { v -> if (patterns.any { it.first == v }) v else 1 }
         WTheme.idx = p.getInt("theme", 0)
+        WFonts.load(c)
     }
     fun savePattern(c: Context, v: Int) { starPattern = v; c.getSharedPreferences(P, Context.MODE_PRIVATE).edit().putInt("pat", v).apply() }
     fun saveTheme(c: Context, v: Int) { WTheme.idx = v; c.getSharedPreferences(P, Context.MODE_PRIVATE).edit().putInt("theme", v).apply() }
