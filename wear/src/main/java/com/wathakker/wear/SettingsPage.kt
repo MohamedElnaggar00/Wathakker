@@ -123,6 +123,26 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         }
     }
 
+    // One UI Watch radio option (reference: system radio pickers), ring + filled dot in app accent.
+    @Composable
+    fun OneUiRadio(on: Boolean, w: Float) {
+        val d = w * 0.05f
+        Canvas(Modifier.size(d.dp)) {
+            val r = size.minDimension / 2f
+            if (on) {
+                drawCircle(Gold, radius = r)
+                drawCircle(Color(0xFF26262B), radius = r * 0.42f)
+            } else {
+                drawCircle(Color(0xFF8E8E93), radius = r * 0.82f, style = Stroke(width = r * 0.22f))
+            }
+        }
+    }
+
+    @Composable
+    fun OneUiDivider(w: Float) {
+        Box(Modifier.fillMaxWidth().padding(horizontal = (w * 0.05f).dp).height(1.dp).background(Color(0xFF3A3A3E)))
+    }
+
     val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); else -> T("الإعدادات", "Settings") }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         ScalingLazyColumn(Modifier.fillMaxSize()) {
@@ -145,9 +165,18 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                 6 -> {
                     item {
                         var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }
-                        Column {
-                            Row1(T("تنبيه إشعار", "Notification alert"), null, { fs = 0; Adhan.setFullScreen(ctx, false) }, selected = fs == 0)
-                            Row1(T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert"), null, { fs = 1; Adhan.setFullScreen(ctx, true) }, selected = fs == 1)
+                        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape((w * 0.08f).dp)).background(Color(0xFF26262B))) {
+                            Row(Modifier.fillMaxWidth().clickable { fs = 0; Adhan.setFullScreen(ctx, false) }.padding(horizontal = (w * 0.05f).dp, vertical = (w * 0.05f).dp), verticalAlignment = Alignment.CenterVertically) {
+                                OneUiRadio(fs == 0, w)
+                                Spacer(Modifier.width((w * 0.04f).dp))
+                                Text1(T("تنبيه إشعار", "Notification alert"), tx(w * 0.056f, Color.White))
+                            }
+                            OneUiDivider(w)
+                            Row(Modifier.fillMaxWidth().clickable { fs = 1; Adhan.setFullScreen(ctx, true) }.padding(horizontal = (w * 0.05f).dp, vertical = (w * 0.05f).dp), verticalAlignment = Alignment.CenterVertically) {
+                                OneUiRadio(fs == 1, w)
+                                Spacer(Modifier.width((w * 0.04f).dp))
+                                Text1(T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert"), tx(w * 0.056f, Color.White))
+                            }
                         }
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
