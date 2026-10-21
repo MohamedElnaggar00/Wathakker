@@ -65,8 +65,8 @@ if ! grep -q "AdhanActivity" "$OUT/ui_alert.xml" 2>/dev/null; then
   echo "FSI_NO_LAUNCH (screen was off; fallback: forced launch for UI evidence only)" >> "$OUT/SUMMARY.txt"
   adb shell input keyevent KEYCODE_WAKEUP; sleep 2
   # the activity auto-closes after SHOW_SECONDS (5s); capture early
-  adb shell am start -n $PKG/com.wathakker.wear.AdhanActivity --ei id 3 --el $NOW >/dev/null 2>&1
-  sleep 2
+  adb shell am start -W -n $PKG/com.wathakker.wear.AdhanActivity --ei id 3 --el $NOW > "$OUT/amstart_adhan.txt" 2>&1
+  sleep 1
   shot 30b_fullscreen_forced
   CUR=alertf; dump $CUR
   sleep 4
@@ -105,13 +105,16 @@ adb shell input swipe 227 380 227 80 400; sleep 3
 shot 41_notification_stream
 adb shell dumpsys notification > "$OUT/notif2.txt" 2>&1
 # iqama counter demo (dev-only PreviewActivity with a fake "now" inside the iqama window)
+adb shell am force-stop $PKG
 adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode tile --ez iqama_demo true >/dev/null 2>&1
 sleep 6
 shot 50_iqama_tile
 CUR=iqtile; dump $CUR
+adb shell am force-stop $PKG
 adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode ranged --ei kind 0 --ez iqama_demo true >/dev/null 2>&1
 sleep 4
 shot 51_iqama_comp_ranged
+adb shell am force-stop $PKG
 adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode short --ei kind 0 --ez iqama_demo true >/dev/null 2>&1
 sleep 4
 shot 52_iqama_comp_short
