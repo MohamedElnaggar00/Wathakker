@@ -10,9 +10,17 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -57,6 +65,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate as rotateScope
@@ -81,6 +90,7 @@ import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import kotlinx.coroutines.delay
 import java.util.concurrent.Executors
+import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.max
@@ -143,17 +153,23 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
             // consumes right swipes to page back one page at a time.
             val subOpen = pager.currentPage == 3 && settingsSub != 0
             val dismissState = rememberSwipeToDismissBoxState()
+            // True while the sub-screen is closing via the edge swipe-back gesture: the box has already
+            // animated that visually, so the content swap back to the root must be instant (no double).
+            var returnViaSwipe by remember { mutableStateOf(false) }
             LaunchedEffect(dismissState.currentValue) {
                 if (dismissState.currentValue == SwipeToDismissValue.Dismissed) {
                     dismissState.snapTo(SwipeToDismissValue.Default)
-                    if (subOpen) settingsSub = 0 else act?.finish()
+                    if (subOpen) { returnViaSwipe = true; settingsSub = 0 } else act?.finish()
                 }
             }
+            // Constant content (root-cause fix for his 19:44 report): keying the box content per
+            // sub-screen made the box dispose and recreate it, so the enter transition never ran.
+            // Now the box only owns the swipe-back gesture (background = settings root revealed under
+            // the finger) and the forward/return transitions run in the AnimatedContent below.
             BasicSwipeToDismissBox(
                 state = dismissState,
                 modifier = Modifier.fillMaxSize().edgeSwipeToDismiss(dismissState),
-                userSwipeEnabled = subOpen || pager.currentPage == 0,
-                contentKey = settingsSub
+                userSwipeEnabled = subOpen || pager.currentPage == 0
             ) { isBackground ->
                 if (isBackground) {
                     if (subOpen) SettingsContent(0, w, {}) else Box(Modifier.fillMaxSize().background(Color.Black))
@@ -169,13 +185,31 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
                                     0 -> MainPage(state, now, w)
                                     1 -> ListPage(state, w)
                                     2 -> QiblaPage(w)
-                                    else -> SettingsPage(w, settingsSub) { settingsSub = it }
+                                    else -> {
+                                        // One UI Watch navigation: the sub-screen slides in from the right
+                                        // while the root slides out left; returning mirrors it. The
+                                        // swipe-back gesture animates itself, so that path stays instant.
+                                        AnimatedContent(
+                                            targetState = settingsSub,
+                                            transitionSpec = {
+                                                when {
+                                                    returnViaSwipe && targetState == 0 -> EnterTransition.None togetherWith ExitTransition.None
+                                                    targetState != 0 -> (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it } + fadeOut())
+                                                    else -> (slideInHorizontally { -it } + fadeIn()) togetherWith (slideOutHorizontally { it } + fadeOut())
+                                                }
+                                            },
+                                            label = "settingsSub"
+                                        ) { sub ->
+                                            SettingsPage(w, sub) { settingsSub = it }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            LaunchedEffect(settingsSub) { returnViaSwipe = false }
             // Dots mirror the physical page order (page 0 at the left, advancing moves the pill right),
             // matching the fixed LTR pager direction in every language.
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -183,11 +217,13 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
                     Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.045f).dp),
                     horizontalArrangement = Arrangement.spacedBy((w * 0.018f).dp)
                 ) {
+                    // The active pill flows with the swipe (One UI style) instead of jumping page to page.
+                    val pos = pager.currentPage + pager.currentPageOffsetFraction
                     for (i in 0 until 4) {
-                        val on = i == pager.currentPage
+                        val dist = abs(pos - i).coerceIn(0f, 1f)
                         Box(
-                            Modifier.width(((if (on) 0.07f else 0.022f) * w).dp).height((w * 0.022f).dp)
-                                .clip(CircleShape).background(if (on) Color.White else Color(0xFF5A5A5E))
+                            Modifier.width(((0.022f + (0.07f - 0.022f) * (1f - dist)) * w).dp).height((w * 0.022f).dp)
+                                .clip(CircleShape).background(lerp(Color(0xFF5A5A5E), Color.White, 1f - dist))
                         )
                     }
                 }

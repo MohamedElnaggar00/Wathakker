@@ -28,14 +28,15 @@ open class PrayerTileService : TileService() {
         return TC(m, androidx.core.graphics.ColorUtils.blendARGB(0xFF000000.toInt(), m, 0.22f))
     }
 
-    // Custom typefaces are not allowed inside tiles (platform restriction), so the font choice reaches
-    // the tile as size scale only; the typeface stays the system font.
+    // Custom typefaces are not allowed inside tiles (platform restriction): the typeface stays the
+    // system font. The tile also ignores the font-SIZE setting on purpose (his 19:43-19:45 review):
+    // a tile is fixed real estate, and scaling its text pushed the Hijri date off the screen.
     private fun text(t: String, size: Float, color: Int, bold: Boolean) =
         LayoutElementBuilders.Text.Builder()
             .setText(t)
             .setFontStyle(
                 LayoutElementBuilders.FontStyle.Builder()
-                    .setSize(sp(size * WFonts.scale)).setColor(argb(color))
+                    .setSize(sp(size)).setColor(argb(color))
                     .setWeight(if (bold) LayoutElementBuilders.FONT_WEIGHT_BOLD else LayoutElementBuilders.FONT_WEIGHT_NORMAL)
                     .build()
             ).build()
@@ -50,21 +51,22 @@ open class PrayerTileService : TileService() {
             .setAnchorAngle(degrees(-135f)).setAnchorType(LayoutElementBuilders.ARC_ANCHOR_START).addContent(line).build()
 
         fun gap(h: Float) = LayoutElementBuilders.Spacer.Builder().setHeight(dp(h)).build()
-        // Layout measured against the reference gold widget ON THE REAL WATCH (Samsung font renders
-        // ~1.4x taller than the emulator, so constants are scaled ~1.16x (0.776 * 1.30 * 1.15, i.e. +49.5% over installed build) to land on the reference
-        // spacing on the actual device; the 454px emulator shows it proportionally smaller).
+        // Redesigned vertical rhythm (his 19:43-19:45 order: tighter inter-line spacing, the clock
+        // sits a little lower and closer to the prayer name, the Hijri date must fit on screen).
+        // Sizes/gaps are fixed: measured against his real watch screenshots (the watch font renders
+        // ~1.44x taller than the 454px emulator, which shows the same layout proportionally smaller).
         val center = LayoutElementBuilders.Column.Builder()
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
             .setModifiers(ModifiersBuilders.Modifiers.Builder()
-                .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(16.5f)).build()).build())
+                .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(18f)).build()).build())
             .addContent(text(Prayer.time12(iq?.at ?: s.next.at), 25.5f, 0xFFFFFFFF.toInt(), false))
-            .addContent(gap(5f))
+            .addContent(gap(2.5f))
             .addContent(text(if (iq != null) T("إقامة ", "Iqama ") + iq.prayer.name else s.next.name, 19.5f, 0xFFFFFFFF.toInt(), false))
-            .addContent(gap(9.7f))
+            .addContent(gap(4.5f))
             .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText((iq?.at ?: s.next.at) - s.now), 14.5f, tc.main, true))
-            .addContent(gap(8f))
+            .addContent(gap(4f))
             .addContent(text(Prayer.hijriDay(s.now), 30f, 0xFFFFFFFF.toInt(), true))
-            .addContent(gap(3.3f))
+            .addContent(gap(2f))
             .addContent(text(Prayer.hijriMonth(s.now), 14.5f, 0xFF9D9DA2.toInt(), false))
             .build()
 
