@@ -116,28 +116,27 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit, rootListState: Scalin
     // (track 73x40px and knob 35px on a 450px screen). Track color follows the app theme accent.
     @Composable
     fun OneUiSwitch(on: Boolean, onChange: (Boolean) -> Unit, w: Float) {
-        val tw = w * 0.162f; val th = w * 0.089f; val knob = w * 0.078f
+        // Proportions from his 22:07 One UI reference: thumb ~0.82 of the track height with a clear inset.
+        val tw = w * 0.162f; val th = w * 0.089f; val knob = w * 0.073f
         // One UI Watch: the knob slides and the track color crossfades (his 19:45 report: it jumped).
         val frac by animateFloatAsState(if (on) 1f else 0f, tween(180, easing = FastOutSlowInEasing), label = "switchKnob")
         val track by animateColorAsState(if (on) Gold else Color(0xFF5A5A60), tween(180), label = "switchTrack")
         val den = LocalDensity.current
-        val padPx = with(den) { ((th - knob) / 2f).dp.toPx() }
         val travelPx = with(den) { (tw - th).dp.toPx() }
+        // The knob is a real child anchored at CenterStart and moved with offset{}: BOTH the
+        // anchor and the offset mirror in RTL together, so ON rests at the END side (right in
+        // LTR, left in RTL) with no manual direction math. (Build 70 bug: a layout-pass trick
+        // shifted the knob's CONTENT inside its own bounds - the white thumb vanished when ON,
+        // his 22:07 catch.) offset{} reads frac without recomposing per frame.
         Box(
             Modifier.size(width = tw.dp, height = th.dp).clip(RoundedCornerShape(th.dp))
-                .background(track).clickable { onChange(!on) },
+                .background(track).clickable { onChange(!on) }.padding(horizontal = ((th - knob) / 2f).dp),
             contentAlignment = Alignment.CenterStart
         ) {
-            // frac is read in the measure block: the knob slides with layout passes only (no recomposition per frame).
-            Box(Modifier.layout { measurable, _ ->
-                    val placeable = measurable.measure(androidx.compose.ui.unit.Constraints.fixed(knob.dp.roundToPx(), knob.dp.roundToPx()))
-                    // place() mirrors x automatically in RTL, so plain frac is enough: the knob
-                    // rests at the END side when ON (right in LTR, left in RTL) like One UI Watch.
-                    // (His 21:30 watch shot: a manual 1-frac compensation on top of place()'s
-                    // mirroring double-mirrored it, showing ON on the right in Arabic.)
-                    val x = padPx + travelPx * frac
-                    layout(placeable.width, placeable.height) { placeable.place(x.roundToInt(), 0) }
-                }.clip(CircleShape).background(Color.White))
+            Box(
+                Modifier.offset { IntOffset((travelPx * frac).roundToInt(), 0) }
+                    .size(knob.dp).clip(CircleShape).background(Color.White)
+            )
         }
     }
 
