@@ -13,6 +13,11 @@ class PatternRenderCheck : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         val mode = intent.getIntExtra("s", 0)
+        if (mode == 3) {
+            val bmp = HomeWidgets.renderKind(this, "OneUI", 330, 170, 9301)
+            val iv = ImageView(this); iv.setImageBitmap(bmp); iv.setPadding(8, 40, 8, 8)
+            setContentView(iv); return
+        }
         val (w, h, cols) = when (mode) { 0 -> Triple(330, 90, 1); 1 -> Triple(165, 165, 2); else -> Triple(330, 170, 1) }
         val pats = if (mode == 2) intArrayOf(1, 10, 0) else intArrayOf(1, 8, 9, 10, 11, 0)
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)

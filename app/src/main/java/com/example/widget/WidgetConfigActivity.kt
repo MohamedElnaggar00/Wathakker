@@ -1,5 +1,6 @@
 package com.example.widget
 
+import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -146,7 +147,7 @@ fun PatternSection(selected: Int, onPick: (Int) -> Unit) {
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, onApply: (String, String, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
+fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, showColors: Boolean = true, onApply: (String, String, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
     val cs = MaterialTheme.colorScheme
     // Taps only select; nothing is saved or closed until Apply (One UI style).
     var barSel by remember { mutableStateOf(current) }
@@ -170,10 +171,13 @@ fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, on
             ) {
                 Text(L10n.t(S.WidgetSettings), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(12.dp))
-                ColorSection(L10n.t(S.BarColor), options, barSel, { barSel = it }, splitAutoSwatch = true)
-                Spacer(Modifier.height(16.dp))
-                ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it; if (it == "wallblur") onNeedFilesPermission() }, captions = mapOf("wallblur" to L10n.t(S.NeedsFilesPerm)))
-                Spacer(Modifier.height(16.dp))
+                // The decorated OneUI widget has fixed colours; it gets the pattern section only.
+                if (showColors) {
+                    ColorSection(L10n.t(S.BarColor), options, barSel, { barSel = it }, splitAutoSwatch = true)
+                    Spacer(Modifier.height(16.dp))
+                    ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it; if (it == "wallblur") onNeedFilesPermission() }, captions = mapOf("wallblur" to L10n.t(S.NeedsFilesPerm)))
+                    Spacer(Modifier.height(16.dp))
+                }
                 PatternSection(patSel) { patSel = it }
             }
             // One UI "Scan phone" style: one centered filled blue pill. Back discards.
@@ -205,6 +209,8 @@ class WidgetConfigActivity : ComponentActivity() {
         L10n.init(this)
         setResult(RESULT_CANCELED)
         appWidgetId = intent?.getIntExtra("appWidgetId", 0) ?: 0
+        val prov = if (appWidgetId > 0) AppWidgetManager.getInstance(this).getAppWidgetInfo(appWidgetId)?.provider?.className else null
+        val decorated = prov == "com.example.widget.OneUIWidgetProvider" || intent.getBooleanExtra("debugOneUi", false)
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)
         val curBar = (sp.getString(keyFor("widget_bar_color"), null)
             ?: sp.getString("widget_bar_color", "auto") ?: "auto").let { v -> if (options.any { o -> o.first == v }) v else "auto" }
@@ -229,6 +235,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     current = curBar,
                     currentBg = curBg,
                     currentPattern = sp.getInt(keyFor("widget_pattern"), 1),
+                    showColors = !decorated,
                     onNeedFilesPermission = { com.example.ui.PermissionFlow.requestFilesIfNeeded(this@WidgetConfigActivity) },
                     onApply = { bar, bg, pat ->
                         sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).apply()

@@ -10,3 +10,14 @@ adb shell input swipe 540 1900 540 500 300; sleep 2; adb exec-out screencap -p >
 adb logcat -d | grep -i "AndroidRuntime\|WathakkerHome\|FATAL" | head -20 > "$OUT/errors.txt"
 adb shell am start -S -W -n $PKG/com.example.ColorRenderCheck >/dev/null 2>&1; sleep 8; adb exec-out screencap -p > "$OUT/widget_colors.png"
 adb logcat -d | grep ColorCheck > "$OUT/color_check.txt"
+adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9301 --ez debugOneUi true >/dev/null 2>&1; sleep 8
+adb exec-out screencap -p > "$OUT/config_oneui.png"
+adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$OUT/ui_oneui.xml" >/dev/null 2>&1
+tap_text(){ B=$(grep -o "text=\"$1\"[^>]*" "$2" | grep -o 'bounds="[^"]*"' | head -1); echo "$B" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}'; }
+XY=$(tap_text "بدون" "$OUT/ui_oneui.xml"); echo "none chip: $XY" >> "$OUT/color_check.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 2
+adb exec-out screencap -p > "$OUT/config_oneui_selected.png"
+adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$OUT/ui_oneui2.xml" >/dev/null 2>&1
+XY=$(tap_text "تطبيق" "$OUT/ui_oneui2.xml"); echo "apply btn: $XY" >> "$OUT/color_check.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_oneui.xml" 2>&1
+adb shell am start -S -W -n $PKG/com.example.PatternRenderCheck --ei s 3 >/dev/null 2>&1; sleep 8
+adb exec-out screencap -p > "$OUT/widget_oneui_applied.png"
