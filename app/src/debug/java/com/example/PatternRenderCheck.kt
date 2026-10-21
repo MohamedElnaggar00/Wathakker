@@ -9,7 +9,7 @@ import android.widget.ImageView
 import com.example.lockwidgets.HomeWidgets
 
 /** Debug-only: renders the OneUI widget bitmap for each pattern at a given size, for emulator screenshots. */
-class WidgetRenderCheck : Activity() {
+class PatternRenderCheck : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         val mode = intent.getIntExtra("s", 0)
