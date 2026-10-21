@@ -46,16 +46,17 @@ open class PrayerTileService : TileService() {
             .setAnchorAngle(degrees(-135f)).setAnchorType(LayoutElementBuilders.ARC_ANCHOR_START).addContent(line).build()
 
         fun gap(h: Float) = LayoutElementBuilders.Spacer.Builder().setHeight(dp(h)).build()
+        // Layout measured to match the reference tile (gold widget) exactly: clock well below the arc,
+        // tight clock->name gap, light-weight name, evenly spaced rows down to the hijri date.
         val center = LayoutElementBuilders.Column.Builder()
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
             .setModifiers(ModifiersBuilders.Modifiers.Builder()
-                .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(9f)).build()).build())
-            .addContent(text(Prayer.time12(s.next.at), 24f, 0xFFFFFFFF.toInt(), false))
-            .addContent(gap(2f))
-            .addContent(text(s.next.name, 19f, 0xFFFFFFFF.toInt(), true))
-            .addContent(gap(5f))
+                .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(27f)).build()).build())
+            .addContent(text(Prayer.time12(s.next.at), 22f, 0xFFFFFFFF.toInt(), false))
+            .addContent(text(s.next.name, 17f, 0xFFFFFFFF.toInt(), false))
+            .addContent(gap(3f))
             .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 12f, tc.main, false))
-            .addContent(gap(7f))
+            .addContent(gap(5f))
             .addContent(text(Prayer.hijriDay(s.now), 26f, 0xFFFFFFFF.toInt(), true))
             .addContent(text(Prayer.hijriMonth(s.now), 12f, 0xFF9D9DA2.toInt(), false))
             .build()
