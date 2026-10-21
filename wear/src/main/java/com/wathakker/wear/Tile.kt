@@ -57,7 +57,7 @@ open class PrayerTileService : TileService() {
             .addContent(gap(5f))
             .addContent(text(s.next.name, 13f, 0xFFFFFFFF.toInt(), false))
             .addContent(gap(9.7f))
-            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 9.5f, tc.main, false))
+            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 9.5f, tc.main, true))
             .addContent(gap(8f))
             .addContent(text(Prayer.hijriDay(s.now), 20f, 0xFFFFFFFF.toInt(), true))
             .addContent(gap(3.3f))
