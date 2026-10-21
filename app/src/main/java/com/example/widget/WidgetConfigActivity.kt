@@ -147,7 +147,7 @@ fun PatternSection(selected: Int, onPick: (Int) -> Unit) {
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, showColors: Boolean = true, onApply: (String, String, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
+fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, showColors: Boolean = true, showPattern: Boolean = true, onApply: (String, String, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
     val cs = MaterialTheme.colorScheme
     // Taps only select; nothing is saved or closed until Apply (One UI style).
     var barSel by remember { mutableStateOf(current) }
@@ -178,7 +178,8 @@ fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, sh
                     ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it; if (it == "wallblur") onNeedFilesPermission() }, captions = mapOf("wallblur" to L10n.t(S.NeedsFilesPerm)))
                     Spacer(Modifier.height(16.dp))
                 }
-                PatternSection(patSel) { patSel = it }
+                // Only the decorated OneUI widget draws patterns; other widgets get colours only.
+                if (showPattern) PatternSection(patSel) { patSel = it }
             }
             // One UI "Scan phone" style: one centered filled blue pill. Back discards.
             Box(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 24.dp), contentAlignment = Alignment.Center) {
@@ -236,6 +237,7 @@ class WidgetConfigActivity : ComponentActivity() {
                     currentBg = curBg,
                     currentPattern = sp.getInt(keyFor("widget_pattern"), 1),
                     showColors = !decorated,
+                    showPattern = decorated,
                     onNeedFilesPermission = { com.example.ui.PermissionFlow.requestFilesIfNeeded(this@WidgetConfigActivity) },
                     onApply = { bar, bg, pat ->
                         sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).apply()
