@@ -55,10 +55,16 @@ object Adhan {
         val n = Prayer.nextAdhan(c) ?: return
         val p = pi(c, n.id, n.at, PendingIntent.FLAG_UPDATE_CURRENT)
         try {
-            if (Build.VERSION.SDK_INT >= 31 && !am.canScheduleExactAlarms()) am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, n.at, p)
-            else am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, n.at, p)
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, n.at, p)
         } catch (_: SecurityException) { am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, n.at, p) }
         c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putLong("adhan_next", n.at).putInt("adhan_next_id", n.id).apply()
+    }
+
+    /** Debug only: sets a real alarm for the Maghrib alert [sec] seconds from now, to test AlarmManager delivery. */
+    fun testIn(c: Context, sec: Int) {
+        val am = c.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val at = System.currentTimeMillis() + sec * 1000L
+        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi(c, 4, at, PendingIntent.FLAG_UPDATE_CURRENT))
     }
 
     fun fire(c: Context, id: Int, at: Long) {
@@ -66,7 +72,7 @@ object Adhan {
         nm.createNotificationChannel(NotificationChannel(CHANNEL, T("تنبيه الأذان", "Adhan alert"), NotificationManager.IMPORTANCE_HIGH).apply {
             enableVibration(true); vibrationPattern = longArrayOf(0, 400, 200, 400); setSound(null, null)
         })
-        val i = Intent(c, AdhanActivity::class.java).putExtra("id", id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        val i = Intent(c, AdhanActivity::class.java).putExtra("id", id).putExtra("at", at).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val full = PendingIntent.getActivity(c, 7002, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val name = Prayer.names[id.coerceIn(0, 5)]
         val n = Notification.Builder(c, CHANNEL).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(T("حان موعد أذان ", "Time for adhan: ") + name)
@@ -100,12 +106,13 @@ class AdhanActivity : ComponentActivity() {
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         Settings.load(this)
         val id = intent.getIntExtra("id", 0).coerceIn(0, 5)
-        setContent { AdhanScreen(id) { finish() } }
+        val at = intent.getLongExtra("at", System.currentTimeMillis())
+        setContent { AdhanScreen(id, at) { finish() } }
     }
 }
 
 @androidx.compose.runtime.Composable
-fun AdhanScreen(id: Int, close: () -> Unit) {
+fun AdhanScreen(id: Int, at: Long, close: () -> Unit) {
     LaunchedEffect(Unit) { delay(Adhan.SHOW_SECONDS * 1000L); close() }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         BoxWithConstraints(Modifier.fillMaxSize().background(Color.Black).clickable { close() }) {
@@ -122,7 +129,7 @@ fun AdhanScreen(id: Int, close: () -> Unit) {
                 Spacer(Modifier.height((w * 0.02f).dp))
                 Text1(Prayer.names[id], tx(w * 0.2f, Color.White, true))
                 Spacer(Modifier.height((w * 0.03f).dp))
-                Text1(Prayer.time12(System.currentTimeMillis()), tx(w * 0.085f, t.main))
+                Text1(Prayer.time12(at), tx(w * 0.085f, t.main))
             }
         }
     }

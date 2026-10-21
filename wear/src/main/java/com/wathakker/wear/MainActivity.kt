@@ -101,6 +101,7 @@ class MainActivity : ComponentActivity() {
         Settings.load(this)
         Adhan.schedule(this)
         if (intent.hasExtra("pat")) starPattern = intent.getIntExtra("pat", 1)
+        if (intent.hasExtra("adhan_test")) Adhan.testIn(this, intent.getIntExtra("adhan_test", 15))
         if (intent.hasExtra("lang")) Loc.save(this, intent.getIntExtra("lang", 0))
         if (intent.hasExtra("theme")) Settings.saveTheme(this, intent.getIntExtra("theme", 0))
         val prefs = getSharedPreferences("wear_prefs", Context.MODE_PRIVATE)
