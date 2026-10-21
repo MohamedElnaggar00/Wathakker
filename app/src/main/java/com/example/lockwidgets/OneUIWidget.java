@@ -12,7 +12,7 @@ final class OneUIWidget {
 
     private static float lerp(float a, float b, float t) { return a + (b - a) * t; }
 
-    static Bitmap render(Context c, HomeWidgets.State s, int wd, int ht) {
+    static Bitmap render(Context c, HomeWidgets.State s, int wd, int ht, int widgetId) {
         float d = c.getResources().getDisplayMetrics().density;
         Bitmap bmp = Bitmap.createBitmap(Math.max(1, (int) (wd * d)), Math.max(1, (int) (ht * d)), Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(bmp);
@@ -39,7 +39,7 @@ final class OneUIWidget {
         p.setShader(new LinearGradient(0, 0, 0, H * d, cardTop, cardBot, Shader.TileMode.CLAMP));
         cv.drawRoundRect(new RectF(card.left * d, card.top * d, card.right * d, card.bottom * d), corner * d, corner * d, p);
         p.setShader(null);
-        // stars, fading from the bottom-left corner
+        // pattern (default Rub el Hizb, per-widget setting), fading from the bottom-left corner
         cv.saveLayer(0, 0, cardW * d, H * d, null);
         Path clip = new Path();
         clip.addRoundRect(new RectF(0, 0, cardW * d, H * d), corner * d, corner * d, Path.Direction.CW);
@@ -50,12 +50,7 @@ final class OneUIWidget {
         sp.setColor(night ? 0xFFFFFFFF : 0xFF7C8396);
         sp.setAlpha(night ? 48 : 70);
         float R = H * lerp(0.115f, 0.092f, t);
-        float step = R * 1.7f;
-        for (float cy = H + R * 0.2f, row = 0; cy > -R; cy -= step * 0.78f, row++) {
-            for (float cx = (row % 2 == 0 ? 0 : step / 2); cx < cardW + R; cx += step) {
-                star(cv, cx * d, cy * d, R * d, sp);
-            }
-        }
+        WidgetPatterns.draw(cv, WidgetPatterns.forWidget(c, widgetId), cardW * d, H * d, R * d, sp);
         Paint fade = new Paint();
         fade.setShader(new LinearGradient(0, H * d, cardW * d * 0.9f, 0, 0xFF000000, 0x00000000, Shader.TileMode.CLAMP));
         fade.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
@@ -123,19 +118,6 @@ final class OneUIWidget {
         String m = cal.get(java.util.Calendar.AM_PM) == 0 ? "ص" : "م";
         String hm = new java.text.SimpleDateFormat("hh:mm", Locale.ENGLISH).format(new java.util.Date(at));
         return "\u2066" + hm + "\u2069 " + m;
-    }
-
-    private static void star(Canvas cv, float cx, float cy, float r, Paint p) {
-        Path path = new Path();
-        float inner = r * 0.45f;
-        for (int i = 0; i < 10; i++) {
-            double a = -Math.PI / 2 + i * Math.PI / 5;
-            float rr = (i % 2 == 0) ? r : inner;
-            float x = cx + (float) Math.cos(a) * rr, y = cy + (float) Math.sin(a) * rr;
-            if (i == 0) path.moveTo(x, y); else path.lineTo(x, y);
-        }
-        path.close();
-        cv.drawPath(path, p);
     }
 
     private static void line(Canvas cv, String s, float x, float cy, float w, float size, Typeface f, int color, Layout.Alignment a, float d) {

@@ -29,6 +29,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import com.example.ui.oneui.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -118,11 +120,38 @@ fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
+fun PatternSection(selected: Int, onPick: (Int) -> Unit) {
+    val cs = MaterialTheme.colorScheme
+    val night = isSystemInDarkTheme()
+    Text(L10n.t(S.WidgetPattern), color = cs.onSurfaceVariant, fontSize = 13.sp)
+    Spacer(Modifier.height(8.dp))
+    val ids = listOf(0) + com.example.lockwidgets.WidgetPatterns.IDS.toList()
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+      for (rowIds in ids.chunked(3)) Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        for (id in rowIds) {
+            val sel = selected == id
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.plainClickable { onPick(id) }) {
+                Box(
+                    Modifier.size(56.dp).clip(RoundedCornerShape(14.dp))
+                        .border(if (sel) 2.5.dp else 1.dp, if (sel) Color(0xFF377AFF) else cs.outlineVariant, RoundedCornerShape(14.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (id == 0) Text(L10n.t(S.NoPattern), color = cs.onSurfaceVariant, fontSize = 12.sp)
+                    else androidx.compose.foundation.Image(remember(id, night) { com.example.lockwidgets.WidgetPatterns.thumb(id, 168, night).asImageBitmap() }, null, Modifier.fillMaxSize())
+                }
+            }
+        }
+      }
+    }
+}
+
+@Composable
+fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, onApply: (String, String, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
     val cs = MaterialTheme.colorScheme
     // Taps only select; nothing is saved or closed until Apply (One UI style).
     var barSel by remember { mutableStateOf(current) }
     var bgSel by remember { mutableStateOf(currentBg) }
+    var patSel by remember { mutableStateOf(currentPattern) }
     Box(
         modifier = Modifier.fillMaxSize().background(cs.background).padding(24.dp),
         contentAlignment = Alignment.Center
@@ -144,6 +173,8 @@ fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -
                 ColorSection(L10n.t(S.BarColor), options, barSel, { barSel = it }, splitAutoSwatch = true)
                 Spacer(Modifier.height(16.dp))
                 ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it; if (it == "wallblur") onNeedFilesPermission() }, captions = mapOf("wallblur" to L10n.t(S.NeedsFilesPerm)))
+                Spacer(Modifier.height(16.dp))
+                PatternSection(patSel) { patSel = it }
             }
             // One UI "Scan phone" style: one centered filled blue pill. Back discards.
             Box(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 24.dp), contentAlignment = Alignment.Center) {
@@ -153,7 +184,7 @@ fun ConfigScreen(current: String, currentBg: String, onApply: (String, String) -
                         .height(52.dp)
                         .clip(RoundedCornerShape(26.dp))
                         .background(Color(0xFF377AFF))
-                        .plainClickable { onApply(barSel, bgSel) },
+                        .plainClickable { onApply(barSel, bgSel, patSel) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(L10n.t(S.Apply), color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
@@ -197,9 +228,10 @@ class WidgetConfigActivity : ComponentActivity() {
                 ConfigScreen(
                     current = curBar,
                     currentBg = curBg,
+                    currentPattern = sp.getInt(keyFor("widget_pattern"), 1),
                     onNeedFilesPermission = { com.example.ui.PermissionFlow.requestFilesIfNeeded(this@WidgetConfigActivity) },
-                    onApply = { bar, bg ->
-                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).apply()
+                    onApply = { bar, bg, pat ->
+                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
