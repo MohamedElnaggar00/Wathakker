@@ -21,3 +21,5 @@ XY=$(tap_text "تطبيق" "$OUT/ui_oneui2.xml"); echo "apply btn: $XY" >> "$OUT
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_oneui.xml" 2>&1
 adb shell am start -S -W -n $PKG/com.example.PatternRenderCheck --ei s 3 >/dev/null 2>&1; sleep 8
 adb exec-out screencap -p > "$OUT/widget_oneui_applied.png"
+adb shell am start -S -W -n $PKG/com.example.PatternScopeCheck >/dev/null 2>&1; sleep 10; adb exec-out screencap -p > "$OUT/pattern_scope.png"
+adb logcat -d | grep PatternScope > "$OUT/pattern_scope.txt"
