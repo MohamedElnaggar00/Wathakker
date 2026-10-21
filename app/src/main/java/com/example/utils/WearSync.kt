@@ -27,6 +27,7 @@ object WearSync {
             req.dataMap.putDouble("lon", p.longitude)
             req.dataMap.putString("city", p.cityName)
             req.dataMap.putBoolean("h24", is24h(app))
+            req.dataMap.putString("lang", app.getSharedPreferences("app_prefs", Context.MODE_PRIVATE).getString("language", "ar") ?: "ar")
             req.dataMap.putLong("ts", System.currentTimeMillis())
             Wearable.getDataClient(app).putDataItem(req.asPutDataRequest().setUrgent())
                 .addOnSuccessListener {

@@ -8,7 +8,8 @@ import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.wearable.WearableListenerService
 
 object LocationSync {
-    fun save(c: Context, lat: Double, lon: Double, city: String?, h24: Boolean = false) {
+    fun save(c: Context, lat: Double, lon: Double, city: String?, h24: Boolean = false, lang: String? = null) {
+        if (lang != null) { c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putString("phone_lang", lang).apply(); Loc.refresh(c) }
         c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit()
             .putLong("lat", java.lang.Double.doubleToLongBits(lat))
             .putLong("lon", java.lang.Double.doubleToLongBits(lon))
@@ -26,7 +27,7 @@ object LocationSync {
                     for (item in items) {
                         if (item.uri.path == "/wathakker/location") {
                             val m = DataMapItem.fromDataItem(item).dataMap
-                            save(c, m.getDouble("lat"), m.getDouble("lon"), m.getString("city"), m.getBoolean("h24", false))
+                            save(c, m.getDouble("lat"), m.getDouble("lon"), m.getString("city"), m.getBoolean("h24", false), m.getString("lang"))
                         }
                     }
                 } finally { items.release() }
@@ -40,7 +41,7 @@ class LocationListener : WearableListenerService() {
         for (e in events) {
             if (e.type == DataEvent.TYPE_CHANGED && e.dataItem.uri.path == "/wathakker/location") {
                 val m = DataMapItem.fromDataItem(e.dataItem).dataMap
-                LocationSync.save(this, m.getDouble("lat"), m.getDouble("lon"), m.getString("city"), m.getBoolean("h24", false))
+                LocationSync.save(this, m.getDouble("lat"), m.getDouble("lon"), m.getString("city"), m.getBoolean("h24", false), m.getString("lang"))
             }
         }
     }

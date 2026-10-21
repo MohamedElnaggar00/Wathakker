@@ -153,6 +153,7 @@ public final class MainViewModel extends AndroidViewModel {
         Intrinsics.checkNotNullParameter(lang, "lang");
         this._language.setValue(lang);
         this.appPrefs.edit().putString("language", lang).apply();
+        try { com.example.utils.WearSync.INSTANCE.push(getApplication(), null); } catch (Throwable ignored) {}
     }
 
     public final void updateVibrationEnabled(boolean enabled) {
