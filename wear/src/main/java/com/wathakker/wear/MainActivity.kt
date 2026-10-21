@@ -101,6 +101,7 @@ class MainActivity : ComponentActivity() {
         Settings.load(this)
         Adhan.schedule(this)
         if (intent.hasExtra("pat")) starPattern = intent.getIntExtra("pat", 1)
+        if (intent.hasExtra("lang")) Loc.save(this, intent.getIntExtra("lang", 0))
         if (intent.hasExtra("theme")) WTheme.idx = intent.getIntExtra("theme", 0)
         val prefs = getSharedPreferences("wear_prefs", Context.MODE_PRIVATE)
         if (!prefs.getBoolean("perm_asked", false) && !intent.hasExtra("page")) {
@@ -127,7 +128,7 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) { while (true) { now = System.currentTimeMillis(); delay(1000) } }
     val state = remember(now / 20000) { Prayer.compute(ctx, now) }
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+    CompositionLocalProvider(LocalLayoutDirection provides (if (langTick >= 0 && Loc.en) LayoutDirection.Ltr else LayoutDirection.Rtl)) {
         BoxWithConstraints(Modifier.fillMaxSize().background(Color.Black)) {
             val w = maxWidth.value
             val pager = rememberPagerState(initialPage = startPage) { 5 }
@@ -239,7 +240,7 @@ fun MainPage(s: PrayerState, now: Long, w: Float) {
             Text1(s.next.name, tx(w * 0.15f, Color.White, true))
             Text1(Prayer.time12(s.next.at), tx(w * 0.095f, Color.White))
             Spacer(Modifier.height((w * 0.035f).dp))
-            Text1("متبقي " + Prayer.remainingText(s.next.at - now), tx(w * 0.062f, Gold))
+            Text1(T("متبقي ", "Time left ") + Prayer.remainingText(s.next.at - now), tx(w * 0.062f, Gold))
         }
     }
 }
@@ -256,7 +257,7 @@ fun ListPage(s: PrayerState, w: Float) {
     val listState = androidx.wear.compose.foundation.lazy.rememberScalingLazyListState(initialCenterItemIndex = nextIdx + 1)
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         androidx.wear.compose.foundation.lazy.ScalingLazyColumn(Modifier.fillMaxSize(), state = listState) {
-            item { Text1("مواقيت الصلاة", tx(w * 0.07f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.05f).dp)) }
+            item { Text1(T("مواقيت الصلاة", "Prayer times"), tx(w * 0.07f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.05f).dp)) }
             items(s.today.size) { i ->
                 val slot = s.today[i]
                 val isNext = slot.at == s.next.at
@@ -297,7 +298,7 @@ fun QiblaPage(w: Float) {
     }
     val needle = bearing - heading
     Box(Modifier.fillMaxSize().background(Color.Black)) {
-        Text1("القبلة", tx(w * 0.065f, Color(0xFFB9B9BE)), Modifier.align(Alignment.TopCenter).padding(top = (w * 0.085f).dp))
+        Text1(T("القبلة", "Qibla"), tx(w * 0.065f, Color(0xFFB9B9BE)), Modifier.align(Alignment.TopCenter).padding(top = (w * 0.085f).dp))
         Box(Modifier.align(Alignment.Center).padding(bottom = (w * 0.07f).dp).size((w * 0.54f).dp)) {
             Canvas(Modifier.fillMaxSize()) {
                 val c = center
@@ -377,7 +378,7 @@ fun CirclesPage(s: PrayerState, now: Long, w: Float, visible: Boolean, bg: Color
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text1(slot.name, tx(w * 0.05f, c, true))
                     Text1(if (past) Prayer.time24(slot.at) else Prayer.hhmm(slot.at - now), tx(w * 0.078f, c))
-                    Text1(if (past) "مضت" else "متبقية", tx(w * 0.042f, if (isNext) Ink else SoftGrey))
+                    Text1(if (past) T("مضت", "Passed") else T("متبقية", "Left"), tx(w * 0.042f, if (isNext) Ink else SoftGrey))
                 }
             }
         }
@@ -407,7 +408,7 @@ fun PhonePage(w: Float) {
                 }
             }
             Spacer(Modifier.height((w * 0.045f).dp))
-            Text1("فتح في الجهاز", tx(w * 0.075f, Color.White))
+            Text1(T("فتح في الجهاز", "Open on phone"), tx(w * 0.075f, Color.White))
             if (status.isNotEmpty()) Text1(status, tx(w * 0.05f, SoftGrey))
         }
     }
@@ -419,9 +420,9 @@ fun openOnPhone(ctx: Context, report: (String) -> Unit) {
         val i = Intent(Intent.ACTION_VIEW).addCategory(Intent.CATEGORY_BROWSABLE).setData(Uri.parse("wathakker://open"))
         val f = helper.startRemoteActivity(i)
         f.addListener({
-            try { f.get(); report("تم الفتح على الهاتف") } catch (e: Exception) { report("الهاتف غير متصل") }
+            try { f.get(); report(T("تم الفتح على الهاتف", "Opened on phone")) } catch (e: Exception) { report(T("الهاتف غير متصل", "Phone not connected")) }
         }, ContextCompat.getMainExecutor(ctx))
     } catch (e: Exception) {
-        report("الهاتف غير متصل")
+        report(T("الهاتف غير متصل", "Phone not connected"))
     }
 }

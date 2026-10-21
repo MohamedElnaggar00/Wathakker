@@ -63,13 +63,13 @@ object Adhan {
 
     fun fire(c: Context, id: Int, at: Long) {
         val nm = c.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.createNotificationChannel(NotificationChannel(CHANNEL, "تنبيه الأذان", NotificationManager.IMPORTANCE_HIGH).apply {
+        nm.createNotificationChannel(NotificationChannel(CHANNEL, T("تنبيه الأذان", "Adhan alert"), NotificationManager.IMPORTANCE_HIGH).apply {
             enableVibration(true); vibrationPattern = longArrayOf(0, 400, 200, 400); setSound(null, null)
         })
         val i = Intent(c, AdhanActivity::class.java).putExtra("id", id).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val full = PendingIntent.getActivity(c, 7002, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val name = Prayer.names[id.coerceIn(0, 5)]
-        val n = Notification.Builder(c, CHANNEL).setSmallIcon(R.mipmap.ic_launcher).setContentTitle("حان موعد أذان $name")
+        val n = Notification.Builder(c, CHANNEL).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(T("حان موعد أذان ", "Time for adhan: ") + name)
             .setCategory(Notification.CATEGORY_ALARM).setFullScreenIntent(full, true).setContentIntent(full).setAutoCancel(true)
             .setTimeoutAfter(60_000).build()
         nm.notify(7000 + id, n)
@@ -118,7 +118,7 @@ fun AdhanScreen(id: Int, close: () -> Unit) {
                 drawArc(t.brush(), -90f, 360f, false, Offset(sw, sw), androidx.compose.ui.geometry.Size(m - 2 * sw, m - 2 * sw), style = Stroke(sw, cap = StrokeCap.Round))
             }
             Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text1("حان موعد أذان", tx(w * 0.075f, Color(0xFFD0D0D4)))
+                Text1(T("حان موعد أذان", "Time for adhan"), tx(w * 0.075f, Color(0xFFD0D0D4)))
                 Spacer(Modifier.height((w * 0.02f).dp))
                 Text1(Prayer.names[id], tx(w * 0.2f, Color.White, true))
                 Spacer(Modifier.height((w * 0.03f).dp))

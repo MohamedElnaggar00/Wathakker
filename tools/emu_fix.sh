@@ -20,6 +20,10 @@ adb shell input keyevent 26; sleep 2
 adb shell am broadcast -a android.intent.action.TIME_SET -p $PKG >/dev/null 2>&1; sleep 15; shot adhan_alarm_fired
 adb shell dumpsys window | grep -i "mCurrentFocus" > "$OUT/focus.txt"
 adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_after.txt"
+for P in 0 1 2 4; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page $P --ei lang 2 >/dev/null 2>&1; sleep 9; shot en_$P; done
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub 5 --ei lang 2 >/dev/null 2>&1; sleep 8; shot en_lang_list
+adb shell am start -S -W -n $PKG/$A.AdhanActivity --ei id 4 >/dev/null 2>&1; sleep 3; shot en_adhan
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei lang 0 >/dev/null 2>&1; sleep 6
 adb shell dumpsys package $PKG | grep -i "versionName\|label" | head -3 > "$OUT/pkg.txt"
 adb logcat -d | grep -i "AndroidRuntime\|FATAL EXCEPTION" -A8 | head -40 > "$OUT/logcat.txt" 2>&1
 echo done > "$OUT/SUMMARY.txt"
