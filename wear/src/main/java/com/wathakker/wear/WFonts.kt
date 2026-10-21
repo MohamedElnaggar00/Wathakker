@@ -20,8 +20,8 @@ object WFonts {
     private fun fam(vararg pairs: Pair<Int, FontWeight>) = FontFamily(pairs.map { Font(it.first, it.second) })
 
     val choices = listOf(
-        // On the watch "app font" = Expo Arabic (the 1.0.2 look; his 18:39 order to keep it the default).
-        Choice("app", "خط التطبيق", "App font", fam(R.font.expoarabic_medium to FontWeight.Normal, R.font.expoarabic_semibold to FontWeight.Bold)),
+        // Same name = same font as the phone (his 18:40 order): "خط التطبيق" is Tajawal like the phone.
+        Choice("app", "خط التطبيق", "App font", fam(R.font.tajawal to FontWeight.Normal, R.font.tajawal_bold to FontWeight.Bold)),
         Choice("app_light", "خط التطبيق الخفيف", "App font light", fam(R.font.expoarabic_book to FontWeight.Normal, R.font.expoarabic_medium to FontWeight.Bold)),
         Choice("app_bold", "خط التطبيق العريض", "App font bold", fam(R.font.expoarabic_bold to FontWeight.Normal, R.font.expoarabic_bold to FontWeight.Bold)),
         Choice("system", "خط النظام", "System font", null),
@@ -43,7 +43,9 @@ object WFonts {
 
     fun load(c: Context) {
         val p = c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE)
-        idx = p.getInt("font_choice", 0)
+        // Default = "خط التطبيق الخفيف" (Expo Arabic) per his 18:39-18:40 orders: the watch keeps
+        // shipping with Expo Arabic selected, under the same name the phone uses for Expo Arabic.
+        idx = p.getInt("font_choice", 1)
         scale = p.getFloat("font_scale", 1f)
     }
 
