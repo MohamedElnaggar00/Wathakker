@@ -15,6 +15,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -51,6 +52,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyListAnchorType
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import kotlin.math.roundToInt
 
@@ -204,15 +206,17 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
     }
 
     val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); 7 -> T("نوع الخط", "Font style"); 8 -> T("حجم الخط", "Font size"); else -> T("الإعدادات", "Settings") }
-    // Always open at the TOP with the title visible (his 19:44 report: it reopened mid-list).
-    // The Wear default list state centers item 1, which pushed the title off the top edge.
-    val listDensity = LocalDensity.current
-    val listState = rememberScalingLazyListState(
-        initialCenterItemIndex = 0,
-        initialCenterItemScrollOffset = with(listDensity) { -(w * 0.45f).dp.roundToPx() }
-    )
+    // Always open at the TOP with the title visible (his 19:44 report: it reopened mid-list):
+    // the Wear default centers item 1, which pushed the title off the top edge. ItemStart anchoring
+    // with item 0 aligned to the start puts the title at the top like One UI Watch.
+    val listState = rememberScalingLazyListState(initialCenterItemIndex = 0, initialCenterItemScrollOffset = 0)
     Box(Modifier.fillMaxSize().background(Color.Black)) {
-        ScalingLazyColumn(Modifier.fillMaxSize(), state = listState) {
+        ScalingLazyColumn(
+            Modifier.fillMaxSize(),
+            state = listState,
+            anchorType = ScalingLazyListAnchorType.ItemStart,
+            contentPadding = PaddingValues(top = (w * 0.09f).dp, bottom = (w * 0.35f).dp)
+        ) {
             item { Text1(title, tx(w * 0.08f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.05f).dp)) }
             when (sub) {
                 0 -> {
