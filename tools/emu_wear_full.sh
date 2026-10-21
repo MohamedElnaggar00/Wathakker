@@ -18,7 +18,10 @@ adb shell input swipe 360 227 90 227 300; sleep 3; shot nav_ar_left_swipe
 adb shell input swipe 90 227 360 227 300; sleep 3; shot nav_ar_right_swipe_back
 # edge swipe-to-dismiss inside a settings sub-screen returns to the settings root
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 3 --ei sub 2 >/dev/null 2>&1; sleep 9
-adb shell input swipe 8 227 320 227 250; sleep 3; shot nav_sub_swipe_back
+adb shell input swipe 8 227 320 227 1400 & sleep 0.7; shot nav_sub_swipe_mid; wait; sleep 3; shot nav_sub_swipe_back
+# settings root scrolled to the end: the Open-on-phone row is the last item
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 3 --ei sub 0 >/dev/null 2>&1; sleep 9
+adb shell input swipe 227 340 227 60 300; sleep 1.5; adb shell input swipe 227 340 227 60 300; sleep 2; shot set_0_end
 # edge swipe-to-dismiss on the first page exits the app (watchface/launcher behind)
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 >/dev/null 2>&1; sleep 9
 adb shell input swipe 8 227 340 227 250; sleep 3; shot nav_main_exit

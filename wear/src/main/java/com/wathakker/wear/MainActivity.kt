@@ -140,22 +140,27 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
             val w = maxWidth.value
             val pager = rememberPagerState(initialPage = startPage) { 4 }
             val act = ctx as? android.app.Activity
-            // Edge swipe-to-dismiss is active only on the first page: swiping right pages back through the
-            // pager one page at a time, and only from the main page does the real back gesture exit the app.
+            var settingsSub by remember { mutableIntStateOf(startSub) }
+            // One swipe-to-dismiss level for the whole navigation hierarchy (like SwipeDismissableNavHost):
+            // on a settings sub-screen the edge swipe dismisses it back to the settings root with the root
+            // visible underneath; on the first pager page it exits the app. On other pages the pager itself
+            // consumes right swipes to page back one page at a time.
+            val subOpen = pager.currentPage == 3 && settingsSub != 0
             val dismissState = rememberSwipeToDismissBoxState()
             LaunchedEffect(dismissState.currentValue) {
                 if (dismissState.currentValue == SwipeToDismissValue.Dismissed) {
                     dismissState.snapTo(SwipeToDismissValue.Default)
-                    act?.finish()
+                    if (subOpen) settingsSub = 0 else act?.finish()
                 }
             }
             BasicSwipeToDismissBox(
                 state = dismissState,
                 modifier = Modifier.fillMaxSize().edgeSwipeToDismiss(dismissState),
-                userSwipeEnabled = pager.currentPage == 0
+                userSwipeEnabled = subOpen || pager.currentPage == 0,
+                contentKey = settingsSub
             ) { isBackground ->
                 if (isBackground) {
-                    Box(Modifier.fillMaxSize().background(Color.Black))
+                    if (subOpen) SettingsContent(0, w, {}) else Box(Modifier.fillMaxSize().background(Color.Black))
                 } else {
                     // The pager direction is fixed to LTR: the Wear back gesture is always a right swipe (it does not
                     // mirror in RTL), so the next page must always come from a left swipe, in every language.
@@ -166,7 +171,7 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
                                     0 -> MainPage(state, now, w)
                                     1 -> ListPage(state, w)
                                     2 -> QiblaPage(w)
-                                    else -> SettingsPage(w, startSub)
+                                    else -> SettingsPage(w, settingsSub) { settingsSub = it }
                                 }
                             }
                         }

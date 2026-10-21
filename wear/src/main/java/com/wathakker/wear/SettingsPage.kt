@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -44,12 +43,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.wear.compose.foundation.BasicSwipeToDismissBox
-import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
-import androidx.wear.compose.foundation.SwipeToDismissValue
-import androidx.wear.compose.foundation.edgeSwipeToDismiss
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
-import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
 
 fun themeName(i: Int) = T(WTheme.defs[i].name, listOf("Gold", "Turquoise", "Blue", "Green")[i])
 fun patName(id: Int): String { val i = Settings.patterns.indexOfFirst { it.first == id }.coerceAtLeast(0); return T(Settings.patterns[i].second, listOf("Rub el Hizb", "Stars and diamonds", "Hex grid", "Crossed octagram", "Round arabesque")[i]) }
@@ -69,44 +63,27 @@ private fun ExternalIcon(w: Float, color: Color) {
     }
 }
 
-/** sub: 0 root, 1 pattern list, 2 theme colors, 3 location source, 4 permissions, 5 language. */
-@OptIn(ExperimentalWearFoundationApi::class)
+/** sub: 0 root, 1 pattern list, 2 theme colors, 3 location source, 4 permissions, 5 language.
+ *  The swipe-back gesture is handled by the single swipe-to-dismiss level in WearApp; here the forward
+ *  navigation slides the sub-screen in (native Wear direction), while returning to the root is instant
+ *  because the dismiss gesture already showed the visual transition. */
 @Composable
-fun SettingsPage(w: Float, startSub: Int = 0) {
-    val ctx = LocalContext.current
-    var sub by remember { mutableIntStateOf(startSub) }
-    BackHandler(enabled = sub != 0) { sub = 0 }
-    // Native Wear behavior: each sub-screen is dismissed by an edge swipe-back to the root, with the root
-    // visible underneath during the gesture; forward navigation slides the sub-screen in.
-    val dismissState = rememberSwipeToDismissBoxState()
-    LaunchedEffect(dismissState.currentValue) {
-        if (dismissState.currentValue == SwipeToDismissValue.Dismissed) {
-            dismissState.snapTo(SwipeToDismissValue.Default)
-            sub = 0
-        }
-    }
-    BasicSwipeToDismissBox(
-        state = dismissState,
-        modifier = Modifier.fillMaxSize().edgeSwipeToDismiss(dismissState),
-        userSwipeEnabled = sub != 0,
-        contentKey = sub
-    ) { isBackground ->
-        val s = if (isBackground) 0 else sub
-        AnimatedContent(
-            targetState = s,
-            transitionSpec = {
-                if (targetState != 0) (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it } + fadeOut())
-                else (slideInHorizontally { -it } + fadeIn()) togetherWith (slideOutHorizontally { it } + fadeOut())
-            },
-            label = "settingsSub"
-        ) { target ->
-            SettingsContent(target, w, { sub = it })
-        }
+fun SettingsPage(w: Float, sub: Int, go: (Int) -> Unit) {
+    BackHandler(enabled = sub != 0) { go(0) }
+    AnimatedContent(
+        targetState = sub,
+        transitionSpec = {
+            if (initialState == 0 && targetState != 0) (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it } + fadeOut())
+            else androidx.compose.animation.EnterTransition.None togetherWith androidx.compose.animation.ExitTransition.None
+        },
+        label = "settingsSub"
+    ) { target ->
+        SettingsContent(target, w, go)
     }
 }
 
 @Composable
-private fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
+fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
     val ctx = LocalContext.current
     var locMode by remember { mutableIntStateOf(Settings.locMode(ctx)) }
     var perm by remember { mutableIntStateOf(0) }
