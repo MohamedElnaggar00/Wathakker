@@ -54,12 +54,23 @@ shot 25_pattern_radio
 CUR=pattern; dump $CUR
 adb shell input keyevent KEYCODE_BACK; sleep 2
 
+# full-screen style: sleep the screen first so the FSI can launch the activity (real-world condition)
+adb shell input keyevent KEYCODE_SLEEP; sleep 3
 NOW=$(($(date +%s%N)/1000000))
 adb shell am broadcast -n $PKG/com.wathakker.wear.AdhanReceiver --ei id 3 --el at $NOW >/dev/null 2>&1
-sleep 6
+sleep 8
 shot 30_fullscreen_alert
 CUR=alert; dump $CUR
+if ! grep -q "AdhanActivity" "$OUT/ui_alert.xml" 2>/dev/null; then
+  echo "FSI_NO_LAUNCH (screen was off; fallback: forced launch for UI evidence only)" >> "$OUT/SUMMARY.txt"
+  adb shell input keyevent KEYCODE_WAKEUP; sleep 2
+  adb shell am start -W -n $PKG/com.wathakker.wear.AdhanActivity --ei id 3 --el $NOW >/dev/null 2>&1
+  sleep 4
+  shot 30b_fullscreen_forced
+  CUR=alertf; dump $CUR
+fi
 adb shell dumpsys notification > "$OUT/notif.txt" 2>&1
+adb shell input keyevent KEYCODE_WAKEUP; sleep 2
 adb shell input tap 227 227; sleep 2
 shot 31_after_dismiss
 
