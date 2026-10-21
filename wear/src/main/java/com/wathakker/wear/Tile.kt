@@ -48,6 +48,8 @@ open class PrayerTileService : TileService() {
         fun gap(h: Float) = LayoutElementBuilders.Spacer.Builder().setHeight(dp(h)).build()
         val center = LayoutElementBuilders.Column.Builder()
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+            .setModifiers(ModifiersBuilders.Modifiers.Builder()
+                .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(9f)).build()).build())
             .addContent(text(Prayer.time12(s.next.at), 24f, 0xFFFFFFFF.toInt(), false))
             .addContent(gap(2f))
             .addContent(text(s.next.name, 19f, 0xFFFFFFFF.toInt(), true))

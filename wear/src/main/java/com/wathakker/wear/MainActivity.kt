@@ -72,6 +72,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.wear.compose.foundation.BasicSwipeToDismissBox
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
+import androidx.wear.compose.foundation.SwipeToDismissValue
+import androidx.wear.compose.foundation.edgeSwipeToDismiss
+import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
 import androidx.wear.remote.interactions.RemoteActivityHelper
 import kotlinx.coroutines.delay
 import java.util.concurrent.Executors
@@ -122,31 +127,57 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalWearFoundationApi::class)
 @Composable
 fun WearApp(startPage: Int, startSub: Int = 0) {
     val ctx = LocalContext.current
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) { while (true) { now = System.currentTimeMillis(); delay(1000) } }
     val state = remember(now / 20000) { Prayer.compute(ctx, now) }
-    CompositionLocalProvider(LocalLayoutDirection provides (if (langTick >= 0 && Loc.en) LayoutDirection.Ltr else LayoutDirection.Rtl)) {
+    val appDir = if (langTick >= 0 && Loc.en) LayoutDirection.Ltr else LayoutDirection.Rtl
+    CompositionLocalProvider(LocalLayoutDirection provides appDir) {
         BoxWithConstraints(Modifier.fillMaxSize().background(Color.Black)) {
             val w = maxWidth.value
-            val pager = rememberPagerState(initialPage = startPage) { 5 }
-            HorizontalPager(pager, Modifier.fillMaxSize()) { page ->
-                when (page) {
-                    0 -> MainPage(state, now, w)
-                    1 -> ListPage(state, w)
-                    2 -> QiblaPage(w)
-                    3 -> PhonePage(w)
-                    else -> SettingsPage(w, startSub)
+            val pager = rememberPagerState(initialPage = startPage) { 4 }
+            val act = ctx as? android.app.Activity
+            // Edge swipe-to-dismiss is active only on the first page: swiping right pages back through the
+            // pager one page at a time, and only from the main page does the real back gesture exit the app.
+            val dismissState = rememberSwipeToDismissBoxState()
+            LaunchedEffect(dismissState.currentValue) {
+                if (dismissState.currentValue == SwipeToDismissValue.Dismissed) {
+                    dismissState.snapTo(SwipeToDismissValue.Default)
+                    act?.finish()
+                }
+            }
+            BasicSwipeToDismissBox(
+                state = dismissState,
+                modifier = Modifier.fillMaxSize().edgeSwipeToDismiss(dismissState),
+                userSwipeEnabled = pager.currentPage == 0
+            ) { isBackground ->
+                if (isBackground) {
+                    Box(Modifier.fillMaxSize().background(Color.Black))
+                } else {
+                    // The pager direction is fixed to LTR: the Wear back gesture is always a right swipe (it does not
+                    // mirror in RTL), so the next page must always come from a left swipe, in every language.
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        HorizontalPager(pager, Modifier.fillMaxSize()) { page ->
+                            CompositionLocalProvider(LocalLayoutDirection provides appDir) {
+                                when (page) {
+                                    0 -> MainPage(state, now, w)
+                                    1 -> ListPage(state, w)
+                                    2 -> QiblaPage(w)
+                                    else -> SettingsPage(w, startSub)
+                                }
+                            }
+                        }
+                    }
                 }
             }
             Row(
                 Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.045f).dp),
                 horizontalArrangement = Arrangement.spacedBy((w * 0.018f).dp)
             ) {
-                for (i in 0 until 5) {
+                for (i in 0 until 4) {
                     val on = i == pager.currentPage
                     Box(
                         Modifier.width(((if (on) 0.07f else 0.022f) * w).dp).height((w * 0.022f).dp)
@@ -387,33 +418,6 @@ fun CirclesPage(s: PrayerState, now: Long, w: Float, visible: Boolean, bg: Color
 }
 
 private val density: Float get() = android.content.res.Resources.getSystem().displayMetrics.density
-
-@Composable
-fun PhonePage(w: Float) {
-    val ctx = LocalContext.current
-    var status by remember { mutableStateOf("") }
-    var busy by remember { mutableStateOf(false) }
-    LaunchedEffect(busy) { if (busy) { delay(3000); busy = false } }
-    Box(Modifier.fillMaxSize().background(Color.Black).clickable(enabled = !busy) { busy = true; openOnPhone(ctx) { status = it } }, contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(Modifier.size((w * 0.56f).dp).clip(CircleShape).background(Color(0xFFBFA03A)), contentAlignment = Alignment.Center) {
-                Canvas(Modifier.fillMaxSize()) {
-                    val m = size.minDimension; val sw = m * 0.065f; val dark = Color(0xFF333333)
-                    val cx = m / 2
-                    // bracket on the right and an arrow going in
-                    val br = Path().apply { moveTo(cx + m * 0.02f, m * 0.30f); lineTo(cx + m * 0.20f, m * 0.30f); lineTo(cx + m * 0.20f, m * 0.70f); lineTo(cx + m * 0.02f, m * 0.70f) }
-                    drawPath(br, dark, style = Stroke(width = sw, cap = StrokeCap.Round))
-                    drawLine(dark, Offset(m * 0.18f, m * 0.5f), Offset(cx + m * 0.12f, m * 0.5f), strokeWidth = sw, cap = StrokeCap.Round)
-                    val ah = Path().apply { moveTo(cx + m * 0.02f, m * 0.40f); lineTo(cx + m * 0.12f, m * 0.5f); lineTo(cx + m * 0.02f, m * 0.60f) }
-                    drawPath(ah, dark, style = Stroke(width = sw, cap = StrokeCap.Round))
-                }
-            }
-            Spacer(Modifier.height((w * 0.045f).dp))
-            Text1(T("فتح في الجهاز", "Open on phone"), tx(w * 0.075f, Color.White))
-            if (status.isNotEmpty()) Text1(status, tx(w * 0.05f, SoftGrey))
-        }
-    }
-}
 
 fun openOnPhone(ctx: Context, report: (String) -> Unit) {
     try {

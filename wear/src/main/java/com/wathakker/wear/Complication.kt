@@ -38,16 +38,16 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
         if (k == 3) {
             if (type != ComplicationType.LONG_TEXT) return null
             return androidx.wear.watchface.complications.data.LongTextComplicationData.Builder(
-                txt(Prayer.gregDate(s.now)), txt("التاريخ")).setTitle(txt(Prayer.hijri(s.now))).setTapAction(tap()).build()
+                txt(Prayer.gregDate(s.now)), txt(T("التاريخ", "Date"))).setTitle(txt(Prayer.hijri(s.now))).setTapAction(tap()).build()
         }
         if (type != ComplicationType.SHORT_TEXT) return null
         val cal = java.util.Calendar.getInstance().apply { timeInMillis = s.now }
         fun down(at: Long) = TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(at))).setText("^1").build()
         return when (k) {
-            1 -> short(txt(cal.get(java.util.Calendar.DAY_OF_MONTH).toString()), Prayer.gregDate(s.now).substringAfter(' '), "التاريخ الميلادي")
-            2 -> short(txt(Prayer.hijriDay(s.now)), Prayer.hijriMonth(s.now), "التاريخ الهجري")
-            4 -> short(txt(Prayer.time12(s.next.at).substringBefore(' ')), s.next.name, "موعد الصلاة القادمة")
-            8 -> short(down(s.next.at), s.next.name, "العد التنازلي للصلاة القادمة")
+            1 -> short(txt(cal.get(java.util.Calendar.DAY_OF_MONTH).toString()), Prayer.gregDate(s.now).substringAfter(' '), T("التاريخ الميلادي", "Gregorian date"))
+            2 -> short(txt(Prayer.hijriDay(s.now)), Prayer.hijriMonth(s.now), T("التاريخ الهجري", "Hijri date"))
+            4 -> short(txt(Prayer.time12(s.next.at).substringBefore(' ')), s.next.name, T("موعد الصلاة القادمة", "Next prayer time"))
+            8 -> short(down(s.next.at), s.next.name, T("العد التنازلي للصلاة القادمة", "Next prayer countdown"))
             else -> null
         }
     }
@@ -57,7 +57,7 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
             .setText("^1")
             .build()
         val title = PlainComplicationText.Builder(s.next.name).build()
-        val desc = PlainComplicationText.Builder("الوقت المتبقي لصلاة " + s.next.name).build()
+        val desc = PlainComplicationText.Builder(T("الوقت المتبقي لصلاة ", "Time left until ") + s.next.name).build()
         return when (type) {
             ComplicationType.RANGED_VALUE -> {
                 val total = ((s.next.at - s.prev.at) / 60000f).coerceAtLeast(1f)

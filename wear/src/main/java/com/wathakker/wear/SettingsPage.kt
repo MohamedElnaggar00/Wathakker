@@ -7,6 +7,13 @@ import android.location.LocationManager
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -21,6 +28,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -28,23 +36,80 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.wear.compose.foundation.BasicSwipeToDismissBox
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
+import androidx.wear.compose.foundation.SwipeToDismissValue
+import androidx.wear.compose.foundation.edgeSwipeToDismiss
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
 
 fun themeName(i: Int) = T(WTheme.defs[i].name, listOf("Gold", "Turquoise", "Blue", "Green")[i])
 fun patName(id: Int): String { val i = Settings.patterns.indexOfFirst { it.first == id }.coerceAtLeast(0); return T(Settings.patterns[i].second, listOf("Rub el Hizb", "Stars and diamonds", "Hex grid", "Crossed octagram", "Round arabesque")[i]) }
 
-/** sub: 0 root, 1 pattern list, 2 theme colors, 3 location source, 4 permissions. */
+/** Small "open externally" glyph: a square with an arrow leaving its top-right corner. */
+@Composable
+private fun ExternalIcon(w: Float, color: Color) {
+    Canvas(Modifier.size((w * 0.055f).dp)) {
+        val m = size.minDimension; val sw = m * 0.14f
+        val box = Path().apply {
+            moveTo(m * 0.10f, m * 0.32f); lineTo(m * 0.10f, m * 0.90f); lineTo(m * 0.68f, m * 0.90f); lineTo(m * 0.68f, m * 0.60f)
+        }
+        drawPath(box, color, style = Stroke(width = sw, cap = StrokeCap.Round))
+        drawLine(color, Offset(m * 0.42f, m * 0.58f), Offset(m * 0.88f, m * 0.12f), strokeWidth = sw, cap = StrokeCap.Round)
+        val head = Path().apply { moveTo(m * 0.52f, m * 0.12f); lineTo(m * 0.88f, m * 0.12f); lineTo(m * 0.88f, m * 0.48f) }
+        drawPath(head, color, style = Stroke(width = sw, cap = StrokeCap.Round))
+    }
+}
+
+/** sub: 0 root, 1 pattern list, 2 theme colors, 3 location source, 4 permissions, 5 language. */
+@OptIn(ExperimentalWearFoundationApi::class)
 @Composable
 fun SettingsPage(w: Float, startSub: Int = 0) {
     val ctx = LocalContext.current
     var sub by remember { mutableIntStateOf(startSub) }
+    BackHandler(enabled = sub != 0) { sub = 0 }
+    // Native Wear behavior: each sub-screen is dismissed by an edge swipe-back to the root, with the root
+    // visible underneath during the gesture; forward navigation slides the sub-screen in.
+    val dismissState = rememberSwipeToDismissBoxState()
+    LaunchedEffect(dismissState.currentValue) {
+        if (dismissState.currentValue == SwipeToDismissValue.Dismissed) {
+            dismissState.snapTo(SwipeToDismissValue.Default)
+            sub = 0
+        }
+    }
+    BasicSwipeToDismissBox(
+        state = dismissState,
+        modifier = Modifier.fillMaxSize().edgeSwipeToDismiss(dismissState),
+        userSwipeEnabled = sub != 0,
+        contentKey = sub
+    ) { isBackground ->
+        val s = if (isBackground) 0 else sub
+        AnimatedContent(
+            targetState = s,
+            transitionSpec = {
+                if (targetState != 0) (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it } + fadeOut())
+                else (slideInHorizontally { -it } + fadeIn()) togetherWith (slideOutHorizontally { it } + fadeOut())
+            },
+            label = "settingsSub"
+        ) { target ->
+            SettingsContent(target, w, { sub = it })
+        }
+    }
+}
+
+@Composable
+private fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
+    val ctx = LocalContext.current
     var locMode by remember { mutableIntStateOf(Settings.locMode(ctx)) }
     var perm by remember { mutableIntStateOf(0) }
-    BackHandler(enabled = sub != 0) { sub = 0 }
     val locLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { perm++; refreshGps(ctx) }
     val notifLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { perm++ }
     fun has(p: String) = ContextCompat.checkSelfPermission(ctx, p) == PackageManager.PERMISSION_GRANTED
@@ -52,7 +117,7 @@ fun SettingsPage(w: Float, startSub: Int = 0) {
     val notifOk = perm >= 0 && has(Manifest.permission.POST_NOTIFICATIONS)
 
     @Composable
-    fun Row1(title: String, value: String?, onClick: () -> Unit, lead: @Composable (() -> Unit)? = null, selected: Boolean = false) {
+    fun Row1(title: String, value: String?, onClick: () -> Unit, lead: @Composable (() -> Unit)? = null, selected: Boolean = false, trail: @Composable (() -> Unit)? = null) {
         Row(
             Modifier.fillMaxWidth().height((w * 0.17f).dp).clip(RoundedCornerShape(50))
                 .then(if (selected) Modifier.background(WTheme.cur.brush()) else Modifier.background(Pill)).clickable { onClick() }.padding(horizontal = (w * 0.06f).dp),
@@ -62,6 +127,7 @@ fun SettingsPage(w: Float, startSub: Int = 0) {
             Text1(title, tx(w * 0.062f, if (selected) Ink else Color.White, selected))
             Spacer(Modifier.weight(1f))
             if (value != null) Text1(value, tx(w * 0.05f, if (selected) Ink else SoftGrey))
+            if (trail != null) { Spacer(Modifier.width((w * 0.02f).dp)); trail() }
         }
     }
 
@@ -71,12 +137,13 @@ fun SettingsPage(w: Float, startSub: Int = 0) {
             item { Text1(title, tx(w * 0.07f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.04f).dp)) }
             when (sub) {
                 0 -> {
-                    item { Row1(T("اللغة", "Language"), listOf(T("مزامنة", "Sync"), "عربي", "English")[Loc.mode(ctx)], { sub = 5 }) }
-                    item { Row1(T("الزخرفة", "Pattern"), patName(starPattern), { sub = 1 }) }
-                    item { Row1(T("لون السمة", "Theme color"), themeName(WTheme.idx), { sub = 2 }) }
-                    item { Row1(T("مصدر الموقع", "Location source"), if (locMode == 0) T("من الهاتف", "Phone") else T("تلقائي", "Auto"), { sub = 3 }) }
+                    item { Row1(T("اللغة", "Language"), listOf(T("مزامنة", "Sync"), "عربي", "English")[Loc.mode(ctx)], { go(5) }) }
+                    item { Row1(T("الزخرفة", "Pattern"), patName(starPattern), { go(1) }) }
+                    item { Row1(T("لون السمة", "Theme color"), themeName(WTheme.idx), { go(2) }) }
+                    item { Row1(T("مصدر الموقع", "Location source"), if (locMode == 0) T("من الهاتف", "Phone") else T("تلقائي", "Auto"), { go(3) }) }
                     item { var on by remember { mutableIntStateOf(if (Adhan.enabled(ctx)) 1 else 0) }; Row1(T("تنبيه الأذان", "Adhan alert"), if (on == 1) T("تشغيل", "On") else T("إيقاف", "Off"), { on = 1 - on; Adhan.setEnabled(ctx, on == 1) }, selected = on == 1) }
-                    item { Row1(T("الأذونات", "Permissions"), null, { sub = 4 }) }
+                    item { Row1(T("الأذونات", "Permissions"), null, { go(4) }) }
+                    item { Row1(T("فتح في الجهاز", "Open on phone"), null, { openOnPhone(ctx) {} }, trail = { ExternalIcon(w, SoftGrey) }) }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 1 -> {

@@ -10,7 +10,18 @@ adb shell cmd package query-services -a android.support.wearable.complications.A
 adb shell am start -W -n $PKG/$A.MainActivity >/dev/null 2>&1; sleep 20
 shot(){ adb exec-out screencap -p > "$OUT/$1.png"; }
 for P in 0 1 2 3; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page $P >/dev/null 2>&1; sleep 12; shot page_$P; done
-for SB in 0 1 2 3 4; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub $SB >/dev/null 2>&1; sleep 10; shot set_$SB; done
+for SB in 0 1 2 3 4 5; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 3 --ei sub $SB >/dev/null 2>&1; sleep 10; shot set_$SB; done
+# Navigation gestures (Arabic UI): left swipe advances to the next page in every language
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei lang 1 >/dev/null 2>&1; sleep 9
+adb shell input swipe 360 227 90 227 300; sleep 3; shot nav_ar_left_swipe
+# right swipe pages back to the main page
+adb shell input swipe 90 227 360 227 300; sleep 3; shot nav_ar_right_swipe_back
+# edge swipe-to-dismiss inside a settings sub-screen returns to the settings root
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 3 --ei sub 2 >/dev/null 2>&1; sleep 9
+adb shell input swipe 8 227 320 227 250; sleep 3; shot nav_sub_swipe_back
+# edge swipe-to-dismiss on the first page exits the app (watchface/launcher behind)
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 >/dev/null 2>&1; sleep 9
+adb shell input swipe 8 227 340 227 250; sleep 3; shot nav_main_exit
 for TH in 1 2 3; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei theme $TH >/dev/null 2>&1; sleep 10; shot theme_main_$TH; adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 1 --ei theme $TH >/dev/null 2>&1; sleep 10; shot theme_list_$TH; done
 adb shell am start -S -W -n $PKG/$A.CirclesActivity >/dev/null 2>&1; sleep 10; shot circles_theme3
 for PT in 1 11; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei pat $PT >/dev/null 2>&1; sleep 10; shot pat_$PT; done
@@ -18,16 +29,16 @@ adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode tile >/dev/null 2>
 for K in 1 2 3 4 8; do adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode short --ei kind $K >/dev/null 2>&1; sleep 7; shot comp_$K; done
 adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode ranged >/dev/null 2>&1; sleep 7; shot comp_ranged
 adb shell am start -S -W -n $PKG/$A.AdhanActivity --ei id 4 >/dev/null 2>&1; sleep 3; shot adhan_screen
-adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub 0 >/dev/null 2>&1; sleep 6; adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_before.txt"
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 3 --ei sub 0 >/dev/null 2>&1; sleep 6; adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_before.txt"
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei adhan_test 20 >/dev/null 2>&1; sleep 2
 adb shell input keyevent 26; sleep 1; adb shell input keyevent 3; sleep 17; shot adhan_alarm_fired
 sleep 3; shot adhan_after_5s
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/wear_prefs.xml" > "$OUT/prefs_after_alarm.xml" 2>&1
 adb logcat -d | grep -i "adhan\|AlarmManager.*wathakker" | head -20 > "$OUT/adhan_log.txt"
 adb shell dumpsys window | grep -i "mCurrentFocus" > "$OUT/focus.txt"
-for P in 0 1 2 4; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page $P --ei lang 2 >/dev/null 2>&1; sleep 9; shot en_$P; done
+for P in 0 1 2 3; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page $P --ei lang 2 >/dev/null 2>&1; sleep 9; shot en_$P; done
 adb shell input keyevent 3; sleep 2
-adb shell input keyevent 265; sleep 4; shot launcher_apps_1
+adb shell input keyevent 264; sleep 4; shot launcher_apps_1
 adb shell input swipe 227 320 227 80; sleep 2; shot launcher_apps_2
 adb shell input swipe 227 320 227 80; sleep 2; shot launcher_apps_3
 adb shell input swipe 227 320 227 80; sleep 2; shot launcher_apps_4

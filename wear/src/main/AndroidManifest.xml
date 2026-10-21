@@ -84,31 +84,31 @@
             <meta-data android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS" android:value="300" />
         </service>
 
-        <service android:name=".DateGregComplication" android:exported="true" android:label="التاريخ الميلادي" android:icon="@drawable/ic_complication_mono"
+        <service android:name=".DateGregComplication" android:exported="true" android:label="@string/comp_greg" android:icon="@drawable/ic_complication_mono"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter><action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" /></intent-filter>
             <meta-data android:name="android.support.wearable.complications.SUPPORTED_TYPES" android:value="SHORT_TEXT" />
             <meta-data android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS" android:value="300" />
         </service>
-        <service android:name=".DateHijriComplication" android:exported="true" android:label="التاريخ الهجري" android:icon="@drawable/ic_complication_mono"
+        <service android:name=".DateHijriComplication" android:exported="true" android:label="@string/comp_hijri" android:icon="@drawable/ic_complication_mono"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter><action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" /></intent-filter>
             <meta-data android:name="android.support.wearable.complications.SUPPORTED_TYPES" android:value="SHORT_TEXT" />
             <meta-data android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS" android:value="300" />
         </service>
-        <service android:name=".DateBothComplication" android:exported="true" android:label="الميلادي والهجري" android:icon="@drawable/ic_complication_mono"
+        <service android:name=".DateBothComplication" android:exported="true" android:label="@string/comp_both" android:icon="@drawable/ic_complication_mono"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter><action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" /></intent-filter>
             <meta-data android:name="android.support.wearable.complications.SUPPORTED_TYPES" android:value="LONG_TEXT" />
             <meta-data android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS" android:value="300" />
         </service>
-        <service android:name=".NextTimeComplication" android:exported="true" android:label="موعد الصلاة القادمة" android:icon="@drawable/ic_complication_mono"
+        <service android:name=".NextTimeComplication" android:exported="true" android:label="@string/comp_next_time" android:icon="@drawable/ic_complication_mono"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter><action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" /></intent-filter>
             <meta-data android:name="android.support.wearable.complications.SUPPORTED_TYPES" android:value="SHORT_TEXT" />
             <meta-data android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS" android:value="300" />
         </service>
-        <service android:name=".UpcomingCountdownComplication" android:exported="true" android:label="العد التنازلي للصلاة القادمة" android:icon="@drawable/ic_complication_mono"
+        <service android:name=".UpcomingCountdownComplication" android:exported="true" android:label="@string/comp_countdown" android:icon="@drawable/ic_complication_mono"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
             <intent-filter><action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" /></intent-filter>
             <meta-data android:name="android.support.wearable.complications.SUPPORTED_TYPES" android:value="SHORT_TEXT" />
