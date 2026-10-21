@@ -22,13 +22,8 @@ jobs:
       run: |
         set -o pipefail
         gradle :wear:assembleRelease -PwithWear=true -PcomposeBom=2025.10.01 --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee wear-build.log
-    - name: Debug-sign minified APK for emulator install
-      run: |
-        BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
-        APK=wear/build/outputs/apk/release/wear-release-unsigned.apk
-        "$BT/zipalign" -f -p 4 "$APK" /tmp/aligned.apk
-        "$BT/apksigner" sign --ks debug.keystore --ks-pass pass:android --key-pass pass:android --out wear/build/outputs/apk/release/wear-minified-debugsigned.apk /tmp/aligned.apk
-        ls -la wear/build/outputs/apk/release/
+    - name: List built APK
+      run: ls -la wear/build/outputs/apk/release/
     - uses: actions/upload-artifact@v4
       if: always()
       with:
@@ -52,7 +47,7 @@ jobs:
         target: android-wear
         profile: wearos_large_round
         disable-animations: false
-        script: bash tools/emu_wear_full.sh wear/build/outputs/apk/release/wear-minified-debugsigned.apk emulator-evidence/wear-minify
+        script: bash tools/emu_wear_full.sh wear/build/outputs/apk/release/wear-release.apk emulator-evidence/wear-minify
     - uses: actions/upload-artifact@v4
       if: always()
       with:
