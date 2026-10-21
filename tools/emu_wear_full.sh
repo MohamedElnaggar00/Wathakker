@@ -27,8 +27,9 @@ adb logcat -d | grep -i "adhan\|AlarmManager.*wathakker" | head -20 > "$OUT/adha
 adb shell dumpsys window | grep -i "mCurrentFocus" > "$OUT/focus.txt"
 for P in 0 1 2 4; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page $P --ei lang 2 >/dev/null 2>&1; sleep 9; shot en_$P; done
 adb shell input keyevent 3; sleep 2
-adb shell input swipe 227 320 227 80; sleep 3; shot launcher_apps_1
+adb shell input keyevent 265; sleep 4; shot launcher_apps_1
 adb shell input swipe 227 320 227 80; sleep 2; shot launcher_apps_2
 adb shell input swipe 227 320 227 80; sleep 2; shot launcher_apps_3
+adb shell input swipe 227 320 227 80; sleep 2; shot launcher_apps_4
 adb logcat -d | grep -i "FATAL EXCEPTION\|AndroidRuntime" -A8 | head -60 > "$OUT/errors.txt" 2>&1
 echo done > "$OUT/SUMMARY.txt"
