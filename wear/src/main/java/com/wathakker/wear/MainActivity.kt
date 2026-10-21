@@ -99,8 +99,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         LocationSync.refresh(this)
         Settings.load(this)
+        Adhan.schedule(this)
         if (intent.hasExtra("pat")) starPattern = intent.getIntExtra("pat", 1)
         if (intent.hasExtra("theme")) WTheme.idx = intent.getIntExtra("theme", 0)
+        val prefs = getSharedPreferences("wear_prefs", Context.MODE_PRIVATE)
+        if (!prefs.getBoolean("perm_asked", false) && !intent.hasExtra("page")) {
+            prefs.edit().putBoolean("perm_asked", true).apply()
+            registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions()) { }
+                .launch(arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.POST_NOTIFICATIONS))
+        }
         val page = intent.getIntExtra("page", 0)
         val sub = intent.getIntExtra("sub", 0)
         setContent { WearApp(page, sub) }

@@ -12,6 +12,14 @@ for PT in 1 11; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 
 adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode tile >/dev/null 2>&1; sleep 8; shot tile_default
 for K in 1 2 3 4 8; do adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode short --ei kind $K >/dev/null 2>&1; sleep 7; shot comp_$K; done
 adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode ranged >/dev/null 2>&1; sleep 7; shot comp_ranged
+adb shell am start -S -W -n $PKG/$A.AdhanActivity --ei id 4 >/dev/null 2>&1; sleep 3; shot adhan_screen
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub 0 >/dev/null 2>&1; sleep 6; adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_before.txt"
+adb shell date 102105335500.00 >/dev/null 2>&1; sleep 1
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 >/dev/null 2>&1; sleep 4
+adb shell input keyevent 26; sleep 2
+adb shell am broadcast -a android.intent.action.TIME_SET -p $PKG >/dev/null 2>&1; sleep 15; shot adhan_alarm_fired
+adb shell dumpsys window | grep -i "mCurrentFocus" > "$OUT/focus.txt"
+adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_after.txt"
 adb shell dumpsys package $PKG | grep -i "versionName\|label" | head -3 > "$OUT/pkg.txt"
 adb logcat -d | grep -i "AndroidRuntime\|FATAL EXCEPTION" -A8 | head -40 > "$OUT/logcat.txt" 2>&1
 echo done > "$OUT/SUMMARY.txt"

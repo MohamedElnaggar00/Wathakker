@@ -15,6 +15,7 @@ object LocationSync {
             .putString("city", city ?: "")
             .putBoolean("h24", h24)
             .apply()
+        try { Adhan.schedule(c) } catch (_: Throwable) {}
     }
 
     /** Reads the last item the phone sent (also works if the phone synced while the watch app was closed). */

@@ -71,6 +71,7 @@ fun SettingsPage(w: Float, startSub: Int = 0) {
                     item { Row1("الزخرفة", Settings.patterns.firstOrNull { it.first == starPattern }?.second ?: "", { sub = 1 }) }
                     item { Row1("لون السمة", WTheme.cur.name, { sub = 2 }) }
                     item { Row1("مصدر الموقع", if (locMode == 0) "من الهاتف" else "تلقائي", { sub = 3 }) }
+                    item { var on by remember { mutableIntStateOf(if (Adhan.enabled(ctx)) 1 else 0) }; Row1("تنبيه الأذان", if (on == 1) "تشغيل" else "إيقاف", { on = 1 - on; Adhan.setEnabled(ctx, on == 1) }, selected = on == 1) }
                     item { Row1("الأذونات", null, { sub = 4 }) }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }

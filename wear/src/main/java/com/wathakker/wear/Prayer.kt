@@ -55,6 +55,12 @@ object Prayer {
         return t.mapIndexed { i, v -> Slot(i, names[i], v) }
     }
 
+    /** Next of the five prayers (no sunrise) strictly after [now]. */
+    fun nextAdhan(c: Context, now: Long = System.currentTimeMillis()): Slot? {
+        for (off in 0..2) for (sl in day(c, off, now)) if (sl.id != 1 && sl.at > now) return sl
+        return null
+    }
+
     @Volatile var h24 = false
 
     fun compute(c: Context, now: Long = System.currentTimeMillis()): PrayerState {
