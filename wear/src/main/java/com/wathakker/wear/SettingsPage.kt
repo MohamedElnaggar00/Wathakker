@@ -109,6 +109,20 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         }
     }
 
+    // One UI Watch switch shape (reference: system Settings toggles), drawn with the app accent color.
+    @Composable
+    fun OneUiSwitch(on: Boolean, onChange: (Boolean) -> Unit, w: Float) {
+        val tw = w * 0.11f; val th = w * 0.065f; val knob = th * 0.72f
+        Box(
+            Modifier.size(width = tw.dp, height = th.dp).clip(RoundedCornerShape(th.dp))
+                .background(if (on) Gold else Color(0xFF4A4A50))
+                .clickable { onChange(!on) }.padding((th * 0.14f).dp),
+            contentAlignment = if (on) Alignment.CenterEnd else Alignment.CenterStart
+        ) {
+            Box(Modifier.size(knob.dp).clip(CircleShape).background(Color.White))
+        }
+    }
+
     val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); else -> T("الإعدادات", "Settings") }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         ScalingLazyColumn(Modifier.fillMaxSize()) {
@@ -119,7 +133,10 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                     item { Row1(T("الزخرفة", "Pattern"), patName(starPattern), { go(1) }) }
                     item { Row1(T("لون السمة", "Theme color"), themeName(WTheme.idx), { go(2) }) }
                     item { Row1(T("مصدر الموقع", "Location source"), if (locMode == 0) T("من الهاتف", "Phone") else T("تلقائي", "Auto"), { go(3) }) }
-                    item { var on by remember { mutableIntStateOf(if (Adhan.enabled(ctx)) 1 else 0) }; Row1(T("تنبيه الأذان", "Adhan alert"), if (on == 1) T("تشغيل", "On") else T("إيقاف", "Off"), { on = 1 - on; Adhan.setEnabled(ctx, on == 1) }, selected = on == 1) }
+                    item {
+                        var on by remember { mutableIntStateOf(if (Adhan.enabled(ctx)) 1 else 0) }
+                        Row1(T("تنبيه الأذان", "Adhan alert"), null, { on = 1 - on; Adhan.setEnabled(ctx, on == 1) }, selected = on == 1, trail = { OneUiSwitch(on == 1, { want -> on = if (want) 1 else 0; Adhan.setEnabled(ctx, want) }, w) })
+                    }
                     item { var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }; Row1(T("نوع التنبيه", "Alert style"), if (fs == 1) T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert") else T("تنبيه إشعار", "Notification alert"), { go(6) }) }
                     item { Row1(T("الأذونات", "Permissions"), null, { go(4) }) }
                     item { Row1(T("فتح في الجهاز", "Open on phone"), null, { openOnPhone(ctx) {} }, trail = { ExternalIcon(w, SoftGrey) }) }
