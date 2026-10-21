@@ -5,10 +5,8 @@
   <p>Accurate prayer times for your location, per-prayer adhan and iqama alerts, a Qibla compass, a Hijri date converter, and an azkar library with statistics that track your daily commitment — in a modern One UI-inspired design.</p>
 
   <p>
-    <a href="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml"><img src="https://github.com/MohamedElnaggar00/Wathkkir/actions/workflows/build-apk.yml/badge.svg" alt="Build status"></a>
-    <img src="https://img.shields.io/badge/version-3.3.0-blue" alt="Version 3.3.0">
     <img src="https://img.shields.io/badge/platform-Android-green?logo=android" alt="Android">
-    <img src="https://img.shields.io/badge/language-Kotlin-purple?logo=kotlin" alt="Kotlin">
+    <img src="https://img.shields.io/badge/platform-Wear%20OS-blue?logo=wearos" alt="Wear OS">
     <img src="https://img.shields.io/badge/UI%20languages-11-orange" alt="11 languages">
   </p>
 
@@ -21,12 +19,10 @@
 
 - [Overview](#-overview)
 - [Key features](#-key-features)
-- [What's new in 3.3.0](#-whats-new-in-330)
-- [Screenshots](#-screenshots)
-- [Wear OS app](#-wear-os-app-in-development)
+- [Latest additions](#-latest-additions)
+- [Gallery](#-gallery)
+- [Watch app](#-watch-app)
 - [Supported languages](#-supported-languages)
-- [Tech stack](#-tech-stack)
-- [Build from source](#-build-from-source)
 - [Download](#-download)
 
 ---
@@ -46,24 +42,23 @@ Wathkkir is an open-source Android app that brings the everyday tools a Muslim n
 | 📅 **Date converter** | One box with a One UI direction switch (Gregorian to Hijri or Hijri to Gregorian), a month list that follows the direction, and a centered "Today" button. Umm al-Qura calendar, weekday shown. |
 | 📿 **Azkar & Hisn al-Muslim** | The complete Hisn al-Muslim library in chapters, custom azkar organized with colored tags, favorites, timed reminders, and preloaded prophetic duas. |
 | 📊 **Statistics** | Daily commitment tracking: azkar read today, this week, and this month, plus a day-streak counter. |
-| 🔢 **Tasbeeh** | A digital counter that keeps your progress even after the app is closed — find it in the side menu. |
-| 🗓️ **Hijri calendar** | A dedicated tab with a One UI-style month grid showing both Hijri and Gregorian dates for every day, colored markers for Islamic occasions (Ramadan, the two Eids, Arafah, Ashura, the White Days, and more), a month events list, and an upcoming-events view with an optional reminder bell for each occasion. Dates use the Umm al-Qura calculation with an adjustable ±2-day offset in Settings. |
+| 🔢 **Tasbeeh** | A digital counter that keeps your progress even after the app is closed. |
 | 📱 **Lock-screen widgets** | Fully customizable widgets (colors, background, text) showing prayer times on the lock screen. |
 | 🎨 **Personalization** | Eleven UI languages with full RTL and LTR support, light/dark/system themes, and multiple Arabic fonts (Cairo, Naskh, Amiri, Ruqaa). |
 
 <details>
 <summary><b>🔔 More about the alert system</b></summary>
 
-- Alert notifications are scheduled with exact alarms and automatically rescheduled after the device reboots.
-- Each prayer has its own settings sheet via a long-press on its bell: alert mode, timing, iqama reminder, and automatic DND.
+- Alerts arrive precisely on time and are automatically rescheduled after the device reboots.
+- Each prayer has its own settings sheet via a long-press on its bell: timing, iqama reminder, and automatic DND.
 - If the Do-Not-Disturb policy permission is missing, the app routes you to the system permission screen instead of silently pretending the feature works.
 
 </details>
 
-## 🆕 What's new in 3.3.0
+## 🆕 Latest additions
 
 - **Fajr full-screen alarm** with its own settings page: tone or audio file, volume, vibration, ring before and/or after the adhan, ring duration, snooze length, test button.
-- **One UI style menus and dialogs** everywhere, with Apply and Cancel on pickers. They now follow the app font size.
+- **One UI style menus and dialogs** everywhere, with Apply and Cancel on pickers. They follow the font size you choose.
 - **Font size**: a 9-step slider in Settings > Appearance.
 - **Hisn Al-Muslim**: search, "done reading" button, notes, counter colours, default favorites, add to my adhkar.
 - **Per-prayer tone and vibration**, plus touch feedback only on controls that change state, following the haptics setting.
@@ -72,37 +67,22 @@ Wathkkir is an open-source Android app that brings the everyday tools a Muslim n
 - **Date converter redesigned**: one box, a One UI direction switch, and a "Today" button.
 - **Time wheels**: the selected value sits inside the selection band, and AM/PM is a plain two-item wheel with no looping.
 - **Page titles**: the gap above each title now matches the gap below it.
-- **Widgets**: widget-settings colours are visible on a light background, the 1x1 next-prayer widget no longer has overlapping lines, and picker names carry no size suffix.
-- **Fixes**: prayer times round like printed timetables, adhan and iqama notifications close after 5 minutes, Arabic fonts render correctly, exact alarms so the adhan is not late.
 
-3.3.0 updates in place over 3.2.3 (same signing key).
-
-## 📸 Screenshots
-
-<p align="center"><i>Real captures from an Android 35 emulator running 3.3.0.</i></p>
+## 📸 Gallery
 
 <div align="center">
   <table>
     <tr><td align="center"><img src="docs/screenshots/04-prayer.png" width="200" alt="Prayer screen"><br><sub>Prayer screen</sub></td><td align="center"><img src="docs/screenshots/05-fajr-alarm.png" width="200" alt="Fajr alarm"><br><sub>Fajr alarm</sub></td><td align="center"><img src="docs/screenshots/06-hisn.png" width="200" alt="Hisn Al-Muslim"><br><sub>Hisn Al-Muslim</sub></td></tr>
     <tr><td align="center"><img src="docs/screenshots/07-reminders.png" width="200" alt="Reminders"><br><sub>Reminders</sub></td><td align="center"><img src="docs/screenshots/08-calendar.png" width="200" alt="Calendar"><br><sub>Calendar</sub></td><td align="center"><img src="docs/screenshots/09-qibla.png" width="200" alt="Qibla"><br><sub>Qibla</sub></td></tr>
     <tr><td align="center"><img src="docs/screenshots/10-menu.png" width="200" alt="One UI style menus"><br><sub>One UI style menus</sub></td><td align="center"><img src="docs/screenshots/11-dialog.png" width="200" alt="Dialogs"><br><sub>Dialogs</sub></td><td align="center"><img src="docs/screenshots/01-language.png" width="200" alt="Onboarding: language"><br><sub>Onboarding: language</sub></td></tr>
-    <tr><td align="center"><img src="docs/screenshots/02-calculation.png" width="200" alt="Calculation method"><br><sub>Calculation method</sub></td><td align="center"><img src="docs/screenshots/03-alerts.png" width="200" alt="Enable alerts"><br><sub>Enable alerts</sub></td></tr>
-  </table>
-</div>
-
-### 🔄 Converter and time wheel
-
-<p align="center"><i>Real captures from an Android 35 emulator.</i></p>
-
-<div align="center">
-  <table>
-    <tr><td align="center"><img src="docs/screenshots/12-converter-g2h.png" width="200" alt="Date converter: Gregorian to Hijri"><br><sub>Gregorian to Hijri</sub></td><td align="center"><img src="docs/screenshots/13-converter-h2g.png" width="200" alt="Date converter: Hijri to Gregorian"><br><sub>Hijri to Gregorian</sub></td><td align="center"><img src="docs/screenshots/14-time-picker.png" width="200" alt="Time wheel"><br><sub>Time wheel</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/02-calculation.png" width="200" alt="Calculation method"><br><sub>Calculation method</sub></td><td align="center"><img src="docs/screenshots/03-alerts.png" width="200" alt="Enable alerts"><br><sub>Enable alerts</sub></td><td align="center"><img src="docs/screenshots/14-time-picker.png" width="200" alt="Time wheel"><br><sub>Time wheel</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/12-converter-g2h.png" width="200" alt="Date converter: Gregorian to Hijri"><br><sub>Gregorian to Hijri</sub></td><td align="center"><img src="docs/screenshots/13-converter-h2g.png" width="200" alt="Date converter: Hijri to Gregorian"><br><sub>Hijri to Gregorian</sub></td></tr>
   </table>
 </div>
 
 ### 📲 From a real device
 
-<p align="center"><i>Captures from the developer's phone: lock screen, home screen and widget settings.</i></p>
+<p align="center"><i>Captures from a real phone: lock screen, home screen and widget settings.</i></p>
 
 <div align="center">
   <table>
@@ -111,46 +91,30 @@ Wathkkir is an open-source Android app that brings the everyday tools a Muslim n
   </table>
 </div>
 
-### 📱 Home-screen widgets
+## ⌚ Watch app
 
-<p align="center"><i>Actual widget renders from 3.3.1: Latin digits (first) and Hindi digits (second).</i></p>
+The watch app is a separate download and runs on Wear OS 3 and newer. Its features:
+
+- **Prayer times on your wrist**: the next prayer with its remaining time, both Hijri and Gregorian dates, and the full day list.
+- **A Tile with a progress arc** showing the run-up to the next prayer, plus an iqama countdown after the adhan, with a preview in the tile picker.
+- **Watch-face complications**: a next-prayer countdown with a progress ring, next prayer time, Hijri date, Gregorian date, or both dates together.
+- **Adhan alert on the watch** with a choice of alert style: a regular notification or a full-screen notification.
+- **Qibla compass** on the watch.
+- **One UI style settings** organized in sections: Appearance (patterned backgrounds, theme colours, font style, and font size), Notifications, Language & location (sync with the phone or choose manually), and an "About this app" section showing the version.
 
 <div align="center">
-  <img src="docs/screenshots/15-widgets-latin.png" width="440" alt="Widgets with Latin digits">
-  <img src="docs/screenshots/16-widgets-hindi.png" width="440" alt="Widgets with Hindi digits">
-  <p><sub>The system widget picker shows a live theme-aware preview (Android 12+); older versions show a static image.</sub></p>
+  <table>
+    <tr><td align="center"><img src="docs/screenshots/w01-tile.png" width="170" alt="Watch tile"><br><sub>Watch tile</sub></td><td align="center"><img src="docs/screenshots/w02-main.png" width="170" alt="Main screen"><br><sub>Main screen</sub></td><td align="center"><img src="docs/screenshots/w03-countdown.png" width="170" alt="Countdown complication"><br><sub>Countdown complication</sub></td></tr>
+  </table>
 </div>
-
-## ⌚ Wear OS app (in development)
-
-The watch app is not finished. It ships as a separate APK for testing only (Wear OS 3+). What exists today: prayer times, qibla, a next-prayer tile and complication, a 24-hour option, and a settings page in the phone app with sync. It has not been tested on a real watch, and it will be renamed and its bugs fixed in a later release.
 
 ## 🌍 Supported languages
 
 العربية · English · Français · Deutsch · Español · Italiano · Türkçe · اردو · Indonesia · Русский · Português
 
-## 🛠️ Tech stack
-
-- **Language**: Kotlin
-- **UI**: Jetpack Compose with Material 3 and a custom One UI-inspired design system
-- **Database**: Room for local azkar, tags, and statistics
-- **Prayer calculations**: astronomical calculation library with the Umm al-Qura Hijri calendar
-- **Architecture**: MVVM
-- **Alerts**: exact alarms with broadcast receivers for post-boot rescheduling
-
-## 🔨 Build from source
-
-```bash
-git clone https://github.com/MohamedElnaggar00/Wathkkir.git
-cd Wathkkir
-./gradlew assembleDebug
-```
-
-The APK is produced in `app/build/outputs/apk/debug/`. Building requires JDK 17 and the Android SDK.
-
 ## 📥 Download
 
-- **[Wathkkir 3.3.0 (latest)](https://github.com/MohamedElnaggar00/Wathkkir/releases/tag/v3.3.0)**: phone app `Wathkkir-3.3.0.apk` and the test watch app `Wathkkir-Wear-3.3.0.apk`, with sha256 values for checking.
+- **[Latest release](https://github.com/MohamedElnaggar00/Wathkkir/releases/latest)**: the phone app and the watch app.
 - All versions: [Releases page](https://github.com/MohamedElnaggar00/Wathkkir/releases).
 
 ---
