@@ -123,6 +123,7 @@
             </intent-filter>
         </receiver>
         <receiver android:exported="false" android:name="com.example.fajr.alarm.FajrAlarmReceiver" />
+        <activity android:excludeFromRecents="true" android:exported="false" android:launchMode="singleTask" android:name="com.example.prayer.PrayerAlertActivity" android:showWhenLocked="true" android:turnScreenOn="true" android:theme="@style/Theme.MyApplication" />
         <activity android:excludeFromRecents="true" android:exported="false" android:launchMode="singleTask" android:name="com.example.fajr.ui.FajrAlarmActivity" android:showWhenLocked="true" android:turnScreenOn="true" android:theme="@style/Theme.MyApplication" />
         <receiver android:exported="false" android:name="com.example.alarm.AlarmReceiver" />
         <receiver android:exported="false" android:name="com.example.prayer.alerts.PrayerAlertReceiver" />

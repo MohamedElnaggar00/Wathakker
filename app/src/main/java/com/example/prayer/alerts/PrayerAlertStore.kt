@@ -65,6 +65,17 @@ object PrayerAlertStore {
         p(context).edit().putBoolean("dnd_" + prayer, enabled).apply()
     }
 
+    /** Alert style at adhan time: false = notification (default), true = full-screen. */
+    fun fullScreen(context: Context, prayer: Int): Boolean {
+        migrate(context)
+        return p(context).getBoolean("fullscreen_$prayer", false)
+    }
+
+    fun setFullScreen(context: Context, prayer: Int, full: Boolean) {
+        migrate(context)
+        p(context).edit().putBoolean("fullscreen_$prayer", full).apply()
+    }
+
     fun iqamaReminder(context: Context, prayer: Int): Boolean {
         migrate(context)
         return p(context).getBoolean("iqama_$prayer", false)
