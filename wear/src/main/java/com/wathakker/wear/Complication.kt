@@ -26,12 +26,12 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
     /** 0 = remaining countdown (and ranged ring); other values are the extra types, see [buildKind]. */
     open val kind: Int get() = 0
 
-    fun build(type: ComplicationType, s: PrayerState): ComplicationData? = if (kind == 0) buildMain(type, s) else buildKind(kind, type, s)
+    fun build(type: ComplicationType, s: PrayerState, preview: Boolean = false): ComplicationData? = if (kind == 0) buildMain(type, s, preview) else buildKind(kind, type, s, preview)
 
     private fun txt(t: String) = PlainComplicationText.Builder(t).build()
 
     /** 1 greg date, 2 hijri date, 3 greg+hijri (long), 4 next prayer time, 8 upcoming prayer countdown. */
-    fun buildKind(k: Int, type: ComplicationType, s: PrayerState): ComplicationData? {
+    fun buildKind(k: Int, type: ComplicationType, s: PrayerState, preview: Boolean = false): ComplicationData? {
         val cd = txt("-")
         fun short(text: androidx.wear.watchface.complications.data.ComplicationText, title: String?, d: String): ComplicationData =
             ShortTextComplicationData.Builder(text, txt(d)).apply { if (title != null) setTitle(txt(title)) }.setTapAction(tap()).build()
@@ -42,7 +42,11 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
         }
         if (type != ComplicationType.SHORT_TEXT) return null
         val cal = java.util.Calendar.getInstance().apply { timeInMillis = s.now }
-        fun down(at: Long) = TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(at))).setText("^1").build()
+        // In picker previews the system renders time-difference text against its own frozen clock, which shows
+        // absurd values; previews instead use plain text computed from the real remaining time at request time,
+        // in the same compact format (the number refreshes each time the picker requests preview data).
+        fun down(at: Long) = if (preview) txt(previewCountdown(at - s.now))
+        else TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(at))).setText("^1").build()
         return when (k) {
             1 -> short(txt(cal.get(java.util.Calendar.DAY_OF_MONTH).toString()), Prayer.gregDate(s.now).substringAfter(' '), T("التاريخ الميلادي", "Gregorian date"))
             2 -> short(txt(Prayer.hijriDay(s.now)), Prayer.hijriMonth(s.now), T("التاريخ الهجري", "Hijri date"))
@@ -52,8 +56,9 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
         }
     }
 
-    fun buildMain(type: ComplicationType, s: PrayerState): ComplicationData? {
-        val countdown = TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(s.next.at)))
+    fun buildMain(type: ComplicationType, s: PrayerState, preview: Boolean = false): ComplicationData? {
+        val countdown = if (preview) PlainComplicationText.Builder(previewCountdown(s.next.at - s.now)).build()
+        else TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(s.next.at)))
             .setText("^1")
             .build()
         val title = PlainComplicationText.Builder(s.next.name).build()
@@ -71,7 +76,19 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
         }
     }
 
-    override fun getPreviewData(type: ComplicationType): ComplicationData? = build(type, Prayer.compute(this))
+    override fun getPreviewData(type: ComplicationType): ComplicationData? = build(type, Prayer.compute(this), preview = true)
+
+    /** Compact remaining-time text matching SHORT_DUAL_UNIT rendering, e.g. "2h 26m", "45m", "1d 2h". */
+    private fun previewCountdown(deltaMs: Long): String {
+        val m = maxOf(0L, deltaMs / 60000); val d = m / 1440; val h = (m % 1440) / 60; val mm = m % 60
+        return when {
+            d > 0 && h > 0 -> "${d}d ${h}h"
+            d > 0 -> "${d}d"
+            h > 0 && mm > 0 -> "${h}h ${mm}m"
+            h > 0 -> "${h}h"
+            else -> "${mm}m"
+        }
+    }
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? =
         build(request.complicationType, Prayer.compute(this))

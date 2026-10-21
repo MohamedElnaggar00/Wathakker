@@ -31,6 +31,7 @@ for PT in 1 11; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 
 adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode tile >/dev/null 2>&1; sleep 8; shot tile_default
 for K in 1 2 3 4 8; do adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode short --ei kind $K >/dev/null 2>&1; sleep 7; shot comp_$K; done
 adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode ranged >/dev/null 2>&1; sleep 7; shot comp_ranged
+for K in 0 8 4; do adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode prev --ei kind $K >/dev/null 2>&1; sleep 7; shot comp_prev_$K; done
 adb shell am start -S -W -n $PKG/$A.AdhanActivity --ei id 4 >/dev/null 2>&1; sleep 3; shot adhan_screen
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 3 --ei sub 0 >/dev/null 2>&1; sleep 6; adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_before.txt"
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei adhan_test 20 >/dev/null 2>&1; sleep 2

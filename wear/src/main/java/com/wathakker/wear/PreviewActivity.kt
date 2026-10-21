@@ -36,7 +36,7 @@ class PreviewActivity : Activity() {
         } else {
             val k = intent.getIntExtra("kind", 0)
             val type = if (k == 3) ComplicationType.LONG_TEXT else if (mode == "short" || k > 0) ComplicationType.SHORT_TEXT else ComplicationType.RANGED_VALUE
-            val data = PreviewComp(this, k).build(type, s)!!
+            val data = if (mode == "prev") PreviewComp(this, k).getPreviewData(type)!! else PreviewComp(this, k).build(type, s)!!
             val cd = ComplicationDrawable(this)
             cd.activeStyle.rangedValuePrimaryColor = WTheme.cur.main.toArgb()
             cd.activeStyle.rangedValueSecondaryColor = 0xFF3A3420.toInt()
