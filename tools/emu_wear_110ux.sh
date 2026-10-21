@@ -68,6 +68,26 @@ wait $REC
 adb pull /sdcard/back.mp4 "$OUT/back.mp4" >/dev/null 2>&1
 frames back
 sleep 2
+
+# 4b) scroll-restore (his 21:30 report): scroll the root list down, open a sub-screen,
+# return with KEYCODE_BACK -> the root must come back at the SAME position, not the top.
+adb shell input swipe 227 340 227 120 300; sleep 1
+adb shell input swipe 227 340 227 120 300; sleep 2
+shot 76a_settings_scrolled
+CUR=scr; dump $CUR
+XY=$(findany "نوع التنبيه" "Alert style")
+if [ -n "$XY" ]; then
+  adb shell input tap $XY; sleep 3
+  shot 76b_alert_style_open
+  adb shell input keyevent KEYCODE_BACK; sleep 3
+  shot 76_settings_restored
+  CUR=restored; dump $CUR
+else
+  echo "ALERT_STYLE_ROW_NOT_FOUND" >> "$OUT/SUMMARY.txt"
+fi
+# return to the top so the switch sequence below starts from a known position
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 >/dev/null 2>&1; sleep 8
+
 CUR=root3; dump $CUR
 XY=$(findany "تنبيه الأذان" "Adhan alert")
 for i in 1 2 3; do
