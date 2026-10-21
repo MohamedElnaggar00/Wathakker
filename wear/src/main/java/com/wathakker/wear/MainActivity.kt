@@ -189,7 +189,7 @@ private fun starOutline(cx: Float, cy: Float, n: Int, ro: Float, ri: Float): Pat
 
 /** Regular square-grid Islamic star pattern that emerges from the bottom-left corner and fades out. */
 @Composable
-fun StarField(modifier: Modifier, pat: Int = starPattern) {
+fun StarField(modifier: Modifier, pat: Int = starPattern, boost: Float = 1f) {
     Canvas(modifier) {
         val r = size.minDimension * 0.085f
         val step = r * 2f
@@ -204,7 +204,7 @@ fun StarField(modifier: Modifier, pat: Int = starPattern) {
             for (row in 0..r0) for (col in 0..c0) {
                 val cx = col * dx + (if (hex && row % 2 == 1) dx / 2 else if (!hex && row % 2 == 1 && pat == 11) dx / 2 else 0f)
                 val cy = size.height - row * dy
-                val al = 0.30f * (1f - hypot(cx, size.height - cy) / maxD).coerceIn(0f, 1f)
+                val al = (0.30f * boost * (1f - hypot(cx, size.height - cy) / maxD).coerceIn(0f, 1f)).coerceAtMost(1f)
                 if (al < 0.01f) continue
                 val col1 = Color.White.copy(alpha = al)
                 when (pat) {
@@ -221,7 +221,7 @@ fun StarField(modifier: Modifier, pat: Int = starPattern) {
             val cx = col * step; val cy = size.height - row * step
             val a = (1f - hypot(cx, size.height - cy) / maxD).coerceIn(0f, 1f)
             if (a > 0.03f) {
-                val al = 0.34f * a
+                val al = (0.34f * boost * a).coerceAtMost(1f)
                 drawPath(starPath(cx, cy, r), Color.White.copy(alpha = al), style = Stroke(width = sw))
             }
         }

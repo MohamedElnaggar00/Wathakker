@@ -79,7 +79,7 @@ fun SettingsPage(w: Float, startSub: Int = 0) {
                     items(Settings.patterns.size) { i ->
                         val (id, name) = Settings.patterns[i]
                         Row1(name, null, { Settings.savePattern(ctx, id) }, selected = starPattern == id, lead = {
-                            Box(Modifier.size((w * 0.11f).dp).clip(CircleShape).background(Color.Black)) { StarField(Modifier.fillMaxSize(), id) }
+                            Box(Modifier.size((w * 0.11f).dp).clip(CircleShape).background(Color.Black)) { StarField(Modifier.fillMaxSize(), id, 3f) }
                         })
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
