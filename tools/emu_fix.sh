@@ -16,8 +16,10 @@ adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode ranged >/dev/null 
 adb shell am start -S -W -n $PKG/$A.AdhanActivity --ei id 4 >/dev/null 2>&1; sleep 3; shot adhan_screen
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub 0 >/dev/null 2>&1; sleep 6; adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_before.txt"
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei adhan_test 20 >/dev/null 2>&1; sleep 2
-adb shell input keyevent 26; sleep 1; adb shell input keyevent 3; sleep 20; shot adhan_alarm_fired
-sleep 7; shot adhan_after_5s
+adb shell input keyevent 26; sleep 1; adb shell input keyevent 3; sleep 17; shot adhan_alarm_fired
+sleep 3; shot adhan_after_5s
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/wear_prefs.xml" > "$OUT/prefs_after_alarm.xml" 2>&1
+adb logcat -d | grep -i "adhan\|AlarmManager.*wathakker" | head -20 > "$OUT/adhan_log.txt"
 adb shell dumpsys window | grep -i "mCurrentFocus" > "$OUT/focus.txt"
 adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_after.txt"
 for P in 0 1 2 4; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page $P --ei lang 2 >/dev/null 2>&1; sleep 9; shot en_$P; done

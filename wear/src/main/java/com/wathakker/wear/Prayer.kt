@@ -120,8 +120,8 @@ object Prayer {
     private val gregMonths = listOf("يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر")
     private val hijriMonths = listOf("محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة")
 
-    fun weekday(ms: Long): String { val c = Calendar.getInstance(); c.timeInMillis = ms; return (if (Loc.en) weekdaysEn else weekdays)[c.get(Calendar.DAY_OF_WEEK) - 1] }
-    fun gregDate(ms: Long): String { val c = Calendar.getInstance(); c.timeInMillis = ms; return "${c.get(Calendar.DAY_OF_MONTH)} ${(if (Loc.en) gregMonthsEn else gregMonths)[c.get(Calendar.MONTH)]}" }
+    fun weekday(ms: Long): String { val c = Calendar.getInstance(); c.timeInMillis = ms; return (if (Loc.en) weekdaysEn[c.get(Calendar.DAY_OF_WEEK) - 1].take(3) else weekdays[c.get(Calendar.DAY_OF_WEEK) - 1]) }
+    fun gregDate(ms: Long): String { val c = Calendar.getInstance(); c.timeInMillis = ms; return "${c.get(Calendar.DAY_OF_MONTH)} ${if (Loc.en) gregMonthsEn[c.get(Calendar.MONTH)].take(3) else gregMonths[c.get(Calendar.MONTH)]}" }
     fun hijri(ms: Long): String {
         val h = java.time.chrono.HijrahDate.from(java.time.Instant.ofEpochMilli(ms).atZone(java.time.ZoneId.systemDefault()))
         return "${h.get(java.time.temporal.ChronoField.DAY_OF_MONTH)} ${(if (Loc.en) hijriMonthsEn else hijriMonths)[h.get(java.time.temporal.ChronoField.MONTH_OF_YEAR) - 1]}"

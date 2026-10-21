@@ -79,6 +79,7 @@ object Adhan {
             .setCategory(Notification.CATEGORY_ALARM).setFullScreenIntent(full, true).setContentIntent(full).setAutoCancel(true)
             .setTimeoutAfter(60_000).build()
         nm.notify(7000 + id, n)
+        c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putLong("adhan_last_fire", System.currentTimeMillis()).apply()
         try { c.startActivity(i) } catch (_: Throwable) {}
         (c.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(VibrationEffect.createWaveform(longArrayOf(0, 400, 200, 400, 200, 400), -1))
     }
@@ -86,6 +87,7 @@ object Adhan {
 
 class AdhanReceiver : BroadcastReceiver() {
     override fun onReceive(c: Context, i: Intent) {
+        c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putLong("adhan_last_receive", System.currentTimeMillis()).apply()
         if (i.hasExtra("id")) {
             // ignore a stale alarm delivered long after its time (e.g. phone was off)
             val at = i.getLongExtra("at", 0L)
