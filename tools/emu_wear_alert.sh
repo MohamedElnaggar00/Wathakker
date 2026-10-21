@@ -39,6 +39,21 @@ XY=$(findany "تنبيه إشعار بملء الشاشة" "Full-screen")
 shot 23_style_fullscreen_chosen
 adb shell "cat /data/data/$PKG/shared_prefs/wear_prefs.xml" > "$OUT/wear_prefs.xml" 2>&1
 
+# back to settings root, open pattern list (radio format evidence)
+adb shell input keyevent KEYCODE_BACK; sleep 3
+CUR=settings3; dump $CUR
+XY=$(findany "الزخرفة" "Pattern")
+for i in 1 2 3; do
+  [ -n "$XY" ] && break
+  adb shell input swipe 227 130 227 320 300; sleep 2
+  CUR=settings3_s$i; dump $CUR
+  XY=$(findany "الزخرفة" "Pattern")
+done
+[ -n "$XY" ] && adb shell input tap $XY; sleep 3
+shot 25_pattern_radio
+CUR=pattern; dump $CUR
+adb shell input keyevent KEYCODE_BACK; sleep 2
+
 NOW=$(($(date +%s%N)/1000000))
 adb shell am broadcast -n $PKG/com.wathakker.wear.AdhanReceiver --ei id 3 --el at $NOW >/dev/null 2>&1
 sleep 6

@@ -143,6 +143,24 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         Box(Modifier.fillMaxWidth().padding(horizontal = (w * 0.05f).dp).height(1.dp).background(Color(0xFF3A3A3E)))
     }
 
+    class RadioOpt(val label: String, val selected: Boolean, val onClick: () -> Unit, val lead: (@Composable () -> Unit)? = null)
+
+    // One UI Watch radio-list card in app colors: dark rounded card, dividers, accent radio rings.
+    @Composable
+    fun OneUiRadioCard(w: Float, options: List<RadioOpt>) {
+        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape((w * 0.08f).dp)).background(Color(0xFF26262B))) {
+            options.forEachIndexed { i, opt ->
+                if (i > 0) OneUiDivider(w)
+                Row(Modifier.fillMaxWidth().clickable { opt.onClick() }.padding(horizontal = (w * 0.05f).dp, vertical = (w * 0.05f).dp), verticalAlignment = Alignment.CenterVertically) {
+                    OneUiRadio(opt.selected, w)
+                    Spacer(Modifier.width((w * 0.04f).dp))
+                    if (opt.lead != null) { opt.lead(); Spacer(Modifier.width((w * 0.04f).dp)) }
+                    Text1(opt.label, tx(w * 0.056f, Color.White))
+                }
+            }
+        }
+    }
+
     val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); else -> T("الإعدادات", "Settings") }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         ScalingLazyColumn(Modifier.fillMaxSize()) {
@@ -165,54 +183,53 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                 6 -> {
                     item {
                         var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }
-                        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape((w * 0.08f).dp)).background(Color(0xFF26262B))) {
-                            Row(Modifier.fillMaxWidth().clickable { fs = 0; Adhan.setFullScreen(ctx, false) }.padding(horizontal = (w * 0.05f).dp, vertical = (w * 0.05f).dp), verticalAlignment = Alignment.CenterVertically) {
-                                OneUiRadio(fs == 0, w)
-                                Spacer(Modifier.width((w * 0.04f).dp))
-                                Text1(T("تنبيه إشعار", "Notification alert"), tx(w * 0.056f, Color.White))
-                            }
-                            OneUiDivider(w)
-                            Row(Modifier.fillMaxWidth().clickable { fs = 1; Adhan.setFullScreen(ctx, true) }.padding(horizontal = (w * 0.05f).dp, vertical = (w * 0.05f).dp), verticalAlignment = Alignment.CenterVertically) {
-                                OneUiRadio(fs == 1, w)
-                                Spacer(Modifier.width((w * 0.04f).dp))
-                                Text1(T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert"), tx(w * 0.056f, Color.White))
-                            }
-                        }
+                        OneUiRadioCard(w, listOf(
+                            RadioOpt(T("تنبيه إشعار", "Notification alert"), fs == 0) { fs = 0; Adhan.setFullScreen(ctx, false) },
+                            RadioOpt(T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert"), fs == 1) { fs = 1; Adhan.setFullScreen(ctx, true) }
+                        ))
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 1 -> {
-                    items(Settings.patterns.size) { i ->
-                        val id = Settings.patterns[i].first; val name = patName(id)
-                        Row1(name, null, { Settings.savePattern(ctx, id) }, selected = starPattern == id, lead = {
-                            Box(Modifier.size((w * 0.11f).dp).clip(CircleShape).background(Color.Black)) { StarField(Modifier.fillMaxSize(), id, 3f) }
+                    item {
+                        OneUiRadioCard(w, Settings.patterns.map { (id, _) ->
+                            RadioOpt(patName(id), starPattern == id, { Settings.savePattern(ctx, id) }, lead = {
+                                Box(Modifier.size((w * 0.1f).dp).clip(CircleShape).background(Color.Black)) { StarField(Modifier.fillMaxSize(), id, 3f) }
+                            })
                         })
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 2 -> {
-                    items(WTheme.defs.size) { i ->
-                        val d = WTheme.defs[i]
-                        Row1(themeName(i), null, { Settings.saveTheme(ctx, i) }, selected = WTheme.idx == i, lead = {
-                            Box(Modifier.size((w * 0.09f).dp).clip(CircleShape).background(d.brush()))
+                    item {
+                        OneUiRadioCard(w, WTheme.defs.mapIndexed { i, d ->
+                            RadioOpt(themeName(i), WTheme.idx == i, { Settings.saveTheme(ctx, i) }, lead = {
+                                Box(Modifier.size((w * 0.09f).dp).clip(CircleShape).background(d.brush()))
+                            })
                         })
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 3 -> {
-                    item { Row1(T("مزامنة مع الهاتف", "Sync with phone"), null, { locMode = 0; Settings.saveLocMode(ctx, 0) }, selected = locMode == 0) }
                     item {
-                        Row1(T("تلقائي (GPS)", "Automatic (GPS)"), null, {
-                            locMode = 1; Settings.saveLocMode(ctx, 1)
-                            if (!locOk) locLauncher.launch(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)) else refreshGps(ctx)
-                        }, selected = locMode == 1)
+                        OneUiRadioCard(w, listOf(
+                            RadioOpt(T("مزامنة مع الهاتف", "Sync with phone"), locMode == 0) { locMode = 0; Settings.saveLocMode(ctx, 0) },
+                            RadioOpt(T("تلقائي (GPS)", "Automatic (GPS)"), locMode == 1) {
+                                locMode = 1; Settings.saveLocMode(ctx, 1)
+                                if (!locOk) locLauncher.launch(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)) else refreshGps(ctx)
+                            }
+                        ))
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 5 -> {
-                    item { Row1(T("مزامنة (الافتراضي)", "Sync (default)"), null, { Loc.save(ctx, 0) }, selected = Loc.mode(ctx) == 0 && langTick >= 0) }
-                    item { Row1("عربي", null, { Loc.save(ctx, 1) }, selected = Loc.mode(ctx) == 1 && langTick >= 0) }
-                    item { Row1("English", null, { Loc.save(ctx, 2) }, selected = Loc.mode(ctx) == 2 && langTick >= 0) }
+                    item {
+                        OneUiRadioCard(w, listOf(
+                            RadioOpt(T("مزامنة (الافتراضي)", "Sync (default)"), Loc.mode(ctx) == 0 && langTick >= 0) { Loc.save(ctx, 0) },
+                            RadioOpt("عربي", Loc.mode(ctx) == 1 && langTick >= 0) { Loc.save(ctx, 1) },
+                            RadioOpt("English", Loc.mode(ctx) == 2 && langTick >= 0) { Loc.save(ctx, 2) }
+                        ))
+                    }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 else -> {
