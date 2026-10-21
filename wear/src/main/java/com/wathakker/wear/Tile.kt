@@ -29,14 +29,14 @@ open class PrayerTileService : TileService() {
     }
 
     // Custom typefaces are not allowed inside tiles (platform restriction), so the font choice reaches
-    // the tile as size scale + bold weight only; the typeface stays the system font.
+    // the tile as size scale only; the typeface stays the system font.
     private fun text(t: String, size: Float, color: Int, bold: Boolean) =
         LayoutElementBuilders.Text.Builder()
             .setText(t)
             .setFontStyle(
                 LayoutElementBuilders.FontStyle.Builder()
                     .setSize(sp(size * WFonts.scale)).setColor(argb(color))
-                    .setWeight(if (bold || WFonts.bold) LayoutElementBuilders.FONT_WEIGHT_BOLD else LayoutElementBuilders.FONT_WEIGHT_NORMAL)
+                    .setWeight(if (bold) LayoutElementBuilders.FONT_WEIGHT_BOLD else LayoutElementBuilders.FONT_WEIGHT_NORMAL)
                     .build()
             ).build()
 

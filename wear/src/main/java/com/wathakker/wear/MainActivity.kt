@@ -93,7 +93,7 @@ val Ink = Color(0xFF0B0B0C)
 val Pill = Color(0xFF1B1B1D)
 val SoftGrey = Color(0xFF9D9DA2)
 fun tx(size: Float, color: Color = Color.White, bold: Boolean = false, align: TextAlign = TextAlign.Center) =
-    TextStyle(fontFamily = WFonts.cur.family, fontSize = (size * WFonts.scale).sp, color = color, fontWeight = if (bold || WFonts.bold) FontWeight.Bold else FontWeight.Normal, textAlign = align)
+    TextStyle(fontFamily = WFonts.cur.family, fontSize = (size * WFonts.scale).sp, color = color, fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal, textAlign = align)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

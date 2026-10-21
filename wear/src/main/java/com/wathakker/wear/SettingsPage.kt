@@ -220,10 +220,6 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                         Column(Modifier.fillMaxWidth().padding(horizontal = (w * 0.027f).dp).clip(RoundedCornerShape((w * 0.09f).dp)).background(Color(0xFF26262B))) {
                             OneUiRow(w, T("نوع الخط", "Font style"), WFonts.cur.label, { go(7) })
                             OneUiDivider(w)
-                            OneUiRow(w, T("خط عريض", "Bold font"), null, { WFonts.saveBold(ctx, !WFonts.bold) }, trail = {
-                                OneUiSwitch(WFonts.bold, { v -> WFonts.saveBold(ctx, v) }, w)
-                            })
-                            OneUiDivider(w)
                             OneUiRow(w, T("حجم الخط", "Font size"), null, { go(8) })
                         }
                     }
