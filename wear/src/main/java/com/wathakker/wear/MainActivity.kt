@@ -42,6 +42,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -147,6 +148,15 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
             val pager = rememberPagerState(initialPage = startPage) { 4 }
             val act = ctx as? android.app.Activity
             var settingsSub by remember { mutableIntStateOf(startSub) }
+            val settingsListState = rememberScalingLazyListState(initialCenterItemIndex = 0, initialCenterItemScrollOffset = 0)
+            // Fresh entry to the settings page opens at the top (19:44); returning from a
+            // sub-screen restores the exact position (21:30) because the state survives above
+            // the AnimatedContent that swaps sub-screens.
+            var prevPagerPage by remember { mutableIntStateOf(pager.currentPage) }
+            LaunchedEffect(pager.currentPage) {
+                if (pager.currentPage == 3 && prevPagerPage != 3) settingsListState.scrollToItem(0, 0)
+                prevPagerPage = pager.currentPage
+            }
             // One swipe-to-dismiss level for the whole navigation hierarchy (like SwipeDismissableNavHost):
             // on a settings sub-screen the edge swipe dismisses it back to the settings root with the root
             // visible underneath; on the first pager page it exits the app. On other pages the pager itself
@@ -172,7 +182,7 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
                 userSwipeEnabled = subOpen || pager.currentPage == 0
             ) { isBackground ->
                 if (isBackground) {
-                    if (subOpen) SettingsContent(0, w, {}) else Box(Modifier.fillMaxSize().background(Color.Black))
+                    if (subOpen) SettingsContent(0, w, {}, settingsListState) else Box(Modifier.fillMaxSize().background(Color.Black))
                 } else {
                     // The pager direction is fixed to LTR: the Wear back gesture is always a right swipe (it does not
                     // mirror in RTL), so the next page must always come from a left swipe, in every language.
@@ -200,7 +210,7 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
                                             },
                                             label = "settingsSub"
                                         ) { sub ->
-                                            SettingsPage(w, sub) { settingsSub = it }
+                                            SettingsPage(w, sub, { settingsSub = it }, settingsListState)
                                         }
                                     }
                                 }
