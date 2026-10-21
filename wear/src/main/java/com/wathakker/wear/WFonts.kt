@@ -22,7 +22,9 @@ object WFonts {
     val choices = listOf(
         // Same name = same font as the phone (his 18:40 order): "خط التطبيق" is Tajawal like the phone.
         Choice("app", "خط التطبيق", "App font", fam(R.font.tajawal to FontWeight.Normal, R.font.tajawal_bold to FontWeight.Bold)),
-        Choice("app_light", "خط التطبيق الخفيف", "App font light", fam(R.font.expoarabic_book to FontWeight.Normal, R.font.expoarabic_medium to FontWeight.Bold)),
+        // On the watch "الخفيف" uses the exact 1.0.2 weights (Medium/SemiBold, his 18:41 order),
+        // a hair heavier than the phone's Book/Medium under the same option name.
+        Choice("app_light", "خط التطبيق الخفيف", "App font light", fam(R.font.expoarabic_medium to FontWeight.Normal, R.font.expoarabic_semibold to FontWeight.Bold)),
         Choice("app_bold", "خط التطبيق العريض", "App font bold", fam(R.font.expoarabic_bold to FontWeight.Normal, R.font.expoarabic_bold to FontWeight.Bold)),
         Choice("system", "خط النظام", "System font", null),
         Choice("cairo", "خط القاهرة", "Cairo", fam(R.font.cairo to FontWeight.Normal, R.font.cairo_bold to FontWeight.Bold)),
