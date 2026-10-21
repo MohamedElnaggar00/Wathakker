@@ -64,10 +64,14 @@ CUR=alert; dump $CUR
 if ! grep -q "AdhanActivity" "$OUT/ui_alert.xml" 2>/dev/null; then
   echo "FSI_NO_LAUNCH (screen was off; fallback: forced launch for UI evidence only)" >> "$OUT/SUMMARY.txt"
   adb shell input keyevent KEYCODE_WAKEUP; sleep 2
-  adb shell am start -W -n $PKG/com.wathakker.wear.AdhanActivity --ei id 3 --el $NOW >/dev/null 2>&1
-  sleep 4
+  # the activity auto-closes after SHOW_SECONDS (5s); capture early
+  adb shell am start -n $PKG/com.wathakker.wear.AdhanActivity --ei id 3 --el $NOW >/dev/null 2>&1
+  sleep 2
   shot 30b_fullscreen_forced
   CUR=alertf; dump $CUR
+  sleep 4
+  shot 30c_fullscreen_autoclosed
+  CUR=alertc; dump $CUR
 fi
 adb shell dumpsys notification > "$OUT/notif.txt" 2>&1
 adb shell input keyevent KEYCODE_WAKEUP; sleep 2
