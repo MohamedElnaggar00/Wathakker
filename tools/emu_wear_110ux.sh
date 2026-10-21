@@ -34,13 +34,16 @@ shot 71_settings_bottom
 CUR=bottom; dump $CUR
 
 # 3) sub-page ENTER animation: record while tapping "نوع الخط" (font style row)
-adb shell am start -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 >/dev/null 2>&1; sleep 6
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 >/dev/null 2>&1; sleep 8
 CUR=root2; dump $CUR
 XY=$(findany "نوع الخط" "Font style")
-for i in 1 2 3; do
+for i in 1 2 3 4; do
   [ -n "$XY" ] && break
-  adb shell input swipe 227 320 227 130 300; sleep 2
-  CUR=root2_s$i; dump $CUR
+  sleep 2; CUR=root2_s$i; dump $CUR   # retry on the same screen first (uiautomator can flake)
+  XY=$(findany "نوع الخط" "Font style")
+  [ -n "$XY" ] && break
+  adb shell input swipe 227 280 227 180 400; sleep 2
+  CUR=root2_sc$i; dump $CUR
   XY=$(findany "نوع الخط" "Font style")
 done
 if [ -n "$XY" ]; then
@@ -90,7 +93,7 @@ else
 fi
 
 # 5) radio animation: open the pattern list, record, pick a different pattern
-adb shell am start -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 --ei sub 1 >/dev/null 2>&1; sleep 6
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 --ei sub 1 >/dev/null 2>&1; sleep 8
 CUR=pat; dump $CUR
 XY=$(findany "نجوم ومعينات" "Stars and diamonds")
 if [ -n "$XY" ]; then

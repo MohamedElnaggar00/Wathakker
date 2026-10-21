@@ -29,14 +29,18 @@ open class PrayerTileService : TileService() {
     }
 
     // Custom typefaces are not allowed inside tiles (platform restriction): the typeface stays the
-    // system font. The tile also ignores the font-SIZE setting on purpose (his 19:43-19:45 review):
-    // a tile is fixed real estate, and scaling its text pushed the Hijri date off the screen.
+    // system font. The tile also ignores the in-app font-SIZE setting on purpose (his 19:43-19:45
+    // review): a tile is fixed real estate, and scaling its text pushed the Hijri date off screen.
+    // Same for the SYSTEM font scale: his watch rendered the tile content ~1.35x after a system
+    // font change, which overflowed the layout. Dividing by the system fontScale keeps the tile's
+    // designed geometry identical on every watch (glanceable fixed layout, like a watch face).
+    private val fontScale: Float get() = resources.configuration.fontScale
     private fun text(t: String, size: Float, color: Int, bold: Boolean) =
         LayoutElementBuilders.Text.Builder()
             .setText(t)
             .setFontStyle(
                 LayoutElementBuilders.FontStyle.Builder()
-                    .setSize(sp(size)).setColor(argb(color))
+                    .setSize(sp(size / fontScale)).setColor(argb(color))
                     .setWeight(if (bold) LayoutElementBuilders.FONT_WEIGHT_BOLD else LayoutElementBuilders.FONT_WEIGHT_NORMAL)
                     .build()
             ).build()

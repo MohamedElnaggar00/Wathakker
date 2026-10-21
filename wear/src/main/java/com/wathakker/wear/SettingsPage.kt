@@ -209,7 +209,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
     val listDensity = LocalDensity.current
     val listState = rememberScalingLazyListState(
         initialCenterItemIndex = 0,
-        initialCenterItemScrollOffset = with(listDensity) { -(w * 0.30f).dp.roundToPx() }
+        initialCenterItemScrollOffset = with(listDensity) { -(w * 0.45f).dp.roundToPx() }
     )
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         ScalingLazyColumn(Modifier.fillMaxSize(), state = listState) {
