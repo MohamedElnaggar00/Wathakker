@@ -166,7 +166,9 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
                     // The pager direction is fixed to LTR: the Wear back gesture is always a right swipe (it does not
                     // mirror in RTL), so the next page must always come from a left swipe, in every language.
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        HorizontalPager(pager, Modifier.fillMaxSize()) { page ->
+                        // While a settings sub-screen is open, the pager must not consume horizontal drags:
+                        // a right swipe then only dismisses the sub-screen back to the settings root.
+                        HorizontalPager(pager, Modifier.fillMaxSize(), userScrollEnabled = settingsSub == 0) { page ->
                             CompositionLocalProvider(LocalLayoutDirection provides appDir) {
                                 when (page) {
                                     0 -> MainPage(state, now, w)
@@ -179,16 +181,20 @@ fun WearApp(startPage: Int, startSub: Int = 0) {
                     }
                 }
             }
-            Row(
-                Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.045f).dp),
-                horizontalArrangement = Arrangement.spacedBy((w * 0.018f).dp)
-            ) {
-                for (i in 0 until 4) {
-                    val on = i == pager.currentPage
-                    Box(
-                        Modifier.width(((if (on) 0.07f else 0.022f) * w).dp).height((w * 0.022f).dp)
-                            .clip(CircleShape).background(if (on) Color.White else Color(0xFF5A5A5E))
-                    )
+            // Dots mirror the physical page order (page 0 at the left, advancing moves the pill right),
+            // matching the fixed LTR pager direction in every language.
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                Row(
+                    Modifier.align(Alignment.BottomCenter).padding(bottom = (w * 0.045f).dp),
+                    horizontalArrangement = Arrangement.spacedBy((w * 0.018f).dp)
+                ) {
+                    for (i in 0 until 4) {
+                        val on = i == pager.currentPage
+                        Box(
+                            Modifier.width(((if (on) 0.07f else 0.022f) * w).dp).height((w * 0.022f).dp)
+                                .clip(CircleShape).background(if (on) Color.White else Color(0xFF5A5A5E))
+                        )
+                    }
                 }
             }
         }
