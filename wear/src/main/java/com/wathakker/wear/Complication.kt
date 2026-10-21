@@ -30,7 +30,7 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
 
     private fun txt(t: String) = PlainComplicationText.Builder(t).build()
 
-    /** 1 greg date, 2 hijri date, 3 greg+hijri (long), 4 next prayer time, 5 current prayer, 6 current prayer elapsed, 7 upcoming prayer, 8 upcoming prayer countdown. */
+    /** 1 greg date, 2 hijri date, 3 greg+hijri (long), 4 next prayer time, 8 upcoming prayer countdown. */
     fun buildKind(k: Int, type: ComplicationType, s: PrayerState): ComplicationData? {
         val cd = txt("-")
         fun short(text: androidx.wear.watchface.complications.data.ComplicationText, title: String?, d: String): ComplicationData =
@@ -47,10 +47,6 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
             1 -> short(txt(cal.get(java.util.Calendar.DAY_OF_MONTH).toString()), Prayer.gregDate(s.now).substringAfter(' '), "التاريخ الميلادي")
             2 -> short(txt(Prayer.hijriDay(s.now)), Prayer.hijriMonth(s.now), "التاريخ الهجري")
             4 -> short(txt(Prayer.time12(s.next.at).substringBefore(' ')), s.next.name, "موعد الصلاة القادمة")
-            5 -> short(txt(s.prev.name), null, "الصلاة الحالية")
-            6 -> short(androidx.wear.watchface.complications.data.TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT,
-                androidx.wear.watchface.complications.data.CountUpTimeReference(Instant.ofEpochMilli(s.prev.at))).setText("^1").build(), s.prev.name, "الوقت منذ بداية الصلاة الحالية")
-            7 -> short(txt(s.next.name), null, "الصلاة القادمة")
             8 -> short(down(s.next.at), s.next.name, "العد التنازلي للصلاة القادمة")
             else -> null
         }
@@ -85,7 +81,4 @@ class DateGregComplication : PrayerComplicationService() { override val kind get
 class DateHijriComplication : PrayerComplicationService() { override val kind get() = 2 }
 class DateBothComplication : PrayerComplicationService() { override val kind get() = 3 }
 class NextTimeComplication : PrayerComplicationService() { override val kind get() = 4 }
-class CurrentPrayerComplication : PrayerComplicationService() { override val kind get() = 5 }
-class CurrentElapsedComplication : PrayerComplicationService() { override val kind get() = 6 }
-class UpcomingPrayerComplication : PrayerComplicationService() { override val kind get() = 7 }
 class UpcomingCountdownComplication : PrayerComplicationService() { override val kind get() = 8 }
