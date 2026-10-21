@@ -45,6 +45,8 @@ add_widget(){
     XY=$(findany "Widgets" "المصغّرة" "المصغرة" "ودجت" "الأدوات")
     if [ -z "$XY" ]; then echo "NO_WIDGETS_MENU $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
     adb shell input tap $XY; sleep 5
+    # Scroll the app list BEFORE any section is expanded: swipes on app rows can
+    # never pick up a widget cell. Position وذكّر high so its cells open into view.
     for i in 1 2 3 4 5 6 7 8; do
       CUR=picker_${TAG}_${ATT}_$i; dump $CUR
       XY=$(findany "وذكّر" "Wathkkir" "وذكر")
@@ -52,25 +54,30 @@ add_widget(){
       adb shell input swipe 540 1900 540 700 300; sleep 2
     done
     if [ -z "$XY" ]; then echo "APP_NOT_FOUND $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
-    adb shell input tap $XY; sleep 5
-    CUR=wlist_${TAG}_${ATT}_0; dump $CUR; shot 12_wlist_${TAG}_0
+    for i in 1 2 3 4 5 6; do
+      CY=$(echo $XY | awk '{print $2}')
+      [ "$CY" -lt 900 ] && break
+      adb shell input swipe 540 1400 540 1000 300; sleep 2
+      CUR=picker_${TAG}_${ATT}_h$i; dump $CUR
+      XY=$(findany "وذكّر" "Wathkkir" "وذكر")
+      [ -z "$XY" ] && break
+    done
+    [ -z "$XY" ] && { echo "APP_LOST $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue; }
+    # Expand only if the section is still collapsed (no widget captions visible yet).
+    CUR=wlist_${TAG}_${ATT}_0; dump $CUR
+    if ! findany "$LABEL" "التاريخ الهجري" "التاريخ الميلادي" "مزخرف" >/dev/null; then
+      adb shell input tap $XY; sleep 5
+      CUR=wlist_${TAG}_${ATT}_0; dump $CUR
+    fi
+    shot 12_wlist_${TAG}_0
     XY=$(findany "$LABEL")
-    for i in 1 2 3 4 5 6 7 8 9 10; do
+    for i in 1 2 3 4; do
       [ -n "$XY" ] && break
-      adb shell input swipe 540 1800 540 900 300; sleep 2
+      adb shell input swipe 60 1800 60 900 300; sleep 2
       CUR=wlist_${TAG}_${ATT}_$i; dump $CUR
       XY=$(findany "$LABEL")
     done
     if [ -z "$XY" ]; then echo "WIDGET_NOT_FOUND $TAG $LABEL att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
-    for i in 1 2 3 4 5 6 7 8; do
-      CY=$(echo $XY | awk '{print $2}')
-      [ "$CY" -lt 1600 ] && break
-      adb shell input swipe 540 1900 540 600 300; sleep 2
-      CUR=wlist_${TAG}_${ATT}_c$i; dump $CUR
-      XY=$(findany "$LABEL")
-      [ -z "$XY" ] && break
-    done
-    [ -z "$XY" ] && { echo "WIDGET_LOST_SCROLL $TAG att$ATT" >> "$OUT/SUMMARY.txt"; continue; }
     LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" cell 2>/dev/null)
     [ -z "$LXY" ] && LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
     [ -n "$LXY" ] && XY=$LXY
@@ -79,17 +86,17 @@ add_widget(){
     adb shell input draganddrop $XY $TX $TY 2200; sleep 6
     shot 13_after_drag_${TAG}_$ATT
     CUR=cfg_${TAG}_$ATT; dump $CUR
-    # A real config screen has an apply/add button; placed widgets on home do not.
-    A=$(findany "تطبيق" "Apply" "إضافة" "Add")
+    # A real config screen has an apply/add button; exact match avoids "التطبيق" hits.
+    A=""
+    for N in "تطبيق" "Apply" "إضافة" "Add" "تم" "Done"; do
+      A=$(python3 tools/findxy.py "$N" "$OUT/ui_$CUR.xml" exact 2>/dev/null); [ -n "$A" ] && break
+    done
     if [ -n "$A" ]; then
       adb shell input tap $A; sleep 5
       shot 14_after_config_$TAG
       adb shell input keyevent KEYCODE_HOME; sleep 3
       CUR=verify_${TAG}_$ATT; dump $CUR
       N=$(grep -c "wathakker" "$OUT/ui_$CUR.xml" 2>/dev/null)
-      if [ "$N" -ge "$EXPECTED" ]; then
-        echo "DRAG_OK $TAG att$ATT nodes=$N" >> "$OUT/SUMMARY.txt"; return 0
-      fi
       echo "DRAG_OK $TAG att$ATT (config applied, nodes=$N)" >> "$OUT/SUMMARY.txt"; return 0
     fi
     if grep -q "بحث" "$OUT/ui_$CUR.xml"; then

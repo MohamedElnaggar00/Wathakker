@@ -18,7 +18,8 @@ def center(node):
 for node in root.iter('node'):
     for attr in ('text', 'content-desc'):
         v = node.get(attr) or ''
-        if needle in v:
+        hit = (needle == v) if mode == 'exact' else (needle in v)
+        if hit:
             n = node
             if mode == 'cell':
                 m = n
