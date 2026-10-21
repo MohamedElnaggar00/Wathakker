@@ -215,6 +215,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
             Modifier.fillMaxSize(),
             state = listState,
             anchorType = ScalingLazyListAnchorType.ItemStart,
+            autoCentering = null,
             contentPadding = PaddingValues(top = (w * 0.09f).dp, bottom = (w * 0.35f).dp)
         ) {
             item { Text1(title, tx(w * 0.08f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.05f).dp)) }
