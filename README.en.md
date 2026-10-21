@@ -80,9 +80,7 @@ Wathkkir is an open-source Android app that brings the everyday tools a Muslim n
   </table>
 </div>
 
-### 📲 From a real device
-
-<p align="center"><i>Captures from a real phone: lock screen, home screen and widget settings.</i></p>
+### 📲 Widgets
 
 <div align="center">
   <table>
