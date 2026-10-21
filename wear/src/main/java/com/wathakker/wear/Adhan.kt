@@ -40,7 +40,7 @@ import kotlinx.coroutines.delay
 /** One alert at the exact adhan time for the five prayers (no sunrise). One on/off switch in Settings. */
 object Adhan {
     const val CHANNEL = "adhan_v1"
-    const val SHOW_SECONDS = 300
+    const val SHOW_SECONDS = 5
     fun enabled(c: Context) = c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).getBoolean("adhan", true)
     fun setEnabled(c: Context, v: Boolean) { c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putBoolean("adhan", v).apply(); schedule(c) }
     /** Alert style: true = full-screen (current behavior, default), false = plain notification. */
