@@ -30,8 +30,10 @@ object WFonts {
         Choice("ruqaa", "خط الرقعة (للمناسبات)", "Ruqaa (occasions)", fam(R.font.aref_ruqaa to FontWeight.Normal, R.font.aref_ruqaa_bold to FontWeight.Bold))
     )
 
-    /** Same 9 steps as the phone (FontScaleSettings.STEPS). */
-    val STEPS = floatArrayOf(0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.6f)
+    /** One UI Watch font-size levels (his 18:38 order: like One UI Watch, NOT the phone's 9 steps).
+     *  His watch reference shows 6 dots; Samsung does not publish the multipliers, so we use 0.1 steps
+     *  with 1.0 (default) at the 3rd dot like One UI. */
+    val STEPS = floatArrayOf(0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f)
 
     var idx by mutableIntStateOf(0)
     var scale by mutableFloatStateOf(1f)
