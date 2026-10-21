@@ -184,8 +184,8 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                     item {
                         var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }
                         OneUiRadioCard(w, listOf(
-                            RadioOpt(T("تنبيه إشعار", "Notification alert"), fs == 0) { fs = 0; Adhan.setFullScreen(ctx, false) },
-                            RadioOpt(T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert"), fs == 1) { fs = 1; Adhan.setFullScreen(ctx, true) }
+                            RadioOpt(T("تنبيه إشعار", "Notification alert"), fs == 0, onClick = { fs = 0; Adhan.setFullScreen(ctx, false) }),
+                            RadioOpt(T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert"), fs == 1, onClick = { fs = 1; Adhan.setFullScreen(ctx, true) })
                         ))
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
@@ -213,11 +213,11 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                 3 -> {
                     item {
                         OneUiRadioCard(w, listOf(
-                            RadioOpt(T("مزامنة مع الهاتف", "Sync with phone"), locMode == 0) { locMode = 0; Settings.saveLocMode(ctx, 0) },
-                            RadioOpt(T("تلقائي (GPS)", "Automatic (GPS)"), locMode == 1) {
+                            RadioOpt(T("مزامنة مع الهاتف", "Sync with phone"), locMode == 0, onClick = { locMode = 0; Settings.saveLocMode(ctx, 0) }),
+                            RadioOpt(T("تلقائي (GPS)", "Automatic (GPS)"), locMode == 1, onClick = {
                                 locMode = 1; Settings.saveLocMode(ctx, 1)
                                 if (!locOk) locLauncher.launch(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)) else refreshGps(ctx)
-                            }
+                            })
                         ))
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
@@ -225,9 +225,9 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                 5 -> {
                     item {
                         OneUiRadioCard(w, listOf(
-                            RadioOpt(T("مزامنة (الافتراضي)", "Sync (default)"), Loc.mode(ctx) == 0 && langTick >= 0) { Loc.save(ctx, 0) },
-                            RadioOpt("عربي", Loc.mode(ctx) == 1 && langTick >= 0) { Loc.save(ctx, 1) },
-                            RadioOpt("English", Loc.mode(ctx) == 2 && langTick >= 0) { Loc.save(ctx, 2) }
+                            RadioOpt(T("مزامنة (الافتراضي)", "Sync (default)"), Loc.mode(ctx) == 0 && langTick >= 0, onClick = { Loc.save(ctx, 0) }),
+                            RadioOpt("عربي", Loc.mode(ctx) == 1 && langTick >= 0, onClick = { Loc.save(ctx, 1) }),
+                            RadioOpt("English", Loc.mode(ctx) == 2 && langTick >= 0, onClick = { Loc.save(ctx, 2) })
                         ))
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
