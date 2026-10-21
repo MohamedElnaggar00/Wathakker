@@ -46,21 +46,22 @@ open class PrayerTileService : TileService() {
             .setAnchorAngle(degrees(-135f)).setAnchorType(LayoutElementBuilders.ARC_ANCHOR_START).addContent(line).build()
 
         fun gap(h: Float) = LayoutElementBuilders.Spacer.Builder().setHeight(dp(h)).build()
-        // Layout measured to match the reference tile (gold widget) exactly: clock well below the arc,
-        // tight clock->name gap, light-weight name, evenly spaced rows down to the hijri date.
+        // Layout measured against the reference gold widget ON THE REAL WATCH (Samsung font renders
+        // ~1.4x taller than the emulator, so constants are scaled down 0.776x to land on the reference
+        // spacing on the actual device; the 454px emulator shows it proportionally smaller).
         val center = LayoutElementBuilders.Column.Builder()
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
             .setModifiers(ModifiersBuilders.Modifiers.Builder()
-                .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(21f)).build()).build())
-            .addContent(text(Prayer.time12(s.next.at), 22f, 0xFFFFFFFF.toInt(), false))
-            .addContent(gap(2.5f))
-            .addContent(text(s.next.name, 17f, 0xFFFFFFFF.toInt(), false))
-            .addContent(gap(19.5f))
-            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 12f, tc.main, false))
-            .addContent(gap(8.5f))
-            .addContent(text(Prayer.hijriDay(s.now), 26f, 0xFFFFFFFF.toInt(), true))
-            .addContent(gap(3f))
-            .addContent(text(Prayer.hijriMonth(s.now), 12f, 0xFF9D9DA2.toInt(), false))
+                .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(16.5f)).build()).build())
+            .addContent(text(Prayer.time12(s.next.at), 17f, 0xFFFFFFFF.toInt(), false))
+            .addContent(gap(5f))
+            .addContent(text(s.next.name, 13f, 0xFFFFFFFF.toInt(), false))
+            .addContent(gap(9.7f))
+            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 9.5f, tc.main, false))
+            .addContent(gap(8f))
+            .addContent(text(Prayer.hijriDay(s.now), 20f, 0xFFFFFFFF.toInt(), true))
+            .addContent(gap(3.3f))
+            .addContent(text(Prayer.hijriMonth(s.now), 9.5f, 0xFF9D9DA2.toInt(), false))
             .build()
 
         val click = ModifiersBuilders.Clickable.Builder()
