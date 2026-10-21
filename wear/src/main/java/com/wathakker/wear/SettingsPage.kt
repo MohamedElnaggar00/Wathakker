@@ -55,7 +55,7 @@ fun SettingsPage(w: Float, startSub: Int = 0) {
     fun Row1(title: String, value: String?, onClick: () -> Unit, lead: @Composable (() -> Unit)? = null, selected: Boolean = false) {
         Row(
             Modifier.fillMaxWidth().height((w * 0.17f).dp).clip(RoundedCornerShape(50))
-                .background(if (selected) Gold else Pill).clickable { onClick() }.padding(horizontal = (w * 0.06f).dp),
+                .then(if (selected) Modifier.background(WTheme.cur.brush()) else Modifier.background(Pill)).clickable { onClick() }.padding(horizontal = (w * 0.06f).dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (lead != null) { lead(); Spacer(Modifier.width((w * 0.03f).dp)) }

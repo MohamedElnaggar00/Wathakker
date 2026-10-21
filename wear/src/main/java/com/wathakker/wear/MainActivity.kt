@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
         Adhan.schedule(this)
         if (intent.hasExtra("pat")) starPattern = intent.getIntExtra("pat", 1)
         if (intent.hasExtra("lang")) Loc.save(this, intent.getIntExtra("lang", 0))
-        if (intent.hasExtra("theme")) WTheme.idx = intent.getIntExtra("theme", 0)
+        if (intent.hasExtra("theme")) Settings.saveTheme(this, intent.getIntExtra("theme", 0))
         val prefs = getSharedPreferences("wear_prefs", Context.MODE_PRIVATE)
         if (!prefs.getBoolean("perm_asked", false) && !intent.hasExtra("page")) {
             prefs.edit().putBoolean("perm_asked", true).apply()
@@ -263,7 +263,7 @@ fun ListPage(s: PrayerState, w: Float) {
                 val isNext = slot.at == s.next.at
                 val past = slot.at <= s.now
                 Row(
-                    Modifier.fillMaxWidth().height((w * 0.19f).dp).clip(RoundedCornerShape(50)).background(if (isNext) Gold else Pill)
+                    Modifier.fillMaxWidth().height((w * 0.19f).dp).clip(RoundedCornerShape(50)).then(if (isNext) Modifier.background(WTheme.cur.brush()) else Modifier.background(Pill))
                         .padding(horizontal = (w * 0.065f).dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -365,7 +365,7 @@ fun CirclesPage(s: PrayerState, now: Long, w: Float, visible: Boolean, bg: Color
                 Canvas(Modifier.fillMaxSize()) {
                     val sw = size.minDimension * 0.045f
                     if (isNext) {
-                        drawCircle(Gold)
+                        drawCircle(WTheme.cur.brush())
                         drawArc(Ink, -90f, 360f * s.progress, false, Offset(sw / 2, sw / 2), Size(size.width - sw, size.height - sw), style = Stroke(width = sw * 0.6f, cap = StrokeCap.Round))
                     } else if (past) {
                         drawCircle(Color(0xFF1D1D1F))

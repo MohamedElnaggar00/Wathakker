@@ -8,6 +8,7 @@ adb shell am start -W -n $PKG/$A.MainActivity >/dev/null 2>&1; sleep 20
 shot(){ adb exec-out screencap -p > "$OUT/$1.png"; }
 for SB in 0 1 2 3 4; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub $SB >/dev/null 2>&1; sleep 10; shot set_$SB; done
 for TH in 1 2 3; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei theme $TH >/dev/null 2>&1; sleep 10; shot theme_main_$TH; adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 1 --ei theme $TH >/dev/null 2>&1; sleep 10; shot theme_list_$TH; done
+adb shell am start -S -W -n $PKG/$A.CirclesActivity >/dev/null 2>&1; sleep 10; shot circles_theme3
 for PT in 1 11; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei pat $PT >/dev/null 2>&1; sleep 10; shot pat_$PT; done
 adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode tile >/dev/null 2>&1; sleep 8; shot tile_default
 for K in 1 2 3 4 8; do adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode short --ei kind $K >/dev/null 2>&1; sleep 7; shot comp_$K; done
@@ -23,7 +24,7 @@ adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/al
 for P in 0 1 2 4; do adb shell am start -S -W -n $PKG/$A.MainActivity --ei page $P --ei lang 2 >/dev/null 2>&1; sleep 9; shot en_$P; done
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub 5 --ei lang 2 >/dev/null 2>&1; sleep 8; shot en_lang_list
 adb shell am start -S -W -n $PKG/$A.AdhanActivity --ei id 4 >/dev/null 2>&1; sleep 3; shot en_adhan
-adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei lang 0 >/dev/null 2>&1; sleep 6
+adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei lang 0 --ei theme 0 >/dev/null 2>&1; sleep 6
 adb shell dumpsys package $PKG | grep -i "versionName\|label" | head -3 > "$OUT/pkg.txt"
 adb logcat -d | grep -i "AndroidRuntime\|FATAL EXCEPTION" -A8 | head -40 > "$OUT/logcat.txt" 2>&1
 echo done > "$OUT/SUMMARY.txt"
