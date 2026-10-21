@@ -39,8 +39,7 @@ class PreviewActivity : Activity() {
             // The bundled TileRenderer mirrors the whole layout in RTL locales, which flipped the arc in
             // Arabic previews (evidence must match the watch), so render the preview in an LTR context.
             val cfg = android.content.res.Configuration(resources.configuration)
-            cfg.setLocale(java.util.Locale.US)
-            cfg.layoutDirection = android.view.View.LAYOUT_DIRECTION_LTR
+            cfg.setLayoutDirection(java.util.Locale.US)
             val r = TileRenderer(createConfigurationContext(cfg), ContextCompat.getMainExecutor(this)) { }
             r.inflateAsync(layout, res, root)
         } else {
