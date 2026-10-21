@@ -16,6 +16,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -108,7 +109,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         }
     }
 
-    val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); else -> T("الإعدادات", "Settings") }
+    val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); else -> T("الإعدادات", "Settings") }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         ScalingLazyColumn(Modifier.fillMaxSize()) {
             item { Text1(title, tx(w * 0.07f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.04f).dp)) }
@@ -119,8 +120,19 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                     item { Row1(T("لون السمة", "Theme color"), themeName(WTheme.idx), { go(2) }) }
                     item { Row1(T("مصدر الموقع", "Location source"), if (locMode == 0) T("من الهاتف", "Phone") else T("تلقائي", "Auto"), { go(3) }) }
                     item { var on by remember { mutableIntStateOf(if (Adhan.enabled(ctx)) 1 else 0) }; Row1(T("تنبيه الأذان", "Adhan alert"), if (on == 1) T("تشغيل", "On") else T("إيقاف", "Off"), { on = 1 - on; Adhan.setEnabled(ctx, on == 1) }, selected = on == 1) }
+                    item { var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }; Row1(T("نوع التنبيه", "Alert style"), if (fs == 1) T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert") else T("تنبيه إشعار", "Notification alert"), { go(6) }) }
                     item { Row1(T("الأذونات", "Permissions"), null, { go(4) }) }
                     item { Row1(T("فتح في الجهاز", "Open on phone"), null, { openOnPhone(ctx) {} }, trail = { ExternalIcon(w, SoftGrey) }) }
+                    item { Spacer(Modifier.height((w * 0.12f).dp)) }
+                }
+                6 -> {
+                    item {
+                        var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }
+                        Column {
+                            Row1(T("تنبيه إشعار", "Notification alert"), null, { fs = 0; Adhan.setFullScreen(ctx, false) }, selected = fs == 0)
+                            Row1(T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert"), null, { fs = 1; Adhan.setFullScreen(ctx, true) }, selected = fs == 1)
+                        }
+                    }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 1 -> {

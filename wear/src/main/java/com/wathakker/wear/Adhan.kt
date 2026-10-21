@@ -40,9 +40,12 @@ import kotlinx.coroutines.delay
 /** One alert at the exact adhan time for the five prayers (no sunrise). One on/off switch in Settings. */
 object Adhan {
     const val CHANNEL = "adhan_v1"
-    const val SHOW_SECONDS = 5
+    const val SHOW_SECONDS = 300
     fun enabled(c: Context) = c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).getBoolean("adhan", true)
     fun setEnabled(c: Context, v: Boolean) { c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putBoolean("adhan", v).apply(); schedule(c) }
+    /** Alert style: true = full-screen (current behavior, default), false = plain notification. */
+    fun fullScreen(c: Context) = c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).getBoolean("adhan_fullscreen", true)
+    fun setFullScreen(c: Context, v: Boolean) { c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putBoolean("adhan_fullscreen", v).apply() }
 
     private fun pi(c: Context, id: Int, at: Long, flags: Int) = PendingIntent.getBroadcast(
         c, 7001, Intent(c, AdhanReceiver::class.java).putExtra("id", id).putExtra("at", at), flags or PendingIntent.FLAG_IMMUTABLE)
@@ -75,12 +78,15 @@ object Adhan {
         val i = Intent(c, AdhanActivity::class.java).putExtra("id", id).putExtra("at", at).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val full = PendingIntent.getActivity(c, 7002, i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val name = Prayer.names[id.coerceIn(0, 5)]
-        val n = Notification.Builder(c, CHANNEL).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(T("حان موعد أذان ", "Time for adhan: ") + name)
-            .setCategory(Notification.CATEGORY_ALARM).setFullScreenIntent(full, true).setContentIntent(full).setAutoCancel(true)
-            .setTimeoutAfter(60_000).build()
-        nm.notify(7000 + id, n)
+        // The notification removes itself 5 minutes after it appears, in both styles, so it
+        // never lingers in the list.
+        val b = Notification.Builder(c, CHANNEL).setSmallIcon(R.mipmap.ic_launcher).setContentTitle(T("حان موعد أذان ", "Time for adhan: ") + name)
+            .setCategory(Notification.CATEGORY_ALARM).setContentIntent(full).setAutoCancel(true)
+            .setTimeoutAfter(300_000)
+        if (fullScreen(c)) b.setFullScreenIntent(full, true)
+        nm.notify(7000 + id, b.build())
         c.getSharedPreferences("wear_prefs", Context.MODE_PRIVATE).edit().putLong("adhan_last_fire", System.currentTimeMillis()).apply()
-        try { c.startActivity(i) } catch (_: Throwable) {}
+        if (fullScreen(c)) { try { c.startActivity(i) } catch (_: Throwable) {} }
         (c.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator).vibrate(VibrationEffect.createWaveform(longArrayOf(0, 400, 200, 400, 200, 400), -1))
     }
 }
