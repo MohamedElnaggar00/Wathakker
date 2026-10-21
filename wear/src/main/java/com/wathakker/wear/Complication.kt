@@ -1,18 +1,19 @@
 package com.wathakker.wear
 
+import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
-import androidx.wear.watchface.complications.data.CountDownTimeReference
 import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
-import androidx.wear.watchface.complications.data.TimeDifferenceComplicationText
-import androidx.wear.watchface.complications.data.TimeDifferenceStyle
+import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
-import java.time.Instant
 
 /** Remaining time to the next prayer, with a progress ring on faces that draw one. Tapping opens the five prayer circles. */
 open class PrayerComplicationService : SuspendingComplicationDataSourceService() {
@@ -42,11 +43,11 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
         }
         if (type != ComplicationType.SHORT_TEXT) return null
         val cal = java.util.Calendar.getInstance().apply { timeInMillis = s.now }
-        // In picker previews the system renders time-difference text against its own frozen clock, which shows
-        // absurd values; previews instead use plain text computed from the real remaining time at request time,
-        // in the same compact format (the number refreshes each time the picker requests preview data).
-        fun down(at: Long) = if (preview) txt(previewCountdown(at - s.now))
-        else TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(at))).setText("^1").build()
+        // Rendered by us (not the system's TimeDifferenceComplicationText) so the value matches the rest
+        // of the app: the system renderer rounds the remaining time UP to whole minutes while hhmm()/
+        // remainingText() truncate, which showed one minute more than the circles screen. A per-minute
+        // update alarm (below) keeps this text fresh instead.
+        fun down(at: Long) = txt(previewCountdown(at - s.now))
         return when (k) {
             1 -> short(txt(cal.get(java.util.Calendar.DAY_OF_MONTH).toString()), Prayer.gregDate(s.now).substringAfter(' '), T("التاريخ الميلادي", "Gregorian date"))
             2 -> short(txt(Prayer.hijriDay(s.now)), Prayer.hijriMonth(s.now), T("التاريخ الهجري", "Hijri date"))
@@ -57,10 +58,7 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
     }
 
     fun buildMain(type: ComplicationType, s: PrayerState, preview: Boolean = false): ComplicationData? {
-        val countdown = if (preview) PlainComplicationText.Builder(previewCountdown(s.next.at - s.now)).build()
-        else TimeDifferenceComplicationText.Builder(TimeDifferenceStyle.SHORT_DUAL_UNIT, CountDownTimeReference(Instant.ofEpochMilli(s.next.at)))
-            .setText("^1")
-            .build()
+        val countdown = PlainComplicationText.Builder(previewCountdown(s.next.at - s.now)).build()
         val title = PlainComplicationText.Builder(s.next.name).build()
         val desc = PlainComplicationText.Builder(T("الوقت المتبقي لصلاة ", "Time left until ") + s.next.name).build()
         return when (type) {
@@ -90,8 +88,29 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
         }
     }
 
-    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? =
-        build(request.complicationType, Prayer.compute(this))
+    /** Re-render at the next minute boundary so the self-rendered countdown stays current. */
+    private fun scheduleNextMinute() {
+        val at = (System.currentTimeMillis() / 60000 + 1) * 60000 + 500
+        val am = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pi = PendingIntent.getBroadcast(this, 8001,
+            Intent(this, ComplicationTickReceiver::class.java).setAction("tick_" + javaClass.name).putExtra("cls", javaClass.name),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        try { am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi) }
+        catch (_: SecurityException) { am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, at, pi) }
+    }
+
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+        if (kind == 0 || kind == 8) scheduleNextMinute()
+        return build(request.complicationType, Prayer.compute(this))
+    }
+}
+
+/** Wakes the countdown complications once a minute so their self-rendered text matches the rest of the app. */
+class ComplicationTickReceiver : BroadcastReceiver() {
+    override fun onReceive(c: Context, i: Intent) {
+        val cls = i.getStringExtra("cls") ?: return
+        ComplicationDataSourceUpdateRequester.create(c, ComponentName(c, cls)).requestUpdateAll()
+    }
 }
 
 class DateGregComplication : PrayerComplicationService() { override val kind get() = 1 }

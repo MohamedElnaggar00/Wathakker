@@ -43,6 +43,7 @@
             android:theme="@style/Theme.Wathakker.Transparent" />
 
         <receiver android:name=".AdhanReceiver" android:exported="false" />
+        <receiver android:name=".ComplicationTickReceiver" android:exported="false" />
         <receiver android:name=".BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
