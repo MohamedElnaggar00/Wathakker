@@ -87,27 +87,8 @@ class PrayerAlertReceiver : BroadcastReceiver() {
         }
         else {
             // Adhan and iqama notifications remove themselves 5 minutes after they appear. The system
-            // enforces the timeout (API 26+), so it also works when the app process is gone. This applies
-            // to the full-screen style too: the alert never lingers in the notification list.
+            // enforces the timeout (API 26+), so it also works when the app process is gone.
             builder.setTimeoutAfter(5 * 60 * 1000L)
-        }
-        if (kind == PrayerAlertScheduler.KIND_ADHAN && PrayerAlertStore.fullScreen(context, prayer)) {
-            val fsIntent = PendingIntent.getActivity(
-                context, 600 + prayer,
-                Intent(context, com.example.prayer.PrayerAlertActivity::class.java)
-                    .putExtra(PrayerAlertScheduler.EXTRA_PRAYER, prayer)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            builder.setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setFullScreenIntent(fsIntent, true)
-            try {
-                context.startActivity(
-                    Intent(context, com.example.prayer.PrayerAlertActivity::class.java)
-                        .putExtra(PrayerAlertScheduler.EXTRA_PRAYER, prayer)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                )
-            } catch (_: Exception) {}
         }
         val notification = builder.build()
         if (kind == PrayerAlertScheduler.KIND_ADHAN) nm.cancel(400 + prayer + PrayerAlertScheduler.KIND_EARLY * 10)

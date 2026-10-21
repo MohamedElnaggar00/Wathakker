@@ -129,7 +129,7 @@ internal val AR = mapOf(
     S.AdjNote to "دقائق تُضاف أو تُخصم من كل وقت محسوب. تُطبَّق فورًا على المواقيت والويدجتس والتنبيهات.",
     S.AdjHijri to "تعديل التاريخ الهجري", S.AdjMinShort to "د", S.AdjDayShort to "يوم",
     S.AlertTiming to "وقت التنبيه", S.AtAdhanTime to "وقت الأذان", S.AtAdhanRow to "عند الأذان", S.AtAdhanRowSub to "الإشعار الأساسي عند حلول وقت الصلاة", S.BeforeAdhanRow to "تنبيه قبل الأذان", S.BeforeAdhanHelper to "تنبيه إضافي — إشعار وقت الأذان يصل دائمًا", S.MinBeforeFmt to "قبل الأذان بـ %1\$d دقيقة",
-    S.AdhanReminder to "تنبيه الأذان", S.AdhanAlertType to "نوع تنبيه الأذان", S.AlertTypeNotification to "تنبيه إشعار", S.AlertTypeFullScreen to "تنبيه إشعار بملء الشاشة", S.IqamaReminder to "تنبيه الإقامة", S.IqamaReminderSub to "إشعار عند وقت الإقامة",
+    S.AdhanReminder to "تنبيه الأذان", S.IqamaReminder to "تنبيه الإقامة", S.IqamaReminderSub to "إشعار عند وقت الإقامة",
     S.PrayerNowFmt to "حان الآن وقت أذان %1\$s", S.PrayerApproachingFmt to "اقترب أذان %1\$s", S.ShuruqNow to "حان الآن وقت الشروق", S.ShuruqApproaching to "اقترب وقت الشروق", S.BgFrosted to "زجاج ضبابي", S.NeedsFilesPerm to "تتطلب صلاحية للملفات", S.PermLocTitle to "الإذن بالوصول إلى الموقع", S.PermLocBody to "يحتاج التطبيق إلى موقعك الجغرافي لحساب مواقيت الصلاة بدقة بحسب مدينتك. يمكنك رفض الإذن وإدخال مدينتك يدويًا في أي وقت من شاشة الموقع والحساب.", S.PermFilesTitle to "الإذن بالوصول إلى الملفات", S.PermFilesBody to "يتيح هذا الإذن للتطبيق قراءة خلفية هاتفك لإظهار تأثير الضبابية الحقيقي في خلفية الويدجت. الإذن اختياري، وإن رفضته يظل خيار Frosted متاحًا دون الحاجة إليه.", S.PermAllow to "السماح", S.PermNotNow to "ليس الآن", S.PermOpenSettings to "فتح الإعدادات",
     S.IqamaNowFmt to "حانت الآن إقامة %1\$s", S.SharedAlertSettings to "إعدادات مشتركة لكل التنبيهات",
 
@@ -257,7 +257,7 @@ internal val EN = mapOf(
     S.AdjNote to "Minutes added to or subtracted from each calculated time. Applies instantly to prayer times, widgets and alerts.",
     S.AdjHijri to "Hijri date adjustment", S.AdjMinShort to "min", S.AdjDayShort to "days",
     S.AlertTiming to "Alert timing", S.AtAdhanTime to "At adhan", S.AtAdhanRow to "At adhan time", S.AtAdhanRowSub to "The base notification when the prayer time arrives", S.BeforeAdhanRow to "Early reminder", S.BeforeAdhanHelper to "An extra reminder - the adhan-time notification still arrives", S.MinBeforeFmt to "%1\$d min before adhan",
-    S.AdhanReminder to "Adhan reminder", S.AdhanAlertType to "Adhan alert type", S.AlertTypeNotification to "Notification alert", S.AlertTypeFullScreen to "Full-screen notification alert", S.IqamaReminder to "Iqama reminder", S.IqamaReminderSub to "Notification at iqama time",
+    S.AdhanReminder to "Adhan reminder", S.IqamaReminder to "Iqama reminder", S.IqamaReminderSub to "Notification at iqama time",
     S.PrayerNowFmt to "It's now time for %1\$s adhan", S.PrayerApproachingFmt to "%1\$s adhan is approaching", S.ShuruqNow to "It's now sunrise", S.ShuruqApproaching to "Sunrise is approaching", S.BgFrosted to "Frosted", S.NeedsFilesPerm to "Requires files permission", S.PermLocTitle to "Location permission", S.PermLocBody to "The app uses your location to calculate accurate prayer times for your city. You can decline and enter your city manually at any time.", S.PermFilesTitle to "Files access", S.PermFilesBody to "This lets the app read your wallpaper to show a true blur behind the widget. It is optional; the Frosted option works without it.", S.PermAllow to "Allow", S.PermNotNow to "Not now", S.PermOpenSettings to "Open settings",
     S.IqamaNowFmt to "It's now time for %1\$s iqama", S.SharedAlertSettings to "Shared settings for all alerts",
 
@@ -389,7 +389,7 @@ internal val FR = mapOf(
     S.AdjNote to "Minutes ajoutées ou retirées de chaque horaire calculé. Application immédiate aux horaires, aux widgets et aux alertes.",
     S.AdjHijri to "Ajustement de la date hégirienne", S.AdjMinShort to "min", S.AdjDayShort to "j",
     S.AlertTiming to "Moment de l'alerte", S.AtAdhanTime to "À l'adhan", S.AtAdhanRow to "À l'adhan", S.AtAdhanRowSub to "La notification de base à l'heure de la prière", S.BeforeAdhanRow to "Rappel anticipé", S.BeforeAdhanHelper to "Un rappel supplémentaire - la notification de l'adhan arrive toujours", S.MinBeforeFmt to "%1\$d min avant l'adhan",
-    S.AdhanReminder to "Rappel de l'adhan", S.AdhanAlertType to "Type d'alerte de l'adhan", S.AlertTypeNotification to "Alerte notification", S.AlertTypeFullScreen to "Alerte notification plein écran", S.IqamaReminder to "Rappel de l'iqama", S.IqamaReminderSub to "Notification à l'heure de l'iqama",
+    S.AdhanReminder to "Rappel de l'adhan", S.IqamaReminder to "Rappel de l'iqama", S.IqamaReminderSub to "Notification à l'heure de l'iqama",
     S.PrayerNowFmt to "C'est l'heure de %1\$s", S.PrayerApproachingFmt to "%1\$s dans %2\$d min",
     S.IqamaNowFmt to "Iqama de %1\$s maintenant", S.SharedAlertSettings to "Réglages partagés pour toutes les alertes",
 
@@ -522,7 +522,7 @@ internal val DE = mapOf(
     S.AdjNote to "Minuten, die zu jeder berechneten Zeit addiert oder von ihr subtrahiert werden. Wirkt sofort auf Zeiten, Widgets und Benachrichtigungen.",
     S.AdjHijri to "Hijri-Datumsanpassung", S.AdjMinShort to "Min.", S.AdjDayShort to "Tage",
     S.AlertTiming to "Benachrichtigungszeit", S.AtAdhanTime to "Zum Gebetsruf", S.AtAdhanRow to "Zum Adhan", S.AtAdhanRowSub to "Die Basis-Benachrichtigung zum Gebetszeitpunkt", S.BeforeAdhanRow to "Frühe Erinnerung", S.BeforeAdhanHelper to "Eine zusätzliche Erinnerung - die Adhan-Benachrichtigung kommt weiterhin", S.MinBeforeFmt to "%1\$d Min. vor dem Gebetsruf",
-    S.AdhanReminder to "Adhan-Erinnerung", S.AdhanAlertType to "Adhan-Hinweistyp", S.AlertTypeNotification to "Benachrichtigung", S.AlertTypeFullScreen to "Vollbild-Benachrichtigung", S.IqamaReminder to "Iqama-Erinnerung", S.IqamaReminderSub to "Benachrichtigung zur Iqama-Zeit",
+    S.AdhanReminder to "Adhan-Erinnerung", S.IqamaReminder to "Iqama-Erinnerung", S.IqamaReminderSub to "Benachrichtigung zur Iqama-Zeit",
     S.PrayerNowFmt to "Es ist jetzt Zeit für %1\$s", S.PrayerApproachingFmt to "%1\$s in %2\$d Min.",
     S.IqamaNowFmt to "Iqama von %1\$s jetzt", S.SharedAlertSettings to "Gemeinsame Einstellungen für alle Benachrichtigungen",
 
@@ -656,7 +656,7 @@ internal val ES = mapOf(
     S.AdjNote to "Minutos que se suman o restan a cada horario calculado. Se aplica al instante a horarios, widgets y alertas.",
     S.AdjHijri to "Ajuste de la fecha hiyri", S.AdjMinShort to "min", S.AdjDayShort to "días",
     S.AlertTiming to "Momento de la alerta", S.AtAdhanTime to "A la llamada", S.AtAdhanRow to "A la hora del adhan", S.AtAdhanRowSub to "La notificación base cuando llega la hora de la oración", S.BeforeAdhanRow to "Recordatorio anticipado", S.BeforeAdhanHelper to "Un recordatorio extra - la notificación del adhan sigue llegando", S.MinBeforeFmt to "%1\$d min antes",
-    S.AdhanReminder to "Recordatorio de adhan", S.AdhanAlertType to "Tipo de alerta del adhan", S.AlertTypeNotification to "Alerta de notificación", S.AlertTypeFullScreen to "Alerta de notificación a pantalla completa", S.IqamaReminder to "Recordatorio de iqama", S.IqamaReminderSub to "Notificación a la hora del iqama",
+    S.AdhanReminder to "Recordatorio de adhan", S.IqamaReminder to "Recordatorio de iqama", S.IqamaReminderSub to "Notificación a la hora del iqama",
     S.PrayerNowFmt to "Ya es hora de %1\$s", S.PrayerApproachingFmt to "%1\$s en %2\$d min",
     S.IqamaNowFmt to "Iqama de %1\$s ahora", S.SharedAlertSettings to "Ajustes compartidos para todas las alertas",
 
@@ -790,7 +790,7 @@ internal val IT = mapOf(
     S.AdjNote to "Minuti aggiunti o sottratti da ogni orario calcolato. Si applica subito a orari, widget e avvisi.",
     S.AdjHijri to "Regolazione della data Hijri", S.AdjMinShort to "min", S.AdjDayShort to "g",
     S.AlertTiming to "Momento dell'avviso", S.AtAdhanTime to "All'adhan", S.AtAdhanRow to "All'adhan", S.AtAdhanRowSub to "La notifica di base all'orario della preghiera", S.BeforeAdhanRow to "Promemoria anticipato", S.BeforeAdhanHelper to "Un promemoria extra - la notifica dell'adhan arriva comunque", S.MinBeforeFmt to "%1\$d min prima",
-    S.AdhanReminder to "Promemoria adhan", S.AdhanAlertType to "Tipo di avviso adhan", S.AlertTypeNotification to "Avviso notifica", S.AlertTypeFullScreen to "Avviso notifica a schermo intero", S.IqamaReminder to "Promemoria iqama", S.IqamaReminderSub to "Notifica all'ora dell'iqama",
+    S.AdhanReminder to "Promemoria adhan", S.IqamaReminder to "Promemoria iqama", S.IqamaReminderSub to "Notifica all'ora dell'iqama",
     S.PrayerNowFmt to "È ora di %1\$s", S.PrayerApproachingFmt to "%1\$s tra %2\$d min",
     S.IqamaNowFmt to "Iqama di %1\$s ora", S.SharedAlertSettings to "Impostazioni condivise per tutti gli avvisi",
 
@@ -923,7 +923,7 @@ internal val TR = mapOf(
     S.AdjNote to "Hesaplanan her vakte eklenen veya çıkarılan dakikalar. Vakitlere, widget'lara ve uyarılara anında uygulanır.",
     S.AdjHijri to "Hicri tarih ayarı", S.AdjMinShort to "dk", S.AdjDayShort to "gün",
     S.AlertTiming to "Uyarı zamanı", S.AtAdhanTime to "Ezan vaktinde", S.AtAdhanRow to "Ezan vaktinde", S.AtAdhanRowSub to "Namaz vakti geldiğinde temel bildirim", S.BeforeAdhanRow to "Erken hatırlatma", S.BeforeAdhanHelper to "Ek bir hatırlatma - ezan bildirimi yine de gelir", S.MinBeforeFmt to "Ezandan %1\$d dk önce",
-    S.AdhanReminder to "Ezan hatırlatıcı", S.AdhanAlertType to "Ezan uyarı türü", S.AlertTypeNotification to "Bildirim uyarısı", S.AlertTypeFullScreen to "Tam ekran bildirim uyarısı", S.IqamaReminder to "Kamet hatırlatıcı", S.IqamaReminderSub to "Kamet vaktinde bildirim",
+    S.AdhanReminder to "Ezan hatırlatıcı", S.IqamaReminder to "Kamet hatırlatıcı", S.IqamaReminderSub to "Kamet vaktinde bildirim",
     S.PrayerNowFmt to "%1\$s vakti geldi", S.PrayerApproachingFmt to "%1\$s %2\$d dk sonra",
     S.IqamaNowFmt to "%1\$s kameti şimdi", S.SharedAlertSettings to "Tüm uyarılar için ortak ayarlar",
 
@@ -1056,7 +1056,7 @@ internal val UR = mapOf(
     S.AdjNote to "ہر حساب شدہ وقت میں شامل یا کم کیے گئے منٹ۔ اوقات، ویجٹس اور الرٹس پر فوری لاگو ہوتے ہیں۔",
     S.AdjHijri to "ہجری تاریخ کی ترمیم", S.AdjMinShort to "منٹ", S.AdjDayShort to "دن",
     S.AlertTiming to "الرٹ کا وقت", S.AtAdhanTime to "اذان کے وقت", S.AtAdhanRow to "اذان کے وقت", S.AtAdhanRowSub to "نماز کے وقت کی بنیادی اطلاع", S.BeforeAdhanRow to "ابتدائی یاد دہانی", S.BeforeAdhanHelper to "اضافی یاد دہانی - اذان کی اطلاع بھی آتی رہے گی", S.MinBeforeFmt to "اذان سے %1\$d منٹ پہلے",
-    S.AdhanReminder to "اذان کی یاد دہانی", S.AdhanAlertType to "اذان کی تنبیہ کی قسم", S.AlertTypeNotification to "اطلاع کی تنبیہ", S.AlertTypeFullScreen to "پوری اسکرین اطلاع کی تنبیہ", S.IqamaReminder to "اقامت کی یاد دہانی", S.IqamaReminderSub to "اقامت کے وقت اطلاع",
+    S.AdhanReminder to "اذان کی یاد دہانی", S.IqamaReminder to "اقامت کی یاد دہانی", S.IqamaReminderSub to "اقامت کے وقت اطلاع",
     S.PrayerNowFmt to "اب %1\$s کا وقت ہے", S.PrayerApproachingFmt to "%1\$s میں %2\$d منٹ",
     S.IqamaNowFmt to "%1\$s کی اقامت ابھی", S.SharedAlertSettings to "تمام الرٹس کی مشترکہ ترتیبات",
 
@@ -1190,7 +1190,7 @@ internal val ID = mapOf(
     S.AdjNote to "Menit yang ditambahkan atau dikurangi dari setiap waktu terhitung. Langsung berlaku untuk waktu, widget, dan pengingat.",
     S.AdjHijri to "Penyesuaian tanggal Hijriah", S.AdjMinShort to "mnt", S.AdjDayShort to "hari",
     S.AlertTiming to "Waktu peringatan", S.AtAdhanTime to "Saat azan", S.AtAdhanRow to "Saat azan", S.AtAdhanRowSub to "Notifikasi dasar saat waktu salat tiba", S.BeforeAdhanRow to "Pengingat awal", S.BeforeAdhanHelper to "Pengingat tambahan - notifikasi waktu azan tetap tiba", S.MinBeforeFmt to "%1\$d mnt sebelum azan",
-    S.AdhanReminder to "Pengingat azan", S.AdhanAlertType to "Jenis pengingat azan", S.AlertTypeNotification to "Pengingat notifikasi", S.AlertTypeFullScreen to "Pengingat notifikasi layar penuh", S.IqamaReminder to "Pengingat iqamah", S.IqamaReminderSub to "Notifikasi saat iqamah",
+    S.AdhanReminder to "Pengingat azan", S.IqamaReminder to "Pengingat iqamah", S.IqamaReminderSub to "Notifikasi saat iqamah",
     S.PrayerNowFmt to "Sekarang waktu %1\$s", S.PrayerApproachingFmt to "%1\$s dalam %2\$d mnt",
     S.IqamaNowFmt to "Iqamah %1\$s sekarang", S.SharedAlertSettings to "Pengaturan bersama untuk semua peringatan",
 
@@ -1324,7 +1324,7 @@ internal val RU = mapOf(
     S.AdjNote to "Минуты, добавляемые или вычитаемые из каждого рассчитанного времени. Применяется мгновенно к временам, виджетам и оповещениям.",
     S.AdjHijri to "Поправка даты хиджры", S.AdjMinShort to "мин", S.AdjDayShort to "дн.",
     S.AlertTiming to "Время оповещения", S.AtAdhanTime to "Во время азана", S.AtAdhanRow to "Во время азана", S.AtAdhanRowSub to "Основное уведомление при наступлении времени молитвы", S.BeforeAdhanRow to "Раннее напоминание", S.BeforeAdhanHelper to "Дополнительное напоминание - уведомление об азане всё равно придёт", S.MinBeforeFmt to "За %1\$d мин до азана",
-    S.AdhanReminder to "Напоминание об азане", S.AdhanAlertType to "Тип оповещения об азане", S.AlertTypeNotification to "Уведомление", S.AlertTypeFullScreen to "Полноэкранное уведомление", S.IqamaReminder to "Напоминание об икаме", S.IqamaReminderSub to "Уведомление во время икама",
+    S.AdhanReminder to "Напоминание об азане", S.IqamaReminder to "Напоминание об икаме", S.IqamaReminderSub to "Уведомление во время икама",
     S.PrayerNowFmt to "Сейчас время: %1\$s", S.PrayerApproachingFmt to "%1\$s через %2\$d мин",
     S.IqamaNowFmt to "Икам %1\$s сейчас", S.SharedAlertSettings to "Общие настройки для всех оповещений",
 
@@ -1458,7 +1458,7 @@ internal val PT = mapOf(
     S.AdjNote to "Minutos adicionados ou subtraídos de cada horário calculado. Aplica-se de imediato a horários, widgets e alertas.",
     S.AdjHijri to "Ajuste da data hégira", S.AdjMinShort to "min", S.AdjDayShort to "dias",
     S.AlertTiming to "Momento do alerta", S.AtAdhanTime to "No adhan", S.AtAdhanRow to "No adhan", S.AtAdhanRowSub to "A notificação base quando chega a hora da oração", S.BeforeAdhanRow to "Lembrete antecipado", S.BeforeAdhanHelper to "Um lembrete extra - a notificação do adhan continua a chegar", S.MinBeforeFmt to "%1\$d min antes",
-    S.AdhanReminder to "Lembrete de adhan", S.AdhanAlertType to "Tipo de alerta de adhan", S.AlertTypeNotification to "Alerta de notificação", S.AlertTypeFullScreen to "Alerta de notificação em ecrã inteiro", S.IqamaReminder to "Lembrete de iqama", S.IqamaReminderSub to "Notificação na hora do iqama",
+    S.AdhanReminder to "Lembrete de adhan", S.IqamaReminder to "Lembrete de iqama", S.IqamaReminderSub to "Notificação na hora do iqama",
     S.PrayerNowFmt to "Agora é hora de %1\$s", S.PrayerApproachingFmt to "%1\$s em %2\$d min",
     S.IqamaNowFmt to "Iqama de %1\$s agora", S.SharedAlertSettings to "Configurações partilhadas para todos os alertas",
 
