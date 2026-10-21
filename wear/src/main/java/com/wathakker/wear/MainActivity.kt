@@ -185,7 +185,7 @@ private fun starOutline(cx: Float, cy: Float, n: Int, ro: Float, ri: Float): Pat
 fun StarField(modifier: Modifier, pat: Int = starPattern) {
     Canvas(modifier) {
         val r = size.minDimension * 0.085f
-        val step = if (pat >= 3) r * 3.1f else if (pat == 2) r * 2.36f else r * 2f
+        val step = r * 2f
         val maxD = hypot(size.width, size.height) * 0.95f
         val sw = size.minDimension * 0.003f
         if (pat >= 8) {
@@ -215,26 +215,7 @@ fun StarField(modifier: Modifier, pat: Int = starPattern) {
             val a = (1f - hypot(cx, size.height - cy) / maxD).coerceIn(0f, 1f)
             if (a > 0.03f) {
                 val al = 0.34f * a
-                if (pat >= 2) {
-                    // interlaced rosettes (n-pointed star polygons {n/k}) inside a square tile frame
-                    val col = Color.White.copy(alpha = al)
-                    fun rosette(n: Int, k: Int, rad: Float, rot: Double) {
-                        fun pt(i: Int) = Offset(cx + cos(rot + i * 2 * Math.PI / n).toFloat() * rad, cy + sin(rot + i * 2 * Math.PI / n).toFloat() * rad)
-                        for (i in 0 until n) {
-                            drawLine(col, pt(i), pt((i + k) % n), strokeWidth = sw)
-                            drawLine(col.copy(alpha = al * 0.55f), pt(i), pt((i + 1) % n), strokeWidth = sw)
-                        }
-                    }
-                    val half = step / 2f
-                    when (pat) {
-                        2 -> rosette(12, 5, r * 1.18f, -Math.PI / 2)
-                        3 -> { rosette(8, 3, half * 0.92f, -Math.PI / 2 + Math.PI / 8); drawPath(diamondPath(cx, cy, half * 0.98f), col, style = Stroke(width = sw)) }
-                        4 -> { rosette(10, 4, half * 0.95f, -Math.PI / 2); rosette(10, 2, half * 0.42f, -Math.PI / 2 + Math.PI / 10); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw)) }
-                        6 -> { rosette(12, 5, half * 0.97f, -Math.PI / 2); rosette(12, 4, half * 0.62f, -Math.PI / 2); rosette(12, 2, half * 0.3f, -Math.PI / 2 + Math.PI / 12); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw)) }
-                        7 -> { rosette(10, 3, half * 0.95f, -Math.PI / 2); rosette(10, 2, half * 0.5f, -Math.PI / 2); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw * 1.8f)) }
-                        else -> { rosette(12, 5, half * 0.97f, -Math.PI / 2); rosette(12, 3, half * 0.46f, -Math.PI / 2 + Math.PI / 12); drawRect(col, Offset(cx - half, cy - half), Size(step, step), style = Stroke(width = sw)) }
-                    }
-                } else drawPath(starPath(cx, cy, r), Color.White.copy(alpha = al), style = Stroke(width = sw))
+                drawPath(starPath(cx, cy, r), Color.White.copy(alpha = al), style = Stroke(width = sw))
             }
         }
     }
