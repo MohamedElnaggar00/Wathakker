@@ -61,14 +61,25 @@ add_widget(){
     XY=$(findany "$LABEL")
   done
   if [ -z "$XY" ]; then echo "WIDGET_NOT_FOUND $TAG $LABEL" >> "$OUT/SUMMARY.txt"; return 1; fi
-  adb shell input draganddrop $XY $TX $TY 1500; sleep 6
-  shot 13_after_drag_$TAG
-  CUR=cfg_$TAG; dump $CUR
-  if grep -q "wathakker" "$OUT/ui_cfg_$TAG.xml"; then
-    A=$(findany "تطبيق" "Apply" "إضافة" "Add" "تم" "Done")
-    if [ -n "$A" ]; then adb shell input tap $A; sleep 5; fi
-    shot 14_after_config_$TAG
-  fi
+  LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
+  [ -n "$LXY" ] && XY=$LXY
+  for TRY in 1 2 3; do
+    adb shell input draganddrop $XY $TX $TY 2200; sleep 6
+    shot 13_after_drag_${TAG}_$TRY
+    CUR=cfg_${TAG}_$TRY; dump $CUR
+    if grep -q "wathakker" "$OUT/ui_cfg_${TAG}_$TRY.xml"; then
+      A=$(findany "تطبيق" "Apply" "إضافة" "Add" "تم" "Done")
+      if [ -n "$A" ]; then adb shell input tap $A; sleep 5; fi
+      shot 14_after_config_$TAG
+      echo "DRAG_OK $TAG try$TRY" >> "$OUT/SUMMARY.txt"; return 0
+    fi
+    if ! grep -q "بحث" "$OUT/ui_cfg_${TAG}_$TRY.xml"; then
+      echo "DRAG_OK $TAG try$TRY (home, no config)" >> "$OUT/SUMMARY.txt"; return 0
+    fi
+    echo "DRAG_RETRY $TAG try$TRY" >> "$OUT/SUMMARY.txt"
+    set -- $XY; XY="$1 $(($2 - 260))"
+  done
+  echo "DRAG_FAIL $TAG" >> "$OUT/SUMMARY.txt"; return 1
 }
 
 add_widget "مزخرف" 540 700 decorated
@@ -79,4 +90,4 @@ adb shell input keyevent KEYCODE_HOME; sleep 4
 CUR=final; dump $CUR
 grep -c "wathakker" "$OUT/ui_final.xml" > "$OUT/widget_nodes.txt" 2>/dev/null
 adb shell cmd uimode night no; sleep 4; shot 20_home_light
-adb shell cmd uimode night yes; sleep 4; shot 21_home_dark
+adb shell cmd uimode night yes; sleep 75; shot 21_home_dark

@@ -1,6 +1,7 @@
 import sys, re
 import xml.etree.ElementTree as ET
 needle, path = sys.argv[1], sys.argv[2]
+mode = sys.argv[3] if len(sys.argv) > 3 else 'click'
 try:
     root = ET.parse(path).getroot()
 except Exception:
@@ -19,8 +20,12 @@ for node in root.iter('node'):
         v = node.get(attr) or ''
         if needle in v:
             n = node
-            while n is not None and n.get('clickable') != 'true' and n.get('long-clickable') != 'true':
-                n = parent.get(n)
+            if mode == 'long':
+                while n is not None and n.get('long-clickable') != 'true':
+                    n = parent.get(n)
+            else:
+                while n is not None and n.get('clickable') != 'true' and n.get('long-clickable') != 'true':
+                    n = parent.get(n)
             if n is None: n = node
             c = center(n)
             if c:
