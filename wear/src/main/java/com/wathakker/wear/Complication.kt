@@ -52,7 +52,7 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
             1 -> short(txt(cal.get(java.util.Calendar.DAY_OF_MONTH).toString()), Prayer.gregDate(s.now).substringAfter(' '), T("التاريخ الميلادي", "Gregorian date"))
             2 -> short(txt(Prayer.hijriDay(s.now)), Prayer.hijriMonth(s.now), T("التاريخ الهجري", "Hijri date"))
             4 -> short(txt(Prayer.time12(s.next.at).substringBefore(' ')), s.next.name, T("موعد الصلاة القادمة", "Next prayer time"))
-            8 -> if (iq != null) short(down(iq.at), T("إقامة ", "Iqama ") + iq.prayer.name, T("العد التنازلي للإقامة", "Iqama countdown"))
+            8 -> if (iq != null) short(down(iq.at), T("الإقامة", "Iqama"), T("العد التنازلي للإقامة", "Iqama countdown"))
                  else short(down(s.next.at), s.next.name, T("العد التنازلي للصلاة القادمة", "Next prayer countdown"))
             else -> null
         }
@@ -61,7 +61,7 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
     fun buildMain(type: ComplicationType, s: PrayerState, preview: Boolean = false, iq: Prayer.Iqama? = null): ComplicationData? {
         // During an iqama window: title "إقامة <prayer>" and a floor-minute countdown to the iqama time.
         val countdown = PlainComplicationText.Builder(previewCountdown((iq?.at ?: s.next.at) - s.now)).build()
-        val title = PlainComplicationText.Builder(if (iq != null) T("إقامة ", "Iqama ") + iq.prayer.name else s.next.name).build()
+        val title = PlainComplicationText.Builder(if (iq != null) T("الإقامة", "Iqama") else s.next.name).build()
         val desc = PlainComplicationText.Builder(if (iq != null) T("الوقت المتبقي لإقامة ", "Time left until iqama of ") + iq.prayer.name else T("الوقت المتبقي لصلاة ", "Time left until ") + s.next.name).build()
         return when (type) {
             ComplicationType.RANGED_VALUE -> {
