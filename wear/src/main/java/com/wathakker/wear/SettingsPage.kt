@@ -120,7 +120,6 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit, rootListState: Scalin
         // One UI Watch: the knob slides and the track color crossfades (his 19:45 report: it jumped).
         val frac by animateFloatAsState(if (on) 1f else 0f, tween(180, easing = FastOutSlowInEasing), label = "switchKnob")
         val track by animateColorAsState(if (on) Gold else Color(0xFF5A5A60), tween(180), label = "switchTrack")
-        val ltr = LocalLayoutDirection.current == LayoutDirection.Ltr
         val den = LocalDensity.current
         val padPx = with(den) { ((th - knob) / 2f).dp.toPx() }
         val travelPx = with(den) { (tw - th).dp.toPx() }
@@ -132,8 +131,12 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit, rootListState: Scalin
             // frac is read in the measure block: the knob slides with layout passes only (no recomposition per frame).
             Box(Modifier.layout { measurable, _ ->
                     val placeable = measurable.measure(androidx.compose.ui.unit.Constraints.fixed(knob.dp.roundToPx(), knob.dp.roundToPx()))
-                    val x = padPx + travelPx * (if (ltr) frac else 1f - frac)
-                    layout(placeable.width, placeable.height) { placeable.placeAbsolute(x.roundToInt(), 0) }
+                    // place() mirrors x automatically in RTL, so plain frac is enough: the knob
+                    // rests at the END side when ON (right in LTR, left in RTL) like One UI Watch.
+                    // (His 21:30 watch shot: a manual 1-frac compensation on top of place()'s
+                    // mirroring double-mirrored it, showing ON on the right in Arabic.)
+                    val x = padPx + travelPx * frac
+                    layout(placeable.width, placeable.height) { placeable.place(x.roundToInt(), 0) }
                 }.clip(CircleShape).background(Color.White))
         }
     }
