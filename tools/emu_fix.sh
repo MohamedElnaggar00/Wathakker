@@ -16,7 +16,7 @@ adb shell am start -S -W -n $PKG/$A.PreviewActivity --es mode ranged >/dev/null 
 adb shell am start -S -W -n $PKG/$A.AdhanActivity --ei id 4 >/dev/null 2>&1; sleep 3; shot adhan_screen
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 4 --ei sub 0 >/dev/null 2>&1; sleep 6; adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_before.txt"
 adb shell am start -S -W -n $PKG/$A.MainActivity --ei page 0 --ei adhan_test 20 >/dev/null 2>&1; sleep 2
-adb shell input keyevent 26; sleep 1; adb shell input keyevent 3; sleep 26; shot adhan_alarm_fired
+adb shell input keyevent 26; sleep 1; adb shell input keyevent 3; sleep 20; shot adhan_alarm_fired
 sleep 7; shot adhan_after_5s
 adb shell dumpsys window | grep -i "mCurrentFocus" > "$OUT/focus.txt"
 adb shell dumpsys alarm | grep -B1 -A4 "com.wathakker.app" | head -30 > "$OUT/alarm_after.txt"
