@@ -109,14 +109,15 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         }
     }
 
-    // One UI Watch switch shape (reference: system Settings toggles), drawn with the app accent color.
+    // One UI Watch switch, geometry measured from the owner's own watch screenshots
+    // (track 73x40px and knob 35px on a 450px screen). Track color follows the app theme accent.
     @Composable
     fun OneUiSwitch(on: Boolean, onChange: (Boolean) -> Unit, w: Float) {
-        val tw = w * 0.11f; val th = w * 0.065f; val knob = th * 0.72f
+        val tw = w * 0.162f; val th = w * 0.089f; val knob = w * 0.078f
         Box(
             Modifier.size(width = tw.dp, height = th.dp).clip(RoundedCornerShape(th.dp))
-                .background(if (on) Gold else Color(0xFF4A4A50))
-                .clickable { onChange(!on) }.padding((th * 0.14f).dp),
+                .background(if (on) Gold else Color(0xFF5A5A60))
+                .clickable { onChange(!on) }.padding(((th - knob) / 2f).dp),
             contentAlignment = if (on) Alignment.CenterEnd else Alignment.CenterStart
         ) {
             Box(Modifier.size(knob.dp).clip(CircleShape).background(Color.White))
@@ -126,7 +127,7 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
     // One UI Watch radio option (reference: system radio pickers), ring + filled dot in app accent.
     @Composable
     fun OneUiRadio(on: Boolean, w: Float) {
-        val d = w * 0.05f
+        val d = w * 0.067f
         Canvas(Modifier.size(d.dp)) {
             val r = size.minDimension / 2f
             if (on) {
@@ -140,44 +141,78 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
 
     @Composable
     fun OneUiDivider(w: Float) {
-        Box(Modifier.fillMaxWidth().padding(horizontal = (w * 0.05f).dp).height(1.dp).background(Color(0xFF3A3A3E)))
+        Box(Modifier.fillMaxWidth().padding(horizontal = (w * 0.08f).dp).height(1.dp).background(Color(0xFF3A3A3E)))
     }
 
     class RadioOpt(val label: String, val selected: Boolean, val onClick: () -> Unit, val lead: (@Composable () -> Unit)? = null)
 
     // One UI Watch radio-list card in app colors: dark rounded card, dividers, accent radio rings.
+    // Row geometry measured from the owner's watch: row ~110px and label ~34px on a 450px screen.
     @Composable
     fun OneUiRadioCard(w: Float, options: List<RadioOpt>) {
-        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape((w * 0.08f).dp)).background(Color(0xFF26262B))) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = (w * 0.027f).dp).clip(RoundedCornerShape((w * 0.09f).dp)).background(Color(0xFF26262B))) {
             options.forEachIndexed { i, opt ->
                 if (i > 0) OneUiDivider(w)
-                Row(Modifier.fillMaxWidth().clickable { opt.onClick() }.padding(horizontal = (w * 0.05f).dp, vertical = (w * 0.05f).dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.fillMaxWidth().height((w * 0.244f).dp).clickable { opt.onClick() }.padding(horizontal = (w * 0.08f).dp), verticalAlignment = Alignment.CenterVertically) {
                     OneUiRadio(opt.selected, w)
-                    Spacer(Modifier.width((w * 0.04f).dp))
-                    if (opt.lead != null) { opt.lead(); Spacer(Modifier.width((w * 0.04f).dp)) }
-                    Text1(opt.label, tx(w * 0.056f, Color.White))
+                    Spacer(Modifier.width((w * 0.05f).dp))
+                    if (opt.lead != null) { opt.lead(); Spacer(Modifier.width((w * 0.05f).dp)) }
+                    Text1(opt.label, tx(w * 0.073f, Color.White))
                 }
             }
         }
     }
 
+    // One UI Watch settings card row: tall row (~120px on 450), white title, value under it in the
+    // app accent color (Samsung renders it blue; we keep the app identity per owner).
+    @Composable
+    fun OneUiRow(w: Float, title: String, value: String?, onClick: () -> Unit, trail: (@Composable () -> Unit)? = null) {
+        Row(Modifier.fillMaxWidth().height((w * 0.267f).dp).clickable { onClick() }.padding(horizontal = (w * 0.08f).dp), verticalAlignment = Alignment.CenterVertically) {
+            Column {
+                Text1(title, tx(w * 0.076f, Color.White))
+                if (value != null) Text1(value, tx(w * 0.058f, Gold))
+            }
+            Spacer(Modifier.weight(1f))
+            if (trail != null) trail()
+        }
+    }
+
+    // Thin vertical separator before a trailing switch, as in the One UI connections screen.
+    @Composable
+    fun OneUiVertDivider(w: Float) {
+        Box(Modifier.padding(horizontal = (w * 0.04f).dp).width(1.dp).height((w * 0.11f).dp).background(Color(0xFF3A3A3E)))
+    }
+
     val title = if (langTick < 0) "" else when (sub) { 1 -> T("الزخرفة", "Pattern"); 2 -> T("لون السمة", "Theme color"); 3 -> T("مصدر الموقع", "Location source"); 4 -> T("الأذونات", "Permissions"); 5 -> T("اللغة", "Language"); 6 -> T("نوع التنبيه", "Alert style"); else -> T("الإعدادات", "Settings") }
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         ScalingLazyColumn(Modifier.fillMaxSize()) {
-            item { Text1(title, tx(w * 0.07f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.04f).dp)) }
+            item { Text1(title, tx(w * 0.08f, Color(0xFFB9B9BE)), Modifier.padding(top = (w * 0.07f).dp, bottom = (w * 0.05f).dp)) }
             when (sub) {
                 0 -> {
-                    item { Row1(T("اللغة", "Language"), listOf(T("مزامنة", "Sync"), "عربي", "English")[Loc.mode(ctx)], { go(5) }) }
-                    item { Row1(T("الزخرفة", "Pattern"), patName(starPattern), { go(1) }) }
-                    item { Row1(T("لون السمة", "Theme color"), themeName(WTheme.idx), { go(2) }) }
-                    item { Row1(T("مصدر الموقع", "Location source"), if (locMode == 0) T("من الهاتف", "Phone") else T("تلقائي", "Auto"), { go(3) }) }
                     item {
                         var on by remember { mutableIntStateOf(if (Adhan.enabled(ctx)) 1 else 0) }
-                        Row1(T("تنبيه الأذان", "Adhan alert"), null, { on = 1 - on; Adhan.setEnabled(ctx, on == 1) }, selected = on == 1, trail = { OneUiSwitch(on == 1, { want -> on = if (want) 1 else 0; Adhan.setEnabled(ctx, want) }, w) })
+                        var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }
+                        Column(Modifier.fillMaxWidth().padding(horizontal = (w * 0.027f).dp).clip(RoundedCornerShape((w * 0.09f).dp)).background(Color(0xFF26262B))) {
+                            OneUiRow(w, T("اللغة", "Language"), listOf(T("مزامنة", "Sync"), "عربي", "English")[Loc.mode(ctx)], { go(5) })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("الزخرفة", "Pattern"), patName(starPattern), { go(1) })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("لون السمة", "Theme color"), themeName(WTheme.idx), { go(2) })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("مصدر الموقع", "Location source"), if (locMode == 0) T("من الهاتف", "Phone") else T("تلقائي", "Auto"), { go(3) })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("تنبيه الأذان", "Adhan alert"), null, { on = 1 - on; Adhan.setEnabled(ctx, on == 1) }, trail = {
+                                OneUiVertDivider(w)
+                                OneUiSwitch(on == 1, { want -> on = if (want) 1 else 0; Adhan.setEnabled(ctx, want) }, w)
+                            })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("نوع التنبيه", "Alert style"), if (fs == 1) T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert") else T("تنبيه إشعار", "Notification alert"), { go(6) })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("الأذونات", "Permissions"), null, { go(4) })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("فتح في الجهاز", "Open on phone"), null, { openOnPhone(ctx) {} }, trail = { ExternalIcon(w, SoftGrey) })
+                        }
                     }
-                    item { var fs by remember { mutableIntStateOf(if (Adhan.fullScreen(ctx)) 1 else 0) }; Row1(T("نوع التنبيه", "Alert style"), if (fs == 1) T("تنبيه إشعار بملء الشاشة", "Full-screen notification alert") else T("تنبيه إشعار", "Notification alert"), { go(6) }) }
-                    item { Row1(T("الأذونات", "Permissions"), null, { go(4) }) }
-                    item { Row1(T("فتح في الجهاز", "Open on phone"), null, { openOnPhone(ctx) {} }, trail = { ExternalIcon(w, SoftGrey) }) }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
                 6 -> {
@@ -234,14 +269,15 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
                 }
                 else -> {
                     item {
-                        Row1(T("الموقع", "Location"), if (locOk) T("مسموح", "Allowed") else T("غير مسموح", "Not allowed"), {
-                            if (!locOk) locLauncher.launch(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION))
-                        })
-                    }
-                    item {
-                        Row1(T("الإشعارات", "Notifications"), if (notifOk) T("مسموح", "Allowed") else T("غير مسموح", "Not allowed"), {
-                            if (!notifOk) notifLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        })
+                        Column(Modifier.fillMaxWidth().padding(horizontal = (w * 0.027f).dp).clip(RoundedCornerShape((w * 0.09f).dp)).background(Color(0xFF26262B))) {
+                            OneUiRow(w, T("الموقع", "Location"), if (locOk) T("مسموح", "Allowed") else T("غير مسموح", "Not allowed"), {
+                                if (!locOk) locLauncher.launch(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION))
+                            })
+                            OneUiDivider(w)
+                            OneUiRow(w, T("الإشعارات", "Notifications"), if (notifOk) T("مسموح", "Allowed") else T("غير مسموح", "Not allowed"), {
+                                if (!notifOk) notifLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            })
+                        }
                     }
                     item { Spacer(Modifier.height((w * 0.12f).dp)) }
                 }
