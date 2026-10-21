@@ -5,14 +5,25 @@ try:
     root = ET.parse(path).getroot()
 except Exception:
     sys.exit(1)
+parent = {}
+for p in root.iter():
+    for c in p:
+        parent[c] = p
+def center(node):
+    m = re.match(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]', node.get('bounds') or '')
+    if not m: return None
+    x1, y1, x2, y2 = map(int, m.groups())
+    return ((x1 + x2) // 2, (y1 + y2) // 2)
 for node in root.iter('node'):
     for attr in ('text', 'content-desc'):
         v = node.get(attr) or ''
         if needle in v:
-            b = node.get('bounds') or ''
-            m = re.match(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]', b)
-            if m:
-                x1, y1, x2, y2 = map(int, m.groups())
-                print((x1 + x2) // 2, (y1 + y2) // 2)
+            n = node
+            while n is not None and n.get('clickable') != 'true' and n.get('long-clickable') != 'true':
+                n = parent.get(n)
+            if n is None: n = node
+            c = center(n)
+            if c:
+                print(c[0], c[1])
                 sys.exit(0)
 sys.exit(1)
