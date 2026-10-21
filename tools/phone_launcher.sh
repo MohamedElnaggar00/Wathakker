@@ -39,7 +39,7 @@ shot 01_after_onboard
 add_widget(){
   LABEL="$1"; TX=$2; TY=$3; TAG=$4
   adb shell input keyevent KEYCODE_HOME; sleep 3
-  adb shell input swipe 540 1000 540 1000 1300; sleep 3
+  adb shell input swipe 540 1250 540 1250 1300; sleep 3
   CUR=menu_$TAG; dump $CUR; shot 10_menu_$TAG
   XY=$(findany "Widgets" "المصغّرة" "المصغرة" "ودجت" "الأدوات")
   if [ -z "$XY" ]; then echo "NO_WIDGETS_MENU $TAG" >> "$OUT/SUMMARY.txt"; return 1; fi
@@ -95,8 +95,8 @@ add_widget(){
 }
 
 add_widget "مزخرف" 540 700 decorated
-add_widget "الصلاة القادمة" 250 1150 nextprayer
-add_widget "التاريخ الهجري" 830 1150 hijri
+add_widget "الصلاة القادمة" 160 600 nextprayer
+add_widget "التاريخ الهجري" 160 950 hijri
 
 adb shell input keyevent KEYCODE_HOME; sleep 4
 CUR=final; dump $CUR
