@@ -104,6 +104,40 @@ adb shell input keyevent KEYCODE_HOME; sleep 3
 adb shell input swipe 227 380 227 80 400; sleep 3
 shot 41_notification_stream
 adb shell dumpsys notification > "$OUT/notif2.txt" 2>&1
+# font section evidence (1.1.0 dev): settings root scrolled to the الخط section, style radio page,
+# size page before/after +, and the whole app rendered in نسخ as an applied-font proof (prefs restored after)
+adb shell am force-stop $PKG
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 >/dev/null 2>&1
+sleep 7
+adb shell input swipe 227 320 227 80 300; sleep 2
+adb shell input swipe 227 320 227 80 300; sleep 2
+adb shell input swipe 227 300 227 190 300; sleep 2
+shot 60_font_section
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 --ei sub 7 >/dev/null 2>&1
+sleep 6
+adb shell input swipe 227 140 227 380 300; sleep 2
+shot 61_font_style
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 --ei sub 8 >/dev/null 2>&1
+sleep 6
+shot 62_font_size
+adb shell input tap 132 287; sleep 2
+shot 63_font_size_plus
+# applied-font proof: force font_choice=5 (نسخ) in prefs, relaunch main page, capture, restore
+adb root >/dev/null 2>&1; sleep 2
+PRF=/data/data/com.wathakker.app/shared_prefs/wear_prefs.xml
+adb shell "sed -i 's|</map>|<int name=\"font_choice\" value=\"5\" /></map>|' $PRF"
+adb shell am force-stop $PKG
+adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 0 >/dev/null 2>&1
+sleep 7
+shot 64_font_applied_naskh
+adb shell "sed -i 's|<int name=\"font_choice\" value=\"5\" />||' $PRF"
+adb shell am force-stop $PKG
+# Tile/complication previews: the bundled TileRenderer mirrors arcs under an RTL system locale
+# (the real watch does not; LTR system locale renders the arc exactly like the watch), so these
+# captures run under en-US. Tile/complication text stays Arabic (app strings follow app prefs).
+adb shell "setprop persist.sys.locale en-US; setprop ctl.restart zygote" >/dev/null 2>&1
+adb wait-for-device; adb shell 'while [ -z "$(getprop sys.boot_completed)" ]; do sleep 2; done'; sleep 20
+adb root >/dev/null 2>&1; sleep 3; adb wait-for-device
 # normal tile (comparison reference, same renderer + locale)
 adb shell am force-stop $PKG
 adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode tile >/dev/null 2>&1
@@ -123,30 +157,4 @@ adb shell am force-stop $PKG
 adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode short --ei kind 0 --ez iqama_demo true >/dev/null 2>&1
 sleep 4
 shot 52_iqama_comp_short
-# font section evidence (1.1.0 dev): settings root scrolled to the الخط section, style radio page,
-# size page before/after +, and the whole app rendered in نسخ as an applied-font proof (prefs restored after)
-adb shell am force-stop $PKG
-adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 >/dev/null 2>&1
-sleep 7
-adb shell input swipe 227 320 227 80 300; sleep 2
-adb shell input swipe 227 320 227 80 300; sleep 2
-shot 60_font_section
-adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 --ei sub 7 >/dev/null 2>&1
-sleep 6
-shot 61_font_style
-adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 3 --ei sub 8 >/dev/null 2>&1
-sleep 6
-shot 62_font_size
-adb shell input tap 309 320; sleep 2
-shot 63_font_size_plus
-# applied-font proof: force font_choice=5 (نسخ) in prefs, relaunch main page, capture, restore
-adb root >/dev/null 2>&1; sleep 2
-PRF=/data/data/com.wathakker.app/shared_prefs/wear_prefs.xml
-adb shell "sed -i 's|</map>|<int name=\"font_choice\" value=\"5\" /></map>|' $PRF"
-adb shell am force-stop $PKG
-adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page 0 >/dev/null 2>&1
-sleep 7
-shot 64_font_applied_naskh
-adb shell "sed -i 's|<int name=\"font_choice\" value=\"5\" />||' $PRF"
-adb shell am force-stop $PKG
 echo DONE > "$OUT/SUMMARY.txt.append"

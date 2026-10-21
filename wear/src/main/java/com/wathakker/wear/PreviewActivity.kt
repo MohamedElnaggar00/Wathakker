@@ -35,12 +35,10 @@ class PreviewActivity : Activity() {
         if (mode == "tile") {
             val layout = LayoutElementBuilders.Layout.Builder().setRoot(PreviewTile(this).layout(s, iq)).build()
             val res = ResourceBuilders.Resources.Builder().setVersion("1").build()
-            // The real watch (sysui renderer) draws the arc clockwise from the anchor in any locale.
-            // The bundled TileRenderer mirrors the whole layout in RTL locales, which flipped the arc in
-            // Arabic previews (evidence must match the watch), so render the preview in an LTR context.
-            val cfg = android.content.res.Configuration(resources.configuration)
-            cfg.setLayoutDirection(java.util.Locale.US)
-            val r = TileRenderer(createConfigurationContext(cfg), ContextCompat.getMainExecutor(this)) { }
+            // Note: the bundled TileRenderer mirrors the arc under an RTL system locale while the real
+            // watch (sysui) does not; a per-renderer LTR context does NOT override that (verified on
+            // emulator), so arc-accurate tile captures are taken under an en-US system locale instead.
+            val r = TileRenderer(this, ContextCompat.getMainExecutor(this)) { }
             r.inflateAsync(layout, res, root)
         } else {
             val k = intent.getIntExtra("kind", 0)
