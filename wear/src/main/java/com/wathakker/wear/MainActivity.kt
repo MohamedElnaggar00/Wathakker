@@ -290,8 +290,8 @@ fun MainPage(s: PrayerState, now: Long, w: Float) {
 }
 
 @Composable
-fun Text1(t: String, style: TextStyle, modifier: Modifier = Modifier) {
-    androidx.compose.foundation.text.BasicText(t, modifier, style = style, maxLines = 1)
+fun Text1(t: String, style: TextStyle, modifier: Modifier = Modifier, maxLines: Int = 1) {
+    androidx.compose.foundation.text.BasicText(t, modifier, style = style, maxLines = maxLines)
 }
 
 @Composable

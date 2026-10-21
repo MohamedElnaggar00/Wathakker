@@ -38,10 +38,12 @@ open class PrayerTileService : TileService() {
                     .build()
             ).build()
 
-    fun layout(s: PrayerState): LayoutElementBuilders.LayoutElement {
+    fun layout(s: PrayerState, iq: Prayer.Iqama? = null): LayoutElementBuilders.LayoutElement {
         val sweep = 270f
+        // During an iqama window the arc and center switch to the iqama countdown (owner feature, wear 1.1.0).
+        val arcProgress = if (iq != null) ((s.now - iq.prayer.at).toFloat() / maxOf(1L, iq.at - iq.prayer.at).toFloat()).coerceIn(0.02f, 1f) else s.progress
         val track = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep)).setThickness(dp(13f)).setColor(argb(tc.dark)).build()
-        val fill = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep * s.progress)).setThickness(dp(13f)).setColor(argb(tc.main)).build()
+        val fill = LayoutElementBuilders.ArcLine.Builder().setLength(degrees(sweep * arcProgress)).setThickness(dp(13f)).setColor(argb(tc.main)).build()
         fun arc(line: LayoutElementBuilders.ArcLine) = LayoutElementBuilders.Arc.Builder()
             .setAnchorAngle(degrees(-135f)).setAnchorType(LayoutElementBuilders.ARC_ANCHOR_START).addContent(line).build()
 
@@ -53,11 +55,11 @@ open class PrayerTileService : TileService() {
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
             .setModifiers(ModifiersBuilders.Modifiers.Builder()
                 .setPadding(ModifiersBuilders.Padding.Builder().setTop(dp(16.5f)).build()).build())
-            .addContent(text(Prayer.time12(s.next.at), 25.5f, 0xFFFFFFFF.toInt(), false))
+            .addContent(text(Prayer.time12(iq?.at ?: s.next.at), 25.5f, 0xFFFFFFFF.toInt(), false))
             .addContent(gap(5f))
-            .addContent(text(s.next.name, 19.5f, 0xFFFFFFFF.toInt(), false))
+            .addContent(text(if (iq != null) T("إقامة ", "Iqama ") + iq.prayer.name else s.next.name, 19.5f, 0xFFFFFFFF.toInt(), false))
             .addContent(gap(9.7f))
-            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText(s.next.at - s.now), 14.5f, tc.main, true))
+            .addContent(text(T("المتبقي ", "Left ") + Prayer.remainingText((iq?.at ?: s.next.at) - s.now), 14.5f, tc.main, true))
             .addContent(gap(8f))
             .addContent(text(Prayer.hijriDay(s.now), 30f, 0xFFFFFFFF.toInt(), true))
             .addContent(gap(3.3f))
@@ -79,10 +81,11 @@ open class PrayerTileService : TileService() {
 
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> {
         val s = Prayer.compute(this)
+        val iq = Prayer.iqamaNow(this)
         val tile = TileBuilders.Tile.Builder()
             .setResourcesVersion("1")
             .setFreshnessIntervalMillis(60_000)
-            .setTileTimeline(TimelineBuilders.Timeline.fromLayoutElement(layout(s)))
+            .setTileTimeline(TimelineBuilders.Timeline.fromLayoutElement(layout(s, iq)))
             .build()
         return Futures.immediateFuture(tile)
     }

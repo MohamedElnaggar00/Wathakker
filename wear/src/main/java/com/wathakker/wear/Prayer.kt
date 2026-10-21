@@ -57,6 +57,28 @@ object Prayer {
         return t.mapIndexed { i, v -> Slot(i, names[i], v) }
     }
 
+    /** One prayer's iqama window: [prayer] is the adhan slot, [at] is the iqama time. */
+    data class Iqama(val prayer: Slot, val at: Long)
+
+    /** Iqama offsets in minutes after adhan, matching the phone app (WidgetUpdater.iqamaOffsets); Friday Dhuhr excluded. */
+    private val iqamaMin = mapOf(0 to 25, 2 to 20, 3 to 20, 4 to 10, 5 to 20)
+
+    /** The active iqama window at [now], if any: after an adhan and until its iqama time. */
+    fun iqamaNow(c: Context, now: Long = System.currentTimeMillis()): Iqama? {
+        val cal = Calendar.getInstance(TimeZone.getDefault())
+        for (off in -1..0) {
+            for (sl in day(c, off, now)) {
+                if (sl.id == 1 || sl.at > now) continue
+                val mins = iqamaMin[sl.id] ?: continue
+                cal.timeInMillis = sl.at
+                if (sl.id == 2 && cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) continue
+                val iq = sl.at + mins * 60000L
+                if (now <= iq) return Iqama(sl, iq)
+            }
+        }
+        return null
+    }
+
     /** Next of the five prayers (no sunrise) strictly after [now]. */
     fun nextAdhan(c: Context, now: Long = System.currentTimeMillis()): Slot? {
         for (off in 0..2) for (sl in day(c, off, now)) if (sl.id != 1 && sl.at > now) return sl

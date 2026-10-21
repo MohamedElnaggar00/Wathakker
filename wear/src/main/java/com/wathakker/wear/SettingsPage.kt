@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -153,11 +154,11 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
         Column(Modifier.fillMaxWidth().padding(horizontal = (w * 0.027f).dp).clip(RoundedCornerShape((w * 0.09f).dp)).background(Color(0xFF26262B))) {
             options.forEachIndexed { i, opt ->
                 if (i > 0) OneUiDivider(w)
-                Row(Modifier.fillMaxWidth().height((w * 0.244f).dp).clickable { opt.onClick() }.padding(horizontal = (w * 0.08f).dp), verticalAlignment = Alignment.CenterVertically) {
+                Row(Modifier.fillMaxWidth().heightIn(min = (w * 0.244f).dp).clickable { opt.onClick() }.padding(horizontal = (w * 0.08f).dp, vertical = (w * 0.03f).dp), verticalAlignment = Alignment.CenterVertically) {
                     OneUiRadio(opt.selected, w)
                     Spacer(Modifier.width((w * 0.05f).dp))
                     if (opt.lead != null) { opt.lead(); Spacer(Modifier.width((w * 0.05f).dp)) }
-                    Text1(opt.label, tx(w * 0.073f, Color.White))
+                    Text1(opt.label, tx(w * 0.073f, Color.White), maxLines = 2)
                 }
             }
         }
@@ -167,13 +168,12 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
     // app accent color (Samsung renders it blue; we keep the app identity per owner).
     @Composable
     fun OneUiRow(w: Float, title: String, value: String?, onClick: () -> Unit, trail: (@Composable () -> Unit)? = null) {
-        Row(Modifier.fillMaxWidth().height((w * 0.267f).dp).clickable { onClick() }.padding(horizontal = (w * 0.08f).dp), verticalAlignment = Alignment.CenterVertically) {
-            Column {
-                Text1(title, tx(w * 0.076f, Color.White))
-                if (value != null) Text1(value, tx(w * 0.058f, Gold))
+        Row(Modifier.fillMaxWidth().heightIn(min = (w * 0.267f).dp).clickable { onClick() }.padding(horizontal = (w * 0.08f).dp, vertical = (w * 0.03f).dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f, fill = false)) {
+                Text1(title, tx(w * 0.076f, Color.White), maxLines = 2)
+                if (value != null) Text1(value, tx(w * 0.058f, Gold), maxLines = 2)
             }
-            Spacer(Modifier.weight(1f))
-            if (trail != null) trail()
+            if (trail != null) { Spacer(Modifier.weight(1f)); trail() }
         }
     }
 

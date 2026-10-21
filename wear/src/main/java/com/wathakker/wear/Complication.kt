@@ -27,12 +27,12 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
     /** 0 = remaining countdown (and ranged ring); other values are the extra types, see [buildKind]. */
     open val kind: Int get() = 0
 
-    fun build(type: ComplicationType, s: PrayerState, preview: Boolean = false): ComplicationData? = if (kind == 0) buildMain(type, s, preview) else buildKind(kind, type, s, preview)
+    fun build(type: ComplicationType, s: PrayerState, preview: Boolean = false, iq: Prayer.Iqama? = null): ComplicationData? = if (kind == 0) buildMain(type, s, preview, iq) else buildKind(kind, type, s, preview, iq)
 
     private fun txt(t: String) = PlainComplicationText.Builder(t).build()
 
     /** 1 greg date, 2 hijri date, 3 greg+hijri (long), 4 next prayer time, 8 upcoming prayer countdown. */
-    fun buildKind(k: Int, type: ComplicationType, s: PrayerState, preview: Boolean = false): ComplicationData? {
+    fun buildKind(k: Int, type: ComplicationType, s: PrayerState, preview: Boolean = false, iq: Prayer.Iqama? = null): ComplicationData? {
         val cd = txt("-")
         fun short(text: androidx.wear.watchface.complications.data.ComplicationText, title: String?, d: String): ComplicationData =
             ShortTextComplicationData.Builder(text, txt(d)).apply { if (title != null) setTitle(txt(title)) }.setTapAction(tap()).build()
@@ -52,19 +52,21 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
             1 -> short(txt(cal.get(java.util.Calendar.DAY_OF_MONTH).toString()), Prayer.gregDate(s.now).substringAfter(' '), T("التاريخ الميلادي", "Gregorian date"))
             2 -> short(txt(Prayer.hijriDay(s.now)), Prayer.hijriMonth(s.now), T("التاريخ الهجري", "Hijri date"))
             4 -> short(txt(Prayer.time12(s.next.at).substringBefore(' ')), s.next.name, T("موعد الصلاة القادمة", "Next prayer time"))
-            8 -> short(down(s.next.at), s.next.name, T("العد التنازلي للصلاة القادمة", "Next prayer countdown"))
+            8 -> if (iq != null) short(down(iq.at), T("إقامة ", "Iqama ") + iq.prayer.name, T("العد التنازلي للإقامة", "Iqama countdown"))
+                 else short(down(s.next.at), s.next.name, T("العد التنازلي للصلاة القادمة", "Next prayer countdown"))
             else -> null
         }
     }
 
-    fun buildMain(type: ComplicationType, s: PrayerState, preview: Boolean = false): ComplicationData? {
-        val countdown = PlainComplicationText.Builder(previewCountdown(s.next.at - s.now)).build()
-        val title = PlainComplicationText.Builder(s.next.name).build()
-        val desc = PlainComplicationText.Builder(T("الوقت المتبقي لصلاة ", "Time left until ") + s.next.name).build()
+    fun buildMain(type: ComplicationType, s: PrayerState, preview: Boolean = false, iq: Prayer.Iqama? = null): ComplicationData? {
+        // During an iqama window: title "إقامة <prayer>" and a floor-minute countdown to the iqama time.
+        val countdown = PlainComplicationText.Builder(previewCountdown((iq?.at ?: s.next.at) - s.now)).build()
+        val title = PlainComplicationText.Builder(if (iq != null) T("إقامة ", "Iqama ") + iq.prayer.name else s.next.name).build()
+        val desc = PlainComplicationText.Builder(if (iq != null) T("الوقت المتبقي لإقامة ", "Time left until iqama of ") + iq.prayer.name else T("الوقت المتبقي لصلاة ", "Time left until ") + s.next.name).build()
         return when (type) {
             ComplicationType.RANGED_VALUE -> {
-                val total = ((s.next.at - s.prev.at) / 60000f).coerceAtLeast(1f)
-                val elapsed = ((s.now - s.prev.at) / 60000f).coerceIn(0f, total)
+                val total = (((iq?.at ?: s.next.at) - (iq?.prayer?.at ?: s.prev.at)) / 60000f).coerceAtLeast(1f)
+                val elapsed = ((s.now - (iq?.prayer?.at ?: s.prev.at)) / 60000f).coerceIn(0f, total)
                 RangedValueComplicationData.Builder(elapsed, 0f, total, desc)
                     .setText(countdown).setTitle(title).setTapAction(tap()).build()
             }
@@ -101,7 +103,7 @@ open class PrayerComplicationService : SuspendingComplicationDataSourceService()
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         if (kind == 0 || kind == 8) scheduleNextMinute()
-        return build(request.complicationType, Prayer.compute(this))
+        return build(request.complicationType, Prayer.compute(this), iq = Prayer.iqamaNow(this))
     }
 }
 

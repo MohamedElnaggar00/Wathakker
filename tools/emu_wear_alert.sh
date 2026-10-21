@@ -104,4 +104,15 @@ adb shell input keyevent KEYCODE_HOME; sleep 3
 adb shell input swipe 227 380 227 80 400; sleep 3
 shot 41_notification_stream
 adb shell dumpsys notification > "$OUT/notif2.txt" 2>&1
+# iqama counter demo (dev-only PreviewActivity with a fake "now" inside the iqama window)
+adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode tile --ez iqama_demo true >/dev/null 2>&1
+sleep 6
+shot 50_iqama_tile
+CUR=iqtile; dump $CUR
+adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode ranged --ei kind 0 --ez iqama_demo true >/dev/null 2>&1
+sleep 4
+shot 51_iqama_comp_ranged
+adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode short --ei kind 0 --ez iqama_demo true >/dev/null 2>&1
+sleep 4
+shot 52_iqama_comp_short
 echo DONE > "$OUT/SUMMARY.txt.append"

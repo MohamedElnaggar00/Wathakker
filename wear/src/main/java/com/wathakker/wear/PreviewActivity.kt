@@ -27,16 +27,20 @@ class PreviewActivity : Activity() {
         val mode = intent.getStringExtra("mode") ?: "tile"
         val root = FrameLayout(this).apply { setBackgroundColor(Color.BLACK) }
         setContentView(root)
-        val s = Prayer.compute(this)
+        // iqama_demo: pretend "now" is 3 minutes after the upcoming adhan so the iqama window is active.
+        val demo = intent.getBooleanExtra("iqama_demo", false)
+        val now0 = if (demo) (Prayer.nextAdhan(this)?.at ?: System.currentTimeMillis()) + 3 * 60000L else System.currentTimeMillis()
+        val s = Prayer.compute(this, now0)
+        val iq = Prayer.iqamaNow(this, now0)
         if (mode == "tile") {
-            val layout = LayoutElementBuilders.Layout.Builder().setRoot(PreviewTile(this).layout(s)).build()
+            val layout = LayoutElementBuilders.Layout.Builder().setRoot(PreviewTile(this).layout(s, iq)).build()
             val res = ResourceBuilders.Resources.Builder().setVersion("1").build()
             val r = TileRenderer(this, ContextCompat.getMainExecutor(this)) { }
             r.inflateAsync(layout, res, root)
         } else {
             val k = intent.getIntExtra("kind", 0)
             val type = if (k == 3) ComplicationType.LONG_TEXT else if (mode == "short" || k > 0) ComplicationType.SHORT_TEXT else ComplicationType.RANGED_VALUE
-            val data = if (mode == "prev") PreviewComp(this, k).getPreviewData(type)!! else PreviewComp(this, k).build(type, s)!!
+            val data = if (mode == "prev") PreviewComp(this, k).getPreviewData(type)!! else PreviewComp(this, k).build(type, s, iq = iq)!!
             val cd = ComplicationDrawable(this)
             cd.activeStyle.rangedValuePrimaryColor = WTheme.cur.main.toArgb()
             cd.activeStyle.rangedValueSecondaryColor = 0xFF3A3420.toInt()
