@@ -1,0 +1,60 @@
+name: Wear minify test (NO RELEASE)
+'on':
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  wear:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: temurin
+    - uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: 9.3.1
+    - name: Generate Debug Keystore
+      run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+    - name: Build watch release APK (minified)
+      run: |
+        set -o pipefail
+        gradle :wear:assembleRelease -PwithWear=true -PcomposeBom=2025.10.01 --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g -Dfile.encoding=UTF-8 -Djava.awt.headless=true" 2>&1 | tee wear-build.log
+    - name: Debug-sign minified APK for emulator install
+      run: |
+        BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+        APK=wear/build/outputs/apk/release/wear-release-unsigned.apk
+        "$BT/zipalign" -f -p 4 "$APK" /tmp/aligned.apk
+        "$BT/apksigner" sign --ks debug.keystore --ks-pass pass:android --key-pass pass:android --out wear/build/outputs/apk/release/wear-minified-debugsigned.apk /tmp/aligned.apk
+        ls -la wear/build/outputs/apk/release/
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: wear-minify-build
+        path: wear-build.log
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: wear-minify-apk
+        path: wear/build/outputs/apk/release/
+    - name: Enable KVM
+      run: |-
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: Wear emulator full regression
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 34
+        arch: x86_64
+        target: android-wear
+        profile: wearos_large_round
+        disable-animations: false
+        script: bash tools/emu_wear_full.sh wear/build/outputs/apk/release/wear-minified-debugsigned.apk emulator-evidence/wear-minify
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: wear-minify-evidence
+        path: emulator-evidence/wear-minify/
