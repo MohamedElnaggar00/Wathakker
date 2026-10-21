@@ -169,11 +169,11 @@ fun SettingsContent(sub: Int, w: Float, go: (Int) -> Unit) {
     @Composable
     fun OneUiRow(w: Float, title: String, value: String?, onClick: () -> Unit, trail: (@Composable () -> Unit)? = null) {
         Row(Modifier.fillMaxWidth().heightIn(min = (w * 0.267f).dp).clickable { onClick() }.padding(horizontal = (w * 0.08f).dp, vertical = (w * 0.03f).dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f, fill = false)) {
+            Column(Modifier.weight(1f)) {
                 Text1(title, tx(w * 0.076f, Color.White), maxLines = 2)
                 if (value != null) Text1(value, tx(w * 0.058f, Gold), maxLines = 2)
             }
-            if (trail != null) { Spacer(Modifier.weight(1f)); trail() }
+            if (trail != null) trail()
         }
     }
 
