@@ -514,6 +514,7 @@ fun OneUISegmented(
     androidx.compose.foundation.layout.BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()
+            .height(46.dp)
             .clip(RoundedCornerShape(24.dp))
             .background(cs.surfaceVariant.copy(alpha = 0.55f))
             .padding(4.dp)
