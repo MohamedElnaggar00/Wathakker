@@ -73,10 +73,10 @@ open_settings
 adb shell input swipe 540 1700 540 600 350; sleep 2
 adb shell input swipe 540 1700 540 600 350; sleep 2
 dump "$OUT/ui_settings3.xml"
-XY=$(tap_text "الساعة الذكية" "$OUT/ui_settings3.xml"); echo "watch row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
+XY=$(tap_text "إعدادات الساعة الذكية" "$OUT/ui_settings3.xml"); echo "watch row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
 adb exec-out screencap -p > "$OUT/ar_watch_rest.png"
 dump "$OUT/ui_watch.xml"
-adb shell input swipe 540 1500 540 1100 250; sleep 1
+adb shell input swipe 540 1400 540 900 400; sleep 1
 adb exec-out screencap -p > "$OUT/ar_watch_mid.png"
 adb shell input swipe 540 1700 540 500 350; sleep 2
 adb exec-out screencap -p > "$OUT/ar_watch_collapsed.png"
@@ -86,11 +86,16 @@ dump "$OUT/ui_home.xml"
 XY=$(tap_text "التقويم" "$OUT/ui_home.xml"); echo "cal tab: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
 adb exec-out screencap -p > "$OUT/ar_calendar.png"
 dump "$OUT/ui_cal.xml"
-adb shell screenrecord --time-limit 5 /sdcard/slide.mp4 & REC=$!
+adb shell settings put global animator_duration_scale 8.0
+adb shell screenrecord --time-limit 10 /sdcard/slide.mp4 & REC=$!
 sleep 1
-XY=$(tap_text "المناسبات" "$OUT/ui_cal.xml"); echo "events seg: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 2
-adb exec-out screencap -p > "$OUT/ar_calendar_events.png"
+XY=$(tap_text "المناسبات" "$OUT/ui_cal.xml"); echo "events seg: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+XY=$(tap_text "التقويم" "$OUT/ui_cal.xml"); echo "cal seg back: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
 wait $REC 2>/dev/null
+adb shell settings put global animator_duration_scale 1.0
+sleep 1
+XY=$(tap_text "المناسبات" "$OUT/ui_cal.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 2
+adb exec-out screencap -p > "$OUT/ar_calendar_events.png"
 adb pull /sdcard/slide.mp4 "$OUT/slide.mp4" >/dev/null 2>&1
 if command -v ffmpeg >/dev/null 2>&1 && [ -f "$OUT/slide.mp4" ]; then
   for i in 0 1 2 3 4 5; do ffmpeg -loglevel error -ss $(awk "BEGIN{print 1.0 + $i * 0.35}") -i "$OUT/slide.mp4" -frames:v 1 "$OUT/slide_f$i.png" -y; done
