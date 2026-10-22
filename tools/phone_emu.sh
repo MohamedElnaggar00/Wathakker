@@ -38,6 +38,13 @@ adb shell setprop persist.sys.locale ar-EG
 adb shell setprop ctl.restart zygote
 sleep 18
 adb shell svc power stayon true
+# Fresh install lands on onboarding; skip it + the permission flow deterministically
+# (app_prefs flags), so the navigation evidence starts on the main tabs.
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
+adb shell am force-stop $PKG
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/app_prefs.xml 2>/dev/null || echo MISSING" > "$OUT/app_prefs_before.xml"
+adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/app_prefs.xml" > "$OUT/app_prefs_after.xml"
 tap_desc(){ B=$(grep -o "content-desc=\"$1\"[^>]*" "$2" | grep -o 'bounds="[^"]*"' | head -1); echo "$B" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}'; }
 dump(){ adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$1" >/dev/null 2>&1; }
 
@@ -83,7 +90,7 @@ adb exec-out screencap -p > "$OUT/ar_calendar_events.png"
 wait $REC 2>/dev/null
 adb pull /sdcard/slide.mp4 "$OUT/slide.mp4" >/dev/null 2>&1
 if command -v ffmpeg >/dev/null 2>&1 && [ -f "$OUT/slide.mp4" ]; then
-  for i in 0 1 2 3 4 5; do ffmpeg -loglevel error -ss $(echo "1.0 + $i * 0.35" | bc) -i "$OUT/slide.mp4" -frames:v 1 "$OUT/slide_f$i.png" -y; done
+  for i in 0 1 2 3 4 5; do ffmpeg -loglevel error -ss $(awk "BEGIN{print 1.0 + $i * 0.35}") -i "$OUT/slide.mp4" -frames:v 1 "$OUT/slide_f$i.png" -y; done
 fi
 # Settings: numbers-type segmented control
 adb shell input keyevent 4 >/dev/null 2>&1; sleep 2
