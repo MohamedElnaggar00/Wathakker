@@ -34,16 +34,14 @@ adb shell cmd uimode night yes
 
 # 3.3.3 in-app UI evidence in Arabic RTL: collapsing headers, gear audit, About rows,
 # segmented controls (with a screen recording of the indicator slide).
-adb shell setprop persist.sys.locale ar-EG
-adb shell setprop ctl.restart zygote
-sleep 18
-adb shell svc power stayon true
-# Fresh install lands on onboarding; skip it + the permission flow deterministically
-# (app_prefs flags), so the navigation evidence starts on the main tabs.
+# No locale/zygote restart needed (it killed the emulator in one run): the app is
+# Arabic RTL on its own (app_prefs language defaults to "ar"). Fresh install lands on
+# onboarding; skip it + the permission flow deterministically, so the navigation
+# evidence starts on the main tabs.
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
 adb shell am force-stop $PKG
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/app_prefs.xml 2>/dev/null || echo MISSING" > "$OUT/app_prefs_before.xml"
-adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"
+adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">ar</string></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/app_prefs.xml" > "$OUT/app_prefs_after.xml"
 tap_desc(){ B=$(grep -o "content-desc=\"$1\"[^>]*" "$2" | grep -o 'bounds="[^"]*"' | head -1); echo "$B" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}'; }
 dump(){ adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$1" >/dev/null 2>&1; }
