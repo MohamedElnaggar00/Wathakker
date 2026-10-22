@@ -509,7 +509,6 @@ fun OneUISegmented(
     androidx.compose.runtime.LaunchedEffect(selected) {
         pos.animateTo(selected.toFloat(), tween(280, easing = androidx.compose.animation.core.CubicBezierEasing(0.22f, 0.25f, 0f, 1f)))
     }
-    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val density = LocalDensity.current
     androidx.compose.foundation.layout.BoxWithConstraints(
         modifier = modifier
@@ -524,7 +523,10 @@ fun OneUISegmented(
         val frac = p - kotlin.math.floor(p)
         val stretch = 1f + 0.14f * kotlin.math.sin(Math.PI * frac).toFloat()
         val segWpx = with(density) { segW.toPx() }
-        val startPx = if (rtl) with(density) { (maxWidth - segW * (p + 1f)).toPx() } else segWpx * p
+        // Modifier.offset{} already mirrors its offset in RTL - computing an RTL start here
+        // too would mirror the pill twice and land it on the wrong segment (caught on the
+        // emulator: pill rendered under the unselected option).
+        val startPx = segWpx * p
         val centerPx = startPx + segWpx / 2f
         // sliding blue indicator (behind the labels)
         Box(
