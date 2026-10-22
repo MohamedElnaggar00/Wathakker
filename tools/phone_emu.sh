@@ -56,30 +56,34 @@ dump "$OUT/ui_tabs.xml"
 open_settings
 adb exec-out screencap -p > "$OUT/ar_settings.png"
 dump "$OUT/ui_settings.xml"
-adb shell input swipe 540 1700 540 600 350; sleep 2
-adb shell input swipe 540 1700 540 600 350; sleep 2
+adb shell input swipe 540 1500 540 800 350; sleep 2
 adb exec-out screencap -p > "$OUT/ar_settings_scrolled.png"
 dump "$OUT/ui_settings2.xml"
+# Shrink the window so page content exceeds the viewport: at the full 2400px height the
+# About/Watch pages fit without scrolling and the collapsing header never engages.
+adb shell wm size 1080x900; sleep 3
 # About page: rest, mid-scroll, collapsed
-XY=$(tap_text "حول التطبيق" "$OUT/ui_settings2.xml"); echo "about row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
+for i in 1 2 3; do XY=$(tap_text "حول التطبيق" "$OUT/ui_settings2.xml"); [ -n "$XY" ] && break; adb shell input swipe 540 700 540 300 300; sleep 2; dump "$OUT/ui_settings2.xml"; done
+echo "about row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
 adb exec-out screencap -p > "$OUT/ar_about_rest.png"
 dump "$OUT/ui_about.xml"
-adb shell input swipe 540 1500 540 1200 250; sleep 1
+adb shell input swipe 540 700 540 450 400; sleep 1
 adb exec-out screencap -p > "$OUT/ar_about_mid.png"
-adb shell input swipe 540 1700 540 500 350; sleep 2
+adb shell input swipe 540 800 540 200 350; sleep 2
 adb exec-out screencap -p > "$OUT/ar_about_collapsed.png"
 # Watch settings page: rest, mid-scroll, collapsed
 open_settings
-adb shell input swipe 540 1700 540 600 350; sleep 2
-adb shell input swipe 540 1700 540 600 350; sleep 2
+adb shell input swipe 540 700 540 300 300; sleep 2
+adb shell input swipe 540 700 540 300 300; sleep 2
 dump "$OUT/ui_settings3.xml"
 XY=$(tap_text "إعدادات الساعة الذكية" "$OUT/ui_settings3.xml"); echo "watch row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
 adb exec-out screencap -p > "$OUT/ar_watch_rest.png"
 dump "$OUT/ui_watch.xml"
-adb shell input swipe 540 1400 540 900 400; sleep 1
+adb shell input swipe 540 700 540 450 400; sleep 1
 adb exec-out screencap -p > "$OUT/ar_watch_mid.png"
-adb shell input swipe 540 1700 540 500 350; sleep 2
+adb shell input swipe 540 800 540 200 350; sleep 2
 adb exec-out screencap -p > "$OUT/ar_watch_collapsed.png"
+adb shell wm size reset; sleep 3
 # Calendar tab: segmented control + slide recording
 relaunch
 dump "$OUT/ui_home.xml"
