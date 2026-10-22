@@ -100,7 +100,7 @@ private fun StepSlider(index: Int, count: Int, onChange: (Int, Boolean) -> Unit)
             for (i in 0 until count) {
                 val f = i / (count - 1f)
                 val x = thumbR + usable * f
-                val isDef = kotlin.math.abs(FontScaleSettings.STEPS[i] - 1.0f) < 0.01f
+                val isDef = kotlin.math.abs(FontScaleSettings.STEPS[i] - FontScaleSettings.DEFAULT) < 0.01f
                 val dsz = if (isDef) 10.dp else 8.dp
                 Box(Modifier.offset { IntOffset((x - dsz.toPx() / 2f).roundToInt(), 0) }.size(dsz).clip(CircleShape).background(if (isDef) cs.primary else dotColor))
             }
