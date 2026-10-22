@@ -69,8 +69,10 @@ final class OneUIWidget {
             tB = night ? deep : blend(m, deep, 0.55f);
             tInk = blend(deep, 0xFF000000, night ? 0.78f : 0.68f);
         }
-        // Iqama countdown keeps the flat amber bar in every theme: it is a mode signal, not decoration.
-        if (s.iqama) { barA = 0xFFE5B455; barB = 0xFFE5B455; }
+        // Iqama countdown: the bar takes the selected theme like everything else (his call
+        // 22.10.2026 20:30). The flat amber override stays for the default yellow theme only,
+        // where it is part of the shipped look.
+        if (s.iqama && accent == 0) { barA = 0xFFE5B455; barB = 0xFFE5B455; }
 
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         // card
