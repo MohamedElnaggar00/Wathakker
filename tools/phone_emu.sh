@@ -23,3 +23,11 @@ adb shell am start -S -W -n $PKG/com.example.PatternRenderCheck --ei s 3 >/dev/n
 adb exec-out screencap -p > "$OUT/widget_oneui_applied.png"
 adb shell am start -S -W -n $PKG/com.example.PatternScopeCheck >/dev/null 2>&1; sleep 10; adb exec-out screencap -p > "$OUT/pattern_scope.png"
 adb logcat -d | grep PatternScope > "$OUT/pattern_scope.txt"
+# 3.3.3 accent themes: the OneUI widget in yellow/turquoise/blue/green, dark then light.
+adb shell cmd uimode night yes
+adb shell am start -S -W -n $PKG/com.example.OneUIColorCheck >/dev/null 2>&1; sleep 8
+adb exec-out screencap -p > "$OUT/widget_accent_night.png"
+adb shell cmd uimode night no
+adb shell am start -S -W -n $PKG/com.example.OneUIColorCheck >/dev/null 2>&1; sleep 8
+adb exec-out screencap -p > "$OUT/widget_accent_day.png"
+adb shell cmd uimode night yes

@@ -12,6 +12,28 @@ final class OneUIWidget {
 
     private static float lerp(float a, float b, float t) { return a + (b - a) * t; }
 
+    /** Per-channel ARGB blend: t=0 keeps a, t=1 gives b. */
+    private static int blend(int a, int b, float t) {
+        int r = (int) (((a >> 16) & 0xFF) + ((((b >> 16) & 0xFF) - ((a >> 16) & 0xFF)) * t));
+        int g = (int) (((a >> 8) & 0xFF) + ((((b >> 8) & 0xFF) - ((a >> 8) & 0xFF)) * t));
+        int bl = (int) ((a & 0xFF) + (((b & 0xFF) - (a & 0xFF)) * t));
+        return 0xFF000000 | (r << 16) | (g << 8) | bl;
+    }
+
+    // Accent themes (3.3.3, his call 22.10.2026): 0 = the classic yellow (default, values
+    // unchanged); 1-3 reuse the watch app palette pairs (wear/Settings.kt WTheme.defs:
+    // main, deep) so the widget matches the watch app colours exactly.
+    private static final int[] ACCENT_MAIN = {0xFFFFD85C, 0xFF44CCC0, 0xFF3E9FFE, 0xFF69D043};
+    private static final int[] ACCENT_DEEP = {0xFFEBA800, 0xFF169498, 0xFF3580F8, 0xFF07C364};
+
+    /** Selected accent for a widget instance: fajr_prefs widget_oneui_color_<id>, default 0 (yellow). */
+    static int accentForWidget(android.content.Context c, int widgetId) {
+        if (widgetId <= 0) return 0;
+        int v = c.getSharedPreferences("fajr_prefs", android.content.Context.MODE_PRIVATE)
+                .getInt("widget_oneui_color_" + widgetId, 0);
+        return v >= 1 && v <= 3 ? v : 0;
+    }
+
     static Bitmap render(Context c, HomeWidgets.State s, int wd, int ht, int widgetId) {
         float d = c.getResources().getDisplayMetrics().density;
         Bitmap bmp = Bitmap.createBitmap(Math.max(1, (int) (wd * d)), Math.max(1, (int) (ht * d)), Bitmap.Config.ARGB_8888);
@@ -31,7 +53,23 @@ final class OneUIWidget {
         int ink = night ? 0xFFFFFFFF : 0xFF1C1C1E;
         int soft = night ? 0xFFB4B4BA : 0xFF6C6C74;
         int track = night ? 0xFF4A4A4F : 0xFFDEDEE2;
-        int barA = night ? 0xFFFFD85C : 0xFF55A0FF, barB = night ? 0xFFF5B800 : 0xFF2A6BF0;
+        int accent = accentForWidget(c, widgetId);
+        int barA, barB, tA, tB, tInk;
+        if (accent == 0) {
+            // Classic yellow: the exact shipped values, including the blue day bar.
+            barA = night ? 0xFFFFD85C : 0xFF55A0FF; barB = night ? 0xFFF5B800 : 0xFF2A6BF0;
+            tA = night ? 0xFFFFD85C : 0xFFFFE58F; tB = night ? 0xFFEBA800 : 0xFFFFC93A;
+            tInk = night ? 0xFF2A2200 : 0xFF3A2E00;
+        } else {
+            int m = ACCENT_MAIN[accent], deep = ACCENT_DEEP[accent];
+            barA = m; barB = deep;
+            // Day tile derived like the yellow one: lighter top, mid-toned bottom; ink is a
+            // dark shade of the accent so the date stays readable on the coloured tile.
+            tA = night ? m : blend(m, 0xFFFFFFFF, 0.38f);
+            tB = night ? deep : blend(m, deep, 0.55f);
+            tInk = blend(deep, 0xFF000000, night ? 0.78f : 0.68f);
+        }
+        // Iqama countdown keeps the flat amber bar in every theme: it is a mode signal, not decoration.
         if (s.iqama) { barA = 0xFFE5B455; barB = 0xFFE5B455; }
 
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -96,9 +134,7 @@ final class OneUIWidget {
         HomeWidgets.ovSemi.set(Boolean.TRUE);
         remaining(cv, prefix, value, padX, remY, inner, remSz, reg, bold, soft, ink, d);
 
-        // date tile
-        int tA = night ? 0xFFFFD85C : 0xFFFFE58F, tB = night ? 0xFFEBA800 : 0xFFFFC93A;
-        int tInk = night ? 0xFF2A2200 : 0xFF3A2E00;
+        // date tile (accent colours resolved above)
         RectF tp = new RectF(tile.left * d, 0, tile.right * d, H * d);
         p.setShader(new LinearGradient(0, 0, 0, H * d, tA, tB, Shader.TileMode.CLAMP));
         cv.drawRoundRect(tp, corner * d * 1.05f, corner * d * 1.05f, p);

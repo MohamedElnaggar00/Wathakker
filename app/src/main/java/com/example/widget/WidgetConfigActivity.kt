@@ -68,6 +68,15 @@ private val bgOptions: List<Pair<String, Pair<String, Color>>> = listOf(
     "wallblur" to (L10n.t(S.BgWallBlur) to Color(0xFF7E7EAA))
 )
 
+// Decorated OneUI widget accent choices (3.3.3): default yellow plus the watch app palette.
+// Keys are the theme index as a string so ColorSection can be reused unchanged.
+private val accentOptions: List<Pair<String, Pair<String, Color>>> = listOf(
+    "0" to (L10n.t(S.ColorYellow) to Color(0xFFFFD85C)),
+    "1" to (L10n.t(S.ColorTurquoise) to Color(0xFF44CCC0)),
+    "2" to (L10n.t(S.ColorBlue) to Color(0xFF3E9FFE)),
+    "3" to (L10n.t(S.ColorGreen) to Color(0xFF69D043))
+)
+
 @Composable
 fun ColorSection(title: String, options: List<Pair<String, Pair<String, Color>>>, current: String, onPick: (String) -> Unit, splitAutoSwatch: Boolean = false, captions: Map<String, String> = emptyMap()) {
     val cs = MaterialTheme.colorScheme
@@ -147,12 +156,13 @@ fun PatternSection(selected: Int, onPick: (Int) -> Unit) {
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, showColors: Boolean = true, showPattern: Boolean = true, onApply: (String, String, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
+fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, currentAccent: Int = 0, showColors: Boolean = true, showPattern: Boolean = true, onApply: (String, String, Int, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
     val cs = MaterialTheme.colorScheme
     // Taps only select; nothing is saved or closed until Apply (One UI style).
     var barSel by remember { mutableStateOf(current) }
     var bgSel by remember { mutableStateOf(currentBg) }
     var patSel by remember { mutableStateOf(currentPattern) }
+    var accentSel by remember { mutableStateOf(currentAccent.toString()) }
     Box(
         modifier = Modifier.fillMaxSize().background(cs.background).padding(24.dp),
         contentAlignment = Alignment.Center
@@ -171,11 +181,16 @@ fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, sh
             ) {
                 Text(L10n.t(S.WidgetSettings), color = cs.onSurface, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(12.dp))
-                // The decorated OneUI widget has fixed colours; it gets the pattern section only.
+                // The decorated OneUI widget has fixed bar/bg colours but a selectable accent
+                // (3.3.3): the accent section goes ABOVE the pattern section (his call 22.10.2026).
                 if (showColors) {
                     ColorSection(L10n.t(S.BarColor), options, barSel, { barSel = it }, splitAutoSwatch = true)
                     Spacer(Modifier.height(16.dp))
                     ColorSection(L10n.t(S.BgColor), bgOptions, bgSel, { bgSel = it; if (it == "wallblur") onNeedFilesPermission() }, captions = mapOf("wallblur" to L10n.t(S.NeedsFilesPerm)))
+                    Spacer(Modifier.height(16.dp))
+                }
+                if (showPattern) {
+                    ColorSection(L10n.t(S.WidgetAccent), accentOptions, accentSel, { accentSel = it })
                     Spacer(Modifier.height(16.dp))
                 }
                 // Only the decorated OneUI widget draws patterns; other widgets get colours only.
@@ -189,7 +204,7 @@ fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, sh
                         .height(52.dp)
                         .clip(RoundedCornerShape(26.dp))
                         .background(Color(0xFF377AFF))
-                        .plainClickable { onApply(barSel, bgSel, patSel) },
+                        .plainClickable { onApply(barSel, bgSel, patSel, accentSel.toIntOrNull() ?: 0) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(L10n.t(S.Apply), color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
@@ -236,11 +251,12 @@ class WidgetConfigActivity : ComponentActivity() {
                     current = curBar,
                     currentBg = curBg,
                     currentPattern = sp.getInt(keyFor("widget_pattern"), 1),
+                    currentAccent = sp.getInt(keyFor("widget_oneui_color"), 0),
                     showColors = !decorated,
                     showPattern = decorated,
                     onNeedFilesPermission = { com.example.ui.PermissionFlow.requestFilesIfNeeded(this@WidgetConfigActivity) },
-                    onApply = { bar, bg, pat ->
-                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).apply()
+                    onApply = { bar, bg, pat, accent ->
+                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).putInt(keyFor("widget_oneui_color"), accent).apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
