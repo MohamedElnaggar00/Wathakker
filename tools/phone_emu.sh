@@ -45,8 +45,9 @@ adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"ye
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/app_prefs.xml" > "$OUT/app_prefs_after.xml"
 tap_desc(){ B=$(grep -o "content-desc=\"$1\"[^>]*" "$2" | grep -o 'bounds="[^"]*"' | head -1); echo "$B" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}'; }
 dump(){ adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$1" >/dev/null 2>&1; }
-relaunch(){ adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 10; }
-open_settings(){ relaunch; dump "$OUT/ui_navx.xml"; XY=$(tap_desc "الإعدادات" "$OUT/ui_navx.xml"); echo "gear: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; }
+dismiss_anr(){ for i in 1 2 3 4; do adb shell uiautomator dump /sdcard/ui_anr.xml >/dev/null 2>&1; adb pull /sdcard/ui_anr.xml "$OUT/ui_anr.xml" >/dev/null 2>&1; if grep -q "responding" "$OUT/ui_anr.xml" 2>/dev/null; then XY=$(tap_text "Wait" "$OUT/ui_anr.xml"); if [ -n "$XY" ]; then adb shell input tap $XY; else adb shell input keyevent 4; fi; sleep 4; else break; fi; done; }
+relaunch(){ adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 14; dismiss_anr; sleep 2; }
+open_settings(){ relaunch; dump "$OUT/ui_navx.xml"; XY=$(tap_desc "الإعدادات" "$OUT/ui_navx.xml"); echo "gear: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr; }
 
 relaunch
 adb exec-out screencap -p > "$OUT/ar_tabs.png"
@@ -60,7 +61,7 @@ adb shell input swipe 540 1700 540 600 350; sleep 2
 adb exec-out screencap -p > "$OUT/ar_settings_scrolled.png"
 dump "$OUT/ui_settings2.xml"
 # About page: rest, mid-scroll, collapsed
-XY=$(tap_text "حول التطبيق" "$OUT/ui_settings2.xml"); echo "about row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+XY=$(tap_text "حول التطبيق" "$OUT/ui_settings2.xml"); echo "about row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
 adb exec-out screencap -p > "$OUT/ar_about_rest.png"
 dump "$OUT/ui_about.xml"
 adb shell input swipe 540 1500 540 1200 250; sleep 1
@@ -72,7 +73,7 @@ open_settings
 adb shell input swipe 540 1700 540 600 350; sleep 2
 adb shell input swipe 540 1700 540 600 350; sleep 2
 dump "$OUT/ui_settings3.xml"
-XY=$(tap_text "الساعة الذكية" "$OUT/ui_settings3.xml"); echo "watch row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+XY=$(tap_text "الساعة الذكية" "$OUT/ui_settings3.xml"); echo "watch row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
 adb exec-out screencap -p > "$OUT/ar_watch_rest.png"
 dump "$OUT/ui_watch.xml"
 adb shell input swipe 540 1500 540 1100 250; sleep 1
@@ -82,7 +83,7 @@ adb exec-out screencap -p > "$OUT/ar_watch_collapsed.png"
 # Calendar tab: segmented control + slide recording
 relaunch
 dump "$OUT/ui_home.xml"
-XY=$(tap_text "التقويم" "$OUT/ui_home.xml"); echo "cal tab: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+XY=$(tap_text "التقويم" "$OUT/ui_home.xml"); echo "cal tab: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; dismiss_anr
 adb exec-out screencap -p > "$OUT/ar_calendar.png"
 dump "$OUT/ui_cal.xml"
 adb shell screenrecord --time-limit 5 /sdcard/slide.mp4 & REC=$!
