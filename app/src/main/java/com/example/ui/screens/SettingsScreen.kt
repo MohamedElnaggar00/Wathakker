@@ -349,33 +349,11 @@ private fun DigitsStyleRow() {
     androidx.compose.foundation.layout.Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
         androidx.compose.material3.Text("نوع الأرقام", color = cs.onSurface, fontSize = 16.sp)
         androidx.compose.foundation.layout.Spacer(Modifier.height(10.dp))
-        androidx.compose.foundation.layout.Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
-                .background(cs.surfaceVariant.copy(alpha = 0.55f))
-                .padding(4.dp)
-        ) {
-            listOf(true to "أرقام هندية  \u0661\u0662\u0663", false to "أرقام عربية  1234").forEach { (h, label) ->
-                val active = hindi == h
-                androidx.compose.foundation.layout.Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
-                        .background(if (active) cs.surface else androidx.compose.ui.graphics.Color.Transparent)
-                        .plainClickable { com.example.utils.Digits.set(ctx, h) }
-                        .padding(vertical = 9.dp, horizontal = 6.dp),
-                    contentAlignment = androidx.compose.ui.Alignment.Center
-                ) {
-                    androidx.compose.material3.Text(
-                        label,
-                        color = if (active) cs.onSurface else cs.onSurfaceVariant,
-                        fontSize = 14.sp,
-                        fontWeight = if (active) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Medium,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center, maxLines = 1
-                    )
-                }
-            }
-        }
+        // 3.3.3: shared One UI segmented control (joined container, sliding blue indicator).
+        com.example.ui.oneui.OneUISegmented(
+            options = listOf("أرقام هندية  ١٢٣", "أرقام عربية  1234"),
+            selected = if (hindi) 0 else 1,
+            onSelect = { com.example.utils.Digits.set(ctx, it == 0) }
+        )
     }
 }

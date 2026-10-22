@@ -31,3 +31,64 @@ adb shell cmd uimode night no
 adb shell am start -S -W -n $PKG/com.example.OneUIColorCheck >/dev/null 2>&1; sleep 8
 adb exec-out screencap -p > "$OUT/widget_accent_day.png"
 adb shell cmd uimode night yes
+
+# 3.3.3 in-app UI evidence in Arabic RTL: collapsing headers, gear audit, About rows,
+# segmented controls (with a screen recording of the indicator slide).
+adb shell setprop persist.sys.locale ar-EG
+adb shell setprop ctl.restart zygote
+sleep 18
+adb shell svc power stayon true
+tap_desc(){ B=$(grep -o "content-desc=\"$1\"[^>]*" "$2" | grep -o 'bounds="[^"]*"' | head -1); echo "$B" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}'; }
+dump(){ adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$1" >/dev/null 2>&1; }
+
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12
+adb exec-out screencap -p > "$OUT/ar_tabs.png"
+dump "$OUT/ui_tabs.xml"
+# open Settings via the gear
+XY=$(tap_desc "الإعدادات" "$OUT/ui_tabs.xml"); echo "gear: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+adb exec-out screencap -p > "$OUT/ar_settings.png"
+dump "$OUT/ui_settings.xml"
+# scroll to reveal About + Watch rows
+adb shell input swipe 540 1700 540 700 300; sleep 2
+adb exec-out screencap -p > "$OUT/ar_settings_scrolled.png"
+dump "$OUT/ui_settings2.xml"
+# About page: rest, mid-scroll, collapsed
+XY=$(tap_text "حول التطبيق" "$OUT/ui_settings2.xml"); echo "about row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+adb exec-out screencap -p > "$OUT/ar_about_rest.png"
+adb shell input swipe 540 1500 540 1200 250; sleep 1
+adb exec-out screencap -p > "$OUT/ar_about_mid.png"
+adb shell input swipe 540 1700 540 500 350; sleep 2
+adb exec-out screencap -p > "$OUT/ar_about_collapsed.png"
+adb shell input keyevent 4; sleep 3
+# Watch settings page: rest, mid-scroll, collapsed
+dump "$OUT/ui_settings3.xml"
+XY=$(tap_text "إعدادات الساعة الذكية" "$OUT/ui_settings3.xml"); echo "watch row: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+adb exec-out screencap -p > "$OUT/ar_watch_rest.png"
+adb shell input swipe 540 1500 540 1100 250; sleep 1
+adb exec-out screencap -p > "$OUT/ar_watch_mid.png"
+adb shell input swipe 540 1700 540 500 350; sleep 2
+adb exec-out screencap -p > "$OUT/ar_watch_collapsed.png"
+adb shell input keyevent 4; sleep 3
+# Calendar tab: segmented control + slide recording
+dump "$OUT/ui_settings4.xml"
+adb shell input keyevent 4; sleep 3
+dump "$OUT/ui_home.xml"
+XY=$(tap_text "التقويم" "$OUT/ui_home.xml"); echo "cal tab: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+adb exec-out screencap -p > "$OUT/ar_calendar.png"
+dump "$OUT/ui_cal.xml"
+adb shell screenrecord --time-limit 5 /sdcard/slide.mp4 & REC=$!
+sleep 1
+XY=$(tap_text "المناسبات" "$OUT/ui_cal.xml"); echo "events seg: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 2
+adb exec-out screencap -p > "$OUT/ar_calendar_events.png"
+wait $REC 2>/dev/null
+adb pull /sdcard/slide.mp4 "$OUT/slide.mp4" >/dev/null 2>&1
+if command -v ffmpeg >/dev/null 2>&1 && [ -f "$OUT/slide.mp4" ]; then
+  for i in 0 1 2 3 4 5; do ffmpeg -loglevel error -ss $(echo "1.0 + $i * 0.35" | bc) -i "$OUT/slide.mp4" -frames:v 1 "$OUT/slide_f$i.png" -y; done
+fi
+# Settings: numbers-type segmented control
+adb shell input keyevent 4 >/dev/null 2>&1; sleep 2
+dump "$OUT/ui_home2.xml"
+XY=$(tap_desc "الإعدادات" "$OUT/ui_home2.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 4
+dump "$OUT/ui_set5.xml"
+XY=$(tap_text "أرقام عربية  1234" "$OUT/ui_set5.xml"); echo "digits seg: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+adb exec-out screencap -p > "$OUT/ar_digits_toggled.png"

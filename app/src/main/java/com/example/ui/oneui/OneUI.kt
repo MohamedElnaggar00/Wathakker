@@ -9,6 +9,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import com.example.utils.plainClickable
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.graphics.graphicsLayer
@@ -147,8 +149,12 @@ fun OneUIScreen(
             else (listState.firstVisibleItemScrollOffset / expandedPx).coerceIn(0f, 1f)
         }
     }
-    val barAlpha by animateFloatAsState(fraction, tween(180), label = "barAlpha")
-    val tileAlpha by animateFloatAsState(if (alwaysShowHeaderTiles) 1f else if (frost == null) (if (fraction > 0.02f) 1f else 0f) else fraction, tween(180), label = "tileAlpha")
+    // One UI collapse timing (3.3.3): the large title scrolls away and fades over the first
+    // third (alpha 1-3f in the header item); the collapsed bar title and the pills fade in
+    // only over the last third, so the two titles never draw on top of each other.
+    val barFraction = ((fraction - 0.66f) / 0.34f).coerceIn(0f, 1f)
+    val barAlpha by animateFloatAsState(barFraction, tween(180), label = "barAlpha")
+    val tileAlpha by animateFloatAsState(if (alwaysShowHeaderTiles) 1f else if (frost == null) barFraction else fraction, tween(180), label = "tileAlpha")
     val hazeState = LocalHazeState.current
 
     Box(modifier = modifier.fillMaxSize().background(containerColor)) {
@@ -276,9 +282,10 @@ fun OneUIScreen(
                 )
                 }
             }
-            // On the Settings screen the gear is suppressed, so the trailing group would be an
-            // empty tile (the faint ghost pill). Skip the group entirely in that case.
-            val showSettingsButton = !HeaderTools.isOnSettings()
+            // Gear belongs to top-level pages only (3.3.3, his call): a sub-page (onBack != null)
+            // shows just the back arrow, so the gear can no longer stack Settings over sub-pages.
+            // On the Settings screen itself it is also suppressed (no empty ghost tile).
+            val showSettingsButton = onBack == null && !HeaderTools.isOnSettings()
             if (showSettingsButton || actions != null) {
                 Box {
                     Box(Modifier.matchParentSize().alpha(tileAlpha).then(HeaderTools.glassTile(Modifier, frost)))
@@ -477,6 +484,78 @@ fun OneUISearchField(
                 cursorBrush = SolidColor(cs.primary),
                 modifier = Modifier.fillMaxWidth().then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier)
             )
+        }
+    }
+}
+
+/**
+ * One UI two-option segmented control (3.3.3, his spec): one joined container; the selected
+ * segment gets the existing Hisn chip look (blue-tinted fill primary 16%, blue text); the
+ * unselected segment stays plain. The blue indicator slides between segments with the One UI
+ * basic path interpolator cubic-bezier(0.22, 0.25, 0.00, 1.00) over 280ms (Samsung motion
+ * guidance: 100-500ms depending on object size - developer.samsung.com/one-ui/motion/basic.html),
+ * with a subtle in-flight stretch like the platform indicators.
+ */
+@Composable
+fun OneUISegmented(
+    options: List<String>,
+    selected: Int,
+    onSelect: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    maxLines: Int = 1
+) {
+    val cs = MaterialTheme.colorScheme
+    val pos = remember { androidx.compose.animation.core.Animatable(selected.toFloat()) }
+    androidx.compose.runtime.LaunchedEffect(selected) {
+        pos.animateTo(selected.toFloat(), tween(280, easing = androidx.compose.animation.core.CubicBezierEasing(0.22f, 0.25f, 0f, 1f)))
+    }
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val density = LocalDensity.current
+    androidx.compose.foundation.layout.BoxWithConstraints(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(24.dp))
+            .background(cs.surfaceVariant.copy(alpha = 0.55f))
+            .padding(4.dp)
+    ) {
+        val segW = maxWidth / options.size
+        val p = pos.value
+        val frac = p - kotlin.math.floor(p)
+        val stretch = 1f + 0.14f * kotlin.math.sin(Math.PI * frac).toFloat()
+        val segWpx = with(density) { segW.toPx() }
+        val startPx = if (rtl) with(density) { (maxWidth - segW * (p + 1f)).toPx() } else segWpx * p
+        val centerPx = startPx + segWpx / 2f
+        // sliding blue indicator (behind the labels)
+        Box(
+            Modifier
+                .fillMaxHeight()
+                .width(segW * stretch)
+                .offset { androidx.compose.ui.unit.IntOffset((centerPx - segWpx * stretch / 2f).toInt(), 0) }
+                .clip(RoundedCornerShape(20.dp))
+                .background(cs.primary.copy(alpha = 0.16f))
+        )
+        Row(Modifier.fillMaxWidth()) {
+            options.forEachIndexed { i, label ->
+                val active = i == selected
+                val textColor by animateColorAsState(if (active) cs.primary else cs.onSurfaceVariant, label = "segText")
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(20.dp))
+                        .plainClickable { onSelect(i) }
+                        .padding(vertical = 9.dp, horizontal = 6.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        label,
+                        color = textColor,
+                        fontSize = 14.sp,
+                        fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                        textAlign = TextAlign.Center,
+                        maxLines = maxLines
+                    )
+                }
+            }
         }
     }
 }

@@ -256,34 +256,14 @@ fun HijriConverterScreen(onBack: (() -> Unit)? = null) {
         item(key = "direction") {
             // One UI segmented control (same pill as the Calendar / Events switch): two
             // exclusive directions, the box below shows the matching fields and month list.
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 6.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(cs.surfaceVariant.copy(alpha = 0.55f))
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                listOf(false to L10n.t(S.GregToHijri), true to L10n.t(S.HijriToGreg)).forEach { (dir, label) ->
-                    val active = hijriToG == dir
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(if (active) cs.surface else Color.Transparent)
-                            .plainClickable { hijriToG = dir }
-                            .padding(vertical = 9.dp, horizontal = 6.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            label,
-                            color = if (active) cs.onSurface else cs.onSurfaceVariant,
-                            fontSize = 14.sp, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
-                            textAlign = TextAlign.Center, maxLines = 2
-                        )
-                    }
-                }
+            // 3.3.3: shared One UI segmented control (joined container, sliding blue indicator).
+            Box(Modifier.padding(horizontal = 20.dp, vertical = 6.dp)) {
+                com.example.ui.oneui.OneUISegmented(
+                    options = listOf(L10n.t(S.GregToHijri), L10n.t(S.HijriToGreg)),
+                    selected = if (hijriToG) 1 else 0,
+                    onSelect = { hijriToG = it == 1 },
+                    maxLines = 2
+                )
             }
         }
         item(key = "box") {

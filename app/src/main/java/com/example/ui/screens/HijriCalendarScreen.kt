@@ -74,33 +74,13 @@ fun HijriCalendarScreen(onMenu: (() -> Unit)? = null) {
 
     OneUIScreen(title = L10n.t(S.CalendarTab), onMenu = onMenu) {
         item(key = "toggle") {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 6.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(cs.surfaceVariant.copy(alpha = 0.55f))
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                listOf(false to L10n.t(S.CalendarTab), true to L10n.t(S.CalEvents)).forEach { (ev, label) ->
-                    val active = showEvents == ev
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(if (active) cs.surface else Color.Transparent)
-                            .plainClickable { showEvents = ev }
-                            .padding(vertical = 9.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            label,
-                            color = if (active) cs.onSurface else cs.onSurfaceVariant,
-                            fontSize = 14.sp, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium
-                        )
-                    }
-                }
+            // 3.3.3: shared One UI segmented control (joined container, sliding blue indicator).
+            Box(Modifier.padding(horizontal = 20.dp, vertical = 6.dp)) {
+                com.example.ui.oneui.OneUISegmented(
+                    options = listOf(L10n.t(S.CalendarTab), L10n.t(S.CalEvents)),
+                    selected = if (showEvents) 1 else 0,
+                    onSelect = { showEvents = it == 1 }
+                )
             }
         }
         if (showEvents) {

@@ -46,7 +46,7 @@ internal val AR = mapOf(
     S.NoFavChapters to "لا توجد أبواب مفضلة", S.NoResults to "لا توجد نتائج", S.ReadTodaySuffix to " · تمت قراءته اليوم",
     S.AddToMyAzkar to "أضف إلى أذكاري", S.AddedToMyAzkar to "تمت الإضافة", S.Done to "تم",
     S.Tagline to "تطبيق يساعدك على المحافظة على أذكارك في يومك وليلتك", S.Version to "الإصدار", S.Developer to "المطوّر",
-    S.DevName to "محمد النجار", S.HisnCredit to "المحتوى من مشروع HisnElmoslem (مرخّص بـ GPL v3)",
+    S.DevName to "محمد النجار", S.HisnCredit to "المحتوى من مشروع HisnElmoslem (مرخّص بـ \u2066GPL v3\u2069)",
     S.InstinctCredit to "بُني بالتعاون مع Instinct", S.Dua to "لا تنسونا من صالح دعائكم",
     S.Font to "الخط", S.FontLight to "خط التطبيق الخفيف", S.FontBold to "خط التطبيق العريض", S.FontSystem to "خط النظام",
     S.FontCairo to "خط القاهرة", S.FontNaskh to "خط النسخ", S.FontAmiri to "خط أميري", S.FontRuqaa to "خط الرقعة (للمناسبات)",
