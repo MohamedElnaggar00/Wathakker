@@ -1,0 +1,50 @@
+name: Exact release APK check on emulator (NO RELEASE)
+'on':
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'build-apk run id whose app-release artifact to check'
+        required: true
+permissions:
+  contents: read
+  actions: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - kind: tablet
+            profile: pixel_tablet
+          - kind: phone
+            profile: pixel_6
+    steps:
+    - uses: actions/checkout@v4
+    - name: Download the CI release APK
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |-
+        mkdir -p dl
+        gh run download ${{ inputs.run_id }} --repo ${{ github.repository }} -n app-release-bom-2025.10.01.apk -D dl
+        ls -la dl
+    - name: Enable KVM
+      run: |-
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: Emulator check
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 34
+        arch: x86_64
+        target: google_apis
+        profile: ${{ matrix.profile }}
+        disable-animations: false
+        script: bash tools/release_check.sh dl/app-release-unsigned.apk evidence/${{ matrix.kind }} ${{ matrix.kind }}
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: release-check-${{ matrix.kind }}
+        path: evidence/
