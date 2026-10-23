@@ -48,6 +48,16 @@ class WidgetSharpCheck : Activity() {
                 }
             }
             val info = mgr.getAppWidgetInfo(id) ?: continue
+            run {
+                // Behave like a launcher: report the real box (dp) to the provider, both as MIN/MAX and as OPTION_APPWIDGET_SIZES.
+                val o = Bundle()
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, cellW)
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, hs[i])
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, cellW)
+                o.putInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, hs[i])
+                if (android.os.Build.VERSION.SDK_INT >= 31) o.putParcelableArrayList(AppWidgetManager.OPTION_APPWIDGET_SIZES, arrayListOf(android.util.SizeF(cellW.toFloat(), hs[i].toFloat())))
+                mgr.updateAppWidgetOptions(id, o)
+            }
             val v = host.createView(this, id, info)
             val lp = android.widget.GridLayout.LayoutParams().apply { width = (cellW * d).toInt(); height = (hs[i] * d).toInt(); topMargin = (6 * d).toInt() }
             root.addView(v, lp); views.add(v)
