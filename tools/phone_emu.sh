@@ -103,9 +103,118 @@ adb pull /sdcard/slide.mp4 "$OUT/slide.mp4" >/dev/null 2>&1
 if command -v ffmpeg >/dev/null 2>&1 && [ -f "$OUT/slide.mp4" ]; then
   for i in 0 1 2 3 4 5; do ffmpeg -loglevel error -ss $(awk "BEGIN{print 1.0 + $i * 0.35}") -i "$OUT/slide.mp4" -frames:v 1 "$OUT/slide_f$i.png" -y; done
 fi
-# Settings: numbers-type segmented control (toggle to the other option)
+# ===== 3.3.3 chip groups: sliding selection pill (his spec: animation ONLY, no joined container)
+record_tap(){
+  adb shell settings put global animator_duration_scale 8.0
+  adb shell screenrecord --time-limit 10 /sdcard/$1.mp4 & REC=$!
+  sleep 1
+  XY=$(tap_text "$3" "$2"); echo "$1 tap [$3]: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 6
+  wait $REC 2>/dev/null
+  adb shell settings put global animator_duration_scale 1.0
+  adb pull /sdcard/$1.mp4 "$OUT/$1.mp4" >/dev/null 2>&1
+  if command -v ffmpeg >/dev/null 2>&1 && [ -f "$OUT/$1.mp4" ]; then
+    for i in 0 1 2 3 4 5 6 7; do ffmpeg -loglevel error -ss $(awk "BEGIN{print 1.2 + $i * 0.5}") -i "$OUT/$1.mp4" -frames:v 1 "$OUT/$1_f$i.png" -y; done
+  fi
+}
+# Hisn الكل/المفضلة + favorite one chapter + full-collection search from favorites
+relaunch
+dump "$OUT/ui_tabs2.xml"
+XY=$(tap_text "حصن المسلم" "$OUT/ui_tabs2.xml"); echo "hisn tab: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 5; dismiss_anr
+adb exec-out screencap -p > "$OUT/hisn_chips_before.png"
+dump "$OUT/ui_hisn.xml"
+python3 - "$OUT/ui_hisn.xml" > /tmp/star_xy.txt << 'PYS'
+import sys, re
+xml = open(sys.argv[1]).read()
+row = re.search(r'text="أذكار الصباح"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"', xml)
+stars = re.findall(r'content-desc="المفضلة"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"', xml)
+if row and stars:
+    ry = (int(row.group(2)) + int(row.group(4))) / 2
+    best = min(stars, key=lambda b: abs((int(b[1]) + int(b[3])) / 2 - ry))
+    print(int((int(best[0]) + int(best[2])) / 2), int((int(best[1]) + int(best[3])) / 2))
+PYS
+SXY=$(cat /tmp/star_xy.txt); echo "first chapter star: $SXY" >> "$OUT/ui_nav.txt"; [ -n "$SXY" ] && adb shell input tap $SXY; sleep 2
+record_tap hisn_slide "$OUT/ui_hisn.xml" "المفضلة"
+adb exec-out screencap -p > "$OUT/hisn_chips_favorites.png"
+dump "$OUT/ui_hisn_fav.xml"
+# favorites-only view must show أذكار الصباح and NOT أذكار المساء
+python3 - "$OUT" << 'PYF'
+import sys
+out = sys.argv[1]
+xml = open(out + '/ui_hisn_fav.xml').read()
+lines = []
+lines.append('favorites view has أذكار الصباح (favorited): ' + str('أذكار الصباح' in xml))
+lines.append('favorites view hides أذكار المساء (not favorited): ' + str('أذكار المساء' not in xml))
+open(out + '/hisn_fav_check.txt', 'w').write('\n'.join(lines) + '\n')
+PYF
+# search FROM the favorites filter: query must span the whole collection, matching favorite pinned first
+XY=$(tap_desc "ابحث في حصن المسلم" "$OUT/ui_hisn_fav.xml"); echo "search icon: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+adb shell input text "أذكار"; sleep 2
+dump "$OUT/ui_search_probe.xml"
+python3 - "$OUT/ui_search_probe.xml" > /tmp/typed.txt << 'PYT'
+import sys, re
+xml = open(sys.argv[1]).read()
+m = re.search(r'class="android\.widget\.EditText"[^>]*text="([^"]*)"', xml)
+print((m.group(1) if m else ''))
+PYT
+if ! grep -q "أذكار" /tmp/typed.txt; then
+  echo "input text dropped Arabic - trying ADBKeyBoard fallback" >> "$OUT/ui_nav.txt"
+  curl -sL -o /tmp/adbkb.apk https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyBoard.apk && adb install -r /tmp/adbkb.apk >/dev/null 2>&1 && adb shell ime set com.android.adbkeyboard/.AdbIME && sleep 2 && adb shell am broadcast -a ADB_INPUT_B64 --es msg "$(printf 'أذكار' | base64)"; sleep 3
+fi
+adb shell input keyevent 4; sleep 2
+dump "$OUT/ui_hisn_search.xml"
+adb exec-out screencap -p > "$OUT/hisn_search_favorites.png"
+python3 - "$OUT" << 'PYQ'
+import sys
+out = sys.argv[1]
+xml = open(out + '/ui_hisn_search.xml').read()
+i1 = xml.find('أذكار الصباح')
+i2 = xml.find('أذكار المساء')
+lines = []
+lines.append('query typed (أذكار in field): ' + str('أذكار' in xml))
+lines.append('full-collection search from favorites: أذكار المساء (not favorited) present: ' + str(i2 > 0))
+lines.append('matching favorite pinned first: ' + str(i1 > 0 and i2 > 0 and i1 < i2))
+open(out + '/hisn_search_check.txt', 'w').write('\n'.join(lines) + '\n')
+PYQ
+# Reminders tags chip group
+relaunch
+dump "$OUT/ui_tabs4.xml"
+XY=$(tap_text "التذكيرات" "$OUT/ui_tabs4.xml"); echo "azkar tab: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 5; dismiss_anr
+adb exec-out screencap -p > "$OUT/azkar_chips_before.png"
+dump "$OUT/ui_azkar.xml"
+record_tap azkar_slide "$OUT/ui_azkar.xml" "أذكار الصباح"
+adb exec-out screencap -p > "$OUT/azkar_chips_after.png"
+# Fajr alarm before/after chip rows (via drawer)
+relaunch
+dump "$OUT/ui_tabs3.xml"
+XY=$(tap_desc "القائمة" "$OUT/ui_tabs3.xml"); echo "drawer: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+dump "$OUT/ui_drawer.xml"
+XY=$(tap_text "منبه صلاة الفجر" "$OUT/ui_drawer.xml"); echo "fajr drawer item: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 5; dismiss_anr
+adb exec-out screencap -p > "$OUT/fajr_chips_before.png"
+dump "$OUT/ui_fajr.xml"
+record_tap fajr_slide "$OUT/ui_fajr.xml" "5 دقائق"
+adb exec-out screencap -p > "$OUT/fajr_chips_after.png"
+# ===== 3.3.3 digits selector: example labels invariant under the global numeral setting (his spec: the ONLY exempt place)
 open_settings
 adb shell input swipe 540 1700 540 600 350; sleep 2
-dump "$OUT/ui_set5.xml"
-XY=$(tap_text "أرقام عربية  1234" "$OUT/ui_set5.xml"); echo "digits seg: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
-adb exec-out screencap -p > "$OUT/ar_digits_toggled.png"
+dump "$OUT/ui_digits_latin.xml"
+adb exec-out screencap -p > "$OUT/digits_latin_selected.png"
+XY=$(tap_text "أرقام هندية  ١٢٣" "$OUT/ui_digits_latin.xml"); echo "digits hindi opt: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+dump "$OUT/ui_digits_hindi.xml"
+adb exec-out screencap -p > "$OUT/digits_hindi_selected.png"
+relaunch
+dump "$OUT/ui_tabs_hindi.xml"
+python3 - "$OUT" << 'PYD'
+import sys, re
+out = sys.argv[1]
+latin = open(out + '/ui_digits_latin.xml').read()
+hindi = open(out + '/ui_digits_hindi.xml').read()
+tabs = open(out + '/ui_tabs_hindi.xml').read()
+h = 'أرقام هندية  ١٢٣'
+a = 'أرقام عربية  1234'
+lines = []
+lines.append('latin selected - هندية label literal: ' + str(h in latin) + ' / عربية label literal: ' + str(a in latin))
+lines.append('hindi selected - هندية label literal: ' + str(h in hindi) + ' / عربية label literal: ' + str(a in hindi))
+lines.append('labels invariant under both settings: ' + str(h in latin and a in latin and h in hindi and a in hindi))
+lines.append('global conversion still active elsewhere (Indic digits on tabs after selecting هندية): ' + str(bool(re.search(r'[٠-٩]', tabs))))
+open(out + '/digits_check.txt', 'w').write('\n'.join(lines) + '\n')
+PYD

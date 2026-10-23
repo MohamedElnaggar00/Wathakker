@@ -30,7 +30,7 @@ public final class WidgetPreviews {
         if (Build.VERSION.SDK_INT < 35) return;
         final Context c = ctx.getApplicationContext();
         final String key = pkgVersion(c) + "|" + HomeWidgets.lang(c) + "|"
-                + (c.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) + "|" + c.getSharedPreferences("app_prefs", 0).getString("digits_style", "latin");
+                + (c.getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) + "|" + c.getSharedPreferences("app_prefs", 0).getString("digits_style", "latin") + "|p2";
         final SharedPreferences sp = c.getSharedPreferences("preview_prefs", 0);
         if (key.equals(sp.getString("generated", null))) return;
         synchronized (WidgetPreviews.class) {
@@ -66,22 +66,22 @@ public final class WidgetPreviews {
         int ok = 0;
         HomeWidgets.batchState.set(st);
         try {
-            String[] kinds = {"Hero", "HeroLarge", "NextPrayer", "PrayerBar", "Schedule", "DayPrayer", "Pill", "Clock", "Hijri", "Gregorian", "OneUI"};
+            String[] kinds = {"Hero", "NextPrayer", "PrayerBar", "Schedule", "DayPrayer", "Pill", "Clock", "Hijri", "Gregorian", "OneUI"};
             for (String kind : kinds) {
                 try {
                     boolean one = kind.equals("OneUI");
                     // Sizes follow each widget's target cell span (cell ~80x90dp) so the preview has the same aspect as the picker box and is never stretched.
                     int wd, ht;
                     switch (kind) {
-                        case "HeroLarge": wd = 330; ht = 185; break;
                         case "Hero": case "Schedule": case "OneUI": wd = 330; ht = 90; break;
                         case "Clock": wd = 240; ht = 90; break;
-                        case "Hijri": case "Gregorian": case "NextPrayer": wd = 82; ht = 90; break;
+                        case "Hijri": case "Gregorian": wd = 82; ht = 90; break;
+                        case "NextPrayer": wd = 160; ht = 90; break; // 3.3.3: default footprint now 2 wide x 1 tall (his spec)
                         default: wd = 160; ht = 82; break; // 2x1: PrayerBar, DayPrayer, Pill
                     }
                     RemoteViews v = new RemoteViews(c.getPackageName(), res(c, "layout", "home_prayer_art_fit"));
                     HomeWidgets.ovBegin();
-                    Bitmap b = HomeWidgets.renderKind(c, kind.equals("HeroLarge") ? "Hero" : kind, wd, ht, 0);
+                    Bitmap b = HomeWidgets.renderKind(c, kind, wd, ht, 0);
                     v.setImageViewBitmap(res(c, "id", "home_prayer_image"), b);
                     HomeWidgets.ovApply(c, v, b.getWidth(), b.getHeight());
                     if (set(m, c, "com.example.widget." + kind + "WidgetProvider", v)) ok++;

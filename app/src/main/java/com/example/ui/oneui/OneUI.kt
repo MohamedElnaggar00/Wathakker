@@ -27,6 +27,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -502,7 +509,8 @@ fun OneUISegmented(
     selected: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    maxLines: Int = 1
+    maxLines: Int = 1,
+    rawLabels: Boolean = false
 ) {
     val cs = MaterialTheme.colorScheme
     val pos = remember { androidx.compose.animation.core.Animatable(selected.toFloat()) }
@@ -549,14 +557,29 @@ fun OneUISegmented(
                         .padding(vertical = 9.dp, horizontal = 6.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        label,
-                        color = textColor,
-                        fontSize = 14.sp,
-                        fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
-                        textAlign = TextAlign.Center,
-                        maxLines = maxLines
-                    )
+                    // rawLabels: render without the app-wide digit conversion (DigitText). Only the
+                    // digits-style selector itself uses this - its two example labels must stay
+                    // literal under both numeral settings (his spec: that selector is the ONLY
+                    // place exempt from the global digits conversion).
+                    if (rawLabels) {
+                        androidx.compose.material3.Text(
+                            label,
+                            color = textColor,
+                            fontSize = 14.sp,
+                            fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                            textAlign = TextAlign.Center,
+                            maxLines = maxLines
+                        )
+                    } else {
+                        Text(
+                            label,
+                            color = textColor,
+                            fontSize = 14.sp,
+                            fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                            textAlign = TextAlign.Center,
+                            maxLines = maxLines
+                        )
+                    }
                 }
             }
         }
@@ -594,6 +617,94 @@ fun OneUIChip(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
+    }
+}
+
+/** One chip entry in a OneUIChipGroup: label plus optional colored dot (tag chips). */
+class OneUIChipItem(val label: String, val dot: Color? = null)
+
+/**
+ * One UI chip row with a sliding selection pill (3.3.3, his spec: "انميشن الانتقال السلس بين هذه
+ * الازرار" - animation ONLY, no joined container; the chips keep the exact OneUIChip look, size
+ * and spacing). Instead of each chip's fill cross-fading, one blue pill slides from the old chip
+ * to the new one with the One UI basic path interpolator cubic-bezier(0.22, 0.25, 0.00, 1.00)
+ * over 280ms (developer.samsung.com/one-ui/motion/basic.html: 100-500ms by object size).
+ * Implementation: the pill is drawn in drawBehind on the scrolling Row, so it rides the same
+ * scrolled content as the chips with no viewport/scroll math. Chip positions come from
+ * onGloballyPositioned boundsInParent() against that same Row - one raw coordinate space, no
+ * manual RTL mirroring (Modifier.offset would mirror twice; drawBehind never mirrors). x and
+ * width are two Animatables so the pill stretches in flight like the platform indicators.
+ * A selected index outside the list (stored value not among the options) draws no pill.
+ */
+@Composable
+fun OneUIChipGroup(
+    items: List<OneUIChipItem>,
+    selected: Int,
+    onSelect: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val cs = MaterialTheme.colorScheme
+    val pillColor = cs.primary.copy(alpha = 0.16f)
+    val chipBounds = remember { mutableStateMapOf<Int, androidx.compose.ui.geometry.Rect>() }
+    val animX = remember { androidx.compose.animation.core.Animatable(0f) }
+    val animW = remember { androidx.compose.animation.core.Animatable(0f) }
+    var pillReady by remember { mutableStateOf(false) }
+    val target = chipBounds[selected]
+    androidx.compose.runtime.LaunchedEffect(selected, target) {
+        val b = target
+        if (selected < 0 || b == null) { pillReady = false; return@LaunchedEffect }
+        val easing = androidx.compose.animation.core.CubicBezierEasing(0.22f, 0.25f, 0f, 1f)
+        if (!pillReady) {
+            animX.snapTo(b.left); animW.snapTo(b.width); pillReady = true
+        } else {
+            launch { animX.animateTo(b.left, tween(280, easing = easing)) }
+            launch { animW.animateTo(b.width, tween(280, easing = easing)) }
+        }
+    }
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .horizontalScroll(androidx.compose.foundation.rememberScrollState())
+            .drawBehind {
+                if (pillReady) {
+                    drawRoundRect(
+                        color = pillColor,
+                        topLeft = androidx.compose.ui.geometry.Offset(animX.value, 0f),
+                        size = androidx.compose.ui.geometry.Size(animW.value, size.height),
+                        cornerRadius = androidx.compose.ui.geometry.CornerRadius(size.height / 2f)
+                    )
+                }
+            },
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items.forEachIndexed { i, chip ->
+            val active = i == selected
+            val textColor by animateColorAsState(if (active) cs.primary else cs.onSurface, label = "grpText")
+            val chipBg by animateColorAsState(if (active) Color.Transparent else cs.surface, label = "grpBg")
+            val tapChip = com.example.utils.AppHaptics.tap { onSelect(i) }
+            Row(
+                modifier = Modifier
+                    .onGloballyPositioned { chipBounds[i] = it.boundsInParent() }
+                    .height(38.dp)
+                    .clip(CircleShape)
+                    .background(chipBg)
+                    .clickable(onClick = tapChip)
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (chip.dot != null) {
+                    Box(modifier = Modifier.size(9.dp).clip(CircleShape).background(chip.dot))
+                    Spacer(modifier = Modifier.width(7.dp))
+                }
+                Text(
+                    chip.label,
+                    color = textColor,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
     }
 }
 

@@ -36,7 +36,7 @@ public class LockWidgets extends AppWidgetProvider {
     private static boolean active(Context c){AppWidgetManager m=AppWidgetManager.getInstance(c);for(Class<?> t:TYPES)if(m.getAppWidgetIds(new ComponentName(c,t)).length>0)return true;return false;}
     public static void schedule(Context c){watchLanguage(c);AlarmManager a=(AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
         boolean any=active(c);AppWidgetManager m=AppWidgetManager.getInstance(c);
-        for(String k:new String[]{"Hero","HeroLarge","NextPrayer","PrayerBar","Clock","Pill","DayPrayer","OneUI"})any|=m.getAppWidgetIds(new ComponentName(c,"com.example.widget."+k+"WidgetProvider")).length>0;
+        for(String k:new String[]{"Hero","NextPrayer","PrayerBar","Clock","Pill","DayPrayer","OneUI"})any|=m.getAppWidgetIds(new ComponentName(c,"com.example.widget."+k+"WidgetProvider")).length>0;
         if(!any){a.cancel(pulse(c));return;}
         long now=System.currentTimeMillis(),next=(now/60000+1)*60000;
         try{Calendar day=Calendar.getInstance();for(int d=0;d<2;d++){long[] ts=times(c,day);boolean friday=day.get(Calendar.DAY_OF_WEEK)==Calendar.FRIDAY;

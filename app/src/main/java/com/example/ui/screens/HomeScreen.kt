@@ -43,7 +43,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.Dhikr
 import com.example.data.Tag
 import com.example.ui.oneui.OneUICard
-import com.example.ui.oneui.OneUIChip
+import com.example.ui.oneui.OneUIChipGroup
+import com.example.ui.oneui.OneUIChipItem
 import com.example.ui.oneui.OneUIEmptyState
 import com.example.ui.oneui.OneUIIconAction
 import com.example.ui.oneui.OneUIMenu
@@ -178,22 +179,19 @@ fun AzkarListContent(
         }
         if (allTags.isNotEmpty()) {
             item(key = "chips") {
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    item {
-                        OneUIChip(L10n.t(S.All), selectedTag == null, { onSelectTag(null) })
+                // 3.3.3: sliding-pill chip group (his spec: animation only, no joined container);
+                // tapping the selected tag still deselects back to All.
+                OneUIChipGroup(
+                    items = listOf(OneUIChipItem(L10n.t(S.All))) + allTags.map { OneUIChipItem(it.name, parseColorSafe(it.colorHex)) },
+                    selected = allTags.indexOfFirst { it.tagId == selectedTag?.tagId }.let { if (it < 0) 0 else it + 1 },
+                    onSelect = { i ->
+                        if (i == 0) onSelectTag(null)
+                        else {
+                            val tag = allTags[i - 1]
+                            onSelectTag(if (selectedTag?.tagId == tag.tagId) null else tag)
+                        }
                     }
-                    items(allTags, key = { it.tagId }) { tag ->
-                        val selected = selectedTag?.tagId == tag.tagId
-                        OneUIChip(
-                            tag.name, selected,
-                            { onSelectTag(if (selected) null else tag) },
-                            dot = parseColorSafe(tag.colorHex)
-                        )
-                    }
-                }
+                )
             }
         }
         if (dhikrs.isEmpty()) {

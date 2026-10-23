@@ -27,7 +27,7 @@ class WidgetRenderCheck : Activity() {
         val out = getExternalFilesDir(null) ?: java.io.File(filesDir, "rendercheck")
         out.mkdirs()
         val dims = mapOf(
-            "Hero" to (330 to 90), "HeroLarge" to (331 to 110), "Schedule" to (330 to 90),
+            "Hero" to (330 to 90), "Schedule" to (330 to 90),
             "Clock" to (250 to 90), "Hijri" to (90 to 90), "Gregorian" to (90 to 90),
             "NextPrayer" to (110 to 90), "PrayerBar" to (110 to 90),
             "DayPrayer" to (110 to 90), "Pill" to (110 to 90)
@@ -38,7 +38,7 @@ class WidgetRenderCheck : Activity() {
         val sp2 = sp.edit().putString("widget_bg_color_994", "white").remove("widget_bar_color_994")
         sp2.apply()
         val previewDims = mapOf(
-            "Hero" to (330 to 90), "HeroLarge" to (331 to 110), "Schedule" to (276 to 90),
+            "Hero" to (330 to 90), "Schedule" to (276 to 90),
             "Clock" to (203 to 90), "Hijri" to (90 to 90), "Gregorian" to (90 to 90),
             "NextPrayer" to (90 to 90), "PrayerBar" to (130 to 90),
             "DayPrayer" to (130 to 90), "Pill" to (130 to 90)
@@ -46,8 +46,7 @@ class WidgetRenderCheck : Activity() {
         for (kind in previewDims.keys) {
             try {
                 val (w, h) = previewDims[kind] ?: (110 to 90)
-                // HeroLarge shares the Hero canvas (provider maps HeroLarge -> Hero), just taller.
-                val rk = if (kind == "HeroLarge") "Hero" else kind
+                val rk = kind
                 val bmp = HomeWidgets.renderKind(this, rk, w, h, 994)
                 FileOutputStream(File(out, "preview_light_${kind}.png")).use {
                     bmp.compress(Bitmap.CompressFormat.PNG, 100, it)

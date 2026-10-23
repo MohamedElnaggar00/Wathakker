@@ -350,10 +350,13 @@ private fun DigitsStyleRow() {
         androidx.compose.material3.Text("نوع الأرقام", color = cs.onSurface, fontSize = 16.sp)
         androidx.compose.foundation.layout.Spacer(Modifier.height(10.dp))
         // 3.3.3: shared One UI segmented control (joined container, sliding blue indicator).
+        // rawLabels: these two example labels stay literal under BOTH numeral settings - this
+        // selector is the only place exempt from the global digits conversion (his spec).
         com.example.ui.oneui.OneUISegmented(
             options = listOf("أرقام هندية  ١٢٣", "أرقام عربية  1234"),
             selected = if (hindi) 0 else 1,
-            onSelect = { com.example.utils.Digits.set(ctx, it == 0) }
+            onSelect = { com.example.utils.Digits.set(ctx, it == 0) },
+            rawLabels = true
         )
     }
 }

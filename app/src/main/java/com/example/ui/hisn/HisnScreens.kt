@@ -51,7 +51,8 @@ import com.example.data.HisnChapter
 import com.example.data.HisnItem
 import com.example.ui.oneui.OneUIButton
 import com.example.ui.oneui.OneUICard
-import com.example.ui.oneui.OneUIChip
+import com.example.ui.oneui.OneUIChipGroup
+import com.example.ui.oneui.OneUIChipItem
 import com.example.ui.oneui.OneUIDivider
 import com.example.ui.oneui.OneUIEmptyState
 import com.example.ui.oneui.OneUIIconAction
@@ -63,11 +64,15 @@ import com.example.ui.i18n.S
 
 fun filterChapters(s: HisnListState, items: List<HisnItem>): List<HisnChapter> {
     val q = HisnViewModelKt.normalizeArabic(s.query.trim())
-    var list = s.chapters
-    if (s.onlyFavorites) list = list.filter { s.favoriteChapterIds.contains(it.id) }
-    if (q.isBlank()) return list
+    if (q.isBlank()) {
+        return if (s.onlyFavorites) s.chapters.filter { s.favoriteChapterIds.contains(it.id) } else s.chapters
+    }
+    // His spec 3.3.3: search always spans the FULL Hisn collection, even while the Favorites
+    // filter is on; chapters whose items match count too. Matching favorites pin to the top
+    // (only favorites that match the query), then the rest - both groups in collection order.
     val hitIds = items.filter { HisnViewModelKt.normalizeArabic(it.text).contains(q) }.map { it.chapterId }.toSet()
-    return list.filter { HisnViewModelKt.normalizeArabic(it.name).contains(q) || hitIds.contains(it.id) }
+    val matches = s.chapters.filter { HisnViewModelKt.normalizeArabic(it.name).contains(q) || hitIds.contains(it.id) }
+    return matches.sortedByDescending { s.favoriteChapterIds.contains(it.id) }
 }
 
 @Composable
@@ -98,15 +103,16 @@ fun HisnListContent(
     ) {
         item { OneUISearchField(state.query, onQuery, L10n.t(S.SearchHisn), focusRequester = searchFocus) }
         item {
-            LazyRow(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                item { OneUIChip(L10n.t(S.All), !state.onlyFavorites, { onOnlyFavorites(false) }) }
-                item { OneUIChip(L10n.t(S.Favorites), state.onlyFavorites, { onOnlyFavorites(true) }) }
-            }
+            OneUIChipGroup(
+                items = listOf(OneUIChipItem(L10n.t(S.All)), OneUIChipItem(L10n.t(S.Favorites))),
+                selected = if (state.onlyFavorites) 1 else 0,
+                onSelect = { onOnlyFavorites(it == 1) }
+            )
         }
         if (filtered.isEmpty()) {
             item {
                 OneUIEmptyState(
-                    if (state.onlyFavorites) L10n.t(S.NoFavChapters) else L10n.t(S.NoResults),
+                    if (state.onlyFavorites && state.query.isBlank()) L10n.t(S.NoFavChapters) else L10n.t(S.NoResults),
                     Icons.Outlined.Search
                 )
             }

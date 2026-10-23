@@ -54,6 +54,8 @@ import com.example.ui.i18n.Lang
 import com.example.ui.i18n.S
 import com.example.ui.oneui.OneUIButton
 import com.example.ui.oneui.OneUIChip
+import com.example.ui.oneui.OneUIChipGroup
+import com.example.ui.oneui.OneUIChipItem
 import com.example.ui.oneui.OneUICard
 import com.example.ui.oneui.OneUIDivider
 import com.example.ui.oneui.OneUIIconBadge
@@ -242,19 +244,20 @@ fun FajrAlarmSettingsScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                     Spacer(Modifier.height(12.dp))
                     Text(w("قبل الأذان", "Before the adhan"), color = MaterialTheme.colorScheme.onSurface, fontSize = 13.sp)
                     Spacer(Modifier.height(6.dp))
-                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        for (m in intArrayOf(0, 5, 10, 15, 30, 45, 60)) {
-                            item { OneUIChip(if (m == 0) w("بدون", "Off") else L10n.minutesCount(m), beforeMin == m, { beforeMin = m; fp.alarmBeforeMin = m; reschedule() }) }
-                        }
-                    }
+                    // 3.3.3: sliding-pill chip group (his spec: animation only, no joined container)
+                    OneUIChipGroup(
+                        items = intArrayOf(0, 5, 10, 15, 30, 45, 60).map { OneUIChipItem(if (it == 0) w("بدون", "Off") else L10n.minutesCount(it)) },
+                        selected = intArrayOf(0, 5, 10, 15, 30, 45, 60).indexOfFirst { it == beforeMin },
+                        onSelect = { i -> val m = intArrayOf(0, 5, 10, 15, 30, 45, 60)[i]; beforeMin = m; fp.alarmBeforeMin = m; reschedule() }
+                    )
                     Spacer(Modifier.height(12.dp))
                     Text(w("بعد الأذان", "After the adhan"), color = MaterialTheme.colorScheme.onSurface, fontSize = 13.sp)
                     Spacer(Modifier.height(6.dp))
-                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        for (m in intArrayOf(0, 5, 10, 15, 30, 45, 60)) {
-                            item { OneUIChip(if (m == 0) w("بدون", "Off") else L10n.minutesCount(m), afterMin == m, { afterMin = m; fp.alarmAfterMin = m; reschedule() }) }
-                        }
-                    }
+                    OneUIChipGroup(
+                        items = intArrayOf(0, 5, 10, 15, 30, 45, 60).map { OneUIChipItem(if (it == 0) w("بدون", "Off") else L10n.minutesCount(it)) },
+                        selected = intArrayOf(0, 5, 10, 15, 30, 45, 60).indexOfFirst { it == afterMin },
+                        onSelect = { i -> val m = intArrayOf(0, 5, 10, 15, 30, 45, 60)[i]; afterMin = m; fp.alarmAfterMin = m; reschedule() }
+                    )
                 }
             }
         }
