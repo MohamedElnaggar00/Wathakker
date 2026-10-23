@@ -49,6 +49,10 @@ class WidgetSharpCheck : Activity() {
             val v = host.createView(this, id, info)
             val lp = LinearLayout.LayoutParams((wdp * d).toInt(), (hs[i] * d).toInt()).apply { topMargin = (24 * d).toInt() }
             root.addView(v, lp); views.add(v)
+            // A launcher reports BOTH orientations: portrait-width/landscape-height are the MIN values, landscape-width/portrait-height the MAX values.
+            val pw = intent.getIntExtra("pw", 480)
+            val ph = intent.getIntExtra("ph", hs[i] + 100)
+            (v as android.appwidget.AppWidgetHostView).updateAppWidgetSize(Bundle(), pw, hs[i], wdp, ph)
         }
         setContentView(root)
         com.example.lockwidgets.HomeWidgets.updateAll(this)
