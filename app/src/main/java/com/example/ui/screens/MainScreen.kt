@@ -169,7 +169,7 @@ fun MainScreen(viewModel: MainViewModel) {
                     val tabsContent: @Composable () -> Unit = {
                         HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
                             when (oneUITabs[page].route) {
-                                "calendar" -> com.example.ui.oneui.WideContentFrame { HijriCalendarScreen { drawerOpen = true } }
+                                "calendar" -> if (com.example.ui.oneui.isTwoPane()) HijriCalendarScreen { drawerOpen = true } else com.example.ui.oneui.WideContentFrame { HijriCalendarScreen { drawerOpen = true } }
                                 "prayer" -> PrayerTimesScreen(onQibla = { navController.navigate("qibla") }, onMenu = { drawerOpen = true }, onLocation = { navController.navigate("location_calc") })
                                 "hisn" -> if (com.example.ui.oneui.isTwoPane()) HisnTwoPane(
                                     hisnViewModel, viewModel,
