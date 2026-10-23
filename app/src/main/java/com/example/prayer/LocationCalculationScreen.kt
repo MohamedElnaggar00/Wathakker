@@ -197,11 +197,8 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                         IconButton(onClick = { editingCity = false }) { Icon(Icons.Outlined.Close, L10n.t(S.Cancel), tint = cs.onSurfaceVariant) }
                     } else {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(L10n.t(S.CurrentCity), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
+                            Text(L10n.t(S.CustomLocationNameHint), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
                             Text(state.cityName, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                        }
-                        if (!state.useCurrentLocation) {
-                            Text(L10n.t(S.ChangeCity), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                         }
                         androidx.compose.material3.Surface(shape = androidx.compose.foundation.shape.CircleShape, color = cs.primary.copy(alpha = 0.12f), modifier = Modifier.padding(start = 8.dp)) {
                             IconButton(onClick = { cityEditText = state.cityName; editingCity = true }, modifier = Modifier.size(36.dp)) {
