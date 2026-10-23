@@ -83,6 +83,15 @@ public final class FajrViewModel extends AndroidViewModel {
     public final boolean setCityAlias(String alias) {
         String trimmed = alias == null ? "" : alias.trim();
         String key = this.prefs.getPlaceKey();
+        if (key == null) {
+            // place_key was introduced with aliases: a location saved before it (or one whose
+            // geocode has not re-run since) has coordinates but no key yet, so the save failed
+            // silently. Derive the same structural identity on the spot from the saved coordinates.
+            key = this.locationHelper.getPlaceKeyFromCoordinates(this.prefs.getLatitude(), this.prefs.getLongitude());
+            if (key != null) {
+                this.prefs.setPlaceKey(key);
+            }
+        }
         if (key == null || trimmed.length() == 0) {
             return false;
         }

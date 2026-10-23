@@ -50,6 +50,45 @@ shot alias_editor_reset
 exit 0
 fi
 
+# ---- auto-mode alias save regression: place_key absent (pre-alias install), save must derive it ----
+if [ "$4" = "AUTO_ALIAS" ]; then
+adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"use_current_location\" value=\"true\" /><float name=\"latitude\" value=\"31.2001\" /><float name=\"longitude\" value=\"29.9187\" /><string name=\"city_name\">مدينة برج العرب، مصر</string><string name=\"city_name_ar\">مدينة برج العرب، مصر</string><string name=\"city_name_en\">Borg El Arab, Egypt</string><string name=\"city_aliases_json\">{}</string></map>' > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml"
+for attempt in 1 2 3; do
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_home.xml"
+XY=$(find_cd "Settings" "$OUT/ui_home.xml"); [ -z "$XY" ] && XY=$(find_cd "الإعدادات" "$OUT/ui_home.xml"); [ -z "$XY" ] && XY="108 222"
+adb shell input tap $XY; sleep 5
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_drawer.xml"
+XY=$(find_text "تغيير الموقع" "$OUT/ui_drawer.xml")
+[ -n "$XY" ] && break
+echo "auto-alias nav retry $attempt" >> "$OUT/nav.txt"
+done
+[ -n "$XY" ] && adb shell input tap $XY; sleep 5
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_loccalc_auto.xml"
+XY=$(find_cd "تعديل اسم المدينة" "$OUT/ui_loccalc_auto.xml")
+echo "pencil at: $XY" >> "$OUT/nav.txt"
+[ -n "$XY" ] && adb shell input tap $XY; sleep 3
+dump_clean "$OUT/ui_editor_auto.xml"
+FB=$(grep -o 'class="android.widget.EditText"[^>]*' "$OUT/ui_editor_auto.xml" | grep -o 'bounds="[^"]*"' | head -1)
+FXY=$(echo "$FB" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}')
+echo "field at: $FXY" >> "$OUT/nav.txt"
+[ -n "$FXY" ] && adb shell input tap $FXY; sleep 2
+adb shell input keyevent KEYCODE_MOVE_END
+for i in $(seq 1 40); do adb shell input keyevent KEYCODE_DEL; done
+adb shell input text "BorgTest"; sleep 2
+XY=$(find_cd "حفظ" "$OUT/ui_editor_auto.xml")
+echo "save at: $XY" >> "$OUT/nav.txt"
+[ -z "$XY" ] && { dump_clean "$OUT/ui_editor_auto2.xml"; XY=$(find_cd "حفظ" "$OUT/ui_editor_auto2.xml"); }
+[ -n "$XY" ] && adb shell input tap $XY; sleep 4
+shot auto_alias_after_save
+dump_clean "$OUT/ui_after_save.xml"
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_after_save.xml" 2>&1
+exit 0
+fi
+
 # ---- 1. city edit prototype boards ----
 adb shell cmd uimode night yes; sleep 1
 adb shell am start -S -W -n $PKG/com.example.CityEditProtoCheck >/dev/null 2>&1; sleep 7

@@ -10,6 +10,10 @@ name: Phone Friday + city-edit preview evidence (NO RELEASE)
         description: 'Set to 1 for alias-placement render-only pass (debug build)'
         required: false
         default: ''
+      auto_alias:
+        description: 'Set to 1 for auto-mode alias save regression pass (debug build)'
+        required: false
+        default: ''
 permissions:
   contents: read
   actions: read
@@ -58,7 +62,7 @@ jobs:
         arch: x86_64
         target: google_apis
         profile: pixel_6
-        script: bash tools/phone_friday.sh "${{ inputs.signed_run_id != '' && 'signed-apk/app-release-unsigned.apk' || 'app/build/outputs/apk/debug/app-debug.apk' }}" emulator-evidence/friday "${{ inputs.signed_run_id != '' && '1' || '' }}" "${{ inputs.render_alias == '1' && 'RENDER_ALIAS' || '' }}"
+        script: bash tools/phone_friday.sh "${{ inputs.signed_run_id != '' && 'signed-apk/app-release-unsigned.apk' || 'app/build/outputs/apk/debug/app-debug.apk' }}" emulator-evidence/friday "${{ inputs.signed_run_id != '' && '1' || '' }}" "${{ inputs.auto_alias == '1' && 'AUTO_ALIAS' || (inputs.render_alias == '1' && 'RENDER_ALIAS' || '') }}"
     - uses: actions/upload-artifact@v4
       if: always()
       with:
