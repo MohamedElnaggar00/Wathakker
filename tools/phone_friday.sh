@@ -28,16 +28,20 @@ seed
 # ---- render-only alias placement pass (proposal renders; long Arabic alias seeded) ----
 if [ "$4" = "RENDER_ALIAS" ]; then
 adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"use_current_location\" value=\"false\" /><float name=\"latitude\" value=\"31.2001\" /><float name=\"longitude\" value=\"29.9187\" /><string name=\"city_name\">حي المقطم بالقاهرة الجديدة</string><string name=\"city_name_ar\">حي المقطم بالقاهرة الجديدة</string><string name=\"city_name_en\">حي المقطم بالقاهرة الجديدة</string><string name=\"city_name_ar_orig\">الإسكندرية، مصر</string><string name=\"city_name_en_orig\">Alexandria, Egypt</string><string name=\"place_key\">m|31.2001|29.9187</string><string name=\"city_aliases_json\">{&quot;m|31.2001|29.9187&quot;:&quot;حي المقطم بالقاهرة الجديدة&quot;}</string></map>' > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml"
+for attempt in 1 2 3; do
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
-dismiss_anr
+dismiss_anr; sleep 2; dismiss_anr
 dump_clean "$OUT/ui_home.xml"
 XY=$(find_cd "Settings" "$OUT/ui_home.xml"); [ -z "$XY" ] && XY=$(find_cd "الإعدادات" "$OUT/ui_home.xml"); [ -z "$XY" ] && XY="108 222"
-adb shell input tap $XY; sleep 4
-dismiss_anr
+adb shell input tap $XY; sleep 5
+dismiss_anr; sleep 2; dismiss_anr
 dump_clean "$OUT/ui_drawer.xml"
 XY=$(find_text "تغيير الموقع" "$OUT/ui_drawer.xml")
+[ -n "$XY" ] && break
+echo "render nav retry $attempt" >> "$OUT/nav.txt"
+done
 [ -n "$XY" ] && adb shell input tap $XY; sleep 5
-dismiss_anr
+dismiss_anr; sleep 2; dismiss_anr
 shot alias_row_long
 dump_clean "$OUT/ui_loccalc.xml"
 XY=$(find_cd "تعديل اسم المدينة" "$OUT/ui_loccalc.xml")
