@@ -150,18 +150,21 @@ adb pull /data/data/com.wathakker.app/databases/wazakkir_database "$OUT/wazakkir
 DROW=$(python3 - "$OUT/wazakkir_database" <<'PYE'
 import sqlite3,sys
 c=sqlite3.connect(sys.argv[1])
-r=c.execute("SELECT id,title,substr(content,1,14) FROM dhikr WHERE length(content)>20 LIMIT 1").fetchone()
-print("|".join(str(x) for x in r))
+r=c.execute("SELECT id,title,substr(content,1,14) FROM dhikr_table WHERE length(content)>20 LIMIT 1").fetchone()
+print("|".join(str(x) for x in r) if r else "")
 PYE
 )
 DID=$(echo "$DROW" | cut -d'|' -f1); DTITLE=$(echo "$DROW" | cut -d'|' -f2); DFRAG=$(echo "$DROW" | cut -d'|' -f3)
 echo "dhikr id=$DID title=$DTITLE frag=$DFRAG" >> "$OUT/nav.txt"
+if [ -z "$DID" ] || [ -z "$DTITLE" ] || [ -z "$DFRAG" ]; then echo "NOTIF_BTN FAIL: no dhikr row resolved, refusing vacuous run" | tee -a "$OUT/nav.txt"; exit 1; fi
 fire_notif(){ adb shell am broadcast -n $PKG/com.example.alarm.AlarmReceiver --ei DHIKR_ID $DID --es DHIKR_TITLE "$DTITLE" --es DHIKR_CONTENT "$DFRAG" >> "$OUT/nav.txt" 2>&1; sleep 3; }
 tap_body(){ # $1 langtag
 adb shell cmd statusbar expand-notifications >/dev/null 2>&1; sleep 3
 dump_clean "$OUT/ui_shade_$1.xml"
 shot notif_shade_$1
-XY=$(find_text "$DTITLE" "$OUT/ui_shade_$1.xml"); [ -z "$XY" ] && XY=$(find_text "$DFRAG" "$OUT/ui_shade_$1.xml")
+if ! grep -q "$DTITLE" "$OUT/ui_shade_$1.xml"; then echo "${1}_NOTIF_PRESENT FAIL (shade lacks notification; other checks vacuous)" | tee -a "$OUT/nav.txt"; return 1; fi
+echo "${1}_NOTIF_PRESENT PASS" | tee -a "$OUT/nav.txt"
+XY=$(find_text "$DTITLE" "$OUT/ui_shade_$1.xml")
 echo "shade body at: $XY" >> "$OUT/nav.txt"
 [ -n "$XY" ] && adb shell input tap $XY; sleep 5
 dismiss_anr; sleep 1
