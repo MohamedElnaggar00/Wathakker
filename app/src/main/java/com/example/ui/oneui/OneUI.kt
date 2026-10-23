@@ -1098,7 +1098,7 @@ fun isTwoPane(): Boolean = androidx.compose.ui.platform.LocalConfiguration.curre
 @Composable
 fun WideContentFrame(content: @Composable () -> Unit) {
     if (!isWideScreen()) { content(); return }
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.TopCenter) {
         Box(Modifier.fillMaxHeight().widthIn(max = 760.dp).fillMaxWidth()) { content() }
     }
 }
@@ -1117,6 +1117,7 @@ fun OneUINavRail(
     Box(
         modifier = modifier
             .fillMaxHeight()
+            .background(cs.background)
             .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
             .padding(horizontal = 12.dp, vertical = 12.dp),

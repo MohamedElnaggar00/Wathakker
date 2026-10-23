@@ -24,18 +24,19 @@ adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
 adb shell settings put system accelerometer_rotation 0
 
 run_lang(){ L=$1; setprefs $L
-  adb shell settings put system user_rotation 1   # landscape
+  adb shell settings put system user_rotation 0   # landscape (natural on tablet)
   launch; sleep 3; shot "${L}_land_prayer"; dump "$OUT/${L}_land_prayer.xml"
   XY=$(tap_re "حصن|Hisn|Fortress" "$OUT/${L}_land_prayer.xml"); echo "$L hisn tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
   shot "${L}_land_hisn"; dump "$OUT/${L}_land_hisn.xml"
-  XY=$(tap_re "أذكار|Morning|Evening|Sleep|Waking" "$OUT/${L}_land_hisn.xml"); echo "$L chapter tap: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+  XY=$(tap_re "^ *[0-9]+ (ذكر|azkar)" "$OUT/${L}_land_hisn.xml"); echo "$L chapter tap: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
   shot "${L}_land_hisn_chapter"
   XY=$(tap_re "التقويم|Calendar" "$OUT/${L}_land_prayer.xml"); echo "$L cal tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_land_calendar"
   XY=$(tap_re "التذكيرات|Reminders" "$OUT/${L}_land_prayer.xml"); echo "$L rem tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_land_reminders"
-  adb shell settings put system user_rotation 0   # portrait
+  XY=$(tap_re "الإعدادات|Settings" "$OUT/${L}_land_prayer.xml"); echo "$L settings: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 4; shot "${L}_land_settings"; adb shell input keyevent 4 >/dev/null 2>&1; sleep 2
+  adb shell settings put system user_rotation 1   # portrait
   sleep 4; shot "${L}_port_reminders"; dump "$OUT/${L}_port.xml"
   XY=$(tap_re "الصلاة|Prayer" "$OUT/${L}_port.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_port_prayer"
-  adb shell settings put system user_rotation 1
+  adb shell settings put system user_rotation 0
 }
 run_lang ar
 run_lang en
@@ -46,20 +47,21 @@ adb shell wm size 1080x2400; adb shell wm density 420; adb shell settings put sy
 setprefs ar; launch; sleep 3; shot "phone_ar_prayer"
 adb shell wm size reset; adb shell wm density reset
 
-# Widget settings: new tap-response selector, choose "nothing", Apply, check saved pref per widget.
-adb shell settings put system user_rotation 0
+# Widget settings at phone size: new tap-response selector, choose "nothing", Apply, check saved pref per widget.
+adb shell wm size 1080x2400; adb shell wm density 420; adb shell settings put system user_rotation 0
 adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8
-adb shell input swipe 540 1800 540 700 300; sleep 2; shot "config_tap_default"; dump "$OUT/cfg1.xml"
+adb shell input swipe 540 1700 540 600 300; sleep 2; shot "config_tap_default"; dump "$OUT/cfg1.xml"
 XY=$(tap_re "لا شيء" "$OUT/cfg1.xml"); echo "nothing seg: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 2; shot "config_tap_nothing"; dump "$OUT/cfg2.xml"
 XY=$(tap_re "تطبيق" "$OUT/cfg2.xml"); echo "apply: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_tap.xml" 2>&1
 grep -o 'widget_tap_[0-9]*[^/]*' "$OUT/prefs_tap.xml" > "$OUT/tap_pref.txt"
 adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8
-adb shell input swipe 540 1800 540 700 300; sleep 2; shot "config_tap_reopened"
+adb shell input swipe 540 1700 540 600 300; sleep 2; shot "config_tap_reopened"
+adb shell wm size reset; adb shell wm density reset
 
 # Widget tap end-to-end: two real widgets (distinct ids) in a debug host; flip open/none and tap each.
 adb shell settings put system user_rotation 0; sleep 2
-adb shell cmd appwidget grantbind --package $PKG > "$OUT/grantbind.txt" 2>&1
+: grantbind unused --package $PKG > "$OUT/grantbind.txt" 2>&1
 SZ=$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1); W=${SZ%x*}; H=${SZ#*x}
 AX=$((W/4)); BX=$((W*3/4)); Y=$((H/2))
 echo "screen $SZ" > "$OUT/hosttap.txt"
@@ -71,7 +73,9 @@ check(){ # name x expected(Main|Host)
   if [ "$GOT" = "$3" ]; then R=PASS; else R=FAIL; fi
   echo "$1 tap -> $GOT (expected $3) $R" >> "$OUT/hosttap.txt"; shot "hosttap_$1"
 }
-adb shell am force-stop $PKG; adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 14
+adb shell settings put system user_rotation 0
+adb shell am force-stop $PKG; adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 8
+for i in 1 2 3 4; do dump "$OUT/bind.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind.xml"); echo "bind dialog tap $i: $XY" >> "$OUT/hosttap.txt"; shot "hosttap_bind$i"; [ -n "$XY" ] && adb shell input tap $XY; sleep 6; done
 host open none; shot hosttap_state1
 check A_open_B_none_tapA $AX Main
 host open none; check A_open_B_none_tapB $BX Host

@@ -27,23 +27,39 @@ class WidgetHostCheck : Activity() {
         val cn = ComponentName(this, "com.example.widget.NextPrayerWidgetProvider")
         val sp = getSharedPreferences("hostcheck", MODE_PRIVATE)
         val root = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        setContentView(root)
         for (i in 0..1) {
             var id = sp.getInt("id$i", 0)
-            if (id == 0 || mgr.getAppWidgetInfo(id) == null) {
+            if (id == 0) {
                 id = host.allocateAppWidgetId()
-                val ok = mgr.bindAppWidgetIdIfAllowed(id, cn)
-                Log.i("HOSTCHECK", "bind id=$id ok=$ok")
                 sp.edit().putInt("id$i", id).apply()
             }
             ids[i] = id
+            if (mgr.getAppWidgetInfo(id) == null) {
+                val ok = mgr.bindAppWidgetIdIfAllowed(id, cn)
+                Log.i("HOSTCHECK", "bind id=$id ok=$ok")
+                if (!ok) {
+                    // Supported route: the system "Allow this app to create widgets" dialog (CI taps Create).
+                    startActivityForResult(
+                        Intent(AppWidgetManager.ACTION_APPWIDGET_BIND)
+                            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+                            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, cn), 7
+                    )
+                    return
+                }
+            }
             val info = mgr.getAppWidgetInfo(id)
             val frame = FrameLayout(this)
             if (info != null) frame.addView(host.createView(this, id, info))
             root.addView(frame, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
         }
-        setContentView(root)
         Log.i("HOSTCHECK", "ids=" + ids[0] + "," + ids[1])
         handle(intent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i("HOSTCHECK", "bind dialog result=$resultCode")
+        recreate()
     }
 
     override fun onNewIntent(intent: Intent) { super.onNewIntent(intent); handle(intent) }
