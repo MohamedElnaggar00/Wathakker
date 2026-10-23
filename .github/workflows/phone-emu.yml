@@ -1,8 +1,18 @@
 name: Phone widget emulator preview (NO RELEASE)
 'on':
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      apk_source:
+        description: 'APK to install'
+        required: true
+        default: 'build-debug'
+        type: choice
+        options:
+          - build-debug
+          - release-artifact
 permissions:
   contents: read
+  actions: read
 jobs:
   phone:
     runs-on: ubuntu-24.04
@@ -19,7 +29,18 @@ jobs:
     - name: Generate Debug Keystore
       run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Build debug APK
+      if: inputs.apk_source == 'build-debug'
       run: set -o pipefail; gradle :app:assembleDebug -PcomposeBom=2025.10.01 --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g" 2>&1 | tee build.log | tail -30
+    - name: Download latest release APK artifact
+      if: inputs.apk_source == 'release-artifact'
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        mkdir -p relapk
+        RUN_ID=$(gh run list --workflow build-apk.yml --branch ${{ github.ref_name }} --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+        echo "release build run: $RUN_ID"
+        gh run download "$RUN_ID" -n app-release-bom-2025.10.01.apk -D relapk
+        ls -la relapk/
     - name: Enable KVM
       run: |-
         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -32,7 +53,7 @@ jobs:
         arch: x86_64
         target: google_apis
         profile: pixel_6
-        script: bash tools/phone_emu.sh app/build/outputs/apk/debug/app-debug.apk emulator-evidence/phone
+        script: bash tools/phone_emu.sh ${{ inputs.apk_source == 'release-artifact' && 'relapk/app-release-unsigned.apk' || 'app/build/outputs/apk/debug/app-debug.apk' }} emulator-evidence/phone
     - uses: actions/upload-artifact@v4
       if: always()
       with:
