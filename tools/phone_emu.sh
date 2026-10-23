@@ -116,63 +116,64 @@ record_tap(){
     for i in 0 1 2 3 4 5 6 7; do ffmpeg -loglevel error -ss $(awk "BEGIN{print 1.2 + $i * 0.5}") -i "$OUT/$1.mp4" -frames:v 1 "$OUT/$1_f$i.png" -y; done
   fi
 }
-# Hisn الكل/المفضلة + favorite one chapter + full-collection search from favorites
+# Hisn الكل/المفضلة + full-collection search from favorites
+# Fresh state: المفضلة is selected by default (viewModel) with 4 seeded favorites
+# (الصباح/المساء/النوم/السفر, importer 3.3.0). Chapter names in dumps carry tashkeel,
+# so every Arabic text match below normalizes diacritics before comparing.
 relaunch
 dump "$OUT/ui_tabs2.xml"
 XY=$(tap_text "حصن المسلم" "$OUT/ui_tabs2.xml"); echo "hisn tab: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 5; dismiss_anr
 adb exec-out screencap -p > "$OUT/hisn_chips_before.png"
 dump "$OUT/ui_hisn.xml"
-python3 - "$OUT/ui_hisn.xml" > /tmp/star_xy.txt << 'PYS'
-import sys, re
-xml = open(sys.argv[1]).read()
-row = re.search(r'text="أذكار الصباح"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"', xml)
-stars = re.findall(r'content-desc="المفضلة"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"', xml)
-if row and stars:
-    ry = (int(row.group(2)) + int(row.group(4))) / 2
-    best = min(stars, key=lambda b: abs((int(b[1]) + int(b[3])) / 2 - ry))
-    print(int((int(best[0]) + int(best[2])) / 2), int((int(best[1]) + int(best[3])) / 2))
-PYS
-SXY=$(cat /tmp/star_xy.txt); echo "first chapter star: $SXY" >> "$OUT/ui_nav.txt"; [ -n "$SXY" ] && adb shell input tap $SXY; sleep 2
-record_tap hisn_slide "$OUT/ui_hisn.xml" "المفضلة"
+# chip slide on Hisn: المفضلة is selected by default, so the recorded slide = tap الكل
+record_tap hisn_slide "$OUT/ui_hisn.xml" "الكل"
+adb exec-out screencap -p > "$OUT/hisn_chips_all.png"
+dump "$OUT/ui_hisn_all.xml"
+# favorites view evidence: switch back to المفضلة
+XY=$(tap_text "المفضلة" "$OUT/ui_hisn_all.xml"); echo "fav chip: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
 adb exec-out screencap -p > "$OUT/hisn_chips_favorites.png"
 dump "$OUT/ui_hisn_fav.xml"
-# favorites-only view must show أذكار الصباح and NOT أذكار المساء
 python3 - "$OUT" << 'PYF'
 import sys
+def norm(s):
+    return ''.join(c for c in s if not (0x064B <= ord(c) <= 0x0652 or ord(c) in (0x0670, 0x0640)))
 out = sys.argv[1]
-xml = open(out + '/ui_hisn_fav.xml').read()
+allxml = norm(open(out + '/ui_hisn_all.xml').read())
+fav = norm(open(out + '/ui_hisn_fav.xml').read())
 lines = []
-lines.append('favorites view has أذكار الصباح (favorited): ' + str('أذكار الصباح' in xml))
-lines.append('favorites view hides أذكار المساء (not favorited): ' + str('أذكار المساء' not in xml))
+lines.append('all view shows non-favorite chapter (normalized): ' + str('أذكار الاستيقاظ من النوم' in allxml))
+lines.append('favorites view has seeded favorite أذكار الصباح (normalized): ' + str('أذكار الصباح' in fav))
+lines.append('favorites view hides non-favorite أذكار الاستيقاظ (normalized): ' + str('أذكار الاستيقاظ من النوم' not in fav))
 open(out + '/hisn_fav_check.txt', 'w').write('\n'.join(lines) + '\n')
 PYF
-# search FROM the favorites filter: query must span the whole collection, matching favorite pinned first
+# search FROM the favorites filter: query must span the whole collection, matching favorites pinned first
 XY=$(tap_desc "ابحث في حصن المسلم" "$OUT/ui_hisn_fav.xml"); echo "search icon: $XY" >> "$OUT/ui_nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
-adb shell input text "أذكار"; sleep 2
-dump "$OUT/ui_search_probe.xml"
-python3 - "$OUT/ui_search_probe.xml" > /tmp/typed.txt << 'PYT'
-import sys, re
-xml = open(sys.argv[1]).read()
-m = re.search(r'class="android\.widget\.EditText"[^>]*text="([^"]*)"', xml)
-print((m.group(1) if m else ''))
-PYT
-if ! grep -q "أذكار" /tmp/typed.txt; then
-  echo "input text dropped Arabic - trying ADBKeyBoard fallback" >> "$OUT/ui_nav.txt"
-  curl -sL -o /tmp/adbkb.apk https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyBoard.apk && adb install -r /tmp/adbkb.apk >/dev/null 2>&1 && adb shell ime set com.android.adbkeyboard/.AdbIME && sleep 2 && adb shell am broadcast -a ADB_INPUT_B64 --es msg "$(printf 'أذكار' | base64)"; sleep 3
-fi
-adb shell input keyevent 4; sleep 2
+# Arabic input needs ADBKeyBoard (adb input text drops non-ASCII); verify every step.
+ORIG_IME=$(adb shell settings get secure default_input_method); echo "orig ime: $ORIG_IME" >> "$OUT/ui_nav.txt"
+curl -sL -o /tmp/adbkb.apk https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyboard.apk
+ls -l /tmp/adbkb.apk >> "$OUT/ui_nav.txt"
+adb install -r /tmp/adbkb.apk >> "$OUT/ui_nav.txt" 2>&1
+KB_IME=$(adb shell ime list -s | grep -i adbkeyboard | head -1); echo "kb ime: $KB_IME" >> "$OUT/ui_nav.txt"
+[ -n "$KB_IME" ] && adb shell ime set "$KB_IME" && sleep 2
+adb shell am broadcast -a ADB_INPUT_B64 --es msg "$(printf 'أذكار' | base64 -w0)"; sleep 3
+adb shell input keyevent 66; sleep 2
+[ -n "$ORIG_IME" ] && adb shell ime set "$ORIG_IME"
 dump "$OUT/ui_hisn_search.xml"
 adb exec-out screencap -p > "$OUT/hisn_search_favorites.png"
 python3 - "$OUT" << 'PYQ'
-import sys
+import sys, re
+def norm(s):
+    return ''.join(c for c in s if not (0x064B <= ord(c) <= 0x0652 or ord(c) in (0x0670, 0x0640)))
 out = sys.argv[1]
-xml = open(out + '/ui_hisn_search.xml').read()
-i1 = xml.find('أذكار الصباح')
-i2 = xml.find('أذكار المساء')
+xml = norm(open(out + '/ui_hisn_search.xml').read())
+m = re.search(r'class="android\.widget\.EditText"[^>]*text="([^"]*)"', xml)
+typed = m.group(1) if m else ''
+i_fav = xml.find('أذكار الصباح')
+i_nonfav = xml.find('أذكار الاستيقاظ من النوم')
 lines = []
-lines.append('query typed (أذكار in field): ' + str('أذكار' in xml))
-lines.append('full-collection search from favorites: أذكار المساء (not favorited) present: ' + str(i2 > 0))
-lines.append('matching favorite pinned first: ' + str(i1 > 0 and i2 > 0 and i1 < i2))
+lines.append('query typed into search field: ' + str('أذكار' in typed))
+lines.append('full-collection span from favorites (non-favorite match present): ' + str(i_nonfav > 0))
+lines.append('matching favorite pinned above non-favorite: ' + str(i_fav > 0 and i_nonfav > 0 and i_fav < i_nonfav))
 open(out + '/hisn_search_check.txt', 'w').write('\n'.join(lines) + '\n')
 PYQ
 # Reminders tags chip group
@@ -227,3 +228,22 @@ adb shell am start -S -W -n $PKG/com.example.GlassProtoCheck >/dev/null 2>&1; sl
 adb exec-out screencap -p > "$OUT/glass_proto_day.png"
 adb shell cmd uimode night yes
 adb logcat -d -s GlassProto > "$OUT/glass_proto.txt"
+
+# ===== 3.3.3 widget evidence: D (عداد الصلاة countdown without seconds), E (HeroLarge removed), F (NextPrayer 2x1)
+adb shell am start -S -W -n $PKG/com.example.WidgetRenderCheck >/dev/null 2>&1; sleep 12
+FILES_DIR=/sdcard/Android/data/$PKG/files
+adb shell ls "$FILES_DIR" > "$OUT/rendercheck_ls.txt" 2>&1
+for f in widget_light_Clock.png widget_dark_Clock.png preview_light_Clock.png widget_light_NextPrayer.png preview_light_NextPrayer.png preview_light_Hero.png widget_prefs.txt actual_prayers.txt; do
+  adb pull "$FILES_DIR/$f" "$OUT/$f" >> "$OUT/ui_nav.txt" 2>&1
+done
+adb shell dumpsys appwidget > "$OUT/appwidget_dumpsys.txt" 2>&1
+python3 - "$OUT" << 'PYW'
+import sys
+out = sys.argv[1]
+d = open(out + '/appwidget_dumpsys.txt').read()
+lines = []
+lines.append('HeroLarge provider gone from appwidget service: ' + str('HeroLargeWidgetProvider' not in d))
+lines.append('Hero provider still registered: ' + str('HeroWidgetProvider' in d))
+lines.append('NextPrayer provider registered: ' + str('NextPrayerWidgetProvider' in d))
+open(out + '/widget_check.txt', 'w').write('\n'.join(lines) + '\n')
+PYW
