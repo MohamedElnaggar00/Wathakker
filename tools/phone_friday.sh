@@ -105,7 +105,7 @@ XY=$(find_cd "bell_2" "$OUT/ui_friday.xml"); echo "bell_2 friday: $XY" >> "$OUT/
 dismiss_anr
 shot friday_sheet; dump_clean "$OUT/ui_friday_sheet.xml"
 adb shell input keyevent 4; sleep 2
-if [ -z "$SIGNED" ]; then
+if true; then
 adb shell am start -S -W -n $PKG/com.example.WidgetRenderCheck >/dev/null 2>&1; sleep 12
 FD=/sdcard/Android/data/$PKG/files
 for f in widget_dark_NextPrayer.png widget_dark_Hero.png widget_dark_PrayerBar.png widget_light_NextPrayer.png widget_light_Hero.png widget_light_PrayerBar.png lock_Next.png lock_Bar.png; do
@@ -164,7 +164,7 @@ lines = [
     'saturday sheet shows iqama row: ' + str('تنبيه الإقامة' in sat_s),
     'friday-again sheet hides iqama row: ' + str('تنبيه الإقامة' not in fri2_s),
     'iqama_2 pref preserved (fri/sat/fri2): ' + str(all('iqama_2" value="true"' in p for p in (p_f, p_s, p_f2))),
-    ('widget renders: ' + ('skipped (signed release build, debug-only activity)' if SIGNED else 'pulled: ' + str(len(renders)) + '/8')),
+    'widget renders pulled: ' + str(len(renders)) + '/8 (production renderer, offscreen backing)',
 ]
 import re as _re
 def pkg_alarm_times(name):
