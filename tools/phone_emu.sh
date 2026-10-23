@@ -154,7 +154,11 @@ curl -sL -o /tmp/adbkb.apk https://github.com/senzhk/ADBKeyBoard/raw/master/ADBK
 ls -l /tmp/adbkb.apk >> "$OUT/ui_nav.txt"
 adb install -r /tmp/adbkb.apk >> "$OUT/ui_nav.txt" 2>&1
 KB_IME=$(adb shell ime list -a -s | grep -i adbkeyboard | head -1); echo "kb ime: $KB_IME" >> "$OUT/ui_nav.txt"
-[ -n "$KB_IME" ] && adb shell ime enable "$KB_IME" && adb shell ime set "$KB_IME" && sleep 2
+[ -z "$KB_IME" ] && KB_IME=com.android.adbkeyboard/.AdbIME
+adb shell pm list packages | grep -i adbkeyboard >> "$OUT/ui_nav.txt" 2>&1
+adb shell ime list -a >> "$OUT/ui_nav.txt" 2>&1
+adb shell ime enable "$KB_IME" >> "$OUT/ui_nav.txt" 2>&1 && adb shell ime set "$KB_IME" >> "$OUT/ui_nav.txt" 2>&1 && sleep 2
+adb shell settings get secure default_input_method >> "$OUT/ui_nav.txt" 2>&1
 adb shell am broadcast -a ADB_INPUT_B64 --es msg "$(printf 'أذكار' | base64 -w0)"; sleep 3
 adb shell input keyevent 66; sleep 2
 [ -n "$ORIG_IME" ] && adb shell ime set "$ORIG_IME"
