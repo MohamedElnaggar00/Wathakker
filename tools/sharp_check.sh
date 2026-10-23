@@ -32,8 +32,22 @@ adb logcat -d -s SHARP:I WathakkerHome:E > "$OUT/sharp_log.txt"
 adb shell am force-stop $PKG; sleep 1
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 14; noanr
 adb exec-out screencap -p > "$OUT/app_land.png"
-for k in 1 2 3; do adb shell input swipe 800 700 1900 700 300; sleep 2; adb exec-out screencap -p > "$OUT/swipe_right_$k.png"; done
-for k in 1 2 3; do adb shell input swipe 1900 700 800 700 300; sleep 2; adb exec-out screencap -p > "$OUT/swipe_left_$k.png"; done
+for k in 1 2 3; do adb shell input swipe 700 1150 2000 1150 700; sleep 2; adb exec-out screencap -p > "$OUT/swipe_right_$k.png"; done
+for k in 1 2 3; do adb shell input swipe 2000 1150 700 1150 700; sleep 2; adb exec-out screencap -p > "$OUT/swipe_left_$k.png"; done
+dump "$OUT/ui_tabs.xml"
+XY=$(tap_re "^ *التقويم *$|Calendar" "$OUT/ui_tabs.xml"); echo "calendar tab: $XY" > "$OUT/cal_nav.txt"
+[ -n "$XY" ] && adb shell input tap $XY; sleep 3; adb exec-out screencap -p > "$OUT/calendar_land.png"
+adb shell settings put system user_rotation 1; sleep 3; adb exec-out screencap -p > "$OUT/calendar_port.png"
+adb shell settings put system user_rotation 0; sleep 2
+# --- launch splash frames, light and dark, cold start ---
+for mode in no yes; do
+  adb shell cmd uimode night $mode; sleep 2
+  adb shell am force-stop $PKG; sleep 2
+  adb shell am start -n $PKG/com.example.MainActivity >/dev/null 2>&1
+  for f in 1 2 3 4 5 6; do adb exec-out screencap -p > "$OUT/splash_${mode}_$f.png"; done
+  sleep 8
+done
+adb shell cmd uimode night no
 adb shell am force-stop $PKG; sleep 1
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12; noanr
 dump "$OUT/ui_land.xml"
