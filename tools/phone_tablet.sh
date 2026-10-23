@@ -53,7 +53,7 @@ adb shell wm size 1080x2400; adb shell wm density 420; adb shell settings put sy
 adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8
 adb shell input swipe 540 1700 540 600 300; sleep 2; shot "config_tap_default"; dump "$OUT/cfg1.xml"
 XY=$(tap_re "لا شيء" "$OUT/cfg1.xml"); echo "nothing seg: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 2; shot "config_tap_nothing"; dump "$OUT/cfg2.xml"
-XY=$(tap_re "تطبيق" "$OUT/cfg2.xml"); echo "apply: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+XY=$(tap_re "^ *تطبيق *$" "$OUT/cfg2.xml"); echo "apply: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
 adb shell "run-as com.wathakker.app cat shared_prefs/fajr_prefs.xml" > "$OUT/prefs_tap.xml" 2>&1
 grep -o 'widget_tap_[0-9]*[^/]*' "$OUT/prefs_tap.xml" > "$OUT/tap_pref.txt"
 adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8
