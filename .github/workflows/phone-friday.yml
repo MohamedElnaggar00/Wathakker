@@ -42,6 +42,7 @@ jobs:
     - name: Verify WidgetRenderCheck non-exported in signed APK
       if: ${{ inputs.signed_run_id != '' }}
       run: |
+        mkdir -p emulator-evidence
         AAPT=$(ls $ANDROID_HOME/build-tools/*/aapt | sort -V | tail -1)
         $AAPT dump xmltree signed-apk/app-release-unsigned.apk AndroidManifest.xml > emulator-evidence/manifest_dump.txt 2>&1 || echo "aapt dump failed" > emulator-evidence/manifest_dump.txt
         grep -B3 -A3 -i "WidgetRenderCheck" emulator-evidence/manifest_dump.txt > emulator-evidence/manifest_check.txt || echo "WidgetRenderCheck NOT FOUND in manifest" > emulator-evidence/manifest_check.txt
