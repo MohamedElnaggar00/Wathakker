@@ -240,7 +240,7 @@ done
 adb shell am start -S -W -n $PKG/com.example.WidgetRenderCheck >/dev/null 2>&1; sleep 12
 FILES_DIR=/sdcard/Android/data/$PKG/files
 adb shell ls "$FILES_DIR" > "$OUT/rendercheck_ls.txt" 2>&1
-for f in widget_light_Clock.png widget_dark_Clock.png preview_light_Clock.png widget_light_NextPrayer.png preview_light_NextPrayer.png preview_light_Hero.png widget_glass_Hero.png widget_glass_NextPrayer.png widget_glass_Clock.png widget_glass_Schedule.png widget_prefs.txt actual_prayers.txt; do
+for f in widget_light_Clock.png widget_dark_Clock.png preview_light_Clock.png widget_light_NextPrayer.png preview_light_NextPrayer.png preview_light_Hero.png widget_glass_Hero.png widget_glass_NextPrayer.png widget_glass_Clock.png widget_glass_Schedule.png widget_wallblur_Hero.png widget_wallblur_NextPrayer.png widget_wallblur_Clock.png widget_wallblur_Schedule.png widget_prefs.txt actual_prayers.txt; do
   adb pull "$FILES_DIR/$f" "$OUT/$f" >> "$OUT/ui_nav.txt" 2>&1
 done
 adb shell dumpsys appwidget > "$OUT/appwidget_dumpsys.txt" 2>&1
