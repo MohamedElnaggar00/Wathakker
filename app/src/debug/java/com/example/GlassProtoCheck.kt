@@ -106,6 +106,8 @@ class GlassProtoCheck : Activity() {
                 y = base + 16 * dm
             }
             // Honest footnote: simulated backgrounds; the effect is generated from the user's own wallpaper colours.
+            // Advance past the last caption pill (its bottom is base + 8dp) so this pill never overlaps it.
+            y += 36 * dm
             val note = "خلفيات تجريبية للمحاكاة — التأثير يتولّد تلقائيًا من ألوان خلفيتك دون أي صلاحية"
             txt.textSize = 24f
             val nw = txt.measureText(note)
