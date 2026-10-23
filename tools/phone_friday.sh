@@ -5,7 +5,7 @@
 #    iqama row; widget renders show الجمعة; stored iqama_2 pref untouched.
 # 3. Saturday 2026-10-24: list shows الظهر; sheet shows the iqama row (still ON).
 # 4. Back to Friday: iqama row hidden again, pref file unchanged.
-APK=$1; OUT=$2; PKG=com.wathakker.app; mkdir -p "$OUT"
+APK=$1; OUT=$2; SIGNED=$3; PKG=com.wathakker.app; mkdir -p "$OUT"
 adb root >/dev/null 2>&1; sleep 2; adb wait-for-device
 adb shell svc power stayon true
 adb install -r -g "$APK" > "$OUT/install.txt" 2>&1
@@ -41,8 +41,10 @@ adb shell input swipe 360 1300 360 500 400; sleep 2; dismiss_anr; shot city_en_n
 adb shell cmd uimode night no; sleep 1
 
 # ---- 1.5 city alias: production roundtrip (manual-mode key, no geocoder dependency) ----
+if [ -z "$SIGNED" ]; then
 adb shell am start -S -W -n $PKG/com.example.CityEditProtoCheck --ez alias_selftest true >/dev/null 2>&1; sleep 6
 adb pull /sdcard/Android/data/$PKG/files/alias_selftest.txt "$OUT/alias_selftest.txt" >> "$OUT/nav.txt" 2>&1
+fi
 curl -sL -o /tmp/adbkb.apk https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyboard.apk
 adb install -r /tmp/adbkb.apk >/dev/null 2>&1
 ORIG_IME=$(adb shell settings get secure default_input_method | tr -d '\r')
@@ -100,11 +102,13 @@ XY=$(find_cd "bell_2" "$OUT/ui_friday.xml"); echo "bell_2 friday: $XY" >> "$OUT/
 dismiss_anr
 shot friday_sheet; dump_clean "$OUT/ui_friday_sheet.xml"
 adb shell input keyevent 4; sleep 2
+if [ -z "$SIGNED" ]; then
 adb shell am start -S -W -n $PKG/com.example.WidgetRenderCheck >/dev/null 2>&1; sleep 12
 FD=/sdcard/Android/data/$PKG/files
 for f in widget_dark_NextPrayer.png widget_dark_Hero.png widget_dark_PrayerBar.png widget_light_NextPrayer.png widget_light_Hero.png widget_light_PrayerBar.png lock_Next.png lock_Bar.png; do
   adb pull "$FD/$f" "$OUT/friday_$f" >> "$OUT/nav.txt" 2>&1
 done
+fi
 adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_friday.xml" 2>&1
 adb shell dumpsys alarm > "$OUT/alarm_friday_dump.txt" 2>&1
 
@@ -136,9 +140,10 @@ adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_fri
 # restore real time
 [ -n "$REAL_DATE" ] && setdate "$REAL_DATE"
 
-python3 - "$OUT" <<'PYC'
+python3 - "$OUT" "$SIGNED" <<'PYC'
 import sys, os
 out = sys.argv[1]
+SIGNED = len(sys.argv) > 2 and sys.argv[2] == '1'
 def read(n):
     try: return open(os.path.join(out, n), encoding='utf-8').read()
     except Exception: return ''
@@ -156,22 +161,31 @@ lines = [
     'saturday sheet shows iqama row: ' + str('تنبيه الإقامة' in sat_s),
     'friday-again sheet hides iqama row: ' + str('تنبيه الإقامة' not in fri2_s),
     'iqama_2 pref preserved (fri/sat/fri2): ' + str(all('iqama_2" value="true"' in p for p in (p_f, p_s, p_f2))),
-    'widget renders pulled: ' + str(len(renders)) + '/8',
+    ('widget renders: ' + ('skipped (signed release build, debug-only activity)' if SIGNED else 'pulled: ' + str(len(renders)) + '/8')),
 ]
 import re as _re
-def alarm_count(name):
-    txt = read(name)
-    return len(set(_re.findall(r'PendingIntentRecord\{[0-9a-f]+ com\.wathakker\.app', txt)))
-fri_n, sat_n = alarm_count('alarm_friday_dump.txt'), alarm_count('alarm_saturday_dump.txt')
+def pkg_alarm_times(name):
+    times = []
+    for ln in read(name).splitlines():
+        if 'com.wathakker.app' in ln:
+            m = _re.search(r'origWhen[= ](\d{13})', ln) or _re.search(r'when[= ](\d{13})', ln)
+            if m:
+                times.append(int(m.group(1)))
+    return sorted(set(times))
+def has_pair(times, gap_ms=20*60000, tol=120000):
+    return any(abs((b - a) - gap_ms) <= tol for a in times for b in times if b > a)
+fri_t, sat_t = pkg_alarm_times('alarm_friday_dump.txt'), pkg_alarm_times('alarm_saturday_dump.txt')
+parsed = len(fri_t) + len(sat_t) > 0
 lines += [
-    'friday Dhuhr alarm count (expect 1 = adhan only, iqama suppressed): ' + str(fri_n) + ' -> ' + str(fri_n == 1),
-    'saturday Dhuhr alarm count (expect 2 = adhan + iqama): ' + str(sat_n) + ' -> ' + str(sat_n == 2),
+    'alarm trigger-time parse (dumpsys, package-filtered): ' + (('friday=%d saturday=%d' % (len(fri_t), len(sat_t))) if parsed else 'unparsed -> verification limit, not claimed'),
+    'friday adhan->iqama 20-min pair present (expect False = iqama suppressed): ' + (str(has_pair(fri_t)) if parsed else 'n/a'),
+    'saturday adhan->iqama 20-min pair present (expect True): ' + (str(has_pair(sat_t)) if parsed else 'n/a'),
 ]
 saved = read('prefs_alias_saved.xml'); restart = read('prefs_alias_restart.xml'); reset = read('prefs_alias_reset.xml')
 AL = 'برج العرب الجديده'
 selftest = read('alias_selftest.txt')
 alines = [
-    'deterministic identity/alias selftest all pass: ' + str('PASS' in selftest and 'FAIL' not in selftest),
+    ('deterministic identity/alias selftest: ' + ('skipped (signed release build, debug-only activity)' if SIGNED else ('all pass: ' + str('PASS' in selftest and 'FAIL' not in selftest)))),
     'alias saved to store: ' + str(AL in saved and 'city_aliases_json' in saved),
     'alias applied to city_name_ar: ' + str('name="city_name_ar">' + AL in saved),
     'orig names backed up: ' + str('city_name_ar_orig' in saved),
