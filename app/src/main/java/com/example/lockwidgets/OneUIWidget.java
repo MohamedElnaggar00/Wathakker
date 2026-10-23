@@ -36,7 +36,7 @@ final class OneUIWidget {
 
     static Bitmap render(Context c, HomeWidgets.State s, int wd, int ht, int widgetId) {
         float d = c.getResources().getDisplayMetrics().density;
-        float os = HomeWidgets.oversample(wd, ht, d);
+        float os = HomeWidgets.oversample(c, wd, ht, d);
         Bitmap bmp = Bitmap.createBitmap(Math.max(1, (int) (wd * d * os)), Math.max(1, (int) (ht * d * os)), Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(bmp);
         cv.scale(os, os);
