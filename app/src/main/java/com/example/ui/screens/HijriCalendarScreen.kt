@@ -79,7 +79,7 @@ fun HijriCalendarScreen(onMenu: (() -> Unit)? = null) {
         // 3.4 tablets: same split as Hisn al-Muslim. First pane (right in RTL) = month grid,
         // second pane (left in RTL) = the selected day and the month's occasions.
         Row(Modifier.fillMaxSize()) {
-            Box(Modifier.weight(0.58f).fillMaxSize()) {
+            Box(Modifier.weight(0.5f).fillMaxSize()) {
                 OneUIScreen(title = L10n.t(S.CalendarTab), onMenu = onMenu) {
                     item(key = "toggle") {
                         Box(Modifier.padding(horizontal = 20.dp, vertical = 6.dp)) {
@@ -101,7 +101,7 @@ fun HijriCalendarScreen(onMenu: (() -> Unit)? = null) {
                     }
                 }
             }
-            Box(Modifier.weight(0.42f).fillMaxSize().background(cs.background)) {
+            Box(Modifier.weight(0.5f).fillMaxSize().background(cs.background)) {
                 androidx.compose.foundation.lazy.LazyColumn(
                     Modifier.fillMaxSize().windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.systemBars)
                 ) {
