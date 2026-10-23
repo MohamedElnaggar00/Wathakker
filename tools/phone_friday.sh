@@ -106,6 +106,7 @@ for f in widget_dark_NextPrayer.png widget_dark_Hero.png widget_dark_PrayerBar.p
   adb pull "$FD/$f" "$OUT/friday_$f" >> "$OUT/nav.txt" 2>&1
 done
 adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_friday.xml" 2>&1
+adb shell dumpsys alarm > "$OUT/alarm_friday_dump.txt" 2>&1
 
 # ---- 3. Saturday ----
 setdate "102411002026.00"
@@ -118,6 +119,7 @@ dismiss_anr
 shot saturday_sheet; dump_clean "$OUT/ui_saturday_sheet.xml"
 adb shell input keyevent 4; sleep 2
 adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_saturday.xml" 2>&1
+adb shell dumpsys alarm > "$OUT/alarm_saturday_dump.txt" 2>&1
 
 # ---- 4. Friday again: hidden again, prefs unchanged ----
 setdate "102311002026.00"
@@ -155,6 +157,15 @@ lines = [
     'friday-again sheet hides iqama row: ' + str('تنبيه الإقامة' not in fri2_s),
     'iqama_2 pref preserved (fri/sat/fri2): ' + str(all('iqama_2" value="true"' in p for p in (p_f, p_s, p_f2))),
     'widget renders pulled: ' + str(len(renders)) + '/8',
+]
+import re as _re
+def alarm_count(name):
+    txt = read(name)
+    return len(set(_re.findall(r'PendingIntentRecord\{[0-9a-f]+ com\.wathakker\.app', txt)))
+fri_n, sat_n = alarm_count('alarm_friday_dump.txt'), alarm_count('alarm_saturday_dump.txt')
+lines += [
+    'friday Dhuhr alarm count (expect 1 = adhan only, iqama suppressed): ' + str(fri_n) + ' -> ' + str(fri_n == 1),
+    'saturday Dhuhr alarm count (expect 2 = adhan + iqama): ' + str(sat_n) + ' -> ' + str(sat_n == 2),
 ]
 saved = read('prefs_alias_saved.xml'); restart = read('prefs_alias_restart.xml'); reset = read('prefs_alias_reset.xml')
 AL = 'برج العرب الجديده'
