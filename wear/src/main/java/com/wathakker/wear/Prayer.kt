@@ -54,7 +54,10 @@ object Prayer {
         cal.set(Calendar.HOUR_OF_DAY, 12); cal.set(Calendar.MINUTE, 0); cal.set(Calendar.SECOND, 0); cal.set(Calendar.MILLISECOND, 0)
         val d = PrayerTimesCalculator.INSTANCE.calculateAll(cal, lat, lon, CalculationMethod.EGYPTIAN, 1, 0, intArrayOf(0, 0, 0, 0, 0, 0))
         val t = longArrayOf(d.fajr, d.sunrise, d.dhuhr, d.asr, d.maghrib, d.isha)
-        return t.mapIndexed { i, v -> Slot(i, names[i], v) }
+        // Jumuah: on Friday the Dhuhr slot is displayed as الجمعة / Jumuah (no iqama, matches the phone app).
+        val ns = if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY)
+            names.toMutableList().apply { set(2, if (Loc.en) "Jumuah" else "الجمعة") } else names
+        return t.mapIndexed { i, v -> Slot(i, ns[i], v) }
     }
 
     /** One prayer's iqama window: [prayer] is the adhan slot, [at] is the iqama time. */

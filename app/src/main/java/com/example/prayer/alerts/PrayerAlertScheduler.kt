@@ -63,6 +63,10 @@ object PrayerAlertScheduler {
         am.cancel(pending(context, prayer, KIND_IQAMA))
         am.cancel(pending(context, prayer, KIND_DND_OFF))
         am.cancel(pending(context, prayer, KIND_EARLY))
+        // No iqama for Friday Dhuhr (Jumuah): suppress the iqama alarm for that occurrence only;
+        // the stored preference and other days/prayers are untouched.
+        val adhanDay = Calendar.getInstance().apply { timeInMillis = adhanTrigger }
+        val fridayDhuhr = prayer == 2 && adhanDay.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY
         if (!PrayerAlertStore.isEnabled(context, prayer)) return
         setExact(am, adhanTrigger, pending(context, prayer, KIND_ADHAN))
         // Additional early reminder: fires IN ADDITION to the adhan-time notification.
@@ -71,7 +75,7 @@ object PrayerAlertScheduler {
             setExact(am, adhanTrigger - leadMs, pending(context, prayer, KIND_EARLY, adhanTrigger))
         }
         val iqamaAt = adhanTrigger + IQAMA_OFFSETS[prayer] * 60000L
-        if (PrayerAlertStore.iqamaReminder(context, prayer) && IQAMA_OFFSETS[prayer] > 0) {
+        if (PrayerAlertStore.iqamaReminder(context, prayer) && IQAMA_OFFSETS[prayer] > 0 && !fridayDhuhr) {
             if (iqamaAt > now) {
                 setExact(am, iqamaAt, pending(context, prayer, KIND_IQAMA))
             }

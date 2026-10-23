@@ -229,6 +229,7 @@ public final class WidgetUpdater {
         lx.init(context);
         String code = lx.getLang().getCode();
         List names2 = java.util.Arrays.asList(new String[]{lx.t(com.example.ui.i18n.S.PrayerFajr), lx.t(com.example.ui.i18n.S.PrayerShuruq), lx.t(com.example.ui.i18n.S.PrayerDhuhr), lx.t(com.example.ui.i18n.S.PrayerAsr), lx.t(com.example.ui.i18n.S.PrayerMaghrib), lx.t(com.example.ui.i18n.S.PrayerIsha)});
+        if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) names2.set(2, lx.t(com.example.ui.i18n.S.PrayerJumuah));
         int i3 = 0;
         Iterator it = times.iterator();
         while (true) {

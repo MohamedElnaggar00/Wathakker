@@ -1,6 +1,7 @@
 package com.example.fajr.ui
 
 import android.app.KeyguardManager
+import java.util.Calendar
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
@@ -201,7 +202,7 @@ class FajrAlarmActivity : ComponentActivity() {
             1 -> S.PrayerShuruq; 2 -> S.PrayerDhuhr; 3 -> S.PrayerAsr
             4 -> S.PrayerMaghrib; 5 -> S.PrayerIsha; else -> S.PrayerFajr
         }
-        val prayerName = L10n.t(nameKey)
+        val prayerName = if (prayerIndex == 2 && Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) L10n.t(S.PrayerJumuah) else L10n.t(nameKey)
         setContent {
             MyApplicationTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides if (L10n.isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {

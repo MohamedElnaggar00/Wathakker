@@ -1,6 +1,7 @@
 package com.example.prayer.alerts
 
 import android.app.NotificationChannel
+import java.util.Calendar
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -44,7 +45,7 @@ class PrayerAlertReceiver : BroadcastReceiver() {
             0 -> S.PrayerFajr; 1 -> S.PrayerShuruq; 2 -> S.PrayerDhuhr
             3 -> S.PrayerAsr; 4 -> S.PrayerMaghrib; else -> S.PrayerIsha
         }
-        val prayerName = L10n.t(nameKey)
+        val prayerName = if (prayer == 2 && Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) L10n.t(S.PrayerJumuah) else L10n.t(nameKey)
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         val isIqama = kind == PrayerAlertScheduler.KIND_IQAMA

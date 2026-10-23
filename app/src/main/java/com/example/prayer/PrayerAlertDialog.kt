@@ -1,6 +1,7 @@
 package com.example.prayer
 
 import android.app.NotificationManager
+import java.util.Calendar
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
@@ -208,8 +209,8 @@ fun PrayerAlertDialog(prayer: Int, prayerName: String, onDismiss: () -> Unit) {
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
-                // Iqama reminder (no iqama for Shuruq)
-                if (prayer != 1) {
+                // Iqama reminder (no iqama for Shuruq; no iqama for Friday Dhuhr - Jumuah)
+                if (prayer != 1 && !(prayer == 2 && Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY)) {
                     Spacer(Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),

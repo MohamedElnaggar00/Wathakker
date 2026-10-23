@@ -146,10 +146,11 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
     }
     val today = days.first
     val nightLen = (days.second.fajr - today.maghrib).coerceAtLeast(1L)
+    val dhuhrName = if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) L10n.t(S.PrayerJumuah) else L10n.t(S.PrayerDhuhr)
     val ordered: List<Triple<String, Long, ImageVector>> = listOf(
         Triple(L10n.t(S.PrayerFajr), today.fajr, Icons.Outlined.WbTwilight),
         Triple(L10n.t(S.PrayerShuruq), today.sunrise, Icons.Outlined.WbSunny),
-        Triple(L10n.t(S.PrayerDhuhr), today.dhuhr, Icons.Outlined.LightMode),
+        Triple(dhuhrName, today.dhuhr, Icons.Outlined.LightMode),
         Triple(L10n.t(S.PrayerAsr), today.asr, Icons.Outlined.FilterDrama),
         Triple(L10n.t(S.PrayerMaghrib), today.maghrib, Icons.Outlined.NightsStay),
         Triple(L10n.t(S.PrayerIsha), today.isha, Icons.Outlined.DarkMode)
@@ -238,7 +239,7 @@ fun PrayerTimesScreen(onQibla: (() -> Unit)? = null, onMenu: (() -> Unit)? = nul
         val names = listOf(S.PrayerFajr, S.PrayerShuruq, S.PrayerDhuhr, S.PrayerAsr, S.PrayerMaghrib, S.PrayerIsha)
         PrayerAlertDialog(
             prayer = idx,
-            prayerName = L10n.t(names[idx]),
+            prayerName = L10n.t(if (idx == 2 && cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) S.PrayerJumuah else names[idx]),
             onDismiss = { alertDialogPrayer = null; bellTick++ }
         )
     }
