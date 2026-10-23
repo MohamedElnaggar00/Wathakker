@@ -105,6 +105,24 @@ public final class HomeWidgets {
   if(frostGrain==null){android.graphics.Bitmap g=android.graphics.Bitmap.createBitmap(64,64,android.graphics.Bitmap.Config.ARGB_8888);java.util.Random rnd=new java.util.Random(7);for(int y=0;y<64;y++)for(int x=0;x<64;x++){int a=rnd.nextInt(26);g.setPixel(x,y,(a<<24)|(rnd.nextBoolean()?0xFFFFFF:0x000000));}frostGrain=g;}
   Paint gp=new Paint(Paint.ANTI_ALIAS_FLAG);gp.setShader(new android.graphics.BitmapShader(frostGrain,Shader.TileMode.REPEAT,Shader.TileMode.REPEAT));cv.drawRoundRect(r,rad,rad,gp);
  }
+ static android.graphics.Bitmap wpLight;static int wpLightId=-2;
+ /** Lighter blur for the glass (Morphe) prototype: larger thumb, one box pass - shapes stay readable. */
+ static android.graphics.Bitmap lightWallBlur(Context c){
+  android.app.WallpaperManager wm=android.app.WallpaperManager.getInstance(c);
+  int id=-1;try{id=wm.getWallpaperId(android.app.WallpaperManager.FLAG_SYSTEM);}catch(Throwable t){}
+  if(wpLight!=null&&id==wpLightId)return wpLight;
+  android.graphics.Bitmap small=null;
+  try{android.graphics.drawable.Drawable d=wm.getDrawable();if(d!=null){int w=d.getIntrinsicWidth(),h=d.getIntrinsicHeight();if(w<=0||h<=0){w=720;h=1280;}int sw=96,sh=Math.max(1,96*h/w);small=android.graphics.Bitmap.createBitmap(sw,sh,android.graphics.Bitmap.Config.ARGB_8888);android.graphics.Canvas cv=new android.graphics.Canvas(small);d.setBounds(0,0,sw,sh);d.draw(cv);}}catch(Throwable t){}
+  if(small==null){android.graphics.Bitmap m=wallBlur(c,false);if(m==null)return null;small=android.graphics.Bitmap.createScaledBitmap(m,96,64,true);}
+  boxBlur(small,2);
+  wpLight=small;wpLightId=id;
+  return small;
+ }
+ static void protoGlass(Context c,Canvas cv,boolean blur,float w,float h,float rad){
+  boolean night=nightMode(c);
+  if(blur){android.graphics.Bitmap wb=lightWallBlur(c);if(wb!=null){android.graphics.Bitmap scaled=centerCrop(wb,Math.max(1,(int)w),Math.max(1,(int)h));Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);bp.setShader(new android.graphics.BitmapShader(scaled,android.graphics.Shader.TileMode.CLAMP,android.graphics.Shader.TileMode.CLAMP));cv.drawRoundRect(new RectF(0,0,w,h),rad,rad,bp);}}
+  Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);p.setColor(night?0x52141A22:0x99F2F2F7);cv.drawRoundRect(new RectF(0,0,w,h),rad,rad,p);
+ }
  static void boxBlur(android.graphics.Bitmap b,int r){
   int w=b.getWidth(),h=b.getHeight();int[] px=new int[w*h];b.getPixels(px,0,w,0,0,w,h);int[] out=new int[w*h];
   for(int y=0;y<h;y++)for(int x=0;x<w;x++){long a=0,rr=0,g=0,bb=0,n=0;for(int dx=-r;dx<=r;dx++){int xx=x+dx;if(xx<0||xx>=w)continue;int p=px[y*w+xx];a+=p>>>24;rr+=(p>>16)&255;g+=(p>>8)&255;bb+=p&255;n++;}out[y*w+x]=(int)((a/n<<24)|(rr/n<<16)|(g/n<<8)|(bb/n));}
@@ -134,7 +152,12 @@ String bgKey=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_co
 if(bgKey==null)bgKey=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");
 float rad=Math.min(24,ht/4f)*d;
 android.graphics.Bitmap wbm=("wallblur".equals(bgKey)||"frosted".equals(bgKey))?wallBlur(c,"wallblur".equals(bgKey)):null;
-if(wbm!=null){
+// 3.3.3 REVIEW PROTOTYPES (rendered only by the debug GlassProtoCheck harness; no settings UI can
+// set these keys, dormant in release): protoGlass1 = Morphe-like sharper glass (tint only, no
+// blur); protoGlass2 = same tint over a lightly blurred wallpaper; the frosted candidate needs no
+// proto key - the existing "wallblur" path IS the real-wallpaper heavy-blur treatment.
+if("protoGlass1".equals(bgKey)||"protoGlass2".equals(bgKey)){protoGlass(c,cv,"protoGlass2".equals(bgKey),wd*d,ht*d,rad);}
+else if(wbm!=null){
  android.graphics.Bitmap scaled=centerCrop(wbm,Math.max(1,(int)(wd*d)),Math.max(1,(int)(ht*d)));
  Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);
  bp.setShader(new android.graphics.BitmapShader(scaled,android.graphics.Shader.TileMode.CLAMP,android.graphics.Shader.TileMode.CLAMP));

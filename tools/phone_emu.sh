@@ -218,3 +218,12 @@ lines.append('labels invariant under both settings: ' + str(h in latin and a in 
 lines.append('global conversion still active elsewhere (Indic digits on tabs after selecting هندية): ' + str(bool(re.search(r'[٠-٩]', tabs))))
 open(out + '/digits_check.txt', 'w').write('\n'.join(lines) + '\n')
 PYD
+# 3.3.3 REVIEW PROTOTYPE: glass/frosted background candidates over the real wallpaper (dark+light)
+adb shell cmd uimode night yes
+adb shell am start -S -W -n $PKG/com.example.GlassProtoCheck >/dev/null 2>&1; sleep 8
+adb exec-out screencap -p > "$OUT/glass_proto_night.png"
+adb shell cmd uimode night no
+adb shell am start -S -W -n $PKG/com.example.GlassProtoCheck >/dev/null 2>&1; sleep 8
+adb exec-out screencap -p > "$OUT/glass_proto_day.png"
+adb shell cmd uimode night yes
+adb logcat -d -s GlassProto > "$OUT/glass_proto.txt"
