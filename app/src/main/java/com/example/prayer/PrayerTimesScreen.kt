@@ -323,20 +323,8 @@ fun PrayerTimesContent(
             PrayerSkyGlass.set(frost)
             onDispose { PrayerSkyGlass.set(null) }
         }
-        OneUIScreen(
-        title = L10n.t(S.PrayerTimes),
-        onMenu = onMenu,
-        containerColor = Color.Transparent,
-        titleColor = sc.textPrimary,
-        alwaysShowHeaderTiles = true,
-        titleTopExtra = 1.5.dp,
-        titleBottomTrim = 0.dp,
-        frost = frost,
-        actions = if (onQibla != null) {
-            { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
-        } else null
-    ) {
-        item(key = "prayer-overview") {
+        val wide = com.example.ui.oneui.isWideScreen()
+        val overviewCard: @Composable () -> Unit = {
             // One card: date and location, a divider, then the next-prayer block.
             OneUICard(
                 modifier = Modifier.skyGlass(RoundedCornerShape(OneUIDimens.CardRadius), skyHaze, sc),
@@ -420,7 +408,7 @@ fun PrayerTimesContent(
                 )
             }
         }
-        item(key = "prayer-list") {
+        val listCard: @Composable () -> Unit = {
             // Next-prayer row: solid green pill with high-contrast content in both themes.
             val nextDark = false // prayer page always sits on the wallpaper: one pale-green look in both themes
             val nextRowBg = if (nextDark) Color(0xFF24533A) else Color(0xFFC2E8CE)
@@ -502,6 +490,30 @@ fun PrayerTimesContent(
                     }
                 }
             }
+        }
+        OneUIScreen(
+        title = L10n.t(S.PrayerTimes),
+        onMenu = onMenu,
+        containerColor = Color.Transparent,
+        titleColor = sc.textPrimary,
+        alwaysShowHeaderTiles = true,
+        titleTopExtra = 1.5.dp,
+        titleBottomTrim = 0.dp,
+        frost = frost,
+        actions = if (onQibla != null) {
+            { OneUIIconAction(Icons.Outlined.Explore, L10n.t(S.QiblaTitle), onQibla) }
+        } else null
+    ) {
+        if (wide) {
+            item(key = "prayer-wide") {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Box(Modifier.weight(1f)) { overviewCard() }
+                    Box(Modifier.weight(1f)) { listCard() }
+                }
+            }
+        } else {
+            item(key = "prayer-overview") { overviewCard() }
+            item(key = "prayer-list") { listCard() }
         }
         }
     }

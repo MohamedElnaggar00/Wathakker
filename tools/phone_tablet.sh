@@ -1,0 +1,58 @@
+#!/bin/bash
+# 3.4 tablet + widget-tap evidence. Usage: phone_tablet.sh <apk> <outdir>
+APK=$1; OUT=$2; PKG=com.wathakker.app; mkdir -p "$OUT"; adb root >/dev/null 2>&1
+adb install -r -g "$APK" > "$OUT/install.txt" 2>&1
+adb shell svc power stayon true
+adb shell wm size > "$OUT/wm.txt"; adb shell wm density >> "$OUT/wm.txt"
+dump(){ adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$1" >/dev/null 2>&1; }
+tap_re(){ python3 - "$1" "$2" <<'PY'
+import re,sys
+x=open(sys.argv[2],encoding='utf8').read()
+for m in re.finditer(r'<node [^>]*>',x):
+    n=m.group(0)
+    t=re.search(r'text="([^"]*)"',n); d=re.search(r'content-desc="([^"]*)"',n); b=re.search(r'bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"',n)
+    s=(t.group(1) if t else '')+' '+(d.group(1) if d else '')
+    if b and re.search(sys.argv[1],s):
+        a=list(map(int,b.groups())); print((a[0]+a[2])//2,(a[1]+a[3])//2); break
+PY
+}
+shot(){ adb exec-out screencap -p > "$OUT/$1.png"; }
+setprefs(){ adb shell am force-stop $PKG; adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">$1</string></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"; }
+launch(){ adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 14; for i in 1 2 3; do dump "$OUT/anr.xml"; if grep -q "isn't responding" "$OUT/anr.xml"; then XY=$(tap_re "Wait" "$OUT/anr.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 4; fi; done; }
+# First launch once so the data dir exists, then force prefs.
+adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
+adb shell settings put system accelerometer_rotation 0
+
+run_lang(){ L=$1; setprefs $L
+  adb shell settings put system user_rotation 1   # landscape
+  launch; sleep 3; shot "${L}_land_prayer"; dump "$OUT/${L}_land_prayer.xml"
+  XY=$(tap_re "حصن|Hisn|Fortress" "$OUT/${L}_land_prayer.xml"); echo "$L hisn tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+  shot "${L}_land_hisn"; dump "$OUT/${L}_land_hisn.xml"
+  XY=$(tap_re "أذكار|Morning|Evening|Sleep|Waking" "$OUT/${L}_land_hisn.xml"); echo "$L chapter tap: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+  shot "${L}_land_hisn_chapter"
+  XY=$(tap_re "التقويم|Calendar" "$OUT/${L}_land_prayer.xml"); echo "$L cal tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_land_calendar"
+  XY=$(tap_re "التذكيرات|Reminders" "$OUT/${L}_land_prayer.xml"); echo "$L rem tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_land_reminders"
+  adb shell settings put system user_rotation 0   # portrait
+  sleep 4; shot "${L}_port_reminders"; dump "$OUT/${L}_port.xml"
+  XY=$(tap_re "الصلاة|Prayer" "$OUT/${L}_port.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_port_prayer"
+  adb shell settings put system user_rotation 1
+}
+run_lang ar
+run_lang en
+adb logcat -d | grep -i "AndroidRuntime\|FATAL" | head -20 > "$OUT/errors.txt"
+
+# Phone-size control: wm override to a phone width must keep the bottom bar (no rail).
+adb shell wm size 1080x2400; adb shell wm density 420; adb shell settings put system user_rotation 0
+setprefs ar; launch; sleep 3; shot "phone_ar_prayer"
+adb shell wm size reset; adb shell wm density reset
+
+# Widget settings: new tap-response selector, choose "nothing", Apply, check saved pref per widget.
+adb shell settings put system user_rotation 0
+adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8
+adb shell input swipe 540 1800 540 700 300; sleep 2; shot "config_tap_default"; dump "$OUT/cfg1.xml"
+XY=$(tap_re "لا شيء" "$OUT/cfg1.xml"); echo "nothing seg: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 2; shot "config_tap_nothing"; dump "$OUT/cfg2.xml"
+XY=$(tap_re "تطبيق" "$OUT/cfg2.xml"); echo "apply: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_tap.xml" 2>&1
+grep -o 'widget_tap_[0-9]*[^/]*' "$OUT/prefs_tap.xml" > "$OUT/tap_pref.txt"
+adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8
+adb shell input swipe 540 1800 540 700 300; sleep 2; shot "config_tap_reopened"

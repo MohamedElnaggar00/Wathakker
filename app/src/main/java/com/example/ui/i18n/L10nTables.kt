@@ -6,6 +6,7 @@ internal fun table(l: Lang): Map<S, String> = when (l) {
 }
 
 internal val AR = mapOf(
+    S.WidgetTapTitle to "عند الضغط على الويدجت", S.WidgetTapOpenApp to "فتح التطبيق", S.WidgetTapNothing to "لا شيء",
     S.PrayerTab to "الصلاة", S.AzkarTab to "التذكيرات", S.HisnTab to "حصن المسلم", S.FajrTab to "الفجر",
     S.TasbeehTab to "السبحة", S.Favorites to "المفضلة", S.Reminders to "التنبيهات", S.Stats to "الإحصائيات",
     S.Tags to "التصنيفات", S.Settings to "الإعدادات", S.About to "حول التطبيق", S.More to "المزيد", S.Menu to "القائمة",
@@ -139,6 +140,7 @@ internal val AR = mapOf(
 )
 
 internal val EN = mapOf(
+    S.WidgetTapTitle to "When tapped", S.WidgetTapOpenApp to "Open the app", S.WidgetTapNothing to "Nothing",
     S.PrayerTab to "Prayer", S.AzkarTab to "Azkar", S.HisnTab to "Hisn", S.FajrTab to "Fajr",
     S.TasbeehTab to "Tasbeeh", S.Favorites to "Favorites", S.Reminders to "Reminders", S.Stats to "Statistics",
     S.Tags to "Tags", S.Settings to "Settings", S.About to "About", S.More to "More", S.Menu to "Menu",

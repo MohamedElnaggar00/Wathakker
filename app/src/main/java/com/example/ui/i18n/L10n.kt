@@ -45,7 +45,8 @@ enum class S {
     HighLatRule, HighLatNone, HighLatMiddle, HighLatSeventh, HighLatAngle,
     AdjSection, AdjNote, AdjHijri, AdjMinShort, AdjDayShort, AlertTiming, AtAdhanTime, MinBeforeFmt,
     AdhanReminder, IqamaReminder, IqamaReminderSub, PrayerNowFmt, PrayerApproachingFmt, ShuruqNow, ShuruqApproaching, BgFrosted, NeedsFilesPerm, ColorYellow, ColorTurquoise, WidgetAccent, PermLocTitle, PermLocBody, PermFilesTitle, PermFilesBody, PermAllow, PermNotNow, PermOpenSettings, IqamaNowFmt, SharedAlertSettings,
-    HijriConvTitle, HijriConvSub, GregToHijri, HijriToGreg, DayLabel, MonthLabel, YearLabel, Back, AtAdhanRow, AtAdhanRowSub, BeforeAdhanRow, EditCityName, ResetCityNameAuto, CustomLocationNameHint, BeforeAdhanHelper
+    HijriConvTitle, HijriConvSub, GregToHijri, HijriToGreg, DayLabel, MonthLabel, YearLabel, Back, AtAdhanRow, AtAdhanRowSub, BeforeAdhanRow, EditCityName, ResetCityNameAuto, CustomLocationNameHint, BeforeAdhanHelper,
+    WidgetTapTitle, WidgetTapOpenApp, WidgetTapNothing
 }
 
 object L10n {

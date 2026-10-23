@@ -1077,3 +1077,90 @@ fun OneUIDrawer(
     }
 }
 
+
+/**
+ * 3.4 large-screen mode: true when the window is at least 600dp wide (Android's Medium/Expanded
+ * width classes: tablets, unfolded foldables, large split-screen windows). It follows the live
+ * window width, so a rotated or resized window switches layout by itself.
+ */
+@Composable
+fun isWideScreen(): Boolean = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
+
+/** Content column used on wide screens for single-column pages so lines do not stretch edge to edge. */
+@Composable
+fun WideContentFrame(content: @Composable () -> Unit) {
+    if (!isWideScreen()) { content(); return }
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        Box(Modifier.fillMaxHeight().widthIn(max = 760.dp).fillMaxWidth()) { content() }
+    }
+}
+
+/** 3.4: side navigation rail that replaces the floating bottom bar on wide screens (same tabs, same tint rules). */
+@Composable
+fun OneUINavRail(
+    tabs: List<BottomTab>,
+    selectedRoute: String,
+    onSelect: (BottomTab) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val cs = MaterialTheme.colorScheme
+    val tabBlue = if (ThemeSettings.isDark()) Color(0xFF78B8F8) else Color(0xFF2E6DB4)
+    val railView = androidx.compose.ui.platform.LocalView.current
+    Box(
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(WindowInsets.statusBars.asPaddingValues())
+            .padding(WindowInsets.navigationBars.asPaddingValues())
+            .padding(horizontal = 12.dp, vertical = 12.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .width(84.dp)
+                .clip(RoundedCornerShape(32.dp))
+                .background(cs.surfaceContainerHigh.copy(alpha = 0.9f))
+                .padding(vertical = 14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            tabs.forEach { tab ->
+                val selected = tab.route == selectedRoute
+                val tint by animateColorAsState(
+                    if (selected) tabBlue else cs.onSurface.copy(alpha = 0.78f),
+                    label = "railTint"
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onSelect(tab) }
+                        .padding(vertical = 4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(32.dp)
+                            .width(56.dp)
+                            .clip(CircleShape)
+                            .background(if (selected) tabBlue.copy(alpha = 0.16f) else Color.Transparent),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        tab.icon(tint)
+                    }
+                    Text(
+                        text = tab.label,
+                        color = tint,
+                        fontSize = 11.sp,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp, vertical = 2.dp),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                }
+            }
+        }
+    }
+}

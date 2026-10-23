@@ -156,13 +156,14 @@ fun PatternSection(selected: Int, onPick: (Int) -> Unit) {
 }
 
 @Composable
-fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, currentAccent: Int = 0, showColors: Boolean = true, showPattern: Boolean = true, onApply: (String, String, Int, Int) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
+fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, currentAccent: Int = 0, currentTapOpens: Boolean = true, showColors: Boolean = true, showPattern: Boolean = true, onApply: (String, String, Int, Int, Boolean) -> Unit, onNeedFilesPermission: () -> Unit = {}) {
     val cs = MaterialTheme.colorScheme
     // Taps only select; nothing is saved or closed until Apply (One UI style).
     var barSel by remember { mutableStateOf(current) }
     var bgSel by remember { mutableStateOf(currentBg) }
     var patSel by remember { mutableStateOf(currentPattern) }
     var accentSel by remember { mutableStateOf(currentAccent.toString()) }
+    var tapOpens by remember { mutableStateOf(currentTapOpens) }
     Box(
         modifier = Modifier.fillMaxSize().background(cs.background).padding(24.dp),
         contentAlignment = Alignment.Center
@@ -195,6 +196,15 @@ fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, cu
                 }
                 // Only the decorated OneUI widget draws patterns; other widgets get colours only.
                 if (showPattern) PatternSection(patSel) { patSel = it }
+                // 3.4: what a tap on this Home widget does (per widget): open the app or nothing.
+                Spacer(Modifier.height(16.dp))
+                Text(L10n.t(S.WidgetTapTitle), color = cs.onSurfaceVariant, fontSize = 13.sp)
+                Spacer(Modifier.height(8.dp))
+                com.example.ui.oneui.OneUISegmented(
+                    options = listOf(L10n.t(S.WidgetTapOpenApp), L10n.t(S.WidgetTapNothing)),
+                    selected = if (tapOpens) 0 else 1,
+                    onSelect = { tapOpens = it == 0 }
+                )
             }
             // One UI "Scan phone" style: one centered filled blue pill. Back discards.
             Box(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 24.dp), contentAlignment = Alignment.Center) {
@@ -204,7 +214,7 @@ fun ConfigScreen(current: String, currentBg: String, currentPattern: Int = 1, cu
                         .height(52.dp)
                         .clip(RoundedCornerShape(26.dp))
                         .background(Color(0xFF377AFF))
-                        .plainClickable { onApply(barSel, bgSel, patSel, accentSel.toIntOrNull() ?: 0) },
+                        .plainClickable { onApply(barSel, bgSel, patSel, accentSel.toIntOrNull() ?: 0, tapOpens) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(L10n.t(S.Apply), color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
@@ -255,8 +265,9 @@ class WidgetConfigActivity : ComponentActivity() {
                     showColors = !decorated,
                     showPattern = decorated,
                     onNeedFilesPermission = { com.example.ui.PermissionFlow.requestFilesIfNeeded(this@WidgetConfigActivity) },
-                    onApply = { bar, bg, pat, accent ->
-                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).putInt(keyFor("widget_oneui_color"), accent).apply()
+                    currentTapOpens = sp.getString(keyFor("widget_tap"), "open") != "none",
+                    onApply = { bar, bg, pat, accent, tap ->
+                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).putInt(keyFor("widget_oneui_color"), accent).putString(keyFor("widget_tap"), if (tap) "open" else "none").apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))

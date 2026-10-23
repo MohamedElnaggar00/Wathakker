@@ -165,23 +165,42 @@ fun MainScreen(viewModel: MainViewModel) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable("tabs") {
-                    HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-                        when (oneUITabs[page].route) {
-                            "calendar" -> HijriCalendarScreen { drawerOpen = true }
-                            "prayer" -> PrayerTimesScreen(onQibla = { navController.navigate("qibla") }, onMenu = { drawerOpen = true }, onLocation = { navController.navigate("location_calc") })
-                            "hisn" -> HisnListScreen(
-                                hisnViewModel,
-                                { chapter -> navController.navigate("hisn/" + chapter.id) },
-                                { drawerOpen = true }
-                            )
-                            "home" -> DashboardScreen(
-                                viewModel,
-                                { navController.navigate(it) },
-                                { drawerOpen = true }
-                            )
-                            else -> AzkarListScreen(viewModel, { showAddDialog = true }, { drawerOpen = true })
+                    val wide = com.example.ui.oneui.isWideScreen()
+                    val tabsContent: @Composable () -> Unit = {
+                        HorizontalPager(state = pagerState, userScrollEnabled = !wide, modifier = Modifier.fillMaxSize()) { page ->
+                            when (oneUITabs[page].route) {
+                                "calendar" -> com.example.ui.oneui.WideContentFrame { HijriCalendarScreen { drawerOpen = true } }
+                                "prayer" -> PrayerTimesScreen(onQibla = { navController.navigate("qibla") }, onMenu = { drawerOpen = true }, onLocation = { navController.navigate("location_calc") })
+                                "hisn" -> if (wide) HisnTwoPane(
+                                    hisnViewModel, viewModel,
+                                    onMenu = { drawerOpen = true }
+                                ) else HisnListScreen(
+                                    hisnViewModel,
+                                    { chapter -> navController.navigate("hisn/" + chapter.id) },
+                                    { drawerOpen = true }
+                                )
+                                "home" -> DashboardScreen(
+                                    viewModel,
+                                    { navController.navigate(it) },
+                                    { drawerOpen = true }
+                                )
+                                else -> com.example.ui.oneui.WideContentFrame { AzkarListScreen(viewModel, { showAddDialog = true }, { drawerOpen = true }) }
+                            }
                         }
                     }
+                    if (wide) {
+                        androidx.compose.foundation.layout.Row(Modifier.fillMaxSize()) {
+                            com.example.ui.oneui.OneUINavRail(
+                                tabs = oneUITabs,
+                                selectedRoute = currentTabRoute,
+                                onSelect = { tab ->
+                                    val i = oneUITabs.indexOf(tab)
+                                    if (i >= 0) scope.launch { pagerState.scrollToPage(i) }
+                                }
+                            )
+                            Box(Modifier.weight(1f).fillMaxSize()) { tabsContent() }
+                        }
+                    } else tabsContent()
                 }
                 composable(
                     "hisn/{id}",
@@ -237,7 +256,7 @@ fun MainScreen(viewModel: MainViewModel) {
             // use the same frost material as the cards; everywhere else they keep
             // their default look.
             val skyFrost = if (isTab && currentTabRoute == "prayer") PrayerSkyGlass.spec.value else null
-            if (isTab) {
+            if (isTab && !com.example.ui.oneui.isWideScreen()) {
                 OneUIBottomBar(
                     tabs = oneUITabs,
                     selectedRoute = currentTabRoute,
@@ -298,3 +317,32 @@ fun MainScreen(viewModel: MainViewModel) {
 }
 
 
+
+
+/** 3.4 wide screens: Hisn al-Muslim chapter list on one side, the open chapter on the other. */
+@Composable
+fun HisnTwoPane(hisnViewModel: HisnViewModel, viewModel: MainViewModel, onMenu: () -> Unit) {
+    var selected by remember { mutableStateOf<Int?>(null) }
+    val addedDhikr by viewModel.allDhikr.collectAsStateWithLifecycle()
+    androidx.compose.foundation.layout.Row(Modifier.fillMaxSize()) {
+        Box(Modifier.weight(0.42f).fillMaxSize()) {
+            HisnListScreen(hisnViewModel, { chapter -> selected = chapter.id }, onMenu)
+        }
+        Box(Modifier.weight(0.58f).fillMaxSize()) {
+            val id = selected
+            if (id != null) {
+                HisnChapterScreen(
+                    id,
+                    hisnViewModel,
+                    { selected = null },
+                    addedDhikr.map { it.title }.toSet(),
+                    { title, content -> viewModel.addDhikrWithSchedule(title, content, listOf("09:00")) }
+                )
+            } else {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(L10n.t(S.HisnTab), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.titleMedium)
+                }
+            }
+        }
+    }
+}
