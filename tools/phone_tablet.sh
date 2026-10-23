@@ -66,7 +66,7 @@ SZ=$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1); W=${SZ%x*}; H=${SZ#
 AX=$((W/4)); BX=$((W*3/4)); Y=$((H/2))
 echo "screen $SZ" > "$OUT/hosttap.txt"
 top(){ adb shell dumpsys activity activities | grep -m1 -E "mResumedActivity|ResumedActivity" | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*' | head -1; }
-host(){ adb shell am start -n $PKG/com.example.WidgetHostCheck --es a $1 --es b $2 >/dev/null 2>&1; sleep 14; }
+host(){ adb shell am start -W -n $PKG/com.example.WidgetHostCheck --es a $1 --es b $2 >> "$OUT/hostlaunch.txt" 2>&1; sleep 12; echo "host $1 $2 top=$(top)" >> "$OUT/hosttap.txt"; }
 check(){ # name x expected(Main|Host)
   adb shell input tap $2 $Y; sleep 4; T=$(top)
   case "$T" in *MainActivity*) GOT=Main;; *WidgetHostCheck*) GOT=Host;; *) GOT="other:$T";; esac
@@ -82,4 +82,4 @@ host open none; check A_open_B_none_tapB $BX Host
 host none open; check A_none_B_open_tapA $AX Host
 host none open; check A_none_B_open_tapB $BX Main
 host open open; check A_open_again_tapA $AX Main
-adb logcat -d | grep HOSTCHECK > "$OUT/hostcheck_log.txt"
+adb logcat -d | grep -E "HOSTCHECK|FATAL EXCEPTION|AppWidgetHost|WathakkerHome" > "$OUT/hostcheck_log.txt"; adb logcat -d -b crash > "$OUT/crash.txt" 2>&1
