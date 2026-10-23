@@ -49,8 +49,8 @@ mid(){ # $1 tag, $2 from, $3 to
   for t in 1 2 3; do sleep 0.45; adb exec-out screencap -p > "$OUT/mid_$1_$t.png"; done
   wait $DP; sleep 2; adb exec-out screencap -p > "$OUT/swipe_$1.png"
 }
-for k in 1 2 3; do mid fwd$k $X1 $X2; done
-for k in 1 2 3; do mid back$k $X2 $X1; done
+for k in 1 2 3; do mid fwd$k $X2 $X1; done
+for k in 1 2 3; do mid back$k $X1 $X2; done
 # --- each page via bar tap, then scroll to the end ---
 scroll_end(){ # $1 name
   for i in 1 2 3 4 5 6 7 8; do adb shell input swipe $((W/2)) $((H*3/4)) $((W/2)) $((H/5)) 400; sleep 1; done
