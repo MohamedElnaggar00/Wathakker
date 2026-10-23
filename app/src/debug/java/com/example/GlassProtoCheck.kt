@@ -95,13 +95,15 @@ class GlassProtoCheck : Activity() {
                 sp.edit().putString("widget_bg_color_996", key).commit()
                 val card = HomeWidgets.renderKind(this, "Hero", cardW, cardH, 996)
                 sc.drawBitmap(card, x.toFloat(), y, null)
-                y += cardH * dm + 8 * dm
-                // Caption fully inside the gap below its card - never over widget pixels.
+                y += cardH * dm
+                // Caption fully inside the gap below its card: baseline 36dp under the card so
+                // the pill (30dp ascent + 8dp descent) never touches widget pixels.
+                val base = y + 36 * dm
                 val w = txt.measureText(name)
                 pill.color = if (night) 0xB3000000.toInt() else 0xB3FFFFFF.toInt()
-                sc.drawRoundRect(RectF(cx - w / 2 - 8 * dm, y - 30 * dm, cx + w / 2 + 8 * dm, y + 8 * dm), 9 * dm, 9 * dm, pill)
-                sc.drawText(name, cx - w / 2, y, txt)
-                y += 34 * dm
+                sc.drawRoundRect(RectF(cx - w / 2 - 8 * dm, base - 30 * dm, cx + w / 2 + 8 * dm, base + 8 * dm), 9 * dm, 9 * dm, pill)
+                sc.drawText(name, cx - w / 2, base, txt)
+                y = base + 16 * dm
             }
             // Honest footnote: simulated backgrounds; the effect is generated from the user's own wallpaper colours.
             val note = "خلفيات تجريبية للمحاكاة — التأثير يتولّد تلقائيًا من ألوان خلفيتك دون أي صلاحية"
