@@ -68,6 +68,52 @@ public final class FajrViewModel extends AndroidViewModel {
         this._uiState.setValue(FajrSettingsState.copy$default(this._uiState.getValue(), false, false, display, 0.0d, 0.0d, null, 0L, null, null, false, 0, 0, false, false, false, 32763, null));
     }
 
+    private final kotlinx.coroutines.flow.MutableStateFlow<Integer> _aliasVersion = kotlinx.coroutines.flow.StateFlowKt.MutableStateFlow(Integer.valueOf(0));
+
+    public final kotlinx.coroutines.flow.StateFlow<Integer> getAliasVersion() {
+        return this._aliasVersion;
+    }
+
+    public final boolean isCurrentPlaceAliased() {
+        String key = this.prefs.getPlaceKey();
+        return key != null && com.example.fajr.location.LocationAliasStore.INSTANCE.aliasFor(getApplication(), key) != null;
+    }
+
+    /** Saves a custom alias for the CURRENT place (keyed by its structural identity) and applies it everywhere the city name is read. Returns false when no reliable place identity is available (e.g. geocoder unavailable). */
+    public final boolean setCityAlias(String alias) {
+        String trimmed = alias == null ? "" : alias.trim();
+        String key = this.prefs.getPlaceKey();
+        if (key == null || trimmed.length() == 0) {
+            return false;
+        }
+        if (this.prefs.getCityNameArOrig() == null) {
+            this.prefs.setCityNamesOrig(this.prefs.getCityNameLocalized("ar"), this.prefs.getCityNameLocalized("en"));
+        }
+        com.example.fajr.location.LocationAliasStore.INSTANCE.put(getApplication(), key, trimmed);
+        this.prefs.setCityNames(trimmed, trimmed);
+        refreshCityDisplay();
+        this._aliasVersion.setValue(Integer.valueOf(this._aliasVersion.getValue().intValue() + 1));
+        return true;
+    }
+
+    /** Removes the alias for the current place and restores the original (pre-alias) names, or re-geocodes in GPS mode. */
+    public final void clearCityAlias() {
+        String key = this.prefs.getPlaceKey();
+        if (key != null) {
+            com.example.fajr.location.LocationAliasStore.INSTANCE.remove(getApplication(), key);
+        }
+        String arOrig = this.prefs.getCityNameArOrig();
+        if (arOrig != null) {
+            String enOrig = this.prefs.getCityNameEnOrig();
+            this.prefs.setCityNames(arOrig, enOrig != null ? enOrig : arOrig);
+            this.prefs.clearCityNamesOrig();
+            refreshCityDisplay();
+        } else if (this.prefs.getUseCurrentLocation()) {
+            updateLocationFromGps();
+        }
+        this._aliasVersion.setValue(Integer.valueOf(this._aliasVersion.getValue().intValue() + 1));
+    }
+
     public final void toggleAlarm(boolean enabled) {
         this.prefs.setAlarmEnabled(enabled);
         this._uiState.setValue(FajrSettingsState.copy$default(this._uiState.getValue(), enabled, false, null, 0.0d, 0.0d, null, 0L, null, null, false, 0, 0, false, false, false, 32766, null));
@@ -101,6 +147,13 @@ public final class FajrViewModel extends AndroidViewModel {
         this.prefs.setLongitude(city.getLongitude());
         String titleAr = city.getCityNameAr() + "، " + city.getCountryNameAr();
         String titleEn = city.getCityNameEn() + ", " + city.getCountryNameEn();
+        String placeKey = String.format(java.util.Locale.US, "m|%.4f|%.4f", Double.valueOf(city.getLatitude()), Double.valueOf(city.getLongitude()));
+        this.prefs.setPlaceKey(placeKey);
+        String cityAlias = com.example.fajr.location.LocationAliasStore.INSTANCE.aliasFor(getApplication(), placeKey);
+        if (cityAlias != null) {
+            titleAr = cityAlias;
+            titleEn = cityAlias;
+        }
         this.prefs.setCityNames(titleAr, titleEn);
         String title = "ar".equals(L10n.INSTANCE.getLang().getCode()) ? titleAr : titleEn;
         this.prefs.setCountryName(city.getCountryNameAr());

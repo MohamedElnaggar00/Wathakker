@@ -124,6 +124,30 @@ public final class FajrPreferences {
         this.prefs.edit().putString("city_name_ar", arTitle).putString("city_name_en", enTitle).apply();
     }
 
+    public final String getPlaceKey() {
+        return this.prefs.getString("place_key", null);
+    }
+
+    public final void setPlaceKey(String value) {
+        this.prefs.edit().putString("place_key", value).apply();
+    }
+
+    public final String getCityNameArOrig() {
+        return this.prefs.getString("city_name_ar_orig", null);
+    }
+
+    public final String getCityNameEnOrig() {
+        return this.prefs.getString("city_name_en_orig", null);
+    }
+
+    public final void setCityNamesOrig(String arTitle, String enTitle) {
+        this.prefs.edit().putString("city_name_ar_orig", arTitle).putString("city_name_en_orig", enTitle).apply();
+    }
+
+    public final void clearCityNamesOrig() {
+        this.prefs.edit().remove("city_name_ar_orig").remove("city_name_en_orig").apply();
+    }
+
     public final long getLastCalculatedFajrTimeMillis() {
         return this.prefs.getLong("last_fajr_time", 0L);
     }

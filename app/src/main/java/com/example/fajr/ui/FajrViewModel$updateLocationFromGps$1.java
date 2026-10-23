@@ -85,6 +85,17 @@ public final class FajrViewModel$updateLocationFromGps$1 extends SuspendLambda i
                         locationManagerHelper4 = this.this$0.locationHelper;
                         String nameAr = locationManagerHelper4.getCityNameFromCoordinates(location.getLatitude(), location.getLongitude(), new Locale("ar"));
                         String nameEn = locationManagerHelper4.getCityNameFromCoordinates(location.getLatitude(), location.getLongitude(), Locale.ENGLISH);
+                        String placeKey = locationManagerHelper4.getPlaceKeyFromCoordinates(location.getLatitude(), location.getLongitude());
+                        if (placeKey != null) {
+                            this.this$0.prefs.setPlaceKey(placeKey);
+                            String cityAlias = com.example.fajr.location.LocationAliasStore.INSTANCE.aliasFor(this.this$0.getApplication(), placeKey);
+                            if (cityAlias != null) {
+                                nameAr = cityAlias;
+                                nameEn = cityAlias;
+                            }
+                        } else {
+                            this.this$0.prefs.setPlaceKey(null);
+                        }
                         this.this$0.prefs.setCityNames(nameAr, nameEn);
                         String name = "ar".equals(L10n.INSTANCE.getLang().getCode()) ? nameAr : nameEn;
                         mutableStateFlow7 = this.this$0._uiState;

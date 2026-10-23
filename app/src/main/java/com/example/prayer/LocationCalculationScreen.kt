@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.EditLocation
 import androidx.compose.material.icons.outlined.GpsFixed
@@ -26,6 +28,8 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
@@ -78,6 +82,10 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
     var showAsrDialog by remember { mutableStateOf(false) }
     var showHighLatDialog by remember { mutableStateOf(false) }
     var prefsTick by remember { mutableIntStateOf(0) }
+    var editingCity by remember { mutableStateOf(false) }
+    var cityEditText by remember { mutableStateOf("") }
+    val aliasVersion by viewModel.aliasVersion.collectAsStateWithLifecycle()
+    val cityAliased = remember(state.cityName, aliasVersion) { viewModel.isCurrentPlaceAliased() }
 
     LaunchedEffect(L10n.lang) { viewModel.refreshCityDisplay() }
 
@@ -172,12 +180,39 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                     Spacer(Modifier.width(56.dp))
                     Icon(Icons.Outlined.LocationOn, null, tint = cs.primary)
                     Spacer(Modifier.width(10.dp))
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(L10n.t(S.CurrentCity), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
-                        Text(state.cityName, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-                    }
-                    if (!state.useCurrentLocation) {
-                        Text(L10n.t(S.ChangeCity), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                    if (editingCity) {
+                        OutlinedTextField(
+                            value = cityEditText,
+                            onValueChange = { cityEditText = it },
+                            modifier = Modifier.weight(1f),
+                            singleLine = true
+                        )
+                        IconButton(onClick = {
+                            if (viewModel.setCityAlias(cityEditText)) {
+                                editingCity = false
+                                recalc()
+                                try { com.example.utils.WearSync.INSTANCE.push(context, null) } catch (_: Throwable) {}
+                            }
+                        }) { Icon(Icons.Outlined.Check, L10n.t(S.Save), tint = cs.primary) }
+                        IconButton(onClick = { editingCity = false }) { Icon(Icons.Outlined.Close, L10n.t(S.Cancel), tint = cs.onSurfaceVariant) }
+                    } else {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(L10n.t(S.CurrentCity), modifier = Modifier.padding(top = 2.dp), color = cs.onSurfaceVariant, fontSize = 13.sp, lineHeight = 18.sp)
+                            Text(state.cityName, color = cs.onSurface, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                        }
+                        if (!state.useCurrentLocation) {
+                            Text(L10n.t(S.ChangeCity), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        }
+                        if (cityAliased) {
+                            TextButton(onClick = { viewModel.clearCityAlias(); recalc(); try { com.example.utils.WearSync.INSTANCE.push(context, null) } catch (_: Throwable) {} }) {
+                                Text(L10n.t(S.ResetCityNameAuto), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                        androidx.compose.material3.Surface(shape = androidx.compose.foundation.shape.CircleShape, color = cs.primary.copy(alpha = 0.12f), modifier = Modifier.padding(start = 8.dp)) {
+                            IconButton(onClick = { cityEditText = state.cityName; editingCity = true }, modifier = Modifier.size(36.dp)) {
+                                Icon(Icons.Outlined.Edit, L10n.t(S.EditCityName), tint = cs.primary, modifier = Modifier.size(18.dp))
+                            }
+                        }
                     }
                 }
                 if (state.useCurrentLocation && (!state.hasLocationPermission || !state.isGpsAvailable())) {

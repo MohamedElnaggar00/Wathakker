@@ -67,6 +67,34 @@ public final class LocationManagerHelper {
         }
     }
 
+    /** Stable structural identity of the geocoded place (English-locale geocode): "g|<countryCode>|<adminArea>|<locality|subAdmin>", normalized. Null when the geocoder cannot resolve - callers must skip alias save/apply in that case. */
+    public final String getPlaceKeyFromCoordinates(double latitude, double longitude) {
+        try {
+            Geocoder geocoder = new Geocoder(this.context, Locale.ENGLISH);
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses == null || addresses.isEmpty()) {
+                return null;
+            }
+            Address address = addresses.get(0);
+            String country = address.getCountryCode();
+            String admin = address.getAdminArea();
+            String local = address.getLocality();
+            if (local == null) {
+                local = address.getSubAdminArea();
+            }
+            if (country == null && admin == null && local == null) {
+                return null;
+            }
+            return "g|" + normPlacePart(country) + "|" + normPlacePart(admin) + "|" + normPlacePart(local);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static String normPlacePart(String s) {
+        return s == null ? "" : s.trim().toLowerCase(Locale.US).replaceAll("\\s+", " ");
+    }
+
     /* JADX WARN: Removed duplicated region for block: B:13:0x0038 A[Catch: Exception -> 0x00ca, TryCatch #1 {Exception -> 0x00ca, blocks: (B:6:0x000f, B:8:0x002c, B:13:0x0038, B:15:0x0044, B:17:0x004a, B:18:0x004e, B:20:0x0057, B:25:0x0063, B:27:0x0068, B:32:0x0074, B:44:0x0097), top: B:5:0x000f }] */
     /* JADX WARN: Removed duplicated region for block: B:25:0x0063 A[Catch: Exception -> 0x00ca, TryCatch #1 {Exception -> 0x00ca, blocks: (B:6:0x000f, B:8:0x002c, B:13:0x0038, B:15:0x0044, B:17:0x004a, B:18:0x004e, B:20:0x0057, B:25:0x0063, B:27:0x0068, B:32:0x0074, B:44:0x0097), top: B:5:0x000f }] */
     /* JADX WARN: Removed duplicated region for block: B:32:0x0074 A[Catch: Exception -> 0x00ca, TryCatch #1 {Exception -> 0x00ca, blocks: (B:6:0x000f, B:8:0x002c, B:13:0x0038, B:15:0x0044, B:17:0x004a, B:18:0x004e, B:20:0x0057, B:25:0x0063, B:27:0x0068, B:32:0x0074, B:44:0x0097), top: B:5:0x000f }] */
