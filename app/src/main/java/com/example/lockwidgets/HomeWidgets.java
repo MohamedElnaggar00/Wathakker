@@ -132,7 +132,7 @@ public final class HomeWidgets {
  static void protoGlass(Context c,Canvas cv,boolean blur,float w,float h,float rad){
   boolean night=nightMode(c);
   if(blur){android.graphics.Bitmap wb=lightWallBlur(c);if(wb!=null){android.graphics.Bitmap scaled=centerCrop(wb,Math.max(1,(int)w),Math.max(1,(int)h));Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);bp.setShader(new android.graphics.BitmapShader(scaled,android.graphics.Shader.TileMode.CLAMP,android.graphics.Shader.TileMode.CLAMP));cv.drawRoundRect(new RectF(0,0,w,h),rad,rad,bp);}}
-  Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);p.setColor(night?0x52141A22:0x99F2F2F7);cv.drawRoundRect(new RectF(0,0,w,h),rad,rad,p);
+  Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);p.setColor(night?0x90141A22:0x99F2F2F7);cv.drawRoundRect(new RectF(0,0,w,h),rad,rad,p);
  }
  static void boxBlur(android.graphics.Bitmap b,int r){
   int w=b.getWidth(),h=b.getHeight();int[] px=new int[w*h];b.getPixels(px,0,w,0,0,w,h);int[] out=new int[w*h];
