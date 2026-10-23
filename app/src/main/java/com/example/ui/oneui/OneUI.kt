@@ -999,6 +999,9 @@ fun DottedDivider() {
     }
 }
 
+/** Material 3 DrawerDefaults.MaximumDrawerWidth (360dp), the platform default for a navigation drawer. */
+val DrawerMaxWidth = 360.dp
+
 @Composable
 fun OneUIDrawer(
     open: Boolean,
@@ -1040,6 +1043,9 @@ fun OneUIDrawer(
                 modifier = Modifier
                     .padding(start = 11.dp, top = statusTop + 14.dp, bottom = 40.dp)
                     .fillMaxWidth(0.78f)
+                    // 3.4: Material's own maximum drawer width (DrawerDefaults.MaximumDrawerWidth = 360dp). Phones are
+                    // unchanged (78% of a phone window is under 360dp); tablets get a content-width side panel.
+                    .widthIn(max = DrawerMaxWidth)
                     .fillMaxHeight()
                     .then(Modifier.oneUIFrosted(RoundedCornerShape(26.dp), drawerFrost, 48))
                     .padding(vertical = 18.dp)
