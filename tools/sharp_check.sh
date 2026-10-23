@@ -32,6 +32,10 @@ adb logcat -d -s SHARP:I WathakkerHome:E > "$OUT/sharp_log.txt"
 adb shell am force-stop $PKG; sleep 1
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 14; noanr
 adb exec-out screencap -p > "$OUT/app_land.png"
+for k in 1 2 3; do adb shell input swipe 800 700 1900 700 300; sleep 2; adb exec-out screencap -p > "$OUT/swipe_right_$k.png"; done
+for k in 1 2 3; do adb shell input swipe 1900 700 800 700 300; sleep 2; adb exec-out screencap -p > "$OUT/swipe_left_$k.png"; done
+adb shell am force-stop $PKG; sleep 1
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12; noanr
 dump "$OUT/ui_land.xml"
 XY=$(tap_re "القائمة|Menu" "$OUT/ui_land.xml")
 echo "menu button: $XY" > "$OUT/drawer_nav.txt"
