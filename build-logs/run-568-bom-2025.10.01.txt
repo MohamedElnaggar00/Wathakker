@@ -1,0 +1,21 @@
+outcome: failure  bom: 2025.10.01  run: 39887840469  sha: ff57af59c47a30369854c02a678748e082341458
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 1
+--- kotlin per file
+      1 OneUI.kt
+--- kotlin details
+e: file:///home/runner/work/Wathkkir/Wathkkir/app/src/main/java/com/example/ui/oneui/OneUI.kt:687:64 Unresolved reference 'boundsInParent'.
+--- sign log
+--- details
+62:* What went wrong:
+63:Execution failed for task ':app:compileReleaseKotlin'.
+64-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+65-   > Compilation error. See log for more details
+66-
+67-* Try:
+--
+73:BUILD FAILED in 1m 34s
+74-33 actionable tasks: 33 executed
