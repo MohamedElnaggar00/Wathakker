@@ -46,10 +46,10 @@ jobs:
         APK=$(ls wear/build/outputs/apk/release/*.apk | head -1)
         mkdir -p out
         "$BT/zipalign" -f -p 4 "$APK" "$work/aligned.apk"
-        "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out out/Wathakker-Wear-3.3.0.apk "$work/aligned.apk"
-        "$BT/apksigner" verify --verbose --print-certs out/Wathakker-Wear-3.3.0.apk > out/signature.txt
-        "$BT/aapt2" dump badging out/Wathakker-Wear-3.3.0.apk | head -12 > out/package.txt
-        sha256sum out/Wathakker-Wear-3.3.0.apk > out/SHA256SUMS
+        "$BT/apksigner" sign --ks "$work/signing.p12" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" --ks-pass env:KEY_PASSWORD --key-pass env:KEY_PASSWORD --out out/Wathkkir-Wear-1.1.1.apk "$work/aligned.apk"
+        "$BT/apksigner" verify --verbose --print-certs out/Wathkkir-Wear-1.1.1.apk > out/signature.txt
+        "$BT/aapt2" dump badging out/Wathkkir-Wear-1.1.1.apk | head -12 > out/package.txt
+        sha256sum out/Wathkkir-Wear-1.1.1.apk > out/SHA256SUMS
         cat out/signature.txt | head -8'
     - uses: actions/upload-artifact@v4
       with:
