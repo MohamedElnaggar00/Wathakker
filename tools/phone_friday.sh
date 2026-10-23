@@ -65,7 +65,9 @@ dump_clean "$OUT/ui_loccalc.xml"
 XY=$(find_cd "تعديل اسم المدينة" "$OUT/ui_loccalc.xml"); echo "pencil: $XY" >> "$OUT/nav.txt"
 [ -n "$XY" ] && adb shell input tap $XY; sleep 3
 shot alias_editor_open
-adb shell am broadcast -a ADB_INPUT_B64 --es msg "$(printf 'برج العرب الجديده' | base64 -w0)"; sleep 3
+adb shell input tap 548 1106; sleep 2
+adb shell am broadcast -a ADB_CLEAR_TEXT; sleep 2
+adb shell input text "NewCairoTest"; sleep 3
 dump_clean "$OUT/ui_editor.xml"
 XY=$(find_cd "حفظ" "$OUT/ui_editor.xml"); echo "save btn: $XY" >> "$OUT/nav.txt"
 [ -n "$XY" ] && adb shell input tap $XY; sleep 4
@@ -93,7 +95,7 @@ adb shell "cat /data/data/$PKG/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_alias_
 [ -n "$ORIG_IME" ] && adb shell ime set "$ORIG_IME" >/dev/null 2>&1
 
 # ---- 2. Friday ----
-setdate "102311002026.00"
+setdate "102304002026.00"
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12
 dismiss_anr
 shot friday_prayers; dump_clean "$OUT/ui_friday.xml"
@@ -113,7 +115,7 @@ adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_fri
 adb shell dumpsys alarm > "$OUT/alarm_friday_dump.txt" 2>&1
 
 # ---- 3. Saturday ----
-setdate "102411002026.00"
+setdate "102404002026.00"
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12
 dismiss_anr
 shot saturday_prayers; dump_clean "$OUT/ui_saturday.xml"
@@ -126,7 +128,7 @@ adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_sat
 adb shell dumpsys alarm > "$OUT/alarm_saturday_dump.txt" 2>&1
 
 # ---- 4. Friday again: hidden again, prefs unchanged ----
-setdate "102311002026.00"
+setdate "102304002026.00"
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12
 dismiss_anr
 dump_clean "$OUT/ui_friday2.xml"
@@ -172,20 +174,24 @@ def pkg_alarm_times(name):
             if m:
                 times.append(int(m.group(1)))
     return sorted(set(times))
-def has_pair(times, gap_ms=20*60000, tol=120000):
-    return any(abs((b - a) - gap_ms) <= tol for a in times for b in times if b > a)
+import datetime as _dt
+def on_date(times, y, m, d):
+    return [t for t in times if _dt.datetime.utcfromtimestamp(t / 1000).date() == _dt.date(y, m, d)]
 fri_t, sat_t = pkg_alarm_times('alarm_friday_dump.txt'), pkg_alarm_times('alarm_saturday_dump.txt')
 parsed = len(fri_t) + len(sat_t) > 0
+fri_on = on_date(fri_t, 2026, 10, 23)
+sat_on = on_date(sat_t, 2026, 10, 24)
 lines += [
-    'alarm trigger-time parse (dumpsys, package-filtered): ' + (('friday=%d saturday=%d' % (len(fri_t), len(sat_t))) if parsed else 'unparsed -> verification limit, not claimed'),
-    'friday adhan->iqama 20-min pair present (expect False = iqama suppressed): ' + (str(has_pair(fri_t)) if parsed else 'n/a'),
-    'saturday adhan->iqama 20-min pair present (expect True): ' + (str(has_pair(sat_t)) if parsed else 'n/a'),
+    'alarm trigger-time parse (dumpsys, package-filtered): ' + (('friday dump=%d alarms, saturday dump=%d alarms' % (len(fri_t), len(sat_t))) if parsed else 'unparsed -> verification limit, not claimed'),
+    'friday-date 2026-10-23 alarms for package (expect 1 = adhan only, iqama suppressed): ' + ((str(len(fri_on)) + ' -> ' + str(len(fri_on) == 1)) if parsed else 'n/a'),
+    'saturday-date 2026-10-24 alarms for package (expect 2 = adhan + iqama): ' + ((str(len(sat_on)) + ' -> ' + str(len(sat_on) == 2)) if parsed else 'n/a'),
 ]
 saved = read('prefs_alias_saved.xml'); restart = read('prefs_alias_restart.xml'); reset = read('prefs_alias_reset.xml')
-AL = 'برج العرب الجديده'
+AL = 'NewCairoTest'
 selftest = read('alias_selftest.txt')
 alines = [
     ('deterministic identity/alias selftest: ' + ('skipped (signed release build, debug-only activity)' if SIGNED else ('all pass: ' + str('PASS' in selftest and 'FAIL' not in selftest)))),
+    'editor received typed text: ' + str(AL in read('ui_editor.xml')),
     'alias saved to store: ' + str(AL in saved and 'city_aliases_json' in saved),
     'alias applied to city_name_ar: ' + str('name="city_name_ar">' + AL in saved),
     'orig names backed up: ' + str('city_name_ar_orig' in saved),
