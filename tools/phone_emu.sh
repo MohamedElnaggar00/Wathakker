@@ -173,8 +173,9 @@ def norm(s):
     return ''.join(c for c in s if not (0x064B <= ord(c) <= 0x0652 or ord(c) in (0x0670, 0x0640)))
 out = sys.argv[1]
 xml = norm(open(out + '/ui_hisn_search.xml').read())
-m = re.search(r'class="android\.widget\.EditText"[^>]*text="([^"]*)"', xml)
-typed = m.group(1) if m else ''
+m = re.search(r'<node[^>]*class="android\.widget\.EditText"[^>]*>', xml)
+t = re.search(r'text="([^"]*)"', m.group(0)) if m else None
+typed = t.group(1) if t else ''
 i_fav = xml.find('أذكار الصباح')
 i_nonfav = xml.find('أذكار الاستيقاظ من النوم')
 lines = []

@@ -81,9 +81,20 @@ add_widget(){
     LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" cell 2>/dev/null)
     [ -z "$LXY" ] && LXY=$(python3 tools/findxy.py "$LABEL" "$OUT/ui_$CUR.xml" long 2>/dev/null)
     [ -n "$LXY" ] && XY=$LXY
+    # Scroll the target row into the draggable band first: rows near the bottom edge
+    # cannot start a drag that reaches the home grid.
+    for i in 1 2 3 4 5 6; do
+      CY=$(echo $XY | awk '{print $2}')
+      [ -z "$CY" ] && break
+      [ "$CY" -le 1300 ] && break
+      adb shell input swipe 540 1400 540 1150 250; sleep 2
+      CUR=wlist_${TAG}_${ATT}_r$i; dump $CUR
+      XY=$(findany "$LABEL")
+      [ -z "$XY" ] && break
+    done
     CY=$(echo $XY | awk '{print $2}')
-    if [ "$CY" -gt 1600 ]; then echo "ROW_TOO_LOW $TAG y=$CY att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
-    adb shell input draganddrop $XY $TX $TY 2200; sleep 6
+    if [ -z "$CY" ] || [ "$CY" -gt 1600 ]; then echo "ROW_TOO_LOW $TAG y=$CY att$ATT" >> "$OUT/SUMMARY.txt"; continue; fi
+    adb shell input draganddrop $XY $TX $TY 4000; sleep 8
     shot 13_after_drag_${TAG}_$ATT
     CUR=cfg_${TAG}_$ATT; dump $CUR
     # A real config screen has an apply/add button; exact match avoids "التطبيق" hits.
