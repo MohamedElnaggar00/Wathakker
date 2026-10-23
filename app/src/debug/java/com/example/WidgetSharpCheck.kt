@@ -35,8 +35,15 @@ class WidgetSharpCheck : Activity() {
             var id = sp.getInt("id$i", 0)
             if (id == 0) { id = host.allocateAppWidgetId(); sp.edit().putInt("id$i", id).apply() }
             if (mgr.getAppWidgetInfo(id) == null) {
-                val ok = mgr.bindAppWidgetIdIfAllowed(id, ComponentName(this, "com.example.widget." + names[i] + "WidgetProvider"))
+                val cn = ComponentName(this, "com.example.widget." + names[i] + "WidgetProvider")
+                val ok = mgr.bindAppWidgetIdIfAllowed(id, cn)
                 Log.i("SHARP", "bind ${names[i]} ok=$ok")
+                if (!ok) {
+                    startActivityForResult(android.content.Intent(AppWidgetManager.ACTION_APPWIDGET_BIND)
+                        .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
+                        .putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, cn), 7)
+                    return
+                }
             }
             val info = mgr.getAppWidgetInfo(id) ?: continue
             val v = host.createView(this, id, info)
@@ -53,6 +60,7 @@ class WidgetSharpCheck : Activity() {
             }
         }, 6000)
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) { recreate() }
     private fun find(v: View): ImageView? {
         if (v is ImageView) return v
         if (v is ViewGroup) for (i in 0 until v.childCount) find(v.getChildAt(i))?.let { return it }
