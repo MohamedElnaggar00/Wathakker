@@ -64,6 +64,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
@@ -1042,10 +1043,15 @@ fun OneUIDrawer(
             Column(
                 modifier = Modifier
                     .padding(start = 11.dp, top = statusTop + 14.dp, bottom = 40.dp)
-                    .fillMaxWidth(0.78f)
-                    // 3.4: Material's own maximum drawer width (DrawerDefaults.MaximumDrawerWidth = 360dp). Phones are
-                    // unchanged (78% of a phone window is under 360dp); tablets get a content-width side panel.
-                    .widthIn(max = DrawerMaxWidth)
+                    // 3.4: 78% of the window, but never wider than Material's own maximum drawer width
+                    // (DrawerDefaults.MaximumDrawerWidth = 360dp). Phones are unchanged (78% of a phone window is under
+                    // 360dp); tablets get a content-width side panel. Measured here because widthIn() placed after
+                    // fillMaxWidth() cannot override the incoming fixed width.
+                    .layout { measurable, constraints ->
+                        val w = minOf((constraints.maxWidth * 0.78f).toInt(), DrawerMaxWidth.roundToPx())
+                        val p = measurable.measure(constraints.copy(minWidth = w, maxWidth = w))
+                        layout(p.width, p.height) { p.place(0, 0) }
+                    }
                     .fillMaxHeight()
                     .then(Modifier.oneUIFrosted(RoundedCornerShape(26.dp), drawerFrost, 48))
                     .padding(vertical = 18.dp)
