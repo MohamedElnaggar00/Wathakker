@@ -1,0 +1,22 @@
+outcome: failure  bom: 2025.10.01  run: 39945034626  sha: ccf041e58c6e1d0ccc4bf7f678a42472daa66010
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 2
+--- kotlin per file
+      2 LocationCalculationScreen.kt
+--- kotlin details
+e: file:///home/runner/work/Wathkkir/Wathkkir/app/src/main/java/com/example/prayer/LocationCalculationScreen.kt:194:66 Unresolved reference 'INSTANCE'.
+e: file:///home/runner/work/Wathkkir/Wathkkir/app/src/main/java/com/example/prayer/LocationCalculationScreen.kt:207:123 Unresolved reference 'INSTANCE'.
+--- sign log
+--- details
+63:* What went wrong:
+64:Execution failed for task ':app:compileReleaseKotlin'.
+65-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+66-   > Compilation error. See log for more details
+67-
+68-* Try:
+--
+74:BUILD FAILED in 1m 39s
+75-33 actionable tasks: 33 executed
