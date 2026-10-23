@@ -62,13 +62,12 @@ class CityEditProtoCheck : ComponentActivity() {
             try {
                 val ctx = applicationContext
                 val store = com.example.fajr.location.LocationAliasStore
-                val H = com.example.fajr.location.LocationManagerHelper
                 // Deterministic geocoder records (no backend): A = the user's renamed place, B = travel destination
-                val keyA = H.buildPlaceKey("EG", "Hod Sakrah WA Abu Hamad")
-                val keyAnorm = H.buildPlaceKey("EG", "  hod   sakrah wa abu hamad ")
-                val keyAsub = H.buildPlaceKey("EG", "Borg El Arab")
-                val keyB = H.buildPlaceKey("EG", "Cairo")
-                val keyAotherCountry = H.buildPlaceKey("SA", "Hod Sakrah WA Abu Hamad")
+                val keyA = com.example.fajr.location.LocationManagerHelper.buildPlaceKey("EG", "Hod Sakrah WA Abu Hamad")
+                val keyAnorm = com.example.fajr.location.LocationManagerHelper.buildPlaceKey("EG", "  hod   sakrah wa abu hamad ")
+                val keyAsub = com.example.fajr.location.LocationManagerHelper.buildPlaceKey("EG", "Borg El Arab")
+                val keyB = com.example.fajr.location.LocationManagerHelper.buildPlaceKey("EG", "Cairo")
+                val keyAotherCountry = com.example.fajr.location.LocationManagerHelper.buildPlaceKey("SA", "Hod Sakrah WA Abu Hamad")
                 store.remove(ctx, keyA); store.remove(ctx, keyB); store.remove(ctx, keyAsub); store.remove(ctx, keyAotherCountry)
                 check("identity: normalization stable (jitter/formatting)", keyA == keyAnorm)
                 check("identity: distinct sublocalities distinct keys", keyA != keyAsub)

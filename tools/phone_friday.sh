@@ -55,7 +55,7 @@ XY=$(find_cd "Settings" "$OUT/ui_home.xml"); [ -z "$XY" ] && XY=$(find_cd "ال�
 adb shell input tap $XY; sleep 4
 dismiss_anr
 dump_clean "$OUT/ui_drawer.xml"
-XY=$(find_text "الموقع والحساب" "$OUT/ui_drawer.xml"); echo "nav loccalc: $XY" >> "$OUT/nav.txt"
+XY=$(find_text "تغيير الموقع" "$OUT/ui_drawer.xml"); echo "nav loccalc: $XY" >> "$OUT/nav.txt"
 [ -n "$XY" ] && adb shell input tap $XY; sleep 5
 dismiss_anr
 shot alias_row_baseline
@@ -78,7 +78,7 @@ XY=$(find_cd "Settings" "$OUT/ui_home2.xml"); [ -z "$XY" ] && XY=$(find_cd "ال
 adb shell input tap $XY; sleep 4
 dismiss_anr
 dump_clean "$OUT/ui_drawer2.xml"
-XY=$(find_text "الموقع والحساب" "$OUT/ui_drawer2.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 5
+XY=$(find_text "تغيير الموقع" "$OUT/ui_drawer2.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 5
 dismiss_anr
 shot alias_persisted
 adb shell "cat /data/data/$PKG/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_alias_restart.xml" 2>&1
