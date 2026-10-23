@@ -1,6 +1,10 @@
 name: Widget sharpness and tablet drawer evidence (NO RELEASE)
 'on':
   workflow_dispatch:
+    inputs:
+      ref:
+        description: commit to test
+        default: main
 permissions:
   contents: read
 jobs:
@@ -9,6 +13,8 @@ jobs:
     timeout-minutes: 60
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref || 'main' }}
     - uses: actions/setup-java@v4
       with:
         java-version: '17'
