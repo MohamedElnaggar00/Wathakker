@@ -1,0 +1,50 @@
+name: Release APK smoke on emulator (NO RELEASE)
+'on':
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+    - uses: actions/checkout@v4
+    - name: Download the published preview APK
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |-
+        mkdir -p dl
+        gh release download preview-21.10.2026 -p 'Wathkkir-android-3.4.0.apk' -D dl --repo ${{ github.repository }}
+        sha256sum dl/Wathkkir-android-3.4.0.apk | tee dl/sha.txt
+        grep -q '^94e99795cb0be79239a5d3ea49832a731f7fc2b4b16546fb3c878dd035227501 ' dl/sha.txt
+    - name: Enable KVM
+      run: |-
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: Release APK emulator smoke
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 34
+        arch: x86_64
+        target: google_apis
+        profile: pixel_tablet
+        disable-animations: true
+        script: bash tools/release_smoke.sh dl/Wathkkir-android-3.4.0.apk emulator-evidence/rel
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: release-smoke
+        path: |
+          emulator-evidence/rel/
+          dl/sha.txt
+    - name: Gate
+      if: always()
+      run: |-
+        d=emulator-evidence/rel
+        fail=0
+        grep -q 'versionName=3.4.0' $d/pkg.txt || { echo "version"; fail=1; }
+        grep -q "isn't responding" $d/shots.txt 2>/dev/null && { echo "system dialog"; fail=1; }
+        grep -q 'widget_tap_[0-9]*.*none' $d/tap_pref.txt 2>/dev/null || { echo "pref not saved"; fail=1; }
+        exit $fail
