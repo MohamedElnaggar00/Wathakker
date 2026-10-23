@@ -56,16 +56,24 @@ class GlassProtoCheck : Activity() {
         } else sc.drawColor(if (night) 0xFF14161C.toInt() else 0xFFC9D6E8.toInt())
 
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)
+        // Labels must say what the sample actually IS: on Android 13+ the wallpaper read is
+        // blocked for this app, so every blur sample is a colour-mesh SIMULATION, not a true
+        // backdrop blur (Main's review note). The access fact is drawn on the sheet itself.
+        val access = if (wall != null) "wallpaper read: OK - real wallpaper behind cards"
+            else "wallpaper read: BLOCKED (Android 13+) - blur samples are colour-mesh simulations"
         val cards = listOf(
             "glass current (sharp, 58/70%)" to "glass",
             "glass p1: tint only, lighter" to "protoGlass1",
-            "glass p2: light blur + tint (Morphe)" to "protoGlass2",
-            "frosted current (colour mesh)" to "frosted",
-            "frosted p1: real wallpaper blur (Samsung)" to "wallblur"
+            "glass p2: light blur + tint (Morphe, mesh sim)" to "protoGlass2",
+            "frosted current (colour mesh, no wallpaper read)" to "frosted",
+            "frosted p1: Samsung-style heavy blur (mesh simulation)" to "wallblur",
+            "frosted p2: mesh + uniform milk scrim (legibility)" to "protoFrost1"
         )
         val label = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = if (night) Color.WHITE else Color.BLACK; textSize = 34f }
         val dm = resources.displayMetrics.density
-        var y = (80 * dm).toInt()
+        var y = (40 * dm).toInt()
+        sc.drawText("REVIEW PROTOTYPES - not shipped", (40 * dm), y.toFloat(), label); y += (16 * dm).toInt()
+        sc.drawText(access, (40 * dm), y.toFloat(), label); y += (24 * dm).toInt()
         val cardW = 330; val cardH = 90
         val x = ((W - cardW * dm) / 2).toInt()
         for ((name, key) in cards) {

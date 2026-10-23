@@ -47,7 +47,13 @@ public final class HomeWidgets {
  static int blendOver(int base,int tint){int a=(tint>>>24),r=(((base>>16)&255)*(255-a)+((tint>>16)&255)*a)/255,g=(((base>>8)&255)*(255-a)+((tint>>8)&255)*a)/255,b=((base&255)*(255-a)+(tint&255)*a)/255;return (r<<16)|(g<<8)|b;}
  static android.graphics.Bitmap wallBlur(Context c){return wallBlur(c,false);}
  static android.graphics.Bitmap wpMesh,wpReal;static int wpMeshId=-2,wpRealId=-2;
- /** real=true: the actual wallpaper image (needs the files permission), falling back to the colour mesh until it is granted. real=false: the frosted colour mesh only. */
+ /** real=true: the actual wallpaper image. Verified on an API 34 emulator (glass_proto.txt) and per
+ *  developer.android.com/reference/android/app/WallpaperManager: on Android 13 the system returns
+ *  the DEFAULT wallpaper or throws SecurityException, on Android 14+ getWallpaperFile ALWAYS throws,
+ *  and only MANAGE_EXTERNAL_STORAGE (Play-restricted, answer 10467955) or the privileged
+ *  READ_WALLPAPER_INTERNAL unlock the real image - no normal runtime permission (incl.
+ *  READ_MEDIA_IMAGES) helps. So real=true falls back to the colour mesh on modern Android.
+ *  real=false: the frosted colour mesh only (WallpaperColors, permissionless). */
  static android.graphics.Bitmap wallBlur(Context c,boolean real){
   android.app.WallpaperManager wm=android.app.WallpaperManager.getInstance(c);
   int id=-1;try{id=wm.getWallpaperId(android.app.WallpaperManager.FLAG_SYSTEM);}catch(Throwable t){}
@@ -154,9 +160,12 @@ float rad=Math.min(24,ht/4f)*d;
 android.graphics.Bitmap wbm=("wallblur".equals(bgKey)||"frosted".equals(bgKey))?wallBlur(c,"wallblur".equals(bgKey)):null;
 // 3.3.3 REVIEW PROTOTYPES (rendered only by the debug GlassProtoCheck harness; no settings UI can
 // set these keys, dormant in release): protoGlass1 = Morphe-like sharper glass (tint only, no
-// blur); protoGlass2 = same tint over a lightly blurred wallpaper; the frosted candidate needs no
-// proto key - the existing "wallblur" path IS the real-wallpaper heavy-blur treatment.
+// blur); protoGlass2 = same tint over a lightly blurred colour mesh (no real wallpaper read on
+// Android 13+); protoFrost1 = frosted colour mesh under a uniform milk scrim, no sheen/grain -
+// the light-mode legibility candidate. The existing "wallblur" path attempts the real-wallpaper
+// heavy-blur treatment and falls back to the mesh when the system blocks the read.
 if("protoGlass1".equals(bgKey)||"protoGlass2".equals(bgKey)){protoGlass(c,cv,"protoGlass2".equals(bgKey),wd*d,ht*d,rad);}
+else if("protoFrost1".equals(bgKey)){android.graphics.Bitmap m=wallBlur(c,false);if(m!=null){android.graphics.Bitmap scaled=centerCrop(m,Math.max(1,(int)(wd*d)),Math.max(1,(int)(ht*d)));Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);bp.setShader(new android.graphics.BitmapShader(scaled,android.graphics.Shader.TileMode.CLAMP,android.graphics.Shader.TileMode.CLAMP));cv.drawRoundRect(new RectF(0,0,wd*d,ht*d),rad,rad,bp);}Paint sp=new Paint(Paint.ANTI_ALIAS_FLAG);sp.setColor(nightMode(c)?0xB8141A22:0xB8F6F6F6);cv.drawRoundRect(new RectF(0,0,wd*d,ht*d),rad,rad,sp);}
 else if(wbm!=null){
  android.graphics.Bitmap scaled=centerCrop(wbm,Math.max(1,(int)(wd*d)),Math.max(1,(int)(ht*d)));
  Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);
