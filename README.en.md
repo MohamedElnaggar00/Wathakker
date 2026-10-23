@@ -103,6 +103,7 @@ The watch app is a separate download and runs on Wear OS 3 and newer. Its featur
 <div align="center">
   <table>
     <tr><td align="center"><img src="docs/screenshots/w01-tile.png" width="170" alt="Watch tile"><br><sub>Watch tile</sub></td><td align="center"><img src="docs/screenshots/w02-main.png" width="170" alt="Main screen"><br><sub>Main screen</sub></td><td align="center"><img src="docs/screenshots/w03-countdown.png" width="170" alt="Countdown complication"><br><sub>Countdown complication</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/w06-friday-times.jpg" width="170" alt="Friday prayer times"><br><sub>Friday prayer times</sub></td><td align="center"><img src="docs/screenshots/w05-theme-colors.jpg" width="170" alt="Theme colors"><br><sub>Theme colors</sub></td><td align="center"><img src="docs/screenshots/w04-qibla.jpg" width="170" alt="Qibla compass"><br><sub>Qibla compass</sub></td></tr>
   </table>
 </div>
 

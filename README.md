@@ -107,6 +107,7 @@
 <div align="center" dir="rtl">
   <table>
     <tr><td align="center"><img src="docs/screenshots/w01-tile.png" width="170" alt="بلاطة الساعة"><br><sub>بلاطة الساعة</sub></td><td align="center"><img src="docs/screenshots/w02-main.png" width="170" alt="الشاشة الرئيسية"><br><sub>الشاشة الرئيسية</sub></td><td align="center"><img src="docs/screenshots/w03-countdown.png" width="170" alt="قطعة العد التنازلي"><br><sub>قطعة العد التنازلي</sub></td></tr>
+    <tr><td align="center"><img src="docs/screenshots/w06-friday-times.jpg" width="170" alt="مواقيت يوم الجمعة"><br><sub>مواقيت يوم الجمعة</sub></td><td align="center"><img src="docs/screenshots/w05-theme-colors.jpg" width="170" alt="ألوان السمات"><br><sub>ألوان السمات</sub></td><td align="center"><img src="docs/screenshots/w04-qibla.jpg" width="170" alt="بوصلة القبلة"><br><sub>بوصلة القبلة</sub></td></tr>
   </table>
 </div>
 
