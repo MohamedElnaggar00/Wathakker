@@ -1,0 +1,24 @@
+outcome: failure  bom: 2025.10.01  run: 40033102826  sha: 5828a174486eacd382cf93a2cbd7a64eef9f2458
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 4
+--- kotlin per file
+      4 AboutScreen.kt
+--- kotlin details
+e: file:///home/runner/work/Wathkkir/Wathkkir/app/src/main/java/com/example/ui/screens/AboutScreen.kt:42:24 Type 'MutableState<Boolean>' has no method 'setValue(Nothing?, KMutableProperty0<*>, ERROR CLASS: Ambiguity: getValue, [kotlin/getValue, kotlin/getValue
+e: file:///home/runner/work/Wathkkir/Wathkkir/app/src/main/java/com/example/ui/screens/AboutScreen.kt:42:24 Property delegate must have a 'getValue(Nothing?, KMutableProperty0<*>)' method. None of the following functions is applicable:
+e: file:///home/runner/work/Wathkkir/Wathkkir/app/src/main/java/com/example/ui/screens/AboutScreen.kt:43:18 Type 'MutableState<String>' has no method 'setValue(Nothing?, KMutableProperty0<*>, ERROR CLASS: Ambiguity: getValue, [kotlin/getValue, kotlin/getValue,
+e: file:///home/runner/work/Wathkkir/Wathkkir/app/src/main/java/com/example/ui/screens/AboutScreen.kt:43:18 Property delegate must have a 'getValue(Nothing?, KMutableProperty0<*>)' method. None of the following functions is applicable:
+--- sign log
+--- details
+78:* What went wrong:
+79:Execution failed for task ':app:compileReleaseKotlin'.
+80-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+81-   > Compilation error. See log for more details
+82-
+83-* Try:
+--
+89:BUILD FAILED in 2m 5s
+90-33 actionable tasks: 33 executed
