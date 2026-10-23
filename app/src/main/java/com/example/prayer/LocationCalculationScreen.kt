@@ -191,7 +191,7 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                             if (viewModel.setCityAlias(cityEditText)) {
                                 editingCity = false
                                 recalc()
-                                try { com.example.utils.WearSync.INSTANCE.push(context, null) } catch (_: Throwable) {}
+                                try { com.example.utils.WearSync.push(context) } catch (_: Throwable) {}
                             }
                         }) { Icon(Icons.Outlined.Check, L10n.t(S.Save), tint = cs.primary) }
                         IconButton(onClick = { editingCity = false }) { Icon(Icons.Outlined.Close, L10n.t(S.Cancel), tint = cs.onSurfaceVariant) }
@@ -204,7 +204,7 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                             Text(L10n.t(S.ChangeCity), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                         }
                         if (cityAliased) {
-                            TextButton(onClick = { viewModel.clearCityAlias(); recalc(); try { com.example.utils.WearSync.INSTANCE.push(context, null) } catch (_: Throwable) {} }) {
+                            TextButton(onClick = { viewModel.clearCityAlias(); recalc(); try { com.example.utils.WearSync.push(context) } catch (_: Throwable) {} }) {
                                 Text(L10n.t(S.ResetCityNameAuto), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                             }
                         }
