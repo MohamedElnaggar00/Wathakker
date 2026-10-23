@@ -105,7 +105,6 @@ fun OneUIDialogSurface(
                         .height(56.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val rtlDir = androidx.compose.ui.platform.LocalLayoutDirection.current == androidx.compose.ui.unit.LayoutDirection.Rtl
                     val dismissBtn: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {
                         Box(
                             modifier = Modifier.weight(1f).fillMaxHeight().clickable(onClick = onDismiss),
@@ -127,12 +126,14 @@ fun OneUIDialogSurface(
                             )
                         }
                     }
-                    // Apply/confirm sits on the right in RTL (first child), Cancel on the left; LTR is the reverse.
+                    // One child order everywhere: Cancel first, confirm second. Compose mirrors
+                    // rows automatically in RTL, so Arabic shows حفظ on the left / إلغاء on the
+                    // right (One UI convention); English keeps Cancel left / Save right.
                     if (onConfirm == null) dismissBtn()
                     else {
-                        if (rtlDir) { confirmBtn() } else { dismissBtn() }
+                        dismissBtn()
                         Box(modifier = Modifier.width(1.dp).height(24.dp).background(cs.onSurface.copy(alpha = 0.18f)))
-                        if (rtlDir) { dismissBtn() } else { confirmBtn() }
+                        confirmBtn()
                     }
                 }
                 Spacer(modifier = Modifier.height(4.dp))

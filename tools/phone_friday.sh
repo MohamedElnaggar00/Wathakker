@@ -89,6 +89,59 @@ adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT
 exit 0
 fi
 
+# ---- dialog button order: AR = confirm LEFT / cancel RIGHT, EN = cancel LEFT / confirm RIGHT ----
+if [ "$4" = "DIALOG_BTNS" ]; then
+open_method_dialog(){
+for attempt in 1 2 3; do
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_home_btn.xml"
+XY=$(find_cd "Settings" "$OUT/ui_home_btn.xml"); [ -z "$XY" ] && XY=$(find_cd "الإعدادات" "$OUT/ui_home_btn.xml"); [ -z "$XY" ] && XY="108 222"
+adb shell input tap $XY; sleep 5
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_drawer_btn.xml"
+XY=$(find_text "$1" "$OUT/ui_drawer_btn.xml")
+[ -n "$XY" ] && break
+echo "btn nav retry $attempt" >> "$OUT/nav.txt"
+done
+[ -n "$XY" ] && adb shell input tap $XY; sleep 5
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_loc_btn.xml"
+XY=$(find_text "$2" "$OUT/ui_loc_btn.xml")
+echo "method row at: $XY" >> "$OUT/nav.txt"
+[ -n "$XY" ] && adb shell input tap $XY; sleep 3
+}
+check_close(){ # $1 = button text that must be gone after confirm tap, $2 = tag
+XY=$(find_text "$1" "$OUT/ui_dialog_$2.xml")
+[ -n "$XY" ] && adb shell input tap $XY; sleep 3
+dump_clean "$OUT/ui_after_confirm_$2.xml"
+if grep -q "text=\"$1\"" "$OUT/ui_after_confirm_$2.xml"; then echo "${2}_CONFIRM_CLOSE FAIL" | tee -a "$OUT/nav.txt"; else echo "${2}_CONFIRM_CLOSE PASS" | tee -a "$OUT/nav.txt"; fi
+}
+# --- Arabic pass (seed already sets language=ar) ---
+open_method_dialog "تغيير الموقع" "طريقة الحساب"
+dismiss_anr; sleep 1
+dump_clean "$OUT/ui_dialog_ar.xml"
+shot dialog_btns_ar
+CAX=$(find_text "إلغاء" "$OUT/ui_dialog_ar.xml" | awk '{print $1}')
+CFX=$(find_text "تطبيق" "$OUT/ui_dialog_ar.xml" | awk '{print $1}')
+echo "AR cancel_x=$CAX apply_x=$CFX" >> "$OUT/nav.txt"
+if [ -n "$CAX" ] && [ -n "$CFX" ] && [ "$CFX" -lt "$CAX" ]; then echo "AR_BTN_ORDER PASS (تطبيق left of إلغاء)" | tee -a "$OUT/nav.txt"; else echo "AR_BTN_ORDER FAIL cancel_x=$CAX apply_x=$CFX" | tee -a "$OUT/nav.txt"; fi
+check_close "تطبيق" "ar"
+# --- English pass ---
+adb shell am force-stop $PKG; sleep 1
+adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">en</string></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"
+open_method_dialog "Change location" "Calculation method"
+dismiss_anr; sleep 1
+dump_clean "$OUT/ui_dialog_en.xml"
+shot dialog_btns_en
+CAX=$(find_text "Cancel" "$OUT/ui_dialog_en.xml" | awk '{print $1}')
+CFX=$(find_text "Apply" "$OUT/ui_dialog_en.xml" | awk '{print $1}')
+echo "EN cancel_x=$CAX apply_x=$CFX" >> "$OUT/nav.txt"
+if [ -n "$CAX" ] && [ -n "$CFX" ] && [ "$CAX" -lt "$CFX" ]; then echo "EN_BTN_ORDER PASS (Cancel left of Apply)" | tee -a "$OUT/nav.txt"; else echo "EN_BTN_ORDER FAIL cancel_x=$CAX apply_x=$CFX" | tee -a "$OUT/nav.txt"; fi
+check_close "Apply" "en"
+exit 0
+fi
+
 # ---- A/B/A auto-location alias memory: alias at A, move to B (no leak), return to A (remembered) ----
 if [ "$4" = "AUTO_ABA" ]; then
 adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"use_current_location\" value=\"true\" /><float name=\"latitude\" value=\"31.2001\" /><float name=\"longitude\" value=\"29.9187\" /><string name=\"city_name\">مدينة برج العرب، مصر</string><string name=\"city_name_ar\">مدينة برج العرب، مصر</string><string name=\"city_name_en\">Borg El Arab, Egypt</string><string name=\"city_aliases_json\">{}</string></map>' > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml"
