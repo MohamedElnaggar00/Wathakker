@@ -44,7 +44,7 @@ adb exec-out screencap -p > "$OUT/page_prayer.png"
 # --- swipe through pages: slow drag with frames captured WHILE the pager is mid-swipe ---
 Y=$((H*7/10)); X1=$((W*3/10)); X2=$((W*8/10))
 mid(){ # $1 tag, $2 from, $3 to
-  adb shell input draganddrop $2 $Y $3 $Y 1600 &
+  adb shell input swipe $2 $Y $3 $Y 1600 &
   DP=$!
   for t in 1 2 3; do sleep 0.45; adb exec-out screencap -p > "$OUT/mid_$1_$t.png"; done
   wait $DP; sleep 2; adb exec-out screencap -p > "$OUT/swipe_$1.png"
