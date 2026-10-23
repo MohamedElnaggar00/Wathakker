@@ -16,7 +16,8 @@ for m in re.finditer(r'<node [^>]*>',x):
         a=list(map(int,b.groups())); print((a[0]+a[2])//2,(a[1]+a[3])//2); break
 PY
 }
-shot(){ adb exec-out screencap -p > "$OUT/$1.png"; adb shell uiautomator dump /sdcard/s.xml >/dev/null 2>&1; adb pull /sdcard/s.xml "$OUT/$1.xml" >/dev/null 2>&1; echo "== $1 top=$(adb shell dumpsys activity activities | grep -m1 ResumedActivity | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*') texts: $(grep -o ' text="[^"]\+"' "$OUT/$1.xml" | head -25 | tr '\n' '|')" >> "$OUT/shots.txt"; }
+noanr(){ for i in 1 2 3; do dump "$OUT/_anr.xml"; if grep -q "isn't responding" "$OUT/_anr.xml"; then XY=$(tap_re "^ *Wait *$" "$OUT/_anr.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 3; else break; fi; done; }
+shot(){ noanr; adb exec-out screencap -p > "$OUT/$1.png"; adb shell uiautomator dump /sdcard/s.xml >/dev/null 2>&1; adb pull /sdcard/s.xml "$OUT/$1.xml" >/dev/null 2>&1; echo "== $1 top=$(adb shell dumpsys activity activities | grep -m1 ResumedActivity | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*') texts: $(grep -o ' text="[^"]\+"' "$OUT/$1.xml" | head -25 | tr '\n' '|')" >> "$OUT/shots.txt"; }
 setprefs(){ adb shell am force-stop $PKG; adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">$1</string></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"; }
 launch(){ adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 14; for i in 1 2 3; do dump "$OUT/anr.xml"; if grep -q "isn't responding" "$OUT/anr.xml"; then XY=$(tap_re "Wait" "$OUT/anr.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 4; fi; done; }
 # First launch once so the data dir exists, then force prefs.
@@ -68,6 +69,7 @@ echo "screen $SZ" > "$OUT/hosttap.txt"
 top(){ adb shell dumpsys activity activities | grep -m1 -E "mResumedActivity|ResumedActivity" | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*' | head -1; }
 host(){ adb shell am force-stop $PKG; sleep 2; adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck --es a $1 --es b $2 >> "$OUT/hostlaunch.txt" 2>&1; sleep 12; echo "host $1 $2 top=$(top)" >> "$OUT/hosttap.txt"; }
 check(){ # name x expected(Main|Host)
+  noanr
   adb shell input tap $2 $Y; sleep 4; T=$(top)
   case "$T" in *MainActivity*) GOT=Main;; *WidgetHostCheck*) GOT=Host;; *) GOT="other:$T";; esac
   if [ "$GOT" = "$3" ]; then R=PASS; else R=FAIL; fi
@@ -75,7 +77,7 @@ check(){ # name x expected(Main|Host)
 }
 adb shell settings put system user_rotation 0
 adb shell am force-stop $PKG; adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 8
-for i in 1 2 3 4; do dump "$OUT/bind.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind.xml"); echo "bind dialog tap $i: $XY" >> "$OUT/hosttap.txt"; shot "hosttap_bind$i"; [ -n "$XY" ] && adb shell input tap $XY; sleep 6; done
+for i in 1 2 3 4; do noanr; dump "$OUT/bind.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind.xml"); echo "bind dialog tap $i: $XY" >> "$OUT/hosttap.txt"; shot "hosttap_bind$i"; [ -n "$XY" ] && adb shell input tap $XY; sleep 6; done
 host open none; shot hosttap_state1
 check A_open_B_none_tapA $AX Main
 host open none; check A_open_B_none_tapB $BX Host
