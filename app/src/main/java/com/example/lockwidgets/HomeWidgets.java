@@ -43,7 +43,6 @@ public final class HomeWidgets {
  static int wpId=-9;static android.graphics.Bitmap wpBlur=null;
  static boolean nightMode(Context c){return (c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;}
  /** Translucent tint laid over the blurred wallpaper so text stays readable: dark smoke at night, milky white by day. */
- static int frostTint(boolean night){return night?0x70101418:0x80FFFFFF;}
  static int blendOver(int base,int tint){int a=(tint>>>24),r=(((base>>16)&255)*(255-a)+((tint>>16)&255)*a)/255,g=(((base>>8)&255)*(255-a)+((tint>>8)&255)*a)/255,b=((base&255)*(255-a)+(tint&255)*a)/255;return (r<<16)|(g<<8)|b;}
  static android.graphics.Bitmap wallBlur(Context c){return wallBlur(c,false);}
  static android.graphics.Bitmap wpMesh,wpReal;static int wpMeshId=-2,wpRealId=-2;
@@ -107,15 +106,6 @@ public final class HomeWidgets {
   if(fromImage){wpReal=small;wpRealId=id;}else if(!real){wpMesh=small;wpMeshId=id;}
   return small;
  }
- static android.graphics.Bitmap frostGrain;
- /** Soft top highlight + fine grain on top of the blurred fill: reads as frosted glass instead of a flat colour. */
- static void frostOverlay(Canvas cv,float w,float h,float rad,boolean night){
-  Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);RectF r=new RectF(0,0,w,h);
-  p.setColor(frostTint(night));cv.drawRoundRect(r,rad,rad,p);
-  p.setColor(0xFFFFFFFF);p.setShader(new LinearGradient(0,0,0,h*.55f,night?0x30FFFFFF:0x60FFFFFF,0x00FFFFFF,Shader.TileMode.CLAMP));cv.drawRoundRect(r,rad,rad,p);
-  if(frostGrain==null){android.graphics.Bitmap g=android.graphics.Bitmap.createBitmap(64,64,android.graphics.Bitmap.Config.ARGB_8888);java.util.Random rnd=new java.util.Random(7);for(int y=0;y<64;y++)for(int x=0;x<64;x++){int a=rnd.nextInt(26);g.setPixel(x,y,(a<<24)|(rnd.nextBoolean()?0xFFFFFF:0x000000));}frostGrain=g;}
-  Paint gp=new Paint(Paint.ANTI_ALIAS_FLAG);gp.setShader(new android.graphics.BitmapShader(frostGrain,Shader.TileMode.REPEAT,Shader.TileMode.REPEAT));cv.drawRoundRect(r,rad,rad,gp);
- }
  static android.graphics.Bitmap wpLight;static int wpLightId=-2;
  /** Lighter blur for the glass (Morphe) prototype: larger thumb, one box pass - shapes stay readable. */
  static android.graphics.Bitmap lightWallBlur(Context c){
@@ -154,7 +144,7 @@ static int avgColor(android.graphics.Bitmap b){
   for(int y=0;y<h;y+=2)for(int x=0;x<w;x+=2){int p=b.getPixel(x,y);r+=(p>>16)&255;g+=(p>>8)&255;bb+=p&255;n++;}
   return (int)(r/n)<<16|(int)(g/n)<<8|(int)(bb/n);
  }
- static int bgColor(Context c,int id){String k=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color_"+id,null):null;if(k==null)k=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");int rgb;if("black".equals(k))rgb=0x000000;else if("gray".equals(k))rgb=0x2b2b2b;else if("white".equals(k))rgb=0xf6f6f6;else{boolean night=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;rgb=night?0x171719:0xf6f6f6;}if("glass".equals(k)){boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return ng?0x90141A22:0x99F2F2F7;}/*3.3.3: adopted glass 1 (user pick 2026-10-23) - Morphe-like flat tint, night darkened to 0x90 alpha per his review*/if("wallblur".equals(k)||"frosted".equals(k)){android.graphics.Bitmap wb=wallBlur(c,"wallblur".equals(k));if(wb!=null)return 0xFF000000|blendOver(avgColor(wb),frostTint(nightMode(c)));boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return 0xD9000000|(ng?0x171719:0xf6f6f6);}return 0xD9000000|rgb;}
+ static int bgColor(Context c,int id){String k=id>0?c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color_"+id,null):null;if(k==null)k=c.getSharedPreferences("fajr_prefs",0).getString("widget_bg_color","auto");int rgb;if("black".equals(k))rgb=0x000000;else if("gray".equals(k))rgb=0x2b2b2b;else if("white".equals(k))rgb=0xf6f6f6;else{boolean night=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;rgb=night?0x171719:0xf6f6f6;}if("glass".equals(k)){boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return ng?0x90141A22:0x99F2F2F7;}/*3.3.3: adopted glass 1 (user pick 2026-10-23) - Morphe-like flat tint, night darkened to 0x90 alpha per his review*/if("wallblur".equals(k)||"frosted".equals(k)){android.graphics.Bitmap wb=wallBlur(c,"wallblur".equals(k));if(wb!=null)return 0xFF000000|blendOver(avgColor(wb),nightMode(c)?0xB8141A22:0xB8F6F6F6);boolean ng=(c.getResources().getConfiguration().uiMode&android.content.res.Configuration.UI_MODE_NIGHT_MASK)==android.content.res.Configuration.UI_MODE_NIGHT_YES;return 0xD9000000|(ng?0x171719:0xf6f6f6);}return 0xD9000000|rgb;}
  static boolean isLight(int bg){int r=(bg>>16)&255,g=(bg>>8)&255,b=bg&255;return 0.299*r+0.587*g+0.114*b>170;}
  static void bar(Canvas cv,Paint p,float pad,float y,float wd,float bh,float fraction,float d,int[] fill,int track){p.setShader(null);p.setColor(track);cv.drawRoundRect(new RectF(pad*d,y*d,(wd-pad)*d,(y+bh)*d),bh*d/2,bh*d/2,p);float fw=Math.max(bh,(wd-2*pad)*Math.max(0,Math.min(1,fraction)));float x0=pad*d,x1=(pad+fw)*d;if(fill[0]!=fill[1])p.setShader(new LinearGradient(x0,0f,x1,0f,fill[0],fill[1],Shader.TileMode.CLAMP));else p.setColor(fill[0]);cv.drawRoundRect(new RectF(x0,y*d,x1,(y+bh)*d),bh*d/2,bh*d/2,p);p.setShader(null);}
  public static Bitmap render(Context c,int wd,int ht){return renderKind(c,"Hero",wd,ht,0);}
@@ -176,7 +166,7 @@ else if(wbm!=null){
  Paint bp=new Paint(Paint.ANTI_ALIAS_FLAG);
  bp.setShader(new android.graphics.BitmapShader(scaled,android.graphics.Shader.TileMode.CLAMP,android.graphics.Shader.TileMode.CLAMP));
  cv.drawRoundRect(new RectF(0,0,wd*d,ht*d),rad,rad,bp);
- frostOverlay(cv,wd*d,ht*d,rad,nightMode(c));
+ Paint sp=new Paint(Paint.ANTI_ALIAS_FLAG);sp.setColor(nightMode(c)?0xB8141A22:0xB8F6F6F6);cv.drawRoundRect(new RectF(0,0,wd*d,ht*d),rad,rad,sp);/*3.3.3: adopted frosted 2 (user pick 2026-10-23) - uniform milk scrim, no sheen/grain*/
 }else{
  p.setColor(bg);cv.drawRoundRect(new RectF(0,0,wd*d,ht*d),rad,rad,p);
 }
