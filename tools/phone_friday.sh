@@ -89,6 +89,61 @@ adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT
 exit 0
 fi
 
+# ---- A/B/A auto-location alias memory: alias at A, move to B (no leak), return to A (remembered) ----
+if [ "$4" = "AUTO_ABA" ]; then
+adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"use_current_location\" value=\"true\" /><float name=\"latitude\" value=\"31.2001\" /><float name=\"longitude\" value=\"29.9187\" /><string name=\"city_name\">مدينة برج العرب، مصر</string><string name=\"city_name_ar\">مدينة برج العرب، مصر</string><string name=\"city_name_en\">Borg El Arab, Egypt</string><string name=\"city_aliases_json\">{}</string></map>' > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml"
+adb emu geo fix 29.9187 31.2001 >> "$OUT/nav.txt" 2>&1
+for attempt in 1 2 3; do
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_home.xml"
+XY=$(find_cd "Settings" "$OUT/ui_home.xml"); [ -z "$XY" ] && XY=$(find_cd "الإعدادات" "$OUT/ui_home.xml"); [ -z "$XY" ] && XY="108 222"
+adb shell input tap $XY; sleep 5
+dismiss_anr; sleep 2; dismiss_anr
+dump_clean "$OUT/ui_drawer.xml"
+XY=$(find_text "تغيير الموقع" "$OUT/ui_drawer.xml")
+[ -n "$XY" ] && break
+echo "aba nav retry $attempt" >> "$OUT/nav.txt"
+done
+[ -n "$XY" ] && adb shell input tap $XY; sleep 6
+dismiss_anr; sleep 2; dismiss_anr
+# save alias at A
+dump_clean "$OUT/ui_aba_loc.xml"
+XY=$(find_cd "تعديل اسم المدينة" "$OUT/ui_aba_loc.xml"); echo "aba pencil: $XY" >> "$OUT/nav.txt"
+[ -n "$XY" ] && adb shell input tap $XY; sleep 3
+dump_clean "$OUT/ui_aba_editor.xml"
+FB=$(grep -o 'class="android.widget.EditText"[^>]*' "$OUT/ui_aba_editor.xml" | grep -o 'bounds="[^"]*"' | head -1)
+FXY=$(echo "$FB" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}')
+[ -n "$FXY" ] && adb shell input tap $FXY; sleep 2
+adb shell input keyevent KEYCODE_MOVE_END
+for i in $(seq 1 40); do adb shell input keyevent KEYCODE_DEL; done
+adb shell input text "BorgTest"; sleep 2
+XY=$(find_cd "حفظ" "$OUT/ui_aba_editor.xml"); echo "aba save: $XY" >> "$OUT/nav.txt"
+[ -n "$XY" ] && adb shell input tap $XY; sleep 4
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_A_aliased.xml" 2>&1
+shot aba_A_aliased
+# move to B (Cairo) and force GPS refresh via mode toggle
+adb emu geo fix 31.2357 30.0444 >> "$OUT/nav.txt" 2>&1; sleep 3
+dump_clean "$OUT/ui_aba_loc2.xml"
+XY=$(find_text "اختر الدولة والمدينة" "$OUT/ui_aba_loc2.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 2
+dump_clean "$OUT/ui_aba_loc3.xml"
+XY=$(find_text "الموقع الحالي" "$OUT/ui_aba_loc3.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 10
+dismiss_anr
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_B.xml" 2>&1
+shot aba_B_shown
+# return to A
+adb emu geo fix 29.9187 31.2001 >> "$OUT/nav.txt" 2>&1; sleep 3
+dump_clean "$OUT/ui_aba_loc4.xml"
+XY=$(find_text "اختر الدولة والمدينة" "$OUT/ui_aba_loc4.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 2
+dump_clean "$OUT/ui_aba_loc5.xml"
+XY=$(find_text "الموقع الحالي" "$OUT/ui_aba_loc5.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 10
+dismiss_anr
+adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_A_back.xml" 2>&1
+shot aba_A_back
+dump_clean "$OUT/ui_aba_final.xml"
+exit 0
+fi
+
 # ---- 1. city edit prototype boards ----
 adb shell cmd uimode night yes; sleep 1
 adb shell am start -S -W -n $PKG/com.example.CityEditProtoCheck >/dev/null 2>&1; sleep 7
