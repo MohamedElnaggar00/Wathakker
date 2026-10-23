@@ -92,7 +92,11 @@ fi
 # ---- A/B/A auto-location alias memory: alias at A, move to B (no leak), return to A (remembered) ----
 if [ "$4" = "AUTO_ABA" ]; then
 adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"use_current_location\" value=\"true\" /><float name=\"latitude\" value=\"31.2001\" /><float name=\"longitude\" value=\"29.9187\" /><string name=\"city_name\">مدينة برج العرب، مصر</string><string name=\"city_name_ar\">مدينة برج العرب، مصر</string><string name=\"city_name_en\">Borg El Arab, Egypt</string><string name=\"city_aliases_json\">{}</string></map>' > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml"
+adb shell settings put secure location_mode 3
+adb shell settings put secure location_providers_allowed +gps,+network,+passive
 adb emu geo fix 29.9187 31.2001 >> "$OUT/nav.txt" 2>&1
+sleep 3
+adb shell dumpsys location | grep -m4 -i "last\|provider" >> "$OUT/nav.txt" 2>&1
 for attempt in 1 2 3; do
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
 dismiss_anr; sleep 2; dismiss_anr
@@ -123,11 +127,12 @@ XY=$(find_cd "حفظ" "$OUT/ui_aba_editor.xml"); echo "aba save: $XY" >> "$OUT/n
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_A_aliased.xml" 2>&1
 shot aba_A_aliased
 # move to B (Cairo) and force GPS refresh via mode toggle
-adb emu geo fix 31.2357 30.0444 >> "$OUT/nav.txt" 2>&1; sleep 3
+adb emu geo fix 31.2357 30.0444 >> "$OUT/nav.txt" 2>&1; sleep 4
+adb shell dumpsys location | grep -m4 -i "last known" >> "$OUT/nav.txt" 2>&1
 dump_clean "$OUT/ui_aba_loc2.xml"
 XY=$(find_text "اختر الدولة والمدينة" "$OUT/ui_aba_loc2.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 2
 dump_clean "$OUT/ui_aba_loc3.xml"
-XY=$(find_text "الموقع الحالي" "$OUT/ui_aba_loc3.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 10
+XY=$(find_text "الموقع الحالي" "$OUT/ui_aba_loc3.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 14
 dismiss_anr
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_B.xml" 2>&1
 shot aba_B_shown
@@ -136,7 +141,7 @@ adb emu geo fix 29.9187 31.2001 >> "$OUT/nav.txt" 2>&1; sleep 3
 dump_clean "$OUT/ui_aba_loc4.xml"
 XY=$(find_text "اختر الدولة والمدينة" "$OUT/ui_aba_loc4.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 2
 dump_clean "$OUT/ui_aba_loc5.xml"
-XY=$(find_text "الموقع الحالي" "$OUT/ui_aba_loc5.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 10
+XY=$(find_text "الموقع الحالي" "$OUT/ui_aba_loc5.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 14
 dismiss_anr
 adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT/prefs_A_back.xml" 2>&1
 shot aba_A_back
