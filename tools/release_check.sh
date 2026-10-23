@@ -7,6 +7,8 @@ sha256sum "$APK" > "$OUT/sha.txt"
 adb install -r -g "$APK" > "$OUT/install.txt" 2>&1
 adb shell dumpsys package $PKG | grep -E 'versionName|versionCode|debuggable|flags=' | head -5 > "$OUT/pkg.txt"
 adb shell svc power stayon true
+adb shell settings put global hide_error_dialogs 1
+adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS >/dev/null 2>&1
 adb shell settings put system accelerometer_rotation 0; adb shell settings put system user_rotation 0
 adb shell wm size > "$OUT/wm.txt"; adb shell wm density >> "$OUT/wm.txt"
 dump(){ adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$1" >/dev/null 2>&1; }

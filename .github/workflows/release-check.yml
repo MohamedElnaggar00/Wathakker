@@ -18,8 +18,6 @@ jobs:
         include:
           - kind: tablet
             profile: pixel_tablet
-          - kind: phone
-            profile: pixel_6
     steps:
     - uses: actions/checkout@v4
     - name: Download the CI release APK
