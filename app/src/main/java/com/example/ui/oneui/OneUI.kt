@@ -684,7 +684,10 @@ fun OneUIChipGroup(
             val tapChip = com.example.utils.AppHaptics.tap { onSelect(i) }
             Row(
                 modifier = Modifier
-                    .onGloballyPositioned { chipBounds[i] = it.boundsInParent() }
+                    .onGloballyPositioned { lc ->
+                        val pos = lc.positionInParent()
+                        chipBounds[i] = androidx.compose.ui.geometry.Rect(pos, androidx.compose.ui.geometry.Size(lc.size.width.toFloat(), lc.size.height.toFloat()))
+                    }
                     .height(38.dp)
                     .clip(CircleShape)
                     .background(chipBg)
