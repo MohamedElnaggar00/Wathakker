@@ -142,6 +142,47 @@ check_close "Apply" "en"
 exit 0
 fi
 
+# ---- reminder notification: no open-app action; body tap opens the same dhikr detail ----
+if [ "$4" = "NOTIF_BTN" ]; then
+adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8
+dismiss_anr; sleep 2; dismiss_anr
+adb pull /data/data/com.wathakker.app/databases/wazakkir_database "$OUT/wazakkir_database" >> "$OUT/nav.txt" 2>&1
+DROW=$(python3 - "$OUT/wazakkir_database" <<'PYE'
+import sqlite3,sys
+c=sqlite3.connect(sys.argv[1])
+r=c.execute("SELECT id,title,substr(content,1,14) FROM dhikr WHERE length(content)>20 LIMIT 1").fetchone()
+print("|".join(str(x) for x in r))
+PYE
+)
+DID=$(echo "$DROW" | cut -d'|' -f1); DTITLE=$(echo "$DROW" | cut -d'|' -f2); DFRAG=$(echo "$DROW" | cut -d'|' -f3)
+echo "dhikr id=$DID title=$DTITLE frag=$DFRAG" >> "$OUT/nav.txt"
+fire_notif(){ adb shell am broadcast -n $PKG/com.example.alarm.AlarmReceiver --ei DHIKR_ID $DID --es DHIKR_TITLE "$DTITLE" --es DHIKR_CONTENT "$DFRAG" >> "$OUT/nav.txt" 2>&1; sleep 3; }
+tap_body(){ # $1 langtag
+adb shell cmd statusbar expand-notifications >/dev/null 2>&1; sleep 3
+dump_clean "$OUT/ui_shade_$1.xml"
+shot notif_shade_$1
+XY=$(find_text "$DTITLE" "$OUT/ui_shade_$1.xml"); [ -z "$XY" ] && XY=$(find_text "$DFRAG" "$OUT/ui_shade_$1.xml")
+echo "shade body at: $XY" >> "$OUT/nav.txt"
+[ -n "$XY" ] && adb shell input tap $XY; sleep 5
+dismiss_anr; sleep 1
+dump_clean "$OUT/ui_after_bodytap_$1.xml"
+if grep -q "$DFRAG" "$OUT/ui_after_bodytap_$1.xml"; then echo "${1}_BODYTAP_DETAIL PASS" | tee -a "$OUT/nav.txt"; else echo "${1}_BODYTAP_DETAIL FAIL" | tee -a "$OUT/nav.txt"; fi
+}
+# pass 1: warm (app already open)
+fire_notif
+if grep -q "فتح التطبيق" "$OUT/ui_shade_dummy" 2>/dev/null; then true; fi
+tap_body warm
+grep -q "فتح التطبيق" "$OUT/ui_shade_warm.xml" && echo "WARM_OPENAPP_REMOVED FAIL" | tee -a "$OUT/nav.txt" || echo "WARM_OPENAPP_REMOVED PASS" | tee -a "$OUT/nav.txt"
+grep -q "تم القراءة" "$OUT/ui_shade_warm.xml" && grep -q "ذكرني بعد 10 دقائق" "$OUT/ui_shade_warm.xml" && echo "WARM_OTHER_ACTIONS_KEPT PASS" | tee -a "$OUT/nav.txt" || echo "WARM_OTHER_ACTIONS_KEPT FAIL" | tee -a "$OUT/nav.txt"
+adb shell input keyevent 4; sleep 2
+# pass 2: cold (force-stopped)
+adb shell am force-stop $PKG; sleep 2
+fire_notif
+tap_body cold
+grep -q "فتح التطبيق" "$OUT/ui_shade_cold.xml" && echo "COLD_OPENAPP_REMOVED FAIL" | tee -a "$OUT/nav.txt" || echo "COLD_OPENAPP_REMOVED PASS" | tee -a "$OUT/nav.txt"
+exit 0
+fi
+
 # ---- A/B/A auto-location alias memory: alias at A, move to B (no leak), return to A (remembered) ----
 if [ "$4" = "AUTO_ABA" ]; then
 adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"use_current_location\" value=\"true\" /><float name=\"latitude\" value=\"31.2001\" /><float name=\"longitude\" value=\"29.9187\" /><string name=\"city_name\">مدينة برج العرب، مصر</string><string name=\"city_name_ar\">مدينة برج العرب، مصر</string><string name=\"city_name_en\">Borg El Arab, Egypt</string><string name=\"city_aliases_json\">{}</string></map>' > /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml"
