@@ -25,11 +25,13 @@ class WidgetSharpCheck : Activity() {
         host = AppWidgetHost(this, 4343)
         val mgr = AppWidgetManager.getInstance(this)
         val sp = getSharedPreferences("sharpcheck", MODE_PRIVATE)
-        val names = listOf("PrayerBar", "OneUI")
+        val all = intent.getBooleanExtra("all", false)
+        val names = if (all) listOf("NextPrayer", "PrayerBar", "Schedule", "DayPrayer", "Pill", "Clock", "Hijri", "Gregorian", "Hero", "OneUI") else listOf("PrayerBar", "OneUI")
         val wdp = intent.getIntExtra("w", 800)
-        val hs = intArrayOf(intent.getIntExtra("h2", 204), intent.getIntExtra("h1", 157))
+        val cellW = if (all) 600 else wdp
+        val hs = if (all) IntArray(names.size) { 130 } else intArrayOf(intent.getIntExtra("h2", 204), intent.getIntExtra("h1", 157))
         val d = resources.displayMetrics.density
-        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(0xFF607080.toInt()) }
+        val root = android.widget.GridLayout(this).apply { columnCount = if (all) 2 else 1; setBackgroundColor(0xFF607080.toInt()) }
         val views = ArrayList<View>()
         for (i in names.indices) {
             var id = sp.getInt("id$i", 0)
@@ -47,12 +49,12 @@ class WidgetSharpCheck : Activity() {
             }
             val info = mgr.getAppWidgetInfo(id) ?: continue
             val v = host.createView(this, id, info)
-            val lp = LinearLayout.LayoutParams((wdp * d).toInt(), (hs[i] * d).toInt()).apply { topMargin = (24 * d).toInt() }
+            val lp = android.widget.GridLayout.LayoutParams().apply { width = (cellW * d).toInt(); height = (hs[i] * d).toInt(); topMargin = (6 * d).toInt() }
             root.addView(v, lp); views.add(v)
             // A launcher reports BOTH orientations: portrait-width/landscape-height are the MIN values, landscape-width/portrait-height the MAX values.
             val pw = intent.getIntExtra("pw", 480)
             val ph = intent.getIntExtra("ph", hs[i] + 100)
-            (v as android.appwidget.AppWidgetHostView).updateAppWidgetSize(Bundle(), pw, hs[i], wdp, ph)
+            (v as android.appwidget.AppWidgetHostView).updateAppWidgetSize(Bundle(), pw, hs[i], cellW, ph)
         }
         setContentView(root)
         com.example.lockwidgets.HomeWidgets.updateAll(this)
