@@ -56,3 +56,26 @@ adb shell "cat /data/data/com.wathakker.app/shared_prefs/fajr_prefs.xml" > "$OUT
 grep -o 'widget_tap_[0-9]*[^/]*' "$OUT/prefs_tap.xml" > "$OUT/tap_pref.txt"
 adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei appWidgetId 9001 >/dev/null 2>&1; sleep 8
 adb shell input swipe 540 1800 540 700 300; sleep 2; shot "config_tap_reopened"
+
+# Widget tap end-to-end: two real widgets (distinct ids) in a debug host; flip open/none and tap each.
+adb shell settings put system user_rotation 0; sleep 2
+adb shell cmd appwidget grantbind --package $PKG > "$OUT/grantbind.txt" 2>&1
+SZ=$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1); W=${SZ%x*}; H=${SZ#*x}
+AX=$((W/4)); BX=$((W*3/4)); Y=$((H/2))
+echo "screen $SZ" > "$OUT/hosttap.txt"
+top(){ adb shell dumpsys activity activities | grep -m1 -E "mResumedActivity|ResumedActivity" | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*' | head -1; }
+host(){ adb shell am start -n $PKG/com.example.WidgetHostCheck --es a $1 --es b $2 >/dev/null 2>&1; sleep 14; }
+check(){ # name x expected(Main|Host)
+  adb shell input tap $2 $Y; sleep 4; T=$(top)
+  case "$T" in *MainActivity*) GOT=Main;; *WidgetHostCheck*) GOT=Host;; *) GOT="other:$T";; esac
+  if [ "$GOT" = "$3" ]; then R=PASS; else R=FAIL; fi
+  echo "$1 tap -> $GOT (expected $3) $R" >> "$OUT/hosttap.txt"; shot "hosttap_$1"
+}
+adb shell am force-stop $PKG; adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 14
+host open none; shot hosttap_state1
+check A_open_B_none_tapA $AX Main
+host open none; check A_open_B_none_tapB $BX Host
+host none open; check A_none_B_open_tapA $AX Host
+host none open; check A_none_B_open_tapB $BX Main
+host open open; check A_open_again_tapA $AX Main
+adb logcat -d | grep HOSTCHECK > "$OUT/hostcheck_log.txt"

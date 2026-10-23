@@ -323,7 +323,7 @@ fun PrayerTimesContent(
             PrayerSkyGlass.set(frost)
             onDispose { PrayerSkyGlass.set(null) }
         }
-        val wide = com.example.ui.oneui.isWideScreen()
+        val wide = com.example.ui.oneui.isTwoPane()
         val overviewCard: @Composable () -> Unit = {
             // One card: date and location, a divider, then the next-prayer block.
             OneUICard(

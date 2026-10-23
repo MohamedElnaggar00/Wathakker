@@ -171,7 +171,7 @@ fun MainScreen(viewModel: MainViewModel) {
                             when (oneUITabs[page].route) {
                                 "calendar" -> com.example.ui.oneui.WideContentFrame { HijriCalendarScreen { drawerOpen = true } }
                                 "prayer" -> PrayerTimesScreen(onQibla = { navController.navigate("qibla") }, onMenu = { drawerOpen = true }, onLocation = { navController.navigate("location_calc") })
-                                "hisn" -> if (wide) HisnTwoPane(
+                                "hisn" -> if (com.example.ui.oneui.isTwoPane()) HisnTwoPane(
                                     hisnViewModel, viewModel,
                                     onMenu = { drawerOpen = true }
                                 ) else HisnListScreen(
@@ -205,7 +205,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 composable(
                     "hisn/{id}",
                     arguments = listOf(navArgument("id") { type = NavType.IntType })
-                ) { entry ->
+                ) { entry -> com.example.ui.oneui.WideContentFrame {
                     val id = entry.arguments?.getInt("id") ?: 0
                     val addedDhikr by viewModel.allDhikr.collectAsStateWithLifecycle()
                     HisnChapterScreen(
@@ -215,12 +215,12 @@ fun MainScreen(viewModel: MainViewModel) {
                         addedDhikr.map { it.title }.toSet(),
                         { title, content -> viewModel.addDhikrWithSchedule(title, content, listOf("09:00")) }
                     )
-                }
-                composable("favorites") { FavoritesScreen(viewModel) { navController.popBackStack() } }
-                composable("reminders") { RemindersScreen(viewModel) { navController.popBackStack() } }
-                composable("statistics") { StatisticsScreen(viewModel) { navController.popBackStack() } }
-                composable("tags") { TagsScreen(viewModel) { navController.popBackStack() } }
-                composable("settings") {
+                } }
+                framed("favorites") { FavoritesScreen(viewModel) { navController.popBackStack() } }
+                framed("reminders") { RemindersScreen(viewModel) { navController.popBackStack() } }
+                framed("statistics") { StatisticsScreen(viewModel) { navController.popBackStack() } }
+                framed("tags") { TagsScreen(viewModel) { navController.popBackStack() } }
+                framed("settings") {
                     SettingsScreen(
                         viewModel,
                         { navController.popBackStack() },
@@ -231,26 +231,26 @@ fun MainScreen(viewModel: MainViewModel) {
                         onNavigateToWatch = { navController.navigate("watch_settings") }
                     )
                 }
-                composable("optional_times") {
+                framed("optional_times") {
                     com.example.prayer.OptionalTimesScreen { navController.popBackStack() }
                 }
-                composable("qibla") {
+                framed("qibla") {
                     com.example.prayer.QiblaScreen { navController.popBackStack() }
                 }
-                composable("hijri_converter") {
+                framed("hijri_converter") {
                     com.example.prayer.HijriConverterScreen { navController.popBackStack() }
                 }
-                composable("location_calc") {
+                framed("location_calc") {
                     val fajrViewModel: FajrViewModel = viewModel()
                     com.example.prayer.LocationCalculationScreen(fajrViewModel) { navController.popBackStack() }
                 }
-                composable("fajr_alarm") {
+                framed("fajr_alarm") {
                     val fajrAlarmVm: FajrViewModel = viewModel()
                     FajrAlarmSettingsScreen(fajrAlarmVm) { navController.popBackStack() }
                 }
-                composable("watch_settings") { WatchSettingsScreen { navController.popBackStack() } }
-                composable("about") { AboutScreen { navController.popBackStack() } }
-                composable("tasbeeh") { TasbeehScreen(viewModel) { navController.popBackStack() } }
+                framed("watch_settings") { WatchSettingsScreen { navController.popBackStack() } }
+                framed("about") { AboutScreen { navController.popBackStack() } }
+                framed("tasbeeh") { TasbeehScreen(viewModel) { navController.popBackStack() } }
             }
             // v3.2.0 glass system: over the prayer sky the bottom bar and the drawer
             // use the same frost material as the cards; everywhere else they keep
@@ -345,4 +345,10 @@ fun HisnTwoPane(hisnViewModel: HisnViewModel, viewModel: MainViewModel, onMenu: 
             }
         }
     }
+}
+
+
+/** 3.4: a non-tab page on wide screens, kept to a readable column instead of stretching edge to edge. */
+private fun androidx.navigation.NavGraphBuilder.framed(route: String, content: @Composable () -> Unit) {
+    composable(route) { com.example.ui.oneui.WideContentFrame { content() } }
 }

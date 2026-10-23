@@ -1086,6 +1086,14 @@ fun OneUIDrawer(
 @Composable
 fun isWideScreen(): Boolean = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 600
 
+/**
+ * Two side-by-side panes (list + detail) only from 840dp window width, Android's Expanded width class and
+ * the width where each pane still gets about 400dp after the 108dp rail. Between 600 and 840dp (portrait
+ * tablets, narrow split-screen) the rail stays and each page keeps a single pane.
+ */
+@Composable
+fun isTwoPane(): Boolean = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp >= 840
+
 /** Content column used on wide screens for single-column pages so lines do not stretch edge to edge. */
 @Composable
 fun WideContentFrame(content: @Composable () -> Unit) {
