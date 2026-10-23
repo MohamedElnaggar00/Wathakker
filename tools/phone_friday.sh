@@ -66,7 +66,8 @@ XY=$(find_cd "تعديل اسم المدينة" "$OUT/ui_loccalc.xml"); echo "pe
 [ -n "$XY" ] && adb shell input tap $XY; sleep 3
 shot alias_editor_open
 adb shell input tap 548 1106; sleep 2
-adb shell am broadcast -a ADB_CLEAR_TEXT; sleep 2
+adb shell input keyevent KEYCODE_MOVE_END; sleep 1
+for i in $(seq 1 40); do adb shell input keyevent KEYCODE_DEL; done; sleep 1
 adb shell input text "NewCairoTest"; sleep 3
 dump_clean "$OUT/ui_editor.xml"
 XY=$(find_cd "حفظ" "$OUT/ui_editor.xml"); echo "save btn: $XY" >> "$OUT/nav.txt"
