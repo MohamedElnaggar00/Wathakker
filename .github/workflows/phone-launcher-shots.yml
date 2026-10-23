@@ -1,6 +1,12 @@
 name: Phone launcher widget shots (NO RELEASE)
 'on':
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      apk_run_id:
+        description: 'Optional: build-apk run id whose signed release artifact to install instead of a debug build'
+        required: false
+        default: ''
+        type: string
 permissions:
   contents: read
 jobs:
@@ -19,7 +25,16 @@ jobs:
     - name: Generate Debug Keystore
       run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Build debug APK
+      if: inputs.apk_run_id == ''
       run: set -o pipefail; gradle :app:assembleDebug -PcomposeBom=2025.10.01 --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g" 2>&1 | tail -30
+    - name: Download pinned release APK artifact
+      if: inputs.apk_run_id != ''
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        mkdir -p relapk
+        gh run download "${{ inputs.apk_run_id }}" -n app-release-bom-2025.10.01.apk -D relapk
+        ls -la relapk/
     - name: Enable KVM
       run: |-
         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -32,7 +47,7 @@ jobs:
         arch: x86_64
         target: google_apis
         profile: pixel_6
-        script: bash tools/phone_launcher.sh app/build/outputs/apk/debug/app-debug.apk emulator-evidence/launcher
+        script: bash tools/phone_launcher.sh ${{ inputs.apk_run_id != '' && 'relapk/app-release-unsigned.apk' || 'app/build/outputs/apk/debug/app-debug.apk' }} emulator-evidence/launcher
     - uses: actions/upload-artifact@v4
       if: always()
       with:

@@ -10,6 +10,11 @@ name: Phone widget emulator preview (NO RELEASE)
         options:
           - build-debug
           - release-artifact
+      apk_run_id:
+        description: 'Optional: build-apk run id whose signed artifact to install (skips latest-success lookup)'
+        required: false
+        default: ''
+        type: string
 permissions:
   contents: read
   actions: read
@@ -37,7 +42,8 @@ jobs:
         GH_TOKEN: ${{ github.token }}
       run: |
         mkdir -p relapk
-        RUN_ID=$(gh run list --workflow build-apk.yml --branch ${{ github.ref_name }} --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+        RUN_ID="${{ inputs.apk_run_id }}"
+        if [ -z "$RUN_ID" ]; then RUN_ID=$(gh run list --workflow build-apk.yml --branch ${{ github.ref_name }} --status success --limit 1 --json databaseId --jq '.[0].databaseId'); fi
         echo "release build run: $RUN_ID"
         gh run download "$RUN_ID" -n app-release-bom-2025.10.01.apk -D relapk
         ls -la relapk/
