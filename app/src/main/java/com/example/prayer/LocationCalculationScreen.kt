@@ -203,16 +203,19 @@ fun LocationCalculationScreen(viewModel: FajrViewModel, onBack: () -> Unit) {
                         if (!state.useCurrentLocation) {
                             Text(L10n.t(S.ChangeCity), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                         }
-                        if (cityAliased) {
-                            TextButton(onClick = { viewModel.clearCityAlias(); recalc(); try { com.example.utils.WearSync.push(context) } catch (_: Throwable) {} }) {
-                                Text(L10n.t(S.ResetCityNameAuto), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                            }
-                        }
                         androidx.compose.material3.Surface(shape = androidx.compose.foundation.shape.CircleShape, color = cs.primary.copy(alpha = 0.12f), modifier = Modifier.padding(start = 8.dp)) {
                             IconButton(onClick = { cityEditText = state.cityName; editingCity = true }, modifier = Modifier.size(36.dp)) {
                                 Icon(Icons.Outlined.Edit, L10n.t(S.EditCityName), tint = cs.primary, modifier = Modifier.size(18.dp))
                             }
                         }
+                    }
+                }
+                if (editingCity && cityAliased) {
+                    TextButton(
+                        onClick = { viewModel.clearCityAlias(); editingCity = false; recalc(); try { com.example.utils.WearSync.push(context) } catch (_: Throwable) {} },
+                        modifier = Modifier.align(Alignment.End).padding(end = 12.dp)
+                    ) {
+                        Text(L10n.t(S.ResetCityNameAuto), color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
                 if (state.useCurrentLocation && (!state.hasLocationPermission || !state.isGpsAvailable())) {
