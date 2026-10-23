@@ -49,53 +49,70 @@ class GlassProtoCheck : Activity() {
         val dm = resources.displayMetrics.density
 
         val walls = listOf(
-            "light" to lightWall(W, H),
-            "dark" to darkWall(W, H),
-            "busy" to busyWall(W, H)
+            Triple("light", "فاتحة", lightWall(W, H)),
+            Triple("dark", "داكنة", darkWall(W, H)),
+            Triple("busy", "مزدحمة", busyWall(W, H))
         )
         val cards = listOf(
-            "glass current (shipped, flat tint)" to "glass",
-            "glass p1: tint only (Morphe) - suits any wallpaper" to "protoGlass1",
-            "glass p2: light blur of wallpaper colours + tint" to "protoGlass2",
-            "frosted current: colour mesh + sheen/grain" to "frosted",
-            "frosted p2: colour mesh + milk scrim (Samsung legibility)" to "protoFrost1"
+            "الزجاج — الشكل الحالي" to "glass",
+            "زجاج ١ — صبغة خفيفة ثابتة (Morphe)" to "protoGlass1",
+            "زجاج ٢ — ضبابية خفيفة من ألوان الخلفية" to "protoGlass2",
+            "الضبابي — الشكل الحالي" to "frosted",
+            "ضبابي ٢ — طبقة حليبية أوضح (Samsung)" to "protoFrost1"
         )
         val access = if (why.startsWith("getDrawable ok")) "wallpaper read: OK"
             else "wallpaper read: BLOCKED (Android 13+) - boards inject each wallpaper's colour mesh"
+        Log.i("GlassProto", "boards: " + access)
         val outDir = getExternalFilesDir(null)
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)
+        val capFace = try { android.graphics.Typeface.createFromAsset(assets, "homefonts/expoarabic_medium.ttf") }
+            catch (t: Throwable) { android.graphics.Typeface.DEFAULT }
         var first: Bitmap? = null
-        for ((wname, wall) in walls) {
+        for ((wfile, wname, wall) in walls) {
             HomeWidgets.debugOverrideMeshForReview(this, meshOf(wall))
             val sheet = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888)
             val sc = Canvas(sheet)
             sc.drawBitmap(wall, 0f, 0f, null)
-            val label = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = if (night) Color.WHITE else Color.BLACK; textSize = 30f }
-            val pill = Paint(Paint.ANTI_ALIAS_FLAG)
-            var y = (34 * dm).toInt()
-            fun line(s: String) {
-                val w = label.measureText(s)
-                pill.color = if (night) 0x99000000.toInt() else 0x99FFFFFF.toInt()
-                sc.drawRoundRect(RectF(30 * dm, y - 34 * dm, 42 * dm + w, y + 10 * dm), 8 * dm, 8 * dm, pill)
-                sc.drawText(s, 36 * dm, y.toFloat(), label)
-                y += (20 * dm).toInt()
+            val txt = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = if (night) Color.WHITE else Color.BLACK
+                textSize = 30f; typeface = capFace
             }
-            line("MOCK REVIEW - $wname wallpaper - " + (if (night) "dark theme" else "light theme"))
-            line(access)
-            y += (4 * dm).toInt()
-            val cardW = 330; val cardH = 90
+            val pill = Paint(Paint.ANTI_ALIAS_FLAG)
+            val cx = W / 2f
+            var y = 34 * dm
+            // Header: what this board is - plain Arabic, no diagnostics.
+            run {
+                val t = "معاينة تجريبية — خلفية " + wname + " — " + (if (night) "الوضع الداكن" else "الوضع الفاتح")
+                val w = txt.measureText(t)
+                pill.color = if (night) 0x99000000.toInt() else 0x99FFFFFF.toInt()
+                sc.drawRoundRect(RectF(cx - w / 2 - 8 * dm, y - 32 * dm, cx + w / 2 + 8 * dm, y + 9 * dm), 9 * dm, 9 * dm, pill)
+                sc.drawText(t, cx - w / 2, y, txt)
+                y += 34 * dm
+            }
+            val cardW = 330; val cardH = 88
             val x = ((W - cardW * dm) / 2).toInt()
             for ((name, key) in cards) {
                 sp.edit().putString("widget_bg_color_996", key).commit()
                 val card = HomeWidgets.renderKind(this, "Hero", cardW, cardH, 996)
-                line(name)
-                y += (4 * dm).toInt()
-                sc.drawBitmap(card, x.toFloat(), y.toFloat(), null)
-                y += (cardH * dm).toInt() + (14 * dm).toInt()
+                sc.drawBitmap(card, x.toFloat(), y, null)
+                y += cardH * dm + 8 * dm
+                // Caption fully inside the gap below its card - never over widget pixels.
+                val w = txt.measureText(name)
+                pill.color = if (night) 0xB3000000.toInt() else 0xB3FFFFFF.toInt()
+                sc.drawRoundRect(RectF(cx - w / 2 - 8 * dm, y - 30 * dm, cx + w / 2 + 8 * dm, y + 8 * dm), 9 * dm, 9 * dm, pill)
+                sc.drawText(name, cx - w / 2, y, txt)
+                y += 34 * dm
             }
+            // Honest footnote: simulated backgrounds; the effect is generated from the user's own wallpaper colours.
+            val note = "خلفيات تجريبية للمحاكاة — التأثير يتولّد تلقائيًا من ألوان خلفيتك دون أي صلاحية"
+            txt.textSize = 24f
+            val nw = txt.measureText(note)
+            pill.color = if (night) 0x99000000.toInt() else 0x99FFFFFF.toInt()
+            sc.drawRoundRect(RectF(cx - nw / 2 - 6 * dm, y - 26 * dm, cx + nw / 2 + 6 * dm, y + 8 * dm), 8 * dm, 8 * dm, pill)
+            sc.drawText(note, cx - nw / 2, y, txt)
             if (first == null) first = sheet
             try {
-                FileOutputStream(File(outDir, "glass_board_" + wname + (if (night) "_night" else "_day") + ".png")).use {
+                FileOutputStream(File(outDir, "glass_board_" + wfile + (if (night) "_night" else "_day") + ".png")).use {
                     sheet.compress(Bitmap.CompressFormat.PNG, 100, it)
                 }
             } catch (t: Throwable) { Log.w("GlassProto", "save failed", t) }
