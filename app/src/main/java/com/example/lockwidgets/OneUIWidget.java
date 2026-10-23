@@ -36,8 +36,10 @@ final class OneUIWidget {
 
     static Bitmap render(Context c, HomeWidgets.State s, int wd, int ht, int widgetId) {
         float d = c.getResources().getDisplayMetrics().density;
-        Bitmap bmp = Bitmap.createBitmap(Math.max(1, (int) (wd * d)), Math.max(1, (int) (ht * d)), Bitmap.Config.ARGB_8888);
+        float os = HomeWidgets.oversample(wd, ht, d);
+        Bitmap bmp = Bitmap.createBitmap(Math.max(1, (int) (wd * d * os)), Math.max(1, (int) (ht * d * os)), Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(bmp);
+        cv.scale(os, os);
         boolean night = (c.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         float W = wd, H = ht;
         float t = Math.max(0f, Math.min(1f, (H - 80f) / 100f)); // 0 = 4x1, 1 = 4x2

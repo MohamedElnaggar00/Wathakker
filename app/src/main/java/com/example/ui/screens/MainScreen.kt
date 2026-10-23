@@ -70,6 +70,7 @@ import com.example.ui.oneui.OneUIDrawer
 import com.example.ui.oneui.OneUIDrawerItem
 import com.example.ui.viewmodel.MainViewModel
 import dev.chrisbanes.haze.rememberHazeState
+import dev.chrisbanes.haze.hazeSource
 import kotlinx.coroutines.launch
 import com.example.ui.i18n.L10n
 import com.example.ui.i18n.S
@@ -146,6 +147,10 @@ fun MainScreen(viewModel: MainViewModel) {
             val oneUiEase = CubicBezierEasing(0.15f, 0.5f, 0.1f, 0.9f)
             val oneUiParallaxEase = CubicBezierEasing(0.15f, 0.0f, 0.3f, 0.85f)
             val dirSign = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
+            // 3.4: one full-screen blur source under the pages. The frosted bottom bar used to blur only the list
+            // that sat under it, so on wide pages (centred frame, two-pane Hisn) and mid-swipe the bar had no
+            // background where no list was drawn. This source always covers the whole screen.
+            Box(Modifier.fillMaxSize().hazeSource(hazeState).background(MaterialTheme.colorScheme.background)) {
             NavHost(
                 navController = navController,
                 startDestination = "tabs",
@@ -240,6 +245,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 framed("watch_settings") { WatchSettingsScreen { navController.popBackStack() } }
                 framed("about") { AboutScreen { navController.popBackStack() } }
                 framed("tasbeeh") { TasbeehScreen(viewModel) { navController.popBackStack() } }
+            }
             }
             // v3.2.0 glass system: over the prayer sky the bottom bar and the drawer
             // use the same frost material as the cards; everywhere else they keep
