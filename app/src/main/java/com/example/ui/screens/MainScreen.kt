@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -328,7 +329,7 @@ fun HisnTwoPane(hisnViewModel: HisnViewModel, viewModel: MainViewModel, onMenu: 
         Box(Modifier.weight(0.42f).fillMaxSize()) {
             HisnListScreen(hisnViewModel, { chapter -> selected = chapter.id }, onMenu)
         }
-        Box(Modifier.weight(0.58f).fillMaxSize()) {
+        Box(Modifier.weight(0.58f).fillMaxSize().background(MaterialTheme.colorScheme.background)) {
             val id = selected
             if (id != null) {
                 HisnChapterScreen(
