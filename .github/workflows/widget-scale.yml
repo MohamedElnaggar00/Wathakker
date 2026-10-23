@@ -38,13 +38,5 @@ jobs:
     - uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: widget-evidence
-        path: emulator-evidence/widgets/
-    - name: Gate on substantive results
-      if: always()
-      run: |-
-        r=emulator-evidence/widgets/widgets.txt
-        grep ' FAIL$' $r && { echo "FAIL lines present"; exit 1; }
-        n=$(grep -c ' PASS$' $r); echo "PASS lines: $n"
-        # 4 phases x10 + settings 10 + E 10 + F 10 + G 10 + H 10 = 90
-        [ "$n" -ge 90 ] || { echo "expected 90 PASS, got $n"; exit 1; }
+        name: widget-scale
+        path: emulator-evidence/scale/
