@@ -29,7 +29,7 @@ class WidgetRenderCheck : Activity() {
         val dims = mapOf(
             "Hero" to (330 to 90), "Schedule" to (330 to 90),
             "Clock" to (250 to 90), "Hijri" to (90 to 90), "Gregorian" to (90 to 90),
-            "NextPrayer" to (110 to 90), "PrayerBar" to (110 to 90),
+            "NextPrayer" to (140 to 60), "PrayerBar" to (110 to 90),  // NextPrayer: match provider XML default 2x1 (min 140x60dip, targetCell 2x1)
             "DayPrayer" to (110 to 90), "Pill" to (110 to 90)
         )
         val kinds = listOf("Hero", "NextPrayer", "PrayerBar", "Schedule", "Clock", "DayPrayer", "Pill", "Hijri", "Gregorian")
