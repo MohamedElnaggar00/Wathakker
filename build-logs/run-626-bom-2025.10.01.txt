@@ -1,0 +1,17 @@
+outcome: failure  bom: 2025.10.01  run: 40011777530  sha: dc5c65f63b15df647ed3a0a2378c3fd3c514b070
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+--- details
+19:* What went wrong:
+20-Plugin [id: 'org.gradle.toolchains.foojay-resolver-convention', version: '1.0.0'] was not found in any of the following sources:
+21-
+22-- Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+23-- Included Builds (No included builds contain this plugin)
+--
+36:BUILD FAILED in 28s
