@@ -16,7 +16,7 @@ for m in re.finditer(r'<node [^>]*>',x):
         a=list(map(int,b.groups())); print((a[0]+a[2])//2,(a[1]+a[3])//2); break
 PY
 }
-shot(){ adb exec-out screencap -p > "$OUT/$1.png"; }
+shot(){ adb exec-out screencap -p > "$OUT/$1.png"; adb shell uiautomator dump /sdcard/s.xml >/dev/null 2>&1; adb pull /sdcard/s.xml "$OUT/$1.xml" >/dev/null 2>&1; echo "== $1 top=$(adb shell dumpsys activity activities | grep -m1 ResumedActivity | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*') texts: $(grep -o ' text="[^"]\+"' "$OUT/$1.xml" | head -25 | tr '\n' '|')" >> "$OUT/shots.txt"; }
 setprefs(){ adb shell am force-stop $PKG; adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">$1</string></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"; }
 launch(){ adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 14; for i in 1 2 3; do dump "$OUT/anr.xml"; if grep -q "isn't responding" "$OUT/anr.xml"; then XY=$(tap_re "Wait" "$OUT/anr.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 4; fi; done; }
 # First launch once so the data dir exists, then force prefs.
@@ -34,8 +34,8 @@ run_lang(){ L=$1; setprefs $L
   XY=$(tap_re "التقويم|Calendar" "$OUT/${L}_land_prayer.xml"); echo "$L cal tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_land_calendar"
   XY=$(tap_re "التذكيرات|Reminders" "$OUT/${L}_land_prayer.xml"); echo "$L rem tab: $XY" >> "$OUT/nav.txt"; [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_land_reminders"
   adb shell settings put system user_rotation 1   # portrait
-  sleep 4; shot "${L}_port_reminders"; dump "$OUT/${L}_port.xml"
-  XY=$(tap_re "الصلاة|Prayer" "$OUT/${L}_port.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_port_prayer"
+  sleep 3; launch; shot "${L}_port_prayer"; dump "$OUT/${L}_port.xml"
+  XY=$(tap_re "التذكيرات|Reminders" "$OUT/${L}_port.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 3; shot "${L}_port_reminders"
   adb shell settings put system user_rotation 0
 }
 run_lang ar

@@ -491,6 +491,7 @@ fun PrayerTimesContent(
                 }
             }
         }
+        Box(Modifier.fillMaxSize().padding(start = com.example.ui.oneui.LocalRailInset.current)) {
         OneUIScreen(
         title = L10n.t(S.PrayerTimes),
         onMenu = onMenu,
@@ -514,6 +515,7 @@ fun PrayerTimesContent(
         } else {
             item(key = "prayer-overview") { overviewCard() }
             item(key = "prayer-list") { listCard() }
+        }
         }
         }
     }

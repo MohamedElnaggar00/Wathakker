@@ -190,16 +190,32 @@ fun MainScreen(viewModel: MainViewModel) {
                         }
                     }
                     if (wide) {
-                        androidx.compose.foundation.layout.Row(Modifier.fillMaxSize()) {
-                            com.example.ui.oneui.OneUINavRail(
-                                tabs = oneUITabs,
-                                selectedRoute = currentTabRoute,
-                                onSelect = { tab ->
-                                    val i = oneUITabs.indexOf(tab)
-                                    if (i >= 0) scope.launch { pagerState.scrollToPage(i) }
-                                }
-                            )
-                            Box(Modifier.weight(1f).fillMaxSize()) { tabsContent() }
+                        val onRailSelect: (BottomTab) -> Unit = { tab ->
+                            val i = oneUITabs.indexOf(tab)
+                            if (i >= 0) scope.launch { pagerState.scrollToPage(i) }
+                        }
+                        if (currentTabRoute == "prayer") {
+                            // The sky scene runs edge to edge; the rail floats over it and the page keeps clear of it.
+                            Box(Modifier.fillMaxSize()) {
+                                androidx.compose.runtime.CompositionLocalProvider(
+                                    com.example.ui.oneui.LocalRailInset provides com.example.ui.oneui.RailInset
+                                ) { tabsContent() }
+                                com.example.ui.oneui.OneUINavRail(
+                                    tabs = oneUITabs,
+                                    selectedRoute = currentTabRoute,
+                                    onSelect = onRailSelect,
+                                    solid = false
+                                )
+                            }
+                        } else {
+                            androidx.compose.foundation.layout.Row(Modifier.fillMaxSize()) {
+                                com.example.ui.oneui.OneUINavRail(
+                                    tabs = oneUITabs,
+                                    selectedRoute = currentTabRoute,
+                                    onSelect = onRailSelect
+                                )
+                                Box(Modifier.weight(1f).fillMaxSize()) { tabsContent() }
+                            }
                         }
                     } else tabsContent()
                 }

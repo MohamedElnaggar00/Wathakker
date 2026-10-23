@@ -1103,13 +1103,18 @@ fun WideContentFrame(content: @Composable () -> Unit) {
     }
 }
 
+/** Width the floating rail takes at the start edge (84dp pill + 12dp padding each side). */
+val RailInset = 108.dp
+val LocalRailInset = androidx.compose.runtime.compositionLocalOf { 0.dp }
+
 /** 3.4: side navigation rail that replaces the floating bottom bar on wide screens (same tabs, same tint rules). */
 @Composable
 fun OneUINavRail(
     tabs: List<BottomTab>,
     selectedRoute: String,
     onSelect: (BottomTab) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    solid: Boolean = true
 ) {
     val cs = MaterialTheme.colorScheme
     val tabBlue = if (ThemeSettings.isDark()) Color(0xFF78B8F8) else Color(0xFF2E6DB4)
@@ -1117,7 +1122,7 @@ fun OneUINavRail(
     Box(
         modifier = modifier
             .fillMaxHeight()
-            .background(cs.background)
+            .then(if (solid) Modifier.background(cs.background) else Modifier)
             .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
             .padding(horizontal = 12.dp, vertical = 12.dp),
