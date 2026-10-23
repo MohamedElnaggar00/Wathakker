@@ -24,7 +24,7 @@ adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"ye
 adb logcat -c
 # --- widgets: bind through the system dialog, then host at fixed tablet-like sizes ---
 adb shell am start -S -W -n $PKG/com.example.WidgetSharpCheck --ei w 800 --ei h1 157 --ei h2 204 --ez all ${ALL:-false} >> "$OUT/launch.txt" 2>&1; sleep 6
-for n in 1 2 3 4 5 6; do noanr; dump "$OUT/bind.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind.xml"); [ -z "$XY" ] && break; adb shell input tap $XY; sleep 6; done
+for n in $(seq 1 14); do noanr; dump "$OUT/bind.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind.xml"); [ -z "$XY" ] && break; CB=$(tap_re "Always allow" "$OUT/bind.xml"); [ -n "$CB" ] && [ $n -eq 1 ] && { adb shell input tap $CB; sleep 1; }; adb shell input tap $XY; sleep 6; done
 sleep 10; noanr
 adb exec-out screencap -p > "$OUT/widgets.png"
 adb logcat -d -s SHARP:I WathakkerHome:E > "$OUT/sharp_log.txt"
