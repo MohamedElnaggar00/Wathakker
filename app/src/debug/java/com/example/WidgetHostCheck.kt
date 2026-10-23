@@ -12,23 +12,21 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 
 /**
- * Debug-only widget host used by CI: hosts two real NextPrayer widgets (two distinct ids) so the tap
- * behaviour can be tested end to end. Extras "a"/"b" ("open" or "none") write widget_tap_<id> exactly
- * like the widget settings screen does and then run the normal HomeWidgets.updateAll refresh.
+ * Debug-only widget host used by CI. Hosts one real widget of EACH enabled Home widget provider
+ * (10 widgets, distinct ids) in a 2x5 grid so tap behaviour can be tested end to end.
+ * Extra "m" (10 chars, one per widget, 'o' = open app, 'n' = nothing) writes widget_tap_<id> exactly like
+ * the widget settings screen does and then runs the normal HomeWidgets.updateAll refresh.
  */
 class WidgetHostCheck : Activity() {
     private lateinit var host: AppWidgetHost
-    private val ids = IntArray(2)
+    private val ids = IntArray(PROVIDERS.size)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         host = AppWidgetHost(this, 4242)
         val mgr = AppWidgetManager.getInstance(this)
-        val cn = ComponentName(this, "com.example.widget.NextPrayerWidgetProvider")
         val sp = getSharedPreferences("hostcheck", MODE_PRIVATE)
-        val root = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        setContentView(root)
-        for (i in 0..1) {
+        for (i in PROVIDERS.indices) {
             var id = sp.getInt("id$i", 0)
             if (id == 0) {
                 id = host.allocateAppWidgetId()
@@ -36,10 +34,10 @@ class WidgetHostCheck : Activity() {
             }
             ids[i] = id
             if (mgr.getAppWidgetInfo(id) == null) {
+                val cn = ComponentName(this, "com.example.widget." + PROVIDERS[i] + "WidgetProvider")
                 val ok = mgr.bindAppWidgetIdIfAllowed(id, cn)
-                Log.i("HOSTCHECK", "bind id=$id ok=$ok")
+                Log.i("HOSTCHECK", "bind " + PROVIDERS[i] + " id=" + id + " ok=" + ok)
                 if (!ok) {
-                    // Supported route: the system "Allow this app to create widgets" dialog (CI taps Create).
                     startActivityForResult(
                         Intent(AppWidgetManager.ACTION_APPWIDGET_BIND)
                             .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id)
@@ -48,12 +46,21 @@ class WidgetHostCheck : Activity() {
                     return
                 }
             }
-            val info = mgr.getAppWidgetInfo(id)
-            val frame = FrameLayout(this)
-            if (info != null) frame.addView(host.createView(this, id, info))
-            root.addView(frame, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
         }
-        Log.i("HOSTCHECK", "ids=" + ids[0] + "," + ids[1])
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        for (row in 0..1) {
+            val line = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+            for (col in 0..4) {
+                val i = row * 5 + col
+                val info = mgr.getAppWidgetInfo(ids[i])
+                val frame = FrameLayout(this)
+                if (info != null) frame.addView(host.createView(this, ids[i], info))
+                line.addView(frame, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f))
+            }
+            root.addView(line, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
+        }
+        setContentView(root)
+        Log.i("HOSTCHECK", "ids=" + ids.joinToString(","))
         handle(intent)
     }
 
@@ -65,17 +72,18 @@ class WidgetHostCheck : Activity() {
     override fun onNewIntent(intent: Intent) { super.onNewIntent(intent); handle(intent) }
 
     private fun handle(intent: Intent?) {
-        val a = intent?.getStringExtra("a"); val b = intent?.getStringExtra("b")
+        val m = intent?.getStringExtra("m") ?: return
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE).edit()
-        if (a != null) sp.putString("widget_tap_" + ids[0], a)
-        if (b != null) sp.putString("widget_tap_" + ids[1], b)
+        for (i in ids.indices) if (i < m.length) sp.putString("widget_tap_" + ids[i], if (m[i] == 'n') "none" else "open")
         sp.apply()
-        if (a != null || b != null) {
-            com.example.lockwidgets.HomeWidgets.updateAll(this)
-            Log.i("HOSTCHECK", "applied a=$a b=$b")
-        }
+        com.example.lockwidgets.HomeWidgets.updateAll(this)
+        Log.i("HOSTCHECK", "applied m=$m")
     }
 
     override fun onStart() { super.onStart(); host.startListening() }
     override fun onStop() { super.onStop(); host.stopListening() }
+
+    companion object {
+        val PROVIDERS = listOf("NextPrayer", "PrayerBar", "Schedule", "DayPrayer", "Pill", "Clock", "Hijri", "Gregorian", "Hero", "OneUI")
+    }
 }

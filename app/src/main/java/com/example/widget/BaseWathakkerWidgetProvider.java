@@ -34,6 +34,7 @@ public abstract class BaseWathakkerWidgetProvider extends AppWidgetProvider {
         for (int id : appWidgetIds) {
             e.remove("widget_bg_color_" + id);
             e.remove("widget_bar_color_" + id);
+            e.remove("widget_tap_" + id);
         }
         e.apply();
     }

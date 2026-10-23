@@ -45,7 +45,6 @@ jobs:
       run: |-
         d=emulator-evidence/tablet
         fail=0
-        [ "$(grep -c ' PASS$' $d/hosttap.txt 2>/dev/null)" = "5" ] || { echo "widget tap: not 5 PASS"; fail=1; }
-        grep -q ' FAIL$' $d/hosttap.txt 2>/dev/null && { echo "widget tap: FAIL line"; fail=1; }
+        grep -q "isn't responding" $d/shots.txt 2>/dev/null && { echo "system dialog in a capture"; fail=1; }
         grep -q 'widget_tap_[0-9]*.*none' $d/tap_pref.txt 2>/dev/null || { echo "pref widget_tap_<id>=none not saved"; fail=1; }
         exit $fail

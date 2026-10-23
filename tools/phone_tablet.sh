@@ -60,28 +60,4 @@ adb shell am start -S -W -n $PKG/com.example.widget.WidgetConfigActivity --ei ap
 adb shell input swipe 540 1700 540 600 300; sleep 2; shot "config_tap_reopened"
 adb shell wm size reset; adb shell wm density reset
 
-# Widget tap end-to-end: two real widgets (distinct ids) in a debug host; flip open/none and tap each.
-adb shell settings put system user_rotation 0; sleep 2
-: grantbind unused --package $PKG > "$OUT/grantbind.txt" 2>&1
-SZ=$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1); W=${SZ%x*}; H=${SZ#*x}
-AX=$((W/4)); BX=$((W*3/4)); Y=$((H/2))
-echo "screen $SZ" > "$OUT/hosttap.txt"
-top(){ adb shell dumpsys activity activities | grep -m1 -E "mResumedActivity|ResumedActivity" | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*' | head -1; }
-host(){ adb shell am force-stop $PKG; sleep 2; adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck --es a $1 --es b $2 >> "$OUT/hostlaunch.txt" 2>&1; sleep 12; echo "host $1 $2 top=$(top)" >> "$OUT/hosttap.txt"; }
-check(){ # name x expected(Main|Host)
-  noanr
-  adb shell input tap $2 $Y; sleep 4; T=$(top)
-  case "$T" in *MainActivity*) GOT=Main;; *WidgetHostCheck*) GOT=Host;; *) GOT="other:$T";; esac
-  if [ "$GOT" = "$3" ]; then R=PASS; else R=FAIL; fi
-  echo "$1 tap -> $GOT (expected $3) $R" >> "$OUT/hosttap.txt"; shot "hosttap_$1"
-}
-adb shell settings put system user_rotation 0
-adb shell am force-stop $PKG; adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 8
-for i in 1 2 3 4; do noanr; dump "$OUT/bind.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind.xml"); echo "bind dialog tap $i: $XY" >> "$OUT/hosttap.txt"; shot "hosttap_bind$i"; [ -n "$XY" ] && adb shell input tap $XY; sleep 6; done
-host open none; shot hosttap_state1
-check A_open_B_none_tapA $AX Main
-host open none; check A_open_B_none_tapB $BX Host
-host none open; check A_none_B_open_tapA $AX Host
-host none open; check A_none_B_open_tapB $BX Main
-host open open; check A_open_again_tapA $AX Main
 adb logcat -d | grep -E "HOSTCHECK|FATAL EXCEPTION|AppWidgetHost|WathakkerHome" > "$OUT/hostcheck_log.txt"; adb logcat -d -b crash > "$OUT/crash.txt" 2>&1

@@ -237,6 +237,12 @@ class WidgetConfigActivity : ComponentActivity() {
         appWidgetId = intent?.getIntExtra("appWidgetId", 0) ?: 0
         val prov = if (appWidgetId > 0) AppWidgetManager.getInstance(this).getAppWidgetInfo(appWidgetId)?.provider?.className else null
         val decorated = prov == "com.example.widget.OneUIWidgetProvider" || intent.getBooleanExtra("debugOneUi", false)
+        // 3.4: these home widgets had no settings screen; they get one with only the tap option (no fake colour controls).
+        val tapOnly = prov in setOf(
+            "com.example.widget.NextPrayerWidgetProvider", "com.example.widget.DayPrayerWidgetProvider",
+            "com.example.widget.GregorianWidgetProvider", "com.example.widget.HijriWidgetProvider",
+            "com.example.widget.PillWidgetProvider"
+        )
         val sp = getSharedPreferences("fajr_prefs", MODE_PRIVATE)
         val curBar = (sp.getString(keyFor("widget_bar_color"), null)
             ?: sp.getString("widget_bar_color", "auto") ?: "auto").let { v -> if (options.any { o -> o.first == v }) v else "auto" }
@@ -262,12 +268,14 @@ class WidgetConfigActivity : ComponentActivity() {
                     currentBg = curBg,
                     currentPattern = sp.getInt(keyFor("widget_pattern"), 1),
                     currentAccent = sp.getInt(keyFor("widget_oneui_color"), 0),
-                    showColors = !decorated,
+                    showColors = !decorated && !tapOnly,
                     showPattern = decorated,
                     onNeedFilesPermission = { com.example.ui.PermissionFlow.requestFilesIfNeeded(this@WidgetConfigActivity) },
                     currentTapOpens = sp.getString(keyFor("widget_tap"), "open") != "none",
                     onApply = { bar, bg, pat, accent, tap ->
-                        sp.edit().putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).putInt(keyFor("widget_oneui_color"), accent).putString(keyFor("widget_tap"), if (tap) "open" else "none").apply()
+                        val ed = sp.edit()
+                        if (!tapOnly) ed.putString(keyFor("widget_bar_color"), bar).putString(keyFor("widget_bg_color"), bg).putInt(keyFor("widget_pattern"), pat).putInt(keyFor("widget_oneui_color"), accent)
+                        ed.putString(keyFor("widget_tap"), if (tap) "open" else "none").apply()
                         WidgetUpdater.INSTANCE.updateAll(this@WidgetConfigActivity)
                         com.example.lockwidgets.HomeWidgets.updateAll(this@WidgetConfigActivity)
                         setResult(RESULT_OK, Intent().putExtra("appWidgetId", appWidgetId))
