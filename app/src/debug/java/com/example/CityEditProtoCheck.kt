@@ -56,6 +56,40 @@ import com.example.ui.theme.MyApplicationTheme
  *  Launch: am start -n com.wathakker.app/com.example.CityEditProtoCheck [--es lang en] */
 class CityEditProtoCheck : ComponentActivity() {
     override fun onCreate(b: Bundle?) {
+        if (intent.getBooleanExtra("alias_selftest", false)) {
+            val lines = mutableListOf<String>()
+            fun check(name: String, ok: Boolean) { lines.add(name + ": " + (if (ok) "PASS" else "FAIL")) }
+            try {
+                val ctx = applicationContext
+                val store = com.example.fajr.location.LocationAliasStore
+                val H = com.example.fajr.location.LocationManagerHelper
+                // Deterministic geocoder records (no backend): A = the user's renamed place, B = travel destination
+                val keyA = H.buildPlaceKey("EG", "Hod Sakrah WA Abu Hamad")
+                val keyAnorm = H.buildPlaceKey("EG", "  hod   sakrah wa abu hamad ")
+                val keyAsub = H.buildPlaceKey("EG", "Borg El Arab")
+                val keyB = H.buildPlaceKey("EG", "Cairo")
+                val keyAotherCountry = H.buildPlaceKey("SA", "Hod Sakrah WA Abu Hamad")
+                store.remove(ctx, keyA); store.remove(ctx, keyB); store.remove(ctx, keyAsub); store.remove(ctx, keyAotherCountry)
+                check("identity: normalization stable (jitter/formatting)", keyA == keyAnorm)
+                check("identity: distinct sublocalities distinct keys", keyA != keyAsub)
+                check("identity: distinct places distinct keys", keyA != keyB)
+                check("identity: same name other country distinct key", keyA != keyAotherCountry)
+                store.put(ctx, keyA, "برج العرب الجديده")
+                check("A->B: no alias at travel place (automatic name)", store.aliasFor(ctx, keyB) == null)
+                check("B->A: alias restored on return", store.aliasFor(ctx, keyA) == "برج العرب الجديده")
+                check("alias survives fresh read (disk-backed store)", store.aliasFor(ctx, keyA) == "برج العرب الجديده")
+                check("distinct sublocality unaffected", store.aliasFor(ctx, keyAsub) == null)
+                store.remove(ctx, keyA)
+                check("reset removes alias", store.aliasFor(ctx, keyA) == null)
+                check("other keys untouched after reset", store.aliasFor(ctx, keyB) == null)
+            } catch (t: Throwable) {
+                lines.add("selftest exception: " + t.message + " FAIL")
+            }
+            try { java.io.File(getExternalFilesDir(null), "alias_selftest.txt").writeText(lines.joinToString("\n") + "\n") } catch (_: Throwable) {}
+            finish()
+            return
+        }
+
         super.onCreate(b)
         val en = intent.getStringExtra("lang") == "en"
         setContent {

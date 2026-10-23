@@ -67,7 +67,10 @@ public final class LocationManagerHelper {
         }
     }
 
-    /** Stable structural identity of the geocoded place (English-locale geocode): "g|<countryCode>|<adminArea>|<locality|subAdmin>", normalized. Null when the geocoder cannot resolve - callers must skip alias save/apply in that case. */
+    /** Identity of the geocoded place = EXACTLY the fields the display name is built from
+     * (city = locality, else subAdminArea, else adminArea; country as locale-stable ISO code),
+     * geocoded in English so the key survives UI-language switches. Null when the geocoder
+     * cannot resolve - callers must skip alias save/apply in that case. */
     public final String getPlaceKeyFromCoordinates(double latitude, double longitude) {
         try {
             Geocoder geocoder = new Geocoder(this.context, Locale.ENGLISH);
@@ -76,19 +79,26 @@ public final class LocationManagerHelper {
                 return null;
             }
             Address address = addresses.get(0);
-            String country = address.getCountryCode();
-            String admin = address.getAdminArea();
-            String local = address.getLocality();
-            if (local == null) {
-                local = address.getSubAdminArea();
+            String city = address.getLocality();
+            if (city == null) {
+                city = address.getSubAdminArea();
             }
-            if (country == null && admin == null && local == null) {
+            if (city == null) {
+                city = address.getAdminArea();
+            }
+            String country = address.getCountryCode();
+            if (country == null && city == null) {
                 return null;
             }
-            return "g|" + normPlacePart(country) + "|" + normPlacePart(admin) + "|" + normPlacePart(local);
+            return buildPlaceKey(country, city);
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /** Production identity seam: same field selection and normalization as the display name. */
+    public static String buildPlaceKey(String countryCode, String cityField) {
+        return "g|" + normPlacePart(countryCode) + "|" + normPlacePart(cityField);
     }
 
     private static String normPlacePart(String s) {

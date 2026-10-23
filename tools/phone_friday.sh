@@ -41,6 +41,8 @@ adb shell input swipe 360 1300 360 500 400; sleep 2; dismiss_anr; shot city_en_n
 adb shell cmd uimode night no; sleep 1
 
 # ---- 1.5 city alias: production roundtrip (manual-mode key, no geocoder dependency) ----
+adb shell am start -S -W -n $PKG/com.example.CityEditProtoCheck --ez alias_selftest true >/dev/null 2>&1; sleep 6
+adb pull /sdcard/Android/data/$PKG/files/alias_selftest.txt "$OUT/alias_selftest.txt" >> "$OUT/nav.txt" 2>&1
 curl -sL -o /tmp/adbkb.apk https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyboard.apk
 adb install -r /tmp/adbkb.apk >/dev/null 2>&1
 ORIG_IME=$(adb shell settings get secure default_input_method | tr -d '\r')
@@ -156,7 +158,9 @@ lines = [
 ]
 saved = read('prefs_alias_saved.xml'); restart = read('prefs_alias_restart.xml'); reset = read('prefs_alias_reset.xml')
 AL = 'برج العرب الجديده'
+selftest = read('alias_selftest.txt')
 alines = [
+    'deterministic identity/alias selftest all pass: ' + str('PASS' in selftest and 'FAIL' not in selftest),
     'alias saved to store: ' + str(AL in saved and 'city_aliases_json' in saved),
     'alias applied to city_name_ar: ' + str('name="city_name_ar">' + AL in saved),
     'orig names backed up: ' + str('city_name_ar_orig' in saved),
