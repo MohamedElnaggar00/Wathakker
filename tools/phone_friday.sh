@@ -11,30 +11,41 @@ adb shell svc power stayon true
 adb install -r -g "$APK" > "$OUT/install.txt" 2>&1
 dump(){ adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; adb pull /sdcard/ui.xml "$1" >/dev/null 2>&1; }
 shot(){ adb exec-out screencap -p > "$OUT/$1.png"; }
-seed(){ adb shell am force-stop $PKG; adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">ar</string></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"; adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"enabled_2\" value=\"true\" /><boolean name=\"iqama_2\" value=\"true\" /></map>' > /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml"; }
-setdate(){ adb shell date "$1" >/dev/null 2>&1; sleep 2; }
+dismiss_anr(){ for i in 1 2 3 4; do adb shell uiautomator dump /sdcard/ui_anr.xml >/dev/null 2>&1; adb pull /sdcard/ui_anr.xml "$OUT/ui_anr.xml" >/dev/null 2>&1; if grep -q "responding" "$OUT/ui_anr.xml" 2>/dev/null; then B=$(grep -o 'text="Wait"[^>]*' "$OUT/ui_anr.xml" | grep -o 'bounds="[^"]*"' | head -1); XY=$(echo "$B" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}'); if [ -n "$XY" ]; then adb shell input tap $XY; else adb shell input keyevent 4; fi; sleep 4; else return; fi; done; }
+seed(){ adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">ar</string></map>' > /data/data/com.wathakker.app/shared_prefs/app_prefs.xml"; adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"migrated_v1\" value=\"true\" /><boolean name=\"enabled_2\" value=\"true\" /><boolean name=\"iqama_2\" value=\"true\" /></map>' > /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml"; adb shell "cat /data/data/com.wathakker.app/shared_prefs/app_prefs.xml /data/data/com.wathakker.app/shared_prefs/prayer_alerts.xml" >> "$OUT/nav.txt" 2>&1; }
+setdate(){ adb shell date "$1" >/dev/null 2>&1; sleep 2; adb shell date >> "$OUT/nav.txt" 2>&1; dismiss_anr; }
 find_cd(){ B=$(grep -o "content-desc=\"$1\"[^>]*" "$2" | grep -o 'bounds="[^"]*"' | head -1); echo "$B" | sed -n 's/bounds="\[\([0-9]*\),\([0-9]*\)\]\[\([0-9]*\),\([0-9]*\)\]"/\1 \2 \3 \4/p' | awk '{print int(($1+$3)/2), int(($2+$4)/2)}'; }
 REAL_DATE=$(adb shell date +%m%d%H%M%Y.%S 2>/dev/null | tr -d '\r'); echo "emulator date at start: $REAL_DATE" > "$OUT/nav.txt"
 
-# ---- 1. city edit prototype boards ----
+# first launch creates shared_prefs; then seed, then everything else
+adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 10
+dismiss_anr
+adb shell am force-stop $PKG; sleep 1
 seed
+
+# ---- 1. city edit prototype boards ----
 adb shell cmd uimode night yes; sleep 1
 adb shell am start -S -W -n $PKG/com.example.CityEditProtoCheck >/dev/null 2>&1; sleep 7
-shot city_ar_night
+dismiss_anr; shot city_ar_night
+adb shell input swipe 360 1300 360 500 400; sleep 2; dismiss_anr; shot city_ar_night_b
 adb shell cmd uimode night no; sleep 1
 adb shell am start -S -W -n $PKG/com.example.CityEditProtoCheck >/dev/null 2>&1; sleep 7
-shot city_ar_day
+dismiss_anr; shot city_ar_day
+adb shell input swipe 360 1300 360 500 400; sleep 2; dismiss_anr; shot city_ar_day_b
 adb shell cmd uimode night yes; sleep 1
 adb shell am start -S -W -n $PKG/com.example.CityEditProtoCheck --es lang en >/dev/null 2>&1; sleep 7
-shot city_en_night
+dismiss_anr; shot city_en_night
+adb shell input swipe 360 1300 360 500 400; sleep 2; dismiss_anr; shot city_en_night_b
 adb shell cmd uimode night no; sleep 1
 
 # ---- 2. Friday ----
 setdate "102311002026.00"
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12
+dismiss_anr
 shot friday_prayers; dump "$OUT/ui_friday.xml"
 XY=$(find_cd "bell_2" "$OUT/ui_friday.xml"); echo "bell_2 friday: $XY" >> "$OUT/nav.txt"
 [ -n "$XY" ] && adb shell input swipe $XY $XY 1300; sleep 4
+dismiss_anr
 shot friday_sheet; dump "$OUT/ui_friday_sheet.xml"
 adb shell input keyevent 4; sleep 2
 adb shell am start -S -W -n $PKG/com.example.WidgetRenderCheck >/dev/null 2>&1; sleep 12
@@ -47,9 +58,11 @@ adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_fri
 # ---- 3. Saturday ----
 setdate "102411002026.00"
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12
+dismiss_anr
 shot saturday_prayers; dump "$OUT/ui_saturday.xml"
 XY=$(find_cd "bell_2" "$OUT/ui_saturday.xml"); echo "bell_2 saturday: $XY" >> "$OUT/nav.txt"
 [ -n "$XY" ] && adb shell input swipe $XY $XY 1300; sleep 4
+dismiss_anr
 shot saturday_sheet; dump "$OUT/ui_saturday_sheet.xml"
 adb shell input keyevent 4; sleep 2
 adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_saturday.xml" 2>&1
@@ -57,9 +70,11 @@ adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_sat
 # ---- 4. Friday again: hidden again, prefs unchanged ----
 setdate "102311002026.00"
 adb shell am start -S -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 12
+dismiss_anr
 dump "$OUT/ui_friday2.xml"
 XY=$(find_cd "bell_2" "$OUT/ui_friday2.xml"); echo "bell_2 friday2: $XY" >> "$OUT/nav.txt"
 [ -n "$XY" ] && adb shell input swipe $XY $XY 1300; sleep 4
+dismiss_anr
 shot friday2_sheet; dump "$OUT/ui_friday2_sheet.xml"
 adb shell input keyevent 4; sleep 2
 adb shell "cat /data/data/$PKG/shared_prefs/prayer_alerts.xml" > "$OUT/prefs_friday2.xml" 2>&1

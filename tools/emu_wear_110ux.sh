@@ -145,4 +145,33 @@ adb shell am force-stop $PKG
 adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode tile --ez iqama_demo true >/dev/null 2>&1
 sleep 6
 shot 50_iqama_tile
+# ---- Friday Jumuah label evidence (wear 1.1.1): set a Friday date, capture list/upcoming/tile ----
+adb root >/dev/null 2>&1; sleep 2; adb wait-for-device
+REAL_WDATE=$(adb shell date +%m%d%H%M%Y.%S 2>/dev/null | tr -d '\r')
+adb shell date 102309002026.00 >/dev/null 2>&1; sleep 3
+adb shell date > "$OUT/wear_friday_date.txt" 2>&1
+for P in 0 1 2; do
+  adb shell am force-stop $PKG
+  adb shell am start -S -W -n $PKG/com.wathakker.wear.MainActivity --ei page $P >/dev/null 2>&1; sleep 8
+  shot friday_page$P; dump friday_page$P
+done
+adb shell am force-stop $PKG
+adb shell am start -W -n $PKG/com.wathakker.wear.PreviewActivity --es mode tile >/dev/null 2>&1; sleep 6
+shot friday_tile
+python3 - "$OUT" <<'PYW'
+import sys, os
+out = sys.argv[1]
+def read(n):
+    try: return open(os.path.join(out, n), encoding='utf-8').read()
+    except Exception: return ''
+pages = [read('ui_friday_page%d.xml' % p) for p in (0, 1, 2)]
+anyx = '\n'.join(pages)
+lines = [
+    'wear friday shows Jumuah/الجمعة somewhere: ' + str(('الجمعة' in anyx) or ('Jumuah' in anyx)),
+    'wear friday drops الظهر/Dhuhr everywhere: ' + str(('الظهر' not in anyx) and ('Dhuhr' not in anyx)),
+]
+open(os.path.join(out, 'wear_friday_check.txt'), 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
+PYW
+cat "$OUT/wear_friday_check.txt"
+[ -n "$REAL_WDATE" ] && adb shell date "$REAL_WDATE" >/dev/null 2>&1
 echo DONE > "$OUT/SUMMARY.txt.append"
