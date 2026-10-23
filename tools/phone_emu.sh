@@ -153,8 +153,8 @@ ORIG_IME=$(adb shell settings get secure default_input_method); echo "orig ime: 
 curl -sL -o /tmp/adbkb.apk https://github.com/senzhk/ADBKeyBoard/raw/master/ADBKeyboard.apk
 ls -l /tmp/adbkb.apk >> "$OUT/ui_nav.txt"
 adb install -r /tmp/adbkb.apk >> "$OUT/ui_nav.txt" 2>&1
-KB_IME=$(adb shell ime list -s | grep -i adbkeyboard | head -1); echo "kb ime: $KB_IME" >> "$OUT/ui_nav.txt"
-[ -n "$KB_IME" ] && adb shell ime set "$KB_IME" && sleep 2
+KB_IME=$(adb shell ime list -a -s | grep -i adbkeyboard | head -1); echo "kb ime: $KB_IME" >> "$OUT/ui_nav.txt"
+[ -n "$KB_IME" ] && adb shell ime enable "$KB_IME" && adb shell ime set "$KB_IME" && sleep 2
 adb shell am broadcast -a ADB_INPUT_B64 --es msg "$(printf 'أذكار' | base64 -w0)"; sleep 3
 adb shell input keyevent 66; sleep 2
 [ -n "$ORIG_IME" ] && adb shell ime set "$ORIG_IME"
@@ -228,6 +228,9 @@ adb shell am start -S -W -n $PKG/com.example.GlassProtoCheck >/dev/null 2>&1; sl
 adb exec-out screencap -p > "$OUT/glass_proto_day.png"
 adb shell cmd uimode night yes
 adb logcat -d -s GlassProto > "$OUT/glass_proto.txt"
+for f in glass_board_light_day.png glass_board_light_night.png glass_board_dark_day.png glass_board_dark_night.png glass_board_busy_day.png glass_board_busy_night.png; do
+  adb pull "/sdcard/Android/data/$PKG/files/$f" "$OUT/$f" >> "$OUT/ui_nav.txt" 2>&1
+done
 
 # ===== 3.3.3 widget evidence: D (عداد الصلاة countdown without seconds), E (HeroLarge removed), F (NextPrayer 2x1)
 adb shell am start -S -W -n $PKG/com.example.WidgetRenderCheck >/dev/null 2>&1; sleep 12

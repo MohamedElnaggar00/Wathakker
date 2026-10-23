@@ -47,6 +47,11 @@ public final class HomeWidgets {
  static int blendOver(int base,int tint){int a=(tint>>>24),r=(((base>>16)&255)*(255-a)+((tint>>16)&255)*a)/255,g=(((base>>8)&255)*(255-a)+((tint>>8)&255)*a)/255,b=((base&255)*(255-a)+(tint&255)*a)/255;return (r<<16)|(g<<8)|b;}
  static android.graphics.Bitmap wallBlur(Context c){return wallBlur(c,false);}
  static android.graphics.Bitmap wpMesh,wpReal;static int wpMeshId=-2,wpRealId=-2;
+ /** REVIEW-ONLY hook used by the debug GlassProtoCheck harness: inject the colour mesh a wallpaper
+  *  would produce so the mock glass/frosted boards can be rendered over wallpapers the emulator
+  *  does not have. Null clears the override so production state is untouched. Never called from
+  *  release UI code. */
+ public static void debugOverrideMeshForReview(Context c,android.graphics.Bitmap mesh){wpMesh=mesh;wpLight=null;wpLightId=-2;if(mesh==null){wpMeshId=-2;return;}try{wpMeshId=android.app.WallpaperManager.getInstance(c).getWallpaperId(android.app.WallpaperManager.FLAG_SYSTEM);}catch(Throwable t){wpMeshId=-1;}}
  /** real=true: the actual wallpaper image. Verified on an API 34 emulator (glass_proto.txt) and per
  *  developer.android.com/reference/android/app/WallpaperManager: on Android 13 the system returns
  *  the DEFAULT wallpaper or throws SecurityException, on Android 14+ getWallpaperFile ALWAYS throws,
