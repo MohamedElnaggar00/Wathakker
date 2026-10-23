@@ -35,6 +35,22 @@ class HonorRenderCheck : Activity() {
                 }
             }
         }
+        // Phone-reference canvases (user phone S721B: 1 span 81dp, 2 spans 187dp, 4 spans 401dp, row 96dp)
+        val refs = listOf(
+            Triple("Hero", 401, 96), Triple("OneUI", 401, 96), Triple("PrayerBar", 187, 96), Triple("Hijri", 81, 96),
+            Triple("NextPrayer", 187, 96), Triple("Schedule", 401, 96)
+        )
+        for ((tag, nightFlag) in listOf("light" to android.content.res.Configuration.UI_MODE_NIGHT_NO, "dark" to android.content.res.Configuration.UI_MODE_NIGHT_YES)) {
+            val cfg = android.content.res.Configuration(resources.configuration)
+            cfg.uiMode = (cfg.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK.inv()) or nightFlag
+            val ctx = createConfigurationContext(cfg)
+            for ((kind, w, h) in refs) {
+                try {
+                    val bmp = HomeWidgets.renderKind(ctx, kind, w, h, 995)
+                    FileOutputStream(File(out, "ref_${tag}_${kind}.png")).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+                } catch (e: Throwable) { File(out, "ref_${tag}_${kind}.err").writeText(e.toString()) }
+            }
+        }
         File(out, "done.txt").writeText("done")
         finish()
     }
