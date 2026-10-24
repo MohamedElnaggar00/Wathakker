@@ -41,28 +41,6 @@ import com.example.ui.i18n.S
 fun AboutScreen(onBack: () -> Unit) {
     val cs = MaterialTheme.colorScheme
     val uri = LocalUriHandler.current
-    var showWidgetDiag by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
-    var diagText by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
-    val diagCtx = androidx.compose.ui.platform.LocalContext.current
-    if (showWidgetDiag) {
-        androidx.compose.runtime.LaunchedEffect(Unit) { diagText = com.example.lockwidgets.HomeWidgets.diagDump(diagCtx) }
-        androidx.compose.material3.AlertDialog(
-            onDismissRequest = { showWidgetDiag = false },
-            confirmButton = {
-                androidx.compose.material3.TextButton(onClick = {
-                    com.example.lockwidgets.HomeWidgets.updateAll(diagCtx)
-                    diagText = com.example.lockwidgets.HomeWidgets.diagDump(diagCtx)
-                }) { Text("Refresh") }
-            },
-            dismissButton = { androidx.compose.material3.TextButton(onClick = { showWidgetDiag = false }) { Text("Close") } },
-            title = { Text("Widget diagnostics") },
-            text = {
-                Column(modifier = Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) {
-                    Text(diagText, style = MaterialTheme.typography.bodySmall, fontSize = 11.sp, lineHeight = 14.sp, fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
-                }
-            }
-        )
-    }
     OneUIScreen(title = L10n.t(S.About), onBack = onBack) {
         item(key = "hero") {
             Column(
@@ -87,13 +65,6 @@ fun AboutScreen(onBack: () -> Unit) {
                     title = L10n.t(S.Version),
                     leading = { OneUIIconBadge(Icons.Outlined.Info) },
                     trailing = { Text(com.example.BuildConfig.VERSION_NAME, color = cs.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium) }
-                )
-                OneUIDivider(70.dp)
-                OneUIRow(
-                    title = "Widget diagnostics",
-                    summary = "Sizes the launcher reports and what the widgets draw",
-                    leading = { OneUIIconBadge(Icons.Outlined.Info) },
-                    onClick = { showWidgetDiag = true }
                 )
                 OneUIDivider(70.dp)
                 OneUIRow(
