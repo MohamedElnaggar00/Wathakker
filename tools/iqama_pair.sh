@@ -56,7 +56,7 @@ sized(){ tag=$1 stamp=$2 k=$3
   adb shell date -u "$stamp" >> "$OUT/clock_$tag.txt" 2>&1
   adb shell am force-stop $PKG; sleep 2
   adb shell am start -S -W -n $PKG/com.example.IqamaSizedCheck --ef k $k >> "$OUT/hostlaunch.txt" 2>&1; sleep 9; noanr; sleep 2; shot "sized_${tag}_k$k"
-  adb logcat -d | grep -E "WathakkerHome|AndroidRuntime" | tail -30 > "$OUT/log_${tag}_k$k.txt"
+  adb logcat -d | grep -E "WathakkerHome|AndroidRuntime|com.example|RemoteViews|AppWidget|Wathkkir" | grep -v "Calling main|START com|boot image|lock profiling|Shutting down" | tail -40 > "$OUT/log_${tag}_k$k.txt"
 }
 sized normal 102408502026.00 1.0
 sized iqama 102409502026.00 1.0
