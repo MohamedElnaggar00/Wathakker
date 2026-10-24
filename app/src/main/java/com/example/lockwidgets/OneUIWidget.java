@@ -45,10 +45,13 @@ final class OneUIWidget {
         float t = Math.max(0f, Math.min(1f, (H - 80f) / 100f)); // 0 = 4x1, 1 = 4x2
         float gap = Math.max(6f, W * 0.02f);
         float tileW = Math.min(H * 0.93f, W * 0.225f);
+        // Large screens only: keep the date tile's shape (width/height = 0.93, the full-width look) when the card is width-limited, instead of letting it turn into a tall sliver; it is centred vertically.
+        float tileH = HomeWidgets.large(c) ? Math.min(H, tileW / 0.93f) : H;
+        float tileTop = (H - tileH) / 2f;
         float cardW = W - tileW - gap;
         float corner = Math.min(H * 0.30f, 34f);
         RectF card = new RectF(0, 0, cardW, H);
-        RectF tile = new RectF(cardW + gap, 0, W, H);
+        RectF tile = new RectF(cardW + gap, tileTop, W, tileTop + tileH);
         Typeface reg = HomeWidgets.face(c, false, s.rtl), bold = HomeWidgets.face(c, true, s.rtl);
 
         int cardTop = night ? 0xFF2B2C30 : 0xFFFFFFFF, cardBot = night ? 0xFF222326 : 0xFFF1F2F5;
@@ -141,15 +144,15 @@ final class OneUIWidget {
         remaining(cv, prefix, value, padX, remY, inner, remSz, reg, bold, soft, ink, d);
 
         // date tile (accent colours resolved above)
-        RectF tp = new RectF(tile.left * d, 0, tile.right * d, H * d);
-        p.setShader(new LinearGradient(0, 0, 0, H * d, tA, tB, Shader.TileMode.CLAMP));
+        RectF tp = new RectF(tile.left * d, tile.top * d, tile.right * d, tile.bottom * d);
+        p.setShader(new LinearGradient(0, tile.top * d, 0, tile.bottom * d, tA, tB, Shader.TileMode.CLAMP));
         cv.drawRoundRect(tp, corner * d * 1.05f, corner * d * 1.05f, p);
         p.setShader(null);
         float tcx = tile.left + tileW / 2;
-        float wdSz = H * lerp(0.127f, 0.07f, t), numSz = H * lerp(0.42f, 0.245f, t), mSz = H * lerp(0.118f, 0.065f, t);
-        line(cv, s.day, tile.left + 4, H * lerp(0.20f, 0.30f, t), tileW - 8, wdSz, reg, tInk, Layout.Alignment.ALIGN_CENTER, d);
-        line(cv, s.hday, tile.left + 4, H * lerp(0.50f, 0.50f, t), tileW - 8, numSz, bold, tInk, Layout.Alignment.ALIGN_CENTER, d);
-        line(cv, s.hmonth, tile.left + 4, H * lerp(0.80f, 0.70f, t), tileW - 8, mSz, reg, tInk, Layout.Alignment.ALIGN_CENTER, d);
+        float wdSz = tileH * lerp(0.127f, 0.07f, t), numSz = tileH * lerp(0.42f, 0.245f, t), mSz = tileH * lerp(0.118f, 0.065f, t);
+        line(cv, s.day, tile.left + 4, tileTop + tileH * lerp(0.20f, 0.30f, t), tileW - 8, wdSz, reg, tInk, Layout.Alignment.ALIGN_CENTER, d);
+        line(cv, s.hday, tile.left + 4, tileTop + tileH * lerp(0.50f, 0.50f, t), tileW - 8, numSz, bold, tInk, Layout.Alignment.ALIGN_CENTER, d);
+        line(cv, s.hmonth, tile.left + 4, tileTop + tileH * lerp(0.80f, 0.70f, t), tileW - 8, mSz, reg, tInk, Layout.Alignment.ALIGN_CENTER, d);
         return bmp;
     }
 

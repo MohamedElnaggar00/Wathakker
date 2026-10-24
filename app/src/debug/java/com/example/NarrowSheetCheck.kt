@@ -18,7 +18,7 @@ class NarrowSheetCheck : Activity() {
         // kind to (wideW, narrowW, h) in dp
         val cases = listOf(
             Triple("Hijri", 90 to 64, 84), Triple("NextPrayer", 196 to 144, 84), Triple("Hero", 408 to 304, 84),
-            Triple("OneUI", 302 to 224, 84), Triple("Clock", 330 to 260, 84), Triple("DayPrayer", 250 to 180, 84),
+            Triple("OneUI", 302 to 224, 84), Triple("OneUI", 410 to 330, 84), Triple("OneUI", 302 to 224, 170), Triple("Clock", 330 to 260, 84), Triple("DayPrayer", 250 to 180, 84),
             Triple("Pill", 330 to 260, 84), Triple("Schedule", 330 to 250, 84), Triple("PrayerBar", 330 to 250, 84),
             Triple("Gregorian", 180 to 110, 84)
         )
