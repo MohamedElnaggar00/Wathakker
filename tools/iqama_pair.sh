@@ -54,7 +54,7 @@ echo "bound: $(grep -c 'ok=false' $OUT/hostcheck_log.txt) dialogs; ids: $(grep '
 adb shell "date -u" > "$OUT/clock0.txt"
 phase(){ tag=$1 stamp=$2
   adb shell date -u "$stamp" >> "$OUT/clock_$tag.txt" 2>&1; adb shell date >> "$OUT/clock_$tag.txt"
-  host ""; sleep 3; shot "host_$tag"; adb logcat -d | grep -E "WathakkerHome" | tail -40 > "$OUT/log_$tag.txt"
+  host "oooooooooo"; sleep 4; shot "host_$tag"; adb logcat -d | grep -E "WathakkerHome" | tail -40 > "$OUT/log_$tag.txt"
 }
 phase normal 102408502026.00
 phase iqama 102409502026.00
