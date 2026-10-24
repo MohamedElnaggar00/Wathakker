@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+<FrameLayout android:id="@+id/home_prayer_root" android:layout_width="fill_parent" android:layout_height="fill_parent"
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView android:id="@id/home_prayer_image" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="fitCenter" android:contentDescription="@string/widget_hero_desc" />
+    <!-- content-rect wrapper: the ImageView is sized to the bitmap aspect (bitmap density 1 = huge intrinsic size, so it always fills the largest aspect-correct rect); the overlay is a sibling that matches this wrapper = the exact displayed image rect. -->
+    <FrameLayout android:id="@+id/home_prayer_wrap" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center">
+    <ImageView android:id="@id/home_prayer_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:adjustViewBounds="true" android:scaleType="fitCenter" android:contentDescription="@string/widget_hero_desc" />
     <FrameLayout android:id="@+id/ov_box" android:visibility="gone" android:layout_width="match_parent" android:layout_height="match_parent">
         <Chronometer android:id="@+id/ov_chrono_med" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:includeFontPadding="false" android:fontFamily="@font/expoarabic_medium" android:textColor="#ffffffff" android:textSize="12sp" android:layoutDirection="ltr" />
         <Chronometer android:id="@+id/ov_chrono_semi" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:includeFontPadding="false" android:fontFamily="@font/expoarabic_semibold" android:textColor="#ffffffff" android:textSize="12sp" android:layoutDirection="ltr" />
     </FrameLayout>
     <include android:id="@+id/ov_stub" layout="@layout/ov_frac" android:layout_width="match_parent" android:layout_height="match_parent" />
+</FrameLayout>
 </FrameLayout>
