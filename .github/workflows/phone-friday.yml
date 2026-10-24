@@ -1,4 +1,4 @@
-name: Phone provider dump (branch-only repurpose, NO RELEASE)
+name: Phone widget_all (branch-only repurpose, NO RELEASE)
 'on':
   workflow_dispatch:
 permissions:
@@ -30,7 +30,7 @@ jobs:
         target: google_apis
         profile: pixel_6
         disable-animations: true
-        script: bash tools/provider_dump.sh app/build/outputs/apk/debug/app-debug.apk emulator-evidence/phone-prov
+        script: bash tools/widget_all.sh app/build/outputs/apk/debug/app-debug.apk emulator-evidence/phone-prov
     - uses: actions/upload-artifact@v4
       if: always()
       with:
