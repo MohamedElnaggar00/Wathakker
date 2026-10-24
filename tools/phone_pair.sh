@@ -15,15 +15,16 @@ for m in re.finditer(r'<node [^>]*>',x):
         a=list(map(int,b.groups())); print((a[0]+a[2])//2,(a[1]+a[3])//2); break
 PY
 }
+noanr(){ for i in 1 2 3 4; do dump "$OUT/_anr.xml"; if grep -q "isn.t responding" "$OUT/_anr.xml"; then XY=$(tap_re "^ *Wait *$" "$OUT/_anr.xml"); [ -n "$XY" ] && adb shell input tap $XY; sleep 3; else break; fi; done; }
 top(){ adb shell dumpsys activity activities | grep -m1 -E "mResumedActivity|ResumedActivity" | grep -o 'com\.[A-Za-z.]*/[A-Za-z.]*' | head -1; }
 run(){ tag=$1; apk=$2
   adb uninstall $PKG >/dev/null 2>&1; adb install -r -g "$apk" > "$OUT/install_$tag.txt" 2>&1
   adb shell am start -W -n $PKG/com.example.MainActivity >/dev/null 2>&1; sleep 8; adb shell am force-stop $PKG
   adb shell "printf '%s' '<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?><map><boolean name=\"onboarding_done\" value=\"true\" /><boolean name=\"perm_flow_done\" value=\"true\" /><string name=\"language\">ar</string></map>' > /data/data/$PKG/shared_prefs/app_prefs.xml"
   adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 8
-  for n in $(seq 1 16); do dump "$OUT/bind_$tag.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind_$tag.xml"); if [ -z "$XY" ]; then [[ "$(top)" == *WidgetHostCheck* ]] && break; fi; [ -n "$XY" ] && adb shell input tap $XY; sleep 5; done
+  for n in $(seq 1 16); do noanr; dump "$OUT/bind_$tag.xml"; XY=$(tap_re "^ *Create *$" "$OUT/bind_$tag.xml"); if [ -z "$XY" ]; then [[ "$(top)" == *WidgetHostCheck* ]] && break; fi; [ -n "$XY" ] && adb shell input tap $XY; sleep 5; done
   adb shell am force-stop $PKG; sleep 2
-  adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 12
+  adb shell am start -S -W -n $PKG/com.example.WidgetHostCheck >/dev/null 2>&1; sleep 12; noanr; sleep 2
   adb exec-out screencap -p > "$OUT/host_$tag.png"
   adb shell wm size > "$OUT/wm_$tag.txt"; adb shell wm density >> "$OUT/wm_$tag.txt"
   adb logcat -d | grep -E "HOSTCHECK|WathakkerHome" > "$OUT/log_$tag.txt"
