@@ -50,7 +50,7 @@ class HostSelectCheck : Activity() {
         for (k in ks) {
             val corners = HomeWidgets.cornerSizes(k.mnW, k.mxW, k.mnH, k.mxH)
             val map = LinkedHashMap<SizeF, RemoteViews>(); val single = LinkedHashMap<SizeF, RemoteViews>()
-            for (z in corners) { val r = rv(k.kind, Math.round(z.width), Math.round(z.height)); map[z] = r; single[z] = rv(k.kind, Math.round(z.width), Math.round(z.height)) }
+            for (z in corners) { val r = rv(k.kind, Math.round(z.width), Math.round(z.height)); map[HomeWidgets.slackKey(z)] = r; single[z] = r }
             val boxes = listOf(
                 "MAXWxMAXH" to Pair(k.mxW, k.mxH), "MAXW-1xMAXH-1" to Pair(k.mxW - 1, k.mxH - 1), "MAXWxMINH(doc landscape)" to Pair(k.mxW, k.mnH),
                 "MINWxMAXH(doc portrait)" to Pair(k.mnW, k.mxH), "MINWxMINH" to Pair(k.mnW, k.mnH), "MAXWxMid" to Pair(k.mxW, (k.mnH + k.mxH) / 2)
@@ -60,7 +60,7 @@ class HostSelectCheck : Activity() {
                     val wpx = Math.round(bx.first * d); val hpx = Math.round(bx.second * d)
                     val m = draw(RemoteViews(map), wpx, hpx)
                     val matches = corners.filter { z -> m.sameAs(draw(single[z]!!, wpx, hpx)) }.map { "${it.width.toInt()}x${it.height.toInt()}" }
-                    val fits = corners.filter { it.width <= bx.first + 0f && it.height <= bx.second + 0f }
+                    val fits = corners.filter { HomeWidgets.slackKey(it).width <= bx.first + 1f && HomeWidgets.slackKey(it).height <= bx.second + 1f }
                     val exp = fits.maxByOrNull { it.width * it.height }?.let { "${it.width.toInt()}x${it.height.toInt()}" } ?: "smallest"
                     log.append("${k.kind} box=$bn ${bx.first}x${bx.second} host picked=$matches ruleExpects=$exp\n")
                     FileOutputStream(File(out, "hs_${k.kind}_${bn.filter { it.isLetterOrDigit() }}.png")).use { m.compress(Bitmap.CompressFormat.PNG, 100, it) }
