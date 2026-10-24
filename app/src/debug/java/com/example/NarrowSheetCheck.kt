@@ -16,17 +16,15 @@ class NarrowSheetCheck : Activity() {
         getSharedPreferences("fajr_prefs", 0).edit().putString("language", "ar").apply()
         val out = getExternalFilesDir(null) ?: File(filesDir, "ns"); out.mkdirs()
         // kind to (wideW, narrowW, h) in dp
-        val cases = listOf(
-            Triple("Hijri", 90 to 64, 84), Triple("NextPrayer", 196 to 144, 84), Triple("Hero", 408 to 304, 84),
-            Triple("OneUI", 302 to 224, 84), Triple("OneUI", 410 to 330, 84), Triple("OneUI", 302 to 224, 170), Triple("Clock", 330 to 260, 84), Triple("DayPrayer", 250 to 180, 84),
-            Triple("Pill", 330 to 260, 84), Triple("Schedule", 330 to 250, 84), Triple("PrayerBar", 330 to 250, 84),
-            Triple("Gregorian", 180 to 110, 84)
-        )
-        for ((kind, ws, h) in cases) for ((tag, w) in listOf("wide" to ws.first, "narrow" to ws.second)) {
-            try {
-                val bmp = HomeWidgets.renderKind(this, kind, w, h, 995)
-                FileOutputStream(File(out, "ns_${kind}_${tag}_${w}x$h.png")).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
-            } catch (e: Exception) { File(out, "ns_${kind}_${tag}.err").writeText(e.toString()) }
+        val spx = getSharedPreferences("fajr_prefs", 0)
+        val states = listOf(410 to 84, 302 to 84, 224 to 84, 302 to 170, 224 to 170)
+        val variants = listOf("base" to (false to false), "tile" to (true to false), "tiletext" to (true to true))
+        for ((v, f) in variants) {
+            spx.edit().putBoolean("dbg_tilefix", f.first).putBoolean("dbg_textfix", f.second).apply()
+            for ((w, h) in states) try {
+                val bmp = HomeWidgets.renderKind(this, "OneUI", w, h, 995)
+                FileOutputStream(File(out, "v_${v}_${w}x$h.png")).use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+            } catch (e: Exception) { File(out, "v_${v}_${w}x$h.err").writeText(e.toString()) }
         }
         File(out, "done.txt").writeText("done")
     }

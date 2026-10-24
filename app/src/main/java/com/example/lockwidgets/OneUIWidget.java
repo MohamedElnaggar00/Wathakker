@@ -46,7 +46,9 @@ final class OneUIWidget {
         float gap = Math.max(6f, W * 0.02f);
         float tileW = Math.min(H * 0.93f, W * 0.225f);
         // Large screens only: keep the date tile's shape (width/height = 0.93, the full-width look) when the card is width-limited, instead of letting it turn into a tall sliver; it is centred vertically.
-        float tileH = HomeWidgets.large(c) ? Math.min(H, tileW / 0.93f) : H;
+        android.content.SharedPreferences dbg = c.getSharedPreferences("fajr_prefs", 0);
+        boolean tileFix = HomeWidgets.large(c) && dbg.getBoolean("dbg_tilefix", true), textFix = HomeWidgets.large(c) && dbg.getBoolean("dbg_textfix", true);
+        float tileH = tileFix ? Math.min(H, tileW / 0.8095f) : H; // 0.8095 = 68/84, the observed known-good 302x84 tile
         float tileTop = (H - tileH) / 2f;
         float cardW = W - tileW - gap;
         float corner = Math.min(H * 0.30f, 34f);
@@ -106,7 +108,7 @@ final class OneUIWidget {
         float nameY = H * lerp(0.21f, 0.20f, t), barY = H * lerp(0.385f, 0.43f, t), timeY = H * lerp(0.565f, 0.63f, t), remY = H * lerp(0.795f, 0.84f, t);
         float nameSz = H * lerp(0.162f, 0.116f, t), timeSz = H * lerp(0.152f, 0.096f, t), remSz = H * lerp(0.165f, 0.108f, t);
         // Large screens only: when the card is narrower than the full-width one (resized down), scale the text with the card width so the rows keep their air. Full width (ratio >= 2.71) and phones are unchanged.
-        if (HomeWidgets.large(c)) { float nf = Math.max(0.78f, Math.min(1f, (cardW / H) / 2.71f)); nameSz *= nf; timeSz *= nf; remSz *= nf; }
+        if (textFix) { float nf = Math.max(0.78f, Math.min(1f, (cardW / H) / 2.71f)); nameSz *= nf; timeSz *= nf; remSz *= nf; }
         float padX = Math.min(24f, cardW * 0.06f), inner = cardW - 2 * padX, side = inner * 0.46f;
         boolean rtl = s.rtl;
         String nextName = s.targetName, prevName = s.names[s.previous];
