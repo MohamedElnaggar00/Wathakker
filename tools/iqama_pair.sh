@@ -64,4 +64,12 @@ if [ "$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1 | cut -dx -f1)" -g
 grid(){ tag=$1 stamp=$2; adb shell date -u "$stamp" >> "$OUT/clock_$tag.txt" 2>&1; adb shell am force-stop $PKG; sleep 2; adb shell am start -S -W -n $PKG/com.example.IqamaSizedCheck --ef k 1.0 >> "$OUT/hostlaunch.txt" 2>&1; sleep 8; host ""; shot "grid_$tag"; adb logcat -d | grep -E "ovFrac|size .*used=" | tail -30 > "$OUT/log_grid_$tag.txt"; }
 grid normal 102408502026.00
 grid iqama 102409502026.00
+# scenario coverage: long remaining text, transitions into/out of the iqama window, live per-second ticking
+sized longnormal 102406002026.00 1.0
+sized preadhan 102409382026.00 1.0
+sized iqamastart 102409412026.00 1.0
+sized preend 102409582026.00 1.0
+sized postend 102410012026.00 1.0
+adb shell date -u "102409502026.00" >> "$OUT/clock_tick.txt" 2>&1; adb shell am force-stop $PKG; sleep 2
+adb shell am start -S -W -n $PKG/com.example.IqamaSizedCheck --ef k 1.0 >> "$OUT/hostlaunch.txt" 2>&1; sleep 9; noanr; shot tick_a; sleep 3; shot tick_b
 adb shell wm size > "$OUT/wm.txt"; adb shell wm density >> "$OUT/wm.txt"
