@@ -84,7 +84,7 @@
   </table>
 </div>
 
-### 📲 الودجت
+### 📲 الودجت لشاشة القفل (خاص بواجهة Sasmung OneUI 7 and above)
 
 <div align="center" dir="rtl">
   <table>
