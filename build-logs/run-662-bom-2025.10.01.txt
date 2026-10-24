@@ -1,0 +1,19 @@
+outcome: failure  bom: 2025.10.01  run: 40092584794  sha: 16f14e1af30452863f08be54cb5b02d76a8bd0e3
+errors: 0
+--- per file
+--- per symbol
+sign outcome: skipped
+kotlin errors: 0
+--- kotlin per file
+--- kotlin details
+--- sign log
+--- details
+39:* What went wrong:
+40:Execution failed for task ':app:compileReleaseKotlin'.
+41-> Could not isolate parameters org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@47b91532 of artifact transform BuildToolsApiClasspathEntrySnapshotTransform
+42-   > Could not isolate value org.jetbrains.kotlin.gradle.internal.transforms.BuildToolsApiClasspathEntrySnapshotTransform$Parameters_Decorated@47b91532 of type BuildToolsApiClasspathEntrySnapshotTransform.Parameters
+43-      > Could not resolve all files for configuration ':app:kotlinBuildToolsApiClasspath'.
+44-         > Could not download kotlin-compiler-embeddable-2.2.10.jar (org.jetbrains.kotlin:kotlin-compiler-embeddable:2.2.10)
+--
+57:BUILD FAILED in 1m 23s
+58-17 actionable tasks: 17 executed
