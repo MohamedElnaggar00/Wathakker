@@ -1,4 +1,4 @@
-name: Exact release APK check on emulator (NO RELEASE)
+name: Exact branch signed APK check on emulator (branch-only repurpose, NO RELEASE)
 'on':
   workflow_dispatch:
     inputs:
@@ -18,6 +18,8 @@ jobs:
         include:
           - kind: tablet
             profile: pixel_tablet
+          - kind: phone
+            profile: pixel_6
     steps:
     - uses: actions/checkout@v4
     - name: Download the CI release APK
@@ -25,7 +27,7 @@ jobs:
         GH_TOKEN: ${{ github.token }}
       run: |-
         mkdir -p dl
-        gh run download ${{ inputs.run_id }} --repo ${{ github.repository }} -n app-release-bom-2025.10.01.apk -D dl
+        gh run download ${{ inputs.run_id }} --repo ${{ github.repository }} -n branch-release-apk -D dl
         ls -la dl
     - name: Enable KVM
       run: |-
