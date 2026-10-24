@@ -35,6 +35,13 @@ class IqamaSizedCheck : Activity() {
             root.addView(cell, lp)
         }
         setContentView(root)
+        root.postDelayed({ dump(root, 0) }, 5000)
+    }
+    private fun dump(v: android.view.View, depth: Int) {
+        if (v.visibility == android.view.View.GONE) return
+        val n = if (v.id != android.view.View.NO_ID) try { resources.getResourceEntryName(v.id) } catch (e: Exception) { "?" } else "-"
+        if (depth <= 7) android.util.Log.i("IQDUMP", " ".repeat(depth) + v.javaClass.simpleName + " " + n + " " + v.left + "," + v.top + " " + v.width + "x" + v.height)
+        if (v is ViewGroup) for (i in 0 until v.childCount) dump(v.getChildAt(i), depth + 1)
     }
     override fun onStart() { super.onStart(); host.startListening() }
     override fun onStop() { super.onStop(); host.stopListening() }
