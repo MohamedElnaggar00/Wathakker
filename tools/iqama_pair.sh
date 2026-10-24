@@ -52,11 +52,13 @@ for n in $(seq 1 16); do noanr; dump "$OUT/bind.xml"; XY=$(tap_re "^ *Create *$"
 adb logcat -d | grep HOSTCHECK > "$OUT/hostcheck_log.txt"
 echo "bound: $(grep -c 'ok=false' $OUT/hostcheck_log.txt) dialogs; ids: $(grep 'ids=' $OUT/hostcheck_log.txt | tail -1)" >> "$RES"
 adb shell "date -u" > "$OUT/clock0.txt"
-phase(){ tag=$1 stamp=$2
-  adb shell date -u "$stamp" >> "$OUT/clock_$tag.txt" 2>&1; adb shell date >> "$OUT/clock_$tag.txt"
-  host "oooooooooo"; sleep 4; shot "host_$tag"; adb logcat -d | grep -E "WathakkerHome" | tail -40 > "$OUT/log_$tag.txt"
+sized(){ tag=$1 stamp=$2 k=$3
+  adb shell date -u "$stamp" >> "$OUT/clock_$tag.txt" 2>&1
+  adb shell am force-stop $PKG; sleep 2
+  adb shell am start -S -W -n $PKG/com.example.IqamaSizedCheck --ef k $k >> "$OUT/hostlaunch.txt" 2>&1; sleep 9; noanr; sleep 2; shot "sized_${tag}_k$k"
+  adb logcat -d | grep -E "WathakkerHome|AndroidRuntime" | tail -30 > "$OUT/log_${tag}_k$k.txt"
 }
-phase normal 102408502026.00
-phase iqama 102409502026.00
-phase iqama2 102409512026.00
+sized normal 102408502026.00 1.0
+sized iqama 102409502026.00 1.0
+if [ "$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1 | cut -dx -f1)" -gt 1800 ]; then sized normal 102408502026.00 1.4; sized iqama 102409502026.00 1.4; fi
 adb shell wm size > "$OUT/wm.txt"; adb shell wm density >> "$OUT/wm.txt"

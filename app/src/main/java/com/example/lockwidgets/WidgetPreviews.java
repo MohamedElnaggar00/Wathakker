@@ -83,7 +83,8 @@ public final class WidgetPreviews {
                     HomeWidgets.ovBegin();
                     Bitmap b = HomeWidgets.renderKind(c, kind, wd, ht, 0);
                     v.setImageViewBitmap(res(c, "id", "home_prayer_image"), b);
-                    HomeWidgets.ovApply(c, v, b.getWidth(), b.getHeight());
+                    float pd = c.getResources().getDisplayMetrics().density;
+                    HomeWidgets.ovApply(c, v, Math.round(wd * pd), Math.round(ht * pd));
                     if (set(m, c, "com.example.widget." + kind + "WidgetProvider", v)) ok++;
                 } catch (Throwable t) {
                     Log.e(TAG, "home preview failed: " + kind, t);

@@ -6,4 +6,5 @@
         <Chronometer android:id="@+id/ov_chrono_med" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:includeFontPadding="false" android:fontFamily="@font/expoarabic_medium" android:textColor="#ffffffff" android:textSize="12sp" android:layoutDirection="ltr" />
         <Chronometer android:id="@+id/ov_chrono_semi" android:visibility="gone" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:includeFontPadding="false" android:fontFamily="@font/expoarabic_semibold" android:textColor="#ffffffff" android:textSize="12sp" android:layoutDirection="ltr" />
     </FrameLayout>
+    <include android:id="@+id/ov_stub" layout="@layout/ov_frac" android:layout_width="match_parent" android:layout_height="match_parent" />
 </FrameLayout>
