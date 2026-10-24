@@ -59,7 +59,7 @@ class HostSelectCheck : Activity() {
                 try {
                     val wpx = Math.round(bx.first * d); val hpx = Math.round(bx.second * d)
                     val m = draw(RemoteViews(map), wpx, hpx)
-                    val matches = corners.filter { z -> m.sameAs(draw(single[z]!!, wpx, hpx)) }.map { "${z.width.toInt()}x${z.height.toInt()}" }
+                    val matches = corners.filter { z -> m.sameAs(draw(single[z]!!, wpx, hpx)) }.map { "${it.width.toInt()}x${it.height.toInt()}" }
                     val fits = corners.filter { it.width <= bx.first + 0f && it.height <= bx.second + 0f }
                     val exp = fits.maxByOrNull { it.width * it.height }?.let { "${it.width.toInt()}x${it.height.toInt()}" } ?: "smallest"
                     log.append("${k.kind} box=$bn ${bx.first}x${bx.second} host picked=$matches ruleExpects=$exp\n")
