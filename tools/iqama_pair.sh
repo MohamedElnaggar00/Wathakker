@@ -61,4 +61,7 @@ sized(){ tag=$1 stamp=$2 k=$3
 sized normal 102408502026.00 1.0
 sized iqama 102409502026.00 1.0
 if [ "$(adb shell wm size | grep -o '[0-9]*x[0-9]*' | tail -1 | cut -dx -f1)" -gt 1800 ]; then sized normal 102408502026.00 1.4; sized iqama 102409502026.00 1.4; fi
+grid(){ tag=$1 stamp=$2; adb shell date -u "$stamp" >> "$OUT/clock_$tag.txt" 2>&1; host ""; shot "grid_$tag"; adb logcat -d | grep -E "ovFrac|size .*used=" | tail -30 > "$OUT/log_grid_$tag.txt"; }
+grid normal 102408502026.00
+grid iqama 102409502026.00
 adb shell wm size > "$OUT/wm.txt"; adb shell wm density >> "$OUT/wm.txt"
