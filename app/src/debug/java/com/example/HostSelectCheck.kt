@@ -40,7 +40,7 @@ class HostSelectCheck : Activity() {
         File(out, "config.txt").writeText("density=$d sw=${resources.configuration.smallestScreenWidthDp}")
         val pi = StringBuilder()
         for (p in AppWidgetManager.getInstance(this).getInstalledProvidersForPackage(packageName, null).sortedBy { it.provider.className }) {
-            pi.append("${p.provider.shortClassName} minW=${p.minWidth} minH=${p.minHeight} minResW=${p.minResizeWidth} minResH=${p.minResizeHeight} maxResW=${p.maxResizeWidth} maxResH=${p.maxResizeHeight} target=${p.targetCellWidth}x${p.targetCellHeight} cat=${p.widgetCategory}\n")
+            pi.append("${p.provider.shortClassName} minW=${p.minWidth} minH=${p.minHeight} minResW=${p.minResizeWidth} minResH=${p.minResizeHeight} maxResW=${p.maxResizeWidth} maxResH=${p.maxResizeHeight} resizeMode=${p.resizeMode} target=${p.targetCellWidth}x${p.targetCellHeight} cat=${p.widgetCategory}\n")
         }
         File(out, "providers.txt").writeText(pi.toString())
         // kind, MIN_W, MAX_W, MIN_H, MAX_H as the Honor launcher reported (launcher dp)
