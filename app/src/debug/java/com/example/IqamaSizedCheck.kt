@@ -23,17 +23,31 @@ class IqamaSizedCheck : Activity() {
         val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(0xFF808890.toInt()) }
         // kind index in WidgetHostCheck.PROVIDERS, drawn dp size (HomeWidgets.updateBatch defaults)
         val rows = listOf(Triple("Hero", 330, 90), Triple("OneUI", 330, 90), Triple("NextPrayer", 110, 90), Triple("PrayerBar", 110, 90), Triple("Clock", 250, 90))
+        val pending = java.util.ArrayList<Triple<android.appwidget.AppWidgetHostView, LinearLayout.LayoutParams, Triple<String, Int, Int>>>()
         for ((name, w, h) in rows) {
             val i = WidgetHostCheck.PROVIDERS.indexOf(name)
             val id = sp.getInt("id$i", 0)
             val info = mgr.getAppWidgetInfo(id) ?: continue
             val cell = FrameLayout(this)
-            cell.addView(host.createView(this, id, info))
+            val hv = host.createView(this, id, info)
+            cell.addView(hv)
             val lp = LinearLayout.LayoutParams((w * d * k).toInt(), (h * d * k).toInt())
             lp.gravity = Gravity.CENTER_HORIZONTAL
             lp.topMargin = (6 * d).toInt()
             root.addView(cell, lp)
+            pending.add(Triple(hv, lp, Triple(name, w, h)))
         }
+        // Compensate the host's default widget padding once it is applied (on RemoteViews delivery), so the
+        // content area is exactly the reported bitmap size - a real phone launcher reports and shows the
+        // same size (no letterbox), which is what the fixed-pixel overlay is designed for.
+        root.postDelayed({
+            for ((hv, lp, wh) in pending) {
+                lp.width = (wh.second * d * k).toInt() + hv.paddingLeft + hv.paddingRight
+                lp.height = (wh.third * d * k).toInt() + hv.paddingTop + hv.paddingBottom
+                android.util.Log.i("IQDUMP", "cell " + wh.first + " pad=" + hv.paddingLeft + "," + hv.paddingTop + "," + hv.paddingRight + "," + hv.paddingBottom + " size=" + lp.width + "x" + lp.height)
+                hv.requestLayout()
+            }
+        }, 2500)
         setContentView(root)
         root.postDelayed({ dump(root, 0) }, 5000)
     }
