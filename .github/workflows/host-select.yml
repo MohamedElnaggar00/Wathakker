@@ -17,7 +17,7 @@ jobs:
     - name: Debug APK
       run: |-
         keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
-        set -o pipefail; gradle :app:assembleDebug -PcomposeBom=2025.10.01 --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g" 2>&1 | tail -5
+        set -o pipefail; gradle :app:assembleDebug -PcomposeBom=2025.10.01 --no-daemon --no-build-cache --no-configuration-cache -Dorg.gradle.jvmargs="-Xmx3g" > build.log 2>&1 || { grep -E "^e: |error:|What went wrong" -A4 build.log | head -60; exit 1; }; tail -3 build.log
     - name: Enable KVM
       run: |-
         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
