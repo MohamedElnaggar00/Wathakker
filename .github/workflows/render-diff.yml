@@ -1,4 +1,4 @@
-name: Phone widget bitmap old vs new (NO RELEASE)
+name: Phone widget host old vs new (branch-only repurpose, NO RELEASE)
 'on':
   workflow_dispatch:
     inputs:
@@ -52,9 +52,9 @@ jobs:
         target: google_apis
         profile: pixel_6
         disable-animations: true
-        script: bash new/tools/render_diff.sh old/app/build/outputs/apk/debug/app-debug.apk new/app/build/outputs/apk/debug/app-debug.apk evidence
+        script: bash new/tools/phone_pair.sh old/app/build/outputs/apk/debug/app-debug.apk new/app/build/outputs/apk/debug/app-debug.apk evidence
     - uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: render-diff
+        name: phone-pair
         path: evidence/
