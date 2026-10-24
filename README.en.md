@@ -80,7 +80,7 @@ Wathkkir is an open-source Android app that brings the everyday tools a Muslim n
   </table>
 </div>
 
-### 📲 Widgets
+### 📲 Lock Screen Widgets (For Samsung OneUI 7 and above)
 
 <div align="center">
   <table>
